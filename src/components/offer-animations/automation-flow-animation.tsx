@@ -14,39 +14,53 @@ const tools = [
 ] as const;
 
 const nodeVariants = {
-  hidden: { opacity: 0, y: 8, scale: 0.98 },
+  hidden: { opacity: 0, y: 9, scale: 0.88 },
   visible: { opacity: 1, y: 0, scale: 1 },
 };
+
+// Draw the connections and send the signal as the cards finish popping into place.
+const TIMING = {
+  trigger: 0, agent: 0.14, condition: 0.28, success: 0.42, fallback: 0.56,
+  lines: { input: 0, decision: 0.14, stem: 0.28, rails: 0.38, legs: 0.58 },
+  signals: { input: 0.42, decision: 0.64, stem: 0.88, rails: 0.96, legs: 1.12 },
+  confirmed: 1.28,
+} as const;
+
+const lineTones = {
+  brand: { line: "bg-service-automation-fg", signal: "ring-service-automation-fg" },
+  success: { line: "bg-service-automation-fg", signal: "ring-service-automation-fg" },
+  muted: { line: "bg-service-automation-fg/25", signal: "ring-service-automation-fg" },
+} as const;
 
 function TriggerPulse({ running }: { running: boolean }) {
   return (
     <motion.span
       data-flow-pulse="trigger"
-      className="pointer-events-none absolute inset-0 rounded-full border border-brand-500"
+      className="pointer-events-none absolute inset-0 rounded-full border border-service-automation-fg"
       initial={false}
       animate={running
         ? { opacity: [0, 0.42, 0], transform: ["scale(0.8)", "scale(1.35)", "scale(1.35)"] }
         : { opacity: 0, transform: "scale(0.8)" }}
       transition={running
-        ? { duration: 1.5, ease: OFFER_EASE_OUT }
-        : { duration: 0.15 }}
+        ? { delay: TIMING.signals.input - 0.04, duration: 0.4, ease: OFFER_EASE_OUT }
+        : { duration: 0 }}
       aria-hidden="true"
     />
   );
 }
 
-function ProcessEmphasis({ running, delay }: { running: boolean; delay: number }) {
+function ProcessEmphasis({ running, delay, success = false }: { running: boolean; delay: number; success?: boolean }) {
   return (
     <motion.span
       data-flow-card-pulse
-      className="pointer-events-none absolute inset-0 rounded-[inherit] ring-2 ring-inset ring-brand-500"
+      className={`pointer-events-none absolute inset-0 rounded-[inherit] ring-2 ring-inset ${success ? "ring-emerald-500" : "ring-service-automation-fg"}`}
       initial={false}
       animate={running
         ? { opacity: [0, 0.36, 0], transform: ["scale(0.995)", "scale(1.01)", "scale(1.018)"] }
         : { opacity: 0, transform: "scale(1)" }}
       transition={running
-        ? { duration: 0.8, delay, ease: OFFER_EASE_IN_OUT }
-        : { duration: 0.15 }}
+        ? { duration: 0.34, delay, ease: OFFER_EASE_IN_OUT }
+        : { duration: 0 }}
       aria-hidden="true"
     />
   );
@@ -58,12 +72,16 @@ function LineSignal({
   duration,
   direction,
   name,
+  tone,
+  ease,
 }: {
   running: boolean;
   delay: number;
   duration: number;
   direction: "forward" | "reverse" | "down";
   name: string;
+  tone: keyof typeof lineTones;
+  ease: typeof OFFER_EASE_OUT | "linear";
 }) {
   const startTransform = direction === "forward"
     ? "translateX(-100%)"
@@ -85,22 +103,50 @@ function LineSignal({
       animate={running
         ? {
             opacity: [0, 1, 1, 0],
-            transform: [startTransform, startTransform, endTransform, endTransform],
+            transform: [startTransform, endTransform],
           }
         : { opacity: 0, transform: startTransform }}
       transition={running
         ? {
-            duration,
-            delay,
-            times: [0, 0.08, 0.9, 1],
-            ease: "linear",
+            opacity: { duration, delay, times: [0, 0.08, 0.9, 1], ease: "linear" },
+            transform: { duration, delay, ease },
           }
-        : { duration: 0.15 }}
+        : { duration: 0 }}
       aria-hidden="true"
     >
-      <span className={`absolute size-1.5 rounded-full bg-white ring-2 ring-brand-500 ${bubblePosition}`} />
+      <span className={`absolute size-1.5 rounded-full bg-white ring-2 ${lineTones[tone].signal} ${bubblePosition}`} />
     </motion.span>
   );
+}
+
+function FlowLine({ name, segment = false, className, direction, start, duration, signalStart, signalDuration = duration, signalEase = "linear", tone = "brand", running, noMotion }: {
+  name: string;
+  segment?: boolean;
+  className: string;
+  direction: "forward" | "reverse" | "down";
+  start: number;
+  duration: number;
+  signalStart?: number;
+  signalDuration?: number;
+  signalEase?: typeof OFFER_EASE_OUT | "linear";
+  tone?: keyof typeof lineTones;
+  running: boolean;
+  noMotion: boolean;
+}) {
+  const vertical = direction === "down";
+  return <span data-flow-connector={segment ? undefined : name} data-flow-segment={segment ? name : undefined} className={className} aria-hidden="true">
+    <motion.span
+      data-flow-line={name}
+      className={`absolute inset-0 ${lineTones[tone].line} ${vertical ? "origin-top" : direction === "reverse" ? "origin-right" : "origin-left"}`}
+      initial={false}
+      variants={vertical
+        ? { hidden: { scaleY: 0 }, visible: { scaleY: 1 } }
+        : { hidden: { scaleX: 0 }, visible: { scaleX: 1 } }}
+      transition={{ delay: noMotion ? 0 : start, duration: noMotion ? 0 : duration, ease: "linear" }}
+    />
+    {/* Keep the signal outside the scaled line so it travels at a steady speed. */}
+    {signalStart !== undefined ? <LineSignal running={running} delay={signalStart} duration={signalDuration} direction={direction} name={name} tone={tone} ease={signalEase} /> : null}
+  </span>;
 }
 
 export function AutomationFlowAnimation({ copy }: { copy: AutomationAnimationCopy }) {
@@ -108,7 +154,21 @@ export function AutomationFlowAnimation({ copy }: { copy: AutomationAnimationCop
   const isInView = useInView(containerRef, OFFER_VIEWPORT);
   const noMotion = useHydratedReducedMotion();
   const active = noMotion || isInView;
-  const loopActive = !noMotion && isInView;
+  const running = !noMotion && isInView;
+  const completionTransition = {
+    delay: noMotion ? 0 : TIMING.confirmed,
+    duration: noMotion ? 0 : 0.18,
+    ease: OFFER_EASE_OUT,
+  };
+  const cardTransition = (delay: number) => noMotion
+    ? { duration: 0 }
+    : {
+        delay,
+        type: "spring" as const,
+        duration: 0.4,
+        bounce: 0.24,
+        opacity: { delay, duration: 0.14, ease: OFFER_EASE_OUT },
+      };
 
   return (
     <motion.div
@@ -124,35 +184,27 @@ export function AutomationFlowAnimation({ copy }: { copy: AutomationAnimationCop
             data-flow-node="trigger"
             className="relative grid min-w-0 place-items-center rounded-xl bg-white p-3 text-center shadow-surface max-[600px]:p-2"
             variants={nodeVariants}
-            transition={{ delay: noMotion ? 0 : 0.08, duration: noMotion ? 0 : 0.35, ease: OFFER_EASE_OUT }}
+            transition={cardTransition(TIMING.trigger)}
           >
-            <ProcessEmphasis running={loopActive} delay={2.15} />
+            <ProcessEmphasis running={running} delay={TIMING.signals.input - 0.02} />
             <span className="min-w-0">
               <span className="relative mx-auto grid size-7 place-items-center">
-                <TriggerPulse running={loopActive} />
+                <TriggerPulse running={running} />
                 <Webhook className="relative size-5 text-brand-600" strokeWidth={1.8} aria-hidden="true" />
               </span>
               <span className="mt-2 block text-xs font-semibold text-pretty [overflow-wrap:normal] hyphens-none">{copy.trigger}</span>
             </span>
           </motion.div>
 
-          <motion.span
-            data-flow-connector="trigger-agent"
-            className="relative my-auto block h-0.5 origin-left bg-brand-500"
-            variants={{ hidden: { opacity: 0, scaleX: 0 }, visible: { opacity: 1, scaleX: 1 } }}
-            transition={{ delay: noMotion ? 0 : 0.3, duration: noMotion ? 0 : 0.3, ease: OFFER_EASE_IN_OUT }}
-            aria-hidden="true"
-          >
-            <LineSignal running={loopActive} delay={2.42} duration={0.28} direction="forward" name="trigger-agent" />
-          </motion.span>
+          <FlowLine name="trigger-agent" className="relative my-auto block h-0.5" direction="forward" start={TIMING.lines.input} duration={0.2} signalStart={TIMING.signals.input} signalDuration={0.18} signalEase={[0.42, 0, 1, 1]} tone="brand" running={running} noMotion={noMotion} />
 
           <motion.div
             data-flow-node="agent"
             className="relative min-w-0 rounded-xl bg-brand-50 p-3 shadow-accent-surface max-[600px]:p-2"
             variants={nodeVariants}
-            transition={{ delay: noMotion ? 0 : 0.42, duration: noMotion ? 0 : 0.38, ease: OFFER_EASE_OUT }}
+            transition={cardTransition(TIMING.agent)}
           >
-            <ProcessEmphasis running={loopActive} delay={2.7} />
+            <ProcessEmphasis running={running} delay={TIMING.signals.input + 0.18} />
             <div className="flex min-w-0 items-center gap-2">
               <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-neutral-900 text-white">
                 <Bot className="size-4" strokeWidth={1.8} aria-hidden="true" />
@@ -173,23 +225,15 @@ export function AutomationFlowAnimation({ copy }: { copy: AutomationAnimationCop
           </motion.div>
         </div>
 
-        <motion.span
-          data-flow-connector="agent-condition"
-          className="relative mx-auto block h-8 w-0.5 origin-top bg-brand-500 max-[600px]:h-3"
-          variants={{ hidden: { opacity: 0, scaleY: 0 }, visible: { opacity: 1, scaleY: 1 } }}
-          transition={{ delay: noMotion ? 0 : 0.84, duration: noMotion ? 0 : 0.28, ease: OFFER_EASE_IN_OUT }}
-          aria-hidden="true"
-        >
-          <LineSignal running={loopActive} delay={2.93} duration={0.32} direction="down" name="agent-condition" />
-        </motion.span>
+        <FlowLine name="agent-condition" className="relative mx-auto block h-8 w-0.5 max-[600px]:h-3" direction="down" start={TIMING.lines.decision} duration={0.2} signalStart={TIMING.signals.decision} signalDuration={0.18} tone="brand" running={running} noMotion={noMotion} />
 
         <motion.div
           data-flow-node="condition"
           className="relative mx-auto flex w-full max-w-xs min-w-0 items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-center shadow-surface max-[600px]:px-3 max-[600px]:py-2"
           variants={nodeVariants}
-          transition={{ delay: noMotion ? 0 : 1.06, duration: noMotion ? 0 : 0.35, ease: OFFER_EASE_OUT }}
+          transition={cardTransition(TIMING.condition)}
         >
-          <ProcessEmphasis running={loopActive} delay={3.25} />
+          <ProcessEmphasis running={running} delay={TIMING.signals.decision + 0.18} />
           <GitBranch className="size-5 shrink-0 text-brand-600" strokeWidth={1.9} aria-hidden="true" />
           <span className="text-xs font-semibold text-pretty [overflow-wrap:normal] hyphens-none">{copy.condition}</span>
         </motion.div>
@@ -199,51 +243,16 @@ export function AutomationFlowAnimation({ copy }: { copy: AutomationAnimationCop
           className="relative grid h-12 w-full grid-cols-2 gap-3 max-[600px]:h-6"
           aria-hidden="true"
         >
-          <motion.span
-            data-flow-segment="stem"
-            className="absolute top-0 left-1/2 h-3 w-0.5 -translate-x-1/2 origin-top bg-brand-500"
-            variants={{ hidden: { opacity: 0, scaleY: 0 }, visible: { opacity: 1, scaleY: 1 } }}
-            transition={{ delay: noMotion ? 0 : 1.3, duration: noMotion ? 0 : 0.12, ease: OFFER_EASE_IN_OUT }}
-          >
-            <LineSignal running={loopActive} delay={3.5} duration={0.12} direction="down" name="branch-stem" />
-          </motion.span>
+          <FlowLine name="stem" segment className="absolute top-0 left-1/2 z-10 h-[calc(.75rem+2px)] w-0.5 -translate-x-1/2" direction="down" start={TIMING.lines.stem} duration={0.1} signalStart={TIMING.signals.stem} signalDuration={0.08} tone="brand" running={running} noMotion={noMotion} />
 
           <div className="relative">
-            <motion.span
-              data-flow-segment="left-rail"
-              className="absolute top-3 right-[-0.375rem] left-1/2 h-0.5 origin-right bg-brand-500"
-              variants={{ hidden: { opacity: 0, scaleX: 0 }, visible: { opacity: 1, scaleX: 1 } }}
-              transition={{ delay: noMotion ? 0 : 1.42, duration: noMotion ? 0 : 0.2, ease: OFFER_EASE_IN_OUT }}
-            >
-              <LineSignal running={loopActive} delay={3.62} duration={0.18} direction="reverse" name="left-rail" />
-            </motion.span>
-            <motion.span
-              data-flow-segment="left-leg"
-              className="absolute top-3 bottom-0 left-1/2 w-0.5 -translate-x-1/2 origin-top bg-brand-500"
-              variants={{ hidden: { opacity: 0, scaleY: 0 }, visible: { opacity: 1, scaleY: 1 } }}
-              transition={{ delay: noMotion ? 0 : 1.62, duration: noMotion ? 0 : 0.2, ease: OFFER_EASE_IN_OUT }}
-            >
-              <LineSignal running={loopActive} delay={3.8} duration={0.2} direction="down" name="left-leg" />
-            </motion.span>
+            <FlowLine name="left-rail" segment className="absolute top-3 right-[-0.375rem] left-1/2 h-0.5" direction="reverse" start={TIMING.lines.rails} duration={0.2} signalStart={TIMING.signals.rails} signalDuration={0.16} tone="success" running={running} noMotion={noMotion} />
+            <FlowLine name="left-leg" segment className="absolute top-3 bottom-0 left-1/2 w-0.5 -translate-x-1/2" direction="down" start={TIMING.lines.legs} duration={0.16} signalStart={TIMING.signals.legs} signalDuration={0.16} signalEase={OFFER_EASE_OUT} tone="success" running={running} noMotion={noMotion} />
           </div>
 
           <div className="relative">
-            <motion.span
-              data-flow-segment="right-rail"
-              className="absolute top-3 right-1/2 left-[-0.375rem] h-0.5 origin-left bg-brand-500"
-              variants={{ hidden: { opacity: 0, scaleX: 0 }, visible: { opacity: 1, scaleX: 1 } }}
-              transition={{ delay: noMotion ? 0 : 1.42, duration: noMotion ? 0 : 0.2, ease: OFFER_EASE_IN_OUT }}
-            >
-              <LineSignal running={loopActive} delay={3.62} duration={0.18} direction="forward" name="right-rail" />
-            </motion.span>
-            <motion.span
-              data-flow-segment="right-leg"
-              className="absolute top-3 right-1/2 bottom-0 w-0.5 translate-x-1/2 origin-top bg-brand-500"
-              variants={{ hidden: { opacity: 0, scaleY: 0 }, visible: { opacity: 1, scaleY: 1 } }}
-              transition={{ delay: noMotion ? 0 : 1.62, duration: noMotion ? 0 : 0.2, ease: OFFER_EASE_IN_OUT }}
-            >
-              <LineSignal running={loopActive} delay={3.8} duration={0.2} direction="down" name="right-leg" />
-            </motion.span>
+            <FlowLine name="right-rail" segment className="absolute top-3 right-1/2 left-[-0.375rem] h-0.5" direction="forward" start={TIMING.lines.rails} duration={0.2} tone="muted" running={running} noMotion={noMotion} />
+            <FlowLine name="right-leg" segment className="absolute top-3 right-1/2 bottom-0 w-0.5 translate-x-1/2" direction="down" start={TIMING.lines.legs} duration={0.16} tone="muted" running={running} noMotion={noMotion} />
           </div>
         </div>
 
@@ -251,23 +260,25 @@ export function AutomationFlowAnimation({ copy }: { copy: AutomationAnimationCop
           <motion.div
             data-flow-node="success"
             className="relative flex min-w-0 items-center gap-2 rounded-xl bg-white p-3 shadow-surface max-[600px]:p-2"
-            variants={nodeVariants}
-            transition={{ delay: noMotion ? 0 : 1.78, duration: noMotion ? 0 : 0.35, ease: OFFER_EASE_OUT }}
+            variants={{
+              hidden: { ...nodeVariants.hidden, backgroundColor: "var(--color-white)", color: "var(--color-neutral-500)", boxShadow: "var(--shadow-surface)" },
+              visible: { ...nodeVariants.visible, backgroundColor: "var(--color-emerald-50)", color: "var(--color-emerald-700)", boxShadow: "inset 0 0 0 1px var(--color-emerald-200)" },
+            }}
+            transition={{ ...cardTransition(TIMING.success), backgroundColor: completionTransition, color: completionTransition, boxShadow: completionTransition }}
           >
-            <ProcessEmphasis running={loopActive} delay={4} />
-            <UserRoundPlus className="size-5 shrink-0 text-brand-600" strokeWidth={1.8} aria-hidden="true" />
+            <ProcessEmphasis running={running} delay={TIMING.confirmed} success />
+            <UserRoundPlus className="size-5 shrink-0" strokeWidth={1.8} aria-hidden="true" />
             <span className="min-w-0">
-              <span className="block text-xs font-medium text-brand-600">{copy.yes}</span>
-              <span className="block text-xs font-semibold text-pretty [overflow-wrap:normal] hyphens-none">{copy.success}</span>
+              <span className="block text-xs font-medium">{copy.yes}</span>
+              <span className="block text-xs font-semibold text-neutral-900 text-pretty [overflow-wrap:normal] hyphens-none">{copy.success}</span>
             </span>
           </motion.div>
           <motion.div
             data-flow-node="fallback"
             className="relative flex min-w-0 items-center gap-2 rounded-xl bg-white p-3 shadow-surface max-[600px]:p-2"
             variants={nodeVariants}
-            transition={{ delay: noMotion ? 0 : 1.86, duration: noMotion ? 0 : 0.35, ease: OFFER_EASE_OUT }}
+            transition={cardTransition(TIMING.fallback)}
           >
-            <ProcessEmphasis running={loopActive} delay={4} />
             <ListTodo className="size-5 shrink-0 text-neutral-500" strokeWidth={1.8} aria-hidden="true" />
             <span className="min-w-0">
               <span className="block text-xs font-medium text-neutral-400">{copy.review}</span>

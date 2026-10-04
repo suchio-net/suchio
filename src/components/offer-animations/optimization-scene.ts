@@ -1,4 +1,5 @@
-export const OPTIMIZATION_FLIGHT_DURATION_MS = 2200;
+export const OPTIMIZATION_RESULT_COUNT = 10;
+export const OPTIMIZATION_FLIGHT_DURATION_MS = 1600;
 export const OPTIMIZATION_TYPING_DELAY_MS = 18;
 export const OPTIMIZATION_RESULTS_DELAY_MS = 280;
 export const OPTIMIZATION_FLIGHT_DELAY_MS = 440;
@@ -13,7 +14,7 @@ export function getOptimizationScene(elapsedMs: number, queryLength: number): Op
     typedLength: Math.min(queryLength, Math.max(0, Math.floor(elapsedMs / OPTIMIZATION_TYPING_DELAY_MS))),
     resultsVisible: elapsedMs >= resultsStart,
     flightStarted: elapsedMs >= flightStart,
-    rank: 20 - Math.round(flightProgress * 19),
+    rank: OPTIMIZATION_RESULT_COUNT - Math.round(flightProgress * (OPTIMIZATION_RESULT_COUNT - 1)),
     complete: flightProgress === 1,
   };
 }

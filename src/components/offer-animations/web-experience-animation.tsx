@@ -62,7 +62,8 @@ const SCENES: Record<SceneVariant, SceneGeometry> = {
   phone: {
     device: { x: 170, y: 22.5, width: 160, height: 405, rx: 34 },
     divider: { x: 170, y: 63, width: 160, height: 1 },
-    urlCenterY: 42.75,
+    // Center the domain between the notch and the browser divider.
+    urlCenterY: 47.8,
     accent: { x: 190, y: 94.5, width: 37, height: 6 },
     headline: { x: 190, y: 128 },
     primaryLine: { x: 190, y: 162, width: 120, height: 6 },
@@ -388,7 +389,7 @@ function BrowserChrome({ scene }: { scene: SceneGeometry }) {
 
       <g data-web-experience-url>
         <rect data-web-experience-url-box fill="transparent" height="10" width="76" x="212" y={urlBoxY} />
-        <text fill="var(--color-neutral-400)" fontFamily="inherit" fontSize="10" textAnchor="middle" x="250" y={urlBaselineY}>suchio</text>
+        <text fill="var(--color-neutral-400)" fontFamily="inherit" fontSize="10" textAnchor="middle" x="250" y={urlBaselineY}>suchio.net</text>
       </g>
 
       <rect data-web-experience-notch fill="var(--color-neutral-900)" height="4" rx="2" style={{ opacity: 0 }} width="22.5" x="238.75" y="28.6" />

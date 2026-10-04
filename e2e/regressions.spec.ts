@@ -84,16 +84,63 @@ test("unlocks scrolling after resizing an open mobile menu", async ({ page }) =>
   await expect(page.getByRole("dialog")).not.toBeVisible();
 });
 
-test("finishes the automation demonstration in normal and reduced motion", async ({ page }) => {
-  for (const reducedMotion of ["no-preference", "reduce"] as const) {
-    await page.emulateMedia({ reducedMotion });
-    await page.goto("/fr/services/automation");
-    const visual = page.locator("[data-automation-flow]");
-    await visual.scrollIntoViewIfNeeded();
-    await expect(visual).toBeVisible();
-    await page.waitForTimeout(reducedMotion === "reduce" ? 300 : 5500);
-    const running = await visual.evaluate((element) => element.getAnimations({ subtree: true }).filter((animation) => animation.playState === "running").length);
-    expect(running).toBe(0);
+test("finishes the staged automation sequence within two seconds in normal and reduced motion", async ({ page }) => {
+  for (const width of [1280, 320]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const reducedMotion of ["no-preference", "reduce"] as const) {
+      await page.emulateMedia({ reducedMotion });
+      await page.goto("/fr/services/automation");
+      const visual = page.locator("[data-automation-flow]");
+      await visual.scrollIntoViewIfNeeded();
+      await expect(visual).toBeVisible();
+      const success = visual.locator('[data-flow-node="success"]');
+      if (reducedMotion === "no-preference") {
+        // The signal starts during the card cascade, without an idle pause.
+        const signal = visual.locator('[data-flow-signal="trigger-agent"]');
+        await expect.poll(() => signal.evaluate((element) => Number(getComputedStyle(element).opacity)), { intervals: [30], timeout: 900 }).toBeGreaterThan(0.2);
+        await page.waitForTimeout(300);
+        const beforeArrival = await success.evaluate((element) => {
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d")!;
+          context.fillStyle = getComputedStyle(element).backgroundColor;
+          context.fillRect(0, 0, 1, 1);
+          return Array.from(context.getImageData(0, 0, 1, 1).data);
+        });
+        expect(beforeArrival).toEqual([255, 255, 255, 255]);
+        await page.waitForTimeout(1100);
+      } else {
+        await page.waitForTimeout(300);
+      }
+      await expect(success).not.toHaveCSS("background-color", "rgb(255, 255, 255)");
+      const colors = await visual.evaluate((element) => {
+        const line = element.querySelector('[data-flow-line="left-leg"]')!;
+        const reference = document.createElement("span");
+        reference.style.backgroundColor = "var(--color-service-automation-fg)";
+        element.appendChild(reference);
+        const expected = getComputedStyle(reference).backgroundColor;
+        reference.style.backgroundColor = "var(--color-emerald-50)";
+        const confirmed = getComputedStyle(reference).backgroundColor;
+        reference.remove();
+        return { actual: getComputedStyle(line).backgroundColor, expected, confirmed };
+      });
+      expect(colors.actual).toBe(colors.expected);
+      await expect(success).toHaveCSS("background-color", colors.confirmed);
+      const running = await visual.evaluate((element) => element.getAnimations({ subtree: true }).filter((animation) => animation.playState === "running").length);
+      expect(running).toBe(0);
+      for (const card of await visual.locator("[data-flow-node]").all()) await expect(card).toHaveCSS("opacity", "1");
+      for (const line of await visual.locator("[data-flow-line]").all()) await expect(line).toHaveCSS("transform", "none");
+      const junction = await visual.evaluate((element) => {
+        const stem = element.querySelector('[data-flow-line="stem"]')!.getBoundingClientRect();
+        return ["left-rail", "right-rail"].map((name) => {
+          const rail = element.querySelector(`[data-flow-line="${name}"]`)!.getBoundingClientRect();
+          return { overlapX: Math.min(stem.right, rail.right) - Math.max(stem.left, rail.left), overlapY: Math.min(stem.bottom, rail.bottom) - Math.max(stem.top, rail.top) };
+        });
+      });
+      for (const overlap of junction) {
+        expect(overlap.overlapX).toBeGreaterThan(0);
+        expect(overlap.overlapY).toBeGreaterThanOrEqual(2);
+      }
+    }
   }
 });
 
