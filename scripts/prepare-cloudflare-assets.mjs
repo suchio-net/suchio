@@ -7,7 +7,8 @@ const configuration = robots();
 await Promise.all([
   Bun.write(`${assetDirectory}/robots.txt`, `User-agent: ${configuration.rules.userAgent}\nAllow: ${configuration.rules.allow}\n\nSitemap: ${configuration.sitemap}\n`),
   Bun.write(`${assetDirectory}/sitemap.xml`, serializeSitemap(sitemap())),
-  Bun.write(`${assetDirectory}/_headers`, `/*\n${securityHeaders.map(({ key, value }) => `  ${key}: ${value}`).join("\n")}\n\n/_astro/*\n  Cache-Control: public, max-age=31536000, immutable\n`),
+  // Client drafts load the client's own photos, fonts, map, and booking engine, so the site CSP does not apply there.
+  Bun.write(`${assetDirectory}/_headers`, `/*\n${securityHeaders.map(({ key, value }) => `  ${key}: ${value}`).join("\n")}\n\n/_astro/*\n  Cache-Control: public, max-age=31536000, immutable\n\n/entwurf/*\n  ! Content-Security-Policy\n  ! Content-Security-Policy-Report-Only\n  X-Robots-Tag: noindex, nofollow, noarchive\n`),
 ]);
 
 const htmlRouteCount = Array.from(new Bun.Glob("**/*.html").scanSync({ cwd: assetDirectory, onlyFiles: true })).length;

@@ -11,5 +11,5 @@ export default defineConfig([
     plugins: { "react-hooks": reactHooks },
     rules: reactHooks.configs.recommended.rules,
   },
-  globalIgnores([".astro/**", ".next/**", ".vinext/**", ".wrangler/**", "dist/**", "output/**", "test-results/**", "playwright-report/**", "node_modules/**", "next-env.d.ts", "src/worker-configuration.d.ts"]),
+  globalIgnores([".astro/**", ".next/**", ".vinext/**", ".wrangler/**", "dist/**", "output/**", "node_modules/**", "next-env.d.ts", "src/worker-configuration.d.ts"]),
 ]);

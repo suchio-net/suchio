@@ -1,0 +1,1102 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Parkhotel am Posthof – Entwurf</title>
+<script>
+  document.documentElement.classList.add('js');
+  setTimeout(() => { if (!window.__motion) document.documentElement.classList.add('static'); }, 3000);
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..700;1,400..500&display=swap");
+:root{
+  --paper:#f4f2ed;
+  --paper-2:#ebe8e1;
+  --white:#fff;
+  --ink:#141b2c;
+  --navy:#1a2f66;
+  --night:#0f1a33;
+  --muted:#626877;
+  --soft:#8b93a6;
+  --line:rgba(20,27,44,.1);
+  --line-inv:rgba(255,255,255,.16);
+  --star:#f5a623;
+  --suchio:hsl(212 100% 48%);
+  --ease:cubic-bezier(.16,1,.3,1);
+  --gutter:clamp(20px,4vw,56px);
+  --grade:saturate(.86) contrast(1.04);
+}
+*{box-sizing:border-box}
+html{background:var(--paper);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16.5px/1.6 "Schibsted Grotesk",system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3,p,figure,dl,dd,ol,ul,blockquote{margin:0}
+ul,ol{padding:0;list-style:none}
+h1,h2,h3{font-weight:500;letter-spacing:-.03em;line-height:1.05;text-wrap:balance}
+h2{font-size:clamp(2rem,3.3vw,3.1rem)}
+p{text-wrap:pretty}
+:focus-visible{outline:2px solid var(--suchio);outline-offset:3px}
+.wrap{padding-inline:var(--gutter);max-width:1400px;margin-inline:auto}
+.photo{overflow:hidden;background:var(--paper-2)}
+.photo img{width:100%;height:100%;object-fit:cover;filter:var(--grade)}
+.lede{color:var(--muted);font-size:1.06rem;max-width:40ch}
+.ico{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* Buttons */
+.btn{--h:50px;position:relative;display:inline-flex;align-items:center;justify-content:space-between;gap:14px;height:var(--h);padding:0 7px 0 22px;border-radius:999px;background:var(--ink);color:#fff;font:500 .97rem/1 "Schibsted Grotesk",sans-serif;text-decoration:none;border:0;cursor:pointer;white-space:nowrap;transition:background .3s var(--ease),scale .15s var(--ease)}
+.btn:active{scale:.97}
+.btn-track{display:grid;overflow:hidden;height:1.45em;line-height:1.45em}
+.btn-track span{transition:transform .5s var(--ease)}
+.btn-icon{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#fff;color:var(--ink);overflow:hidden}
+.btn-icon svg{width:16px;height:16px}
+.btn.light{background:#fff;color:var(--ink)}
+.btn.light .btn-icon{background:var(--ink);color:#fff}
+.btn.navy{background:var(--navy)}
+@media (hover:hover){
+  .btn:hover .btn-track span{transform:translateY(-100%)}
+  .btn:hover .btn-icon svg{animation:nudge .6s var(--ease)}
+  .btn:hover{background:var(--navy)}
+  .btn.navy:hover{background:var(--night)}
+  .btn.light:hover{background:#ebe8e1}
+}
+@keyframes nudge{45%{transform:translateX(140%)}46%{transform:translateX(-140%)}100%{transform:none}}
+.link{font-weight:500;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.3em;transition:text-underline-offset .3s var(--ease)}
+.link:hover{text-underline-offset:.45em}
+
+/* Header */
+header.site{position:fixed;inset:0 0 auto;z-index:40;color:#fff;transition:background .45s var(--ease),color .45s var(--ease),box-shadow .45s var(--ease)}
+header.site .wrap{display:flex;align-items:center;height:88px;gap:40px;transition:height .45s var(--ease)}
+.logo{position:relative;display:block;height:54px;transition:height .45s var(--ease)}
+.logo img{height:100%;width:auto;transition:opacity .45s var(--ease)}
+.logo .on-light{position:absolute;inset:0;opacity:0}
+header.site.scrolled{background:rgba(244,242,237,.9);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);color:var(--ink);box-shadow:0 1px 0 var(--line)}
+header.site.scrolled .wrap{height:72px}
+header.site.scrolled .logo{height:46px}
+header.site.scrolled .on-dark{opacity:0}
+header.site.scrolled .on-light{opacity:1}
+nav.main{display:flex;gap:32px;font-size:.95rem;font-weight:500;margin-left:auto}
+nav.main a{text-decoration:none;position:relative;padding:6px 0}
+nav.main a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
+nav.main a:hover::after{transform:scaleX(1);transform-origin:left}
+.head-right{display:flex;align-items:center;gap:22px;font-size:.93rem}
+.head-right .tel{text-decoration:none;font-weight:500;font-variant-numeric:tabular-nums}
+.lang{opacity:.7;text-decoration:none}
+header .btn{--h:44px;padding-left:18px}
+header .btn .btn-icon{width:30px;height:30px}
+header:not(.scrolled) .btn{background:#fff;color:var(--ink)}
+header:not(.scrolled) .btn .btn-icon{background:var(--ink);color:#fff}
+.burger{display:none}
+.menu{position:fixed;inset:0;z-index:39;display:flex;flex-direction:column;justify-content:space-between;padding:110px var(--gutter) calc(32px + env(safe-area-inset-bottom));background:var(--night);color:#fff;clip-path:inset(0 0 100% 0);visibility:hidden;transition:clip-path .7s var(--ease),visibility 0s .7s}
+.menu.open{clip-path:inset(0 0 0 0);visibility:visible;transition:clip-path .7s var(--ease)}
+.menu nav{display:grid}
+.menu nav a{font-size:clamp(1.9rem,8vw,2.6rem);font-weight:500;letter-spacing:-.03em;line-height:1.2;text-decoration:none;padding:14px 0;border-bottom:1px solid var(--line-inv);opacity:0;transform:translateY(18px);transition:opacity .5s var(--ease),transform .7s var(--ease)}
+.menu.open nav a{opacity:1;transform:none;transition-delay:calc(.12s + var(--i) * .06s)}
+.menu-foot{display:grid;gap:18px;opacity:0;transition:opacity .6s var(--ease)}
+.menu.open .menu-foot{opacity:1;transition-delay:.4s}
+.menu-foot .row{display:flex;justify-content:space-between;color:#b9c1d4}
+.menu-foot a{text-decoration:none}
+.menu-foot .btn{justify-content:space-between}
+body.menu-open header.site{background:transparent;color:#fff;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+body.menu-open header.site .on-dark{opacity:1}
+body.menu-open header.site .on-light{opacity:0}
+
+/* Hero */
+.hero{position:relative;height:100vh;height:100svh;min-height:560px;color:#fff;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.hero-media{position:absolute;inset:0;background:var(--night)}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:var(--grade)}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(12,20,40,.5) 0%,rgba(12,20,40,0) 22%,rgba(12,20,40,0) 38%,rgba(12,20,40,.72) 100%),linear-gradient(90deg,rgba(12,20,40,.35) 0%,rgba(12,20,40,0) 60%)}
+.hero>.wrap{width:100%}
+.hero-copy{position:relative;z-index:2;padding-bottom:36px}
+.hero h1{font-size:clamp(2.7rem,5.4vw,5.2rem);line-height:.98;letter-spacing:-.04em;color:#fff;max-width:11ch}
+.line{display:block;overflow:hidden;padding-bottom:.1em;margin-bottom:-.1em}
+.line>span{display:block}
+.line>.hero-name{display:flex;align-items:center;gap:14px;font-size:clamp(1rem,1.3vw,1.2rem);font-weight:500;letter-spacing:.01em;line-height:1.3;margin-bottom:20px;color:rgba(255,255,255,.92)}
+.line>.hero-name::before{content:"";width:36px;height:1px;background:currentColor;opacity:.7}
+.hero-sub{margin-top:20px;font-size:1.12rem;color:rgba(255,255,255,.88);max-width:36ch}
+
+/* Booking */
+.book-wrap{position:relative;z-index:3;padding-bottom:clamp(24px,4vh,44px)}
+.book{background:#fff;color:var(--ink);border-radius:18px;display:grid;grid-template-columns:repeat(3,1fr) auto;padding:6px;box-shadow:0 24px 60px -24px rgba(0,0,0,.45)}
+.field{position:relative;display:flex;align-items:center;gap:14px;min-width:0;padding:11px 16px;border:0;border-radius:12px;background:transparent;text-align:left;font:inherit;color:var(--ink);cursor:pointer;transition:background .25s var(--ease),box-shadow .25s var(--ease)}
+.field+.field::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:1px;background:var(--line);transition:opacity .25s}
+.field:hover,.field[aria-expanded=true]{background:var(--paper)}
+.field[aria-expanded=true]{box-shadow:inset 0 0 0 1.5px var(--navy)}
+.field:hover::before,.field:hover+.field::before,.field[aria-expanded=true]::before,.field[aria-expanded=true]+.field::before{opacity:0}
+.field-ico{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:11px;background:var(--paper);color:var(--navy);transition:background .25s var(--ease)}
+.field:hover .field-ico,.field[aria-expanded=true] .field-ico{background:#fff}
+.field-ico svg,.icon-btn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.field-text{display:flex;flex-direction:column;min-width:0}
+.field-label{font-size:.8rem;color:var(--muted);line-height:1.3}
+.field-value{display:block;font-weight:500;font-size:1.02rem;line-height:1.45;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.field-value.swap{animation:value-in .45s var(--ease)}
+@keyframes value-in{from{opacity:0;transform:translateY(6px)}}
+
+/* Booking pickers: floating panel on desktop, bottom sheet on mobile */
+.pop{position:absolute;left:0;top:0;z-index:70;background:#fff;color:var(--ink);border-radius:22px;padding:22px;box-shadow:0 0 0 1px rgba(20,27,44,.06),0 40px 80px -30px rgba(10,18,40,.5),0 12px 24px -12px rgba(10,18,40,.18);opacity:0;visibility:hidden;transform:translateY(10px) scale(.98);transform-origin:var(--origin,bottom left);transition:opacity .3s var(--ease),transform .45s var(--ease),visibility 0s .45s}
+.pop.open{opacity:1;visibility:visible;transform:none;transition:opacity .3s var(--ease),transform .45s var(--ease)}
+.sheet-head,.scrim{display:none}
+.icon-btn{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:0;background:#fff;box-shadow:inset 0 0 0 1px var(--line);color:var(--ink);cursor:pointer;transition:background .2s,opacity .2s}
+.icon-btn:hover{background:var(--paper)}
+.icon-btn:disabled{opacity:.3;cursor:default;background:#fff}
+.icon-btn svg{width:16px;height:16px;stroke-width:1.8}
+.cal{width:min(720px,calc(100vw - 2 * var(--gutter)))}
+.cal-body{position:relative}
+.cal-nav{position:absolute;inset:0 0 auto;display:flex;justify-content:space-between;pointer-events:none;z-index:2}
+.cal-nav button{pointer-events:auto}
+.cal-months{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.cal-months.next{animation:cal-next .45s var(--ease)}
+.cal-months.prev{animation:cal-prev .45s var(--ease)}
+@keyframes cal-next{from{opacity:0;transform:translateX(28px)}}
+@keyframes cal-prev{from{opacity:0;transform:translateX(-28px)}}
+.month-title{text-align:center;font-weight:500;letter-spacing:-.01em;line-height:38px;margin-bottom:12px}
+.dow,.days{display:grid;grid-template-columns:repeat(7,1fr)}
+.dow span{font-size:.75rem;color:var(--muted);text-align:center;padding-bottom:8px}
+.day{position:relative;height:44px;border:0;background:none;padding:0;font:500 .93rem/1 "Schibsted Grotesk",sans-serif;color:var(--ink);cursor:pointer;font-variant-numeric:tabular-nums}
+.day span{position:relative;z-index:1;display:grid;place-items:center;width:42px;height:42px;margin:1px auto;border-radius:50%;transition:background .2s,color .2s,box-shadow .2s}
+.day:hover span{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.day.past{color:#c4c7ce;cursor:default}
+.day.past:hover span{box-shadow:none}
+.day.today span::after{content:"";position:absolute;bottom:6px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:currentColor}
+.day.in::before,.day.start.ranged::before,.day.end::before{content:"";position:absolute;top:1px;height:42px;left:0;right:0;background:#e8ecf6}
+.day.start.ranged::before{left:50%}
+.day.end::before{right:50%}
+.day.start span,.day.end span{background:var(--navy);color:#fff;box-shadow:none;animation:day-pop .35s var(--ease)}
+.day.preview.end span{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--navy);animation:none}
+.days .day.in:nth-child(7n+1)::before{border-radius:21px 0 0 21px}
+.days .day.in:nth-child(7n)::before{border-radius:0 21px 21px 0}
+.days .day.end:nth-child(7n+1)::before,.days .day.start.ranged:nth-child(7n)::before{display:none}
+@keyframes day-pop{from{transform:scale(.6)}}
+.pop-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.pop-sum b{display:block;font-weight:500}
+.pop-sum span{font-size:.88rem;color:var(--muted)}
+.pop-actions{display:flex;align-items:center;gap:16px}
+.text-btn{border:0;background:none;padding:0;font:500 .92rem "Schibsted Grotesk",sans-serif;color:var(--muted);text-decoration:underline;text-underline-offset:.3em;cursor:pointer}
+.text-btn:hover{color:var(--ink)}
+.pop .btn{--h:46px;padding:0 22px;justify-content:center}
+.pop .btn:disabled{opacity:.35;cursor:default}
+.room-pop{width:380px}
+.stepper-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0}
+.stepper-row+.stepper-row{border-top:1px solid var(--line)}
+.stepper-row b{display:block;font-weight:500}
+.stepper-row span{font-size:.88rem;color:var(--muted)}
+.stepper{display:flex;align-items:center;gap:14px}
+.stepper output{min-width:18px;text-align:center;font-weight:500;font-size:1.08rem;font-variant-numeric:tabular-nums}
+.stepper output.bump{animation:value-in .35s var(--ease)}
+.pop-note{font-size:.86rem;color:var(--muted);padding-top:4px}
+.pop-note a{color:var(--ink)}
+.book .btn{--h:58px;align-self:center;margin-left:6px;padding-left:26px;border-radius:13px}
+.book .btn .btn-icon{border-radius:9px;width:42px;height:42px}
+.book-perks{display:flex;gap:28px;margin-top:14px;font-size:.88rem;color:rgba(255,255,255,.86);padding-left:6px}
+.book-perks span{display:inline-flex;align-items:center;gap:8px}
+.book-perks .ico{width:16px;height:16px}
+
+/* Intro */
+.intro{padding:clamp(90px,10vw,150px) 0}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,96px);align-items:center}
+.statement{font-size:clamp(1.55rem,2.35vw,2.15rem);font-weight:450;letter-spacing:-.025em;line-height:1.22;max-width:24ch}
+.facts{margin-top:44px;display:grid;max-width:440px}
+.facts li{display:flex;align-items:center;gap:16px;padding:16px 0;border-top:1px solid var(--line);font-weight:500}
+.facts li:last-child{border-bottom:1px solid var(--line)}
+.facts .ico{width:22px;height:22px;color:var(--navy)}
+.facts small{margin-left:auto;font-weight:400;color:var(--muted);font-size:.9rem}
+.collage{position:relative;height:clamp(420px,42vw,600px)}
+.collage .one{position:absolute;right:0;top:0;width:72%;height:82%;border-radius:20px}
+.collage .two{position:absolute;left:0;bottom:0;width:46%;height:52%;border-radius:20px;box-shadow:0 0 0 10px var(--paper)}
+
+/* Park, Sleep & Fly */
+.psf{background:var(--night);color:#fff;padding:clamp(90px,10vw,150px) 0 clamp(40px,5vw,80px);overflow:clip}
+.psf-grid{display:grid;grid-template-columns:5fr 6fr;gap:clamp(40px,6vw,100px);align-items:center}
+.psf h2{color:#fff}
+.psf-copy p{color:#b9c1d4;max-width:38ch;margin-top:20px;font-size:1.06rem}
+.includes{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;margin:30px 0 32px;padding:22px 0;border-block:1px solid var(--line-inv)}
+.includes li{display:flex;align-items:center;gap:10px;color:#fff;font-weight:500}
+.includes li::before{content:"";flex:none;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.12) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4L18 8'/%3E%3C/svg%3E") center/12px no-repeat}
+.fine{font-size:.85rem;color:var(--soft)!important;margin-top:18px!important}
+.psf-media{aspect-ratio:5/4;border-radius:20px}
+
+/* Scroll scene: car parks, night falls, car becomes the shuttle, shuttle becomes the plane. */
+.journey{margin-top:clamp(56px,6vw,88px)}
+.journey-sticky{display:flex;flex-direction:column;gap:20px}
+.journey-head{display:flex;justify-content:space-between;align-items:center;gap:20px}
+.replay{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:9px 16px 9px 12px;background:rgba(255,255,255,.08);color:#d5dbea;font:500 .88rem "Schibsted Grotesk",sans-serif;cursor:pointer;transition:background .25s var(--ease),color .25s var(--ease)}
+.replay:hover{background:rgba(255,255,255,.14);color:#fff}
+.replay svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:transform .6s var(--ease)}
+.replay:hover svg{transform:rotate(-180deg)}
+.journey-title{font-size:clamp(1.35rem,2vw,1.8rem);font-weight:500;letter-spacing:-.02em;color:#fff}
+.scene{--night:0;--dawn:0;position:relative;height:clamp(200px,30vh,290px);border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#24407f 0%,#36599c 78%);box-shadow:inset 0 0 0 1px var(--line-inv)}
+.sky-night{position:absolute;inset:0;background:linear-gradient(180deg,#050b1c 0%,#0f1d44 80%);opacity:var(--night)}
+.sky-dawn{position:absolute;inset:0;background:radial-gradient(90% 75% at 50% 100%,rgba(255,168,92,.6),rgba(255,168,92,0) 65%);opacity:var(--dawn)}
+.night-stars{position:absolute;inset:0 0 35% 0;opacity:var(--night);background-image:radial-gradient(1.6px 1.6px at 8% 22%,#fff 50%,transparent 52%),radial-gradient(1.2px 1.2px at 21% 44%,#fff 50%,transparent 52%),radial-gradient(1.4px 1.4px at 34% 16%,#fff 50%,transparent 52%),radial-gradient(1px 1px at 47% 36%,#fff 50%,transparent 52%),radial-gradient(1.6px 1.6px at 58% 12%,#fff 50%,transparent 52%),radial-gradient(1.2px 1.2px at 69% 40%,#fff 50%,transparent 52%),radial-gradient(1.4px 1.4px at 81% 20%,#fff 50%,transparent 52%),radial-gradient(1px 1px at 92% 34%,#fff 50%,transparent 52%),radial-gradient(1.2px 1.2px at 14% 62%,#fff 50%,transparent 52%),radial-gradient(1px 1px at 76% 64%,#fff 50%,transparent 52%)}
+.moon{position:absolute;left:24%;top:13%;width:clamp(26px,3.6vw,42px);height:auto;fill:#f7e9bf;opacity:var(--night);transform:translateY(calc((1 - var(--night)) * 50px));filter:drop-shadow(0 0 18px rgba(247,233,191,.5))}
+.ground{position:absolute;left:0;right:0;bottom:0;height:24%;background:#0c1631;box-shadow:0 -1px 0 var(--line-inv)}
+.ground::after{content:"";position:absolute;left:0;right:0;top:48%;height:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.26) 0 18px,transparent 18px 38px)}
+.scene svg{overflow:visible}
+.hotel,.tower{position:absolute;bottom:24%;height:auto;fill:#14234b;stroke:#fff;stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round}
+.hotel{left:5%;width:clamp(96px,13vw,180px)}
+.hotel .win{fill:#ffd27a;fill-opacity:calc(.06 + var(--night) * .9);stroke:rgba(255,255,255,.55);stroke-width:1}
+.tower{right:5%;width:clamp(50px,5.5vw,72px)}
+.tower .beacon{fill:#ff5d52;stroke:none;animation:blink 1.4s steps(1) infinite}
+@keyframes blink{50%{opacity:.15}}
+.vehicle{position:absolute;left:-12%;bottom:calc(24% - 1px);width:clamp(58px,6.5vw,88px);aspect-ratio:64/30;transform:translateX(-50%);will-change:transform,left}
+.vehicle svg{position:absolute;inset:0;width:100%;height:100%;fill:#14234b;stroke:#fff;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round}
+.v-bus-detail,.v-plane-detail{opacity:0}
+.journey-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,2vw,28px)}
+.step{--f:0;position:relative;padding-top:18px;color:var(--soft);transition:color .4s var(--ease)}
+.step::before,.step::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;border-radius:2px}
+.step::before{background:var(--line-inv)}
+.step::after{background:#fff;transform:scaleX(var(--f));transform-origin:left}
+.step b{display:block;font-size:1.1rem;font-weight:500}
+.step span{font-size:.9rem}
+.step.on{color:#fff}
+.step.on span{color:#b9c1d4}
+
+/* Rooms */
+.rooms{padding:clamp(100px,11vw,160px) 0 0}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:clamp(36px,4vw,56px)}
+.rooms-grid{display:grid;grid-template-columns:7fr 5fr;gap:16px}
+.rooms-grid figure{border-radius:20px}
+.rooms-grid .a{grid-row:span 2;min-height:100%}
+.rooms-grid .b,.rooms-grid .c{aspect-ratio:16/11}
+.rooms-grid .d,.rooms-grid .e,.dots{display:none}
+.amenities{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.amenities span{padding:7px 14px;border-radius:999px;background:var(--white);box-shadow:0 0 0 1px var(--line);font-size:.88rem;color:var(--muted)}
+
+/* Breakfast */
+.breakfast{position:relative;height:min(92vh,880px);width:calc(min(100%,1400px) - 2 * var(--gutter));margin:clamp(100px,11vw,160px) auto 0;border-radius:24px;overflow:hidden;color:#fff;display:flex;align-items:flex-end}
+.breakfast .photo{position:absolute;inset:-10% 0;background:var(--night)}
+.breakfast::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,20,40,0) 45%,rgba(12,20,40,.66) 100%)}
+.bf-copy{position:relative;z-index:1;width:100%;padding:clamp(32px,4vw,56px);display:flex;justify-content:space-between;align-items:end;gap:40px}
+.breakfast h2{color:#fff;max-width:14ch}
+.breakfast p{max-width:34ch;color:rgba(255,255,255,.88)}
+
+/* Meetings */
+.meet{padding:clamp(100px,11vw,160px) 0}
+.meet-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(40px,6vw,100px);align-items:center}
+.meet-copy .lede{margin-top:20px}
+.meet-price{display:flex;align-items:baseline;gap:12px;margin:34px 0 28px;color:var(--muted)}
+.meet-price strong{color:var(--ink);font-size:clamp(2.2rem,3vw,2.8rem);font-weight:500;letter-spacing:-.04em;line-height:1}
+.meet-card{background:var(--white);border-radius:24px;padding:10px;box-shadow:0 0 0 1px var(--line),0 30px 60px -40px rgba(20,27,44,.35)}
+.meet-media{aspect-ratio:16/9;border-radius:16px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;margin:8px 0 4px}
+th{font-weight:400;font-size:.84rem;color:var(--muted);text-align:left;padding:14px 18px 10px}
+td{padding:13px 18px;border-top:1px solid var(--line);font-weight:500}
+th:not(:first-child),td:not(:first-child){text-align:right}
+td:not(:first-child){font-weight:400;color:var(--muted)}
+
+/* Reviews */
+.reviews{padding:0 0 clamp(100px,11vw,160px)}
+.review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.review{background:var(--white);border-radius:20px;padding:26px 26px 28px;box-shadow:0 0 0 1px var(--line);display:flex;flex-direction:column;gap:16px;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.review:hover{transform:translateY(-4px);box-shadow:0 0 0 1px var(--line),0 24px 40px -28px rgba(20,27,44,.35)}
+.review header{display:flex;align-items:center;gap:12px}
+.avatar{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--c);color:#fff;font-weight:600;font-size:1rem}
+.who b{display:block;font-weight:600;font-size:.97rem;line-height:1.3}
+.who span{font-size:.84rem;color:var(--muted)}
+.review .g{margin-left:auto;width:22px;height:22px}
+.stars{display:flex;gap:2px;color:var(--star)}
+.stars svg{width:18px;height:18px;fill:currentColor}
+.review p{font-size:1.02rem;line-height:1.55}
+.review small{color:var(--muted);font-size:.84rem;margin-top:auto}
+
+/* Location */
+.loc{padding:0 0 clamp(100px,11vw,160px)}
+.loc-card{display:grid;grid-template-columns:5fr 7fr;background:var(--white);border-radius:24px;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+.loc-copy{padding:clamp(32px,4vw,56px)}
+.loc address{font-style:normal;font-size:1.25rem;letter-spacing:-.015em;line-height:1.4;margin:22px 0 12px}
+.routes{margin-top:36px}
+.routes div{display:flex;gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.routes .ico{width:22px;height:22px;color:var(--navy);margin-top:2px}
+.routes dt{font-weight:500}
+.routes dd{color:var(--muted);font-size:.95rem}
+.map{min-height:520px;background:#e5e3dd}
+.map iframe{width:100%;height:100%;min-height:520px;border:0;display:block}
+
+/* Footer */
+footer.site{background:var(--night);color:#b9c1d4;padding:clamp(90px,10vw,140px) 0 40px}
+.foot-cta{display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap;padding-bottom:clamp(64px,8vw,100px)}
+.foot-cta h2{color:#fff;font-size:clamp(2.4rem,4.6vw,4.4rem);letter-spacing:-.04em}
+.foot-cta p{margin-top:14px;max-width:44ch}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-top:40px;border-top:1px solid var(--line-inv);font-size:.95rem}
+.foot-grid img{height:64px;width:auto;margin-bottom:22px}
+.foot-grid h3{font-size:.95rem;font-weight:500;color:#fff;margin:0 0 14px;letter-spacing:0}
+.foot-grid ul{display:grid;gap:8px}
+.foot-grid a{text-decoration:none}
+.foot-grid a:hover{color:#fff}
+.legal{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:64px;font-size:.85rem;color:#7a84a0}
+.legal a{text-decoration:none;margin-left:20px}
+.legal a:hover{color:#fff}
+
+.mbar{display:none}
+
+/* Reveal states (only while Motion runs) */
+.js:not(.static) .hero .line>span{transform:translateY(105%)}
+.js:not(.static) [data-fade],.js:not(.static) .review-grid .review{opacity:0}
+.js:not(.static) [data-reveal]>*{clip-path:inset(100% 0 0 0)}
+
+/* Suchio pitch layer */
+.pitch{position:fixed;left:20px;bottom:20px;z-index:60;display:flex;align-items:center;gap:12px;background:#fff;border-radius:999px;padding:6px 6px 6px 16px;box-shadow:0 12px 32px -12px rgba(0,0,0,.3),0 0 0 1px rgba(0,0,0,.06);font:500 .85rem/1 "Schibsted Grotesk",sans-serif;color:var(--ink)}
+.pitch b{font-weight:700;letter-spacing:-.02em}
+.pitch b i{font-style:normal;color:var(--suchio)}
+.pitch span{color:var(--muted)}
+.pitch button{border:0;border-radius:999px;background:var(--suchio);color:#fff;font:inherit;padding:9px 14px;cursor:pointer}
+.pitch button[aria-pressed=true]{background:var(--ink)}
+.note{display:none}
+body.notes .note{position:absolute;z-index:30;display:flex;gap:10px;align-items:flex-start;max-width:290px;background:var(--suchio);color:#fff;padding:10px 14px 11px 10px;border-radius:12px;font:500 .84rem/1.35 "Schibsted Grotesk",sans-serif;text-align:left;box-shadow:0 16px 32px -14px rgba(0,60,160,.6);animation:note-in .5s var(--ease) both}
+body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#fff;color:var(--suchio);font-style:normal;font-weight:700;font-size:.8rem}
+@keyframes note-in{from{opacity:0;transform:translateY(6px) scale(.97)}}
+.rel{position:relative}
+
+@media (max-width:1080px){
+  nav.main{display:none}
+  .head-right{margin-left:auto}
+  .intro-grid,.psf-grid,.meet-grid,.loc-card{grid-template-columns:1fr}
+  .psf-media{order:-1}
+  .review-grid{grid-template-columns:1fr 1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px) and (max-height:720px){
+  .hero-sub{display:none}
+}
+@media (max-width:760px){
+  body{font-size:16px}
+  header.site .wrap,header.site.scrolled .wrap{height:64px}
+  .logo,header.site.scrolled .logo{height:40px}
+  .head-right .tel,.lang,header .btn{display:none}
+  .burger{position:relative;display:block;margin-left:auto;width:44px;height:44px;border:0;background:none;color:inherit;cursor:pointer}
+  .burger span{position:absolute;left:10px;right:10px;top:50%;height:1.6px;margin-top:-.8px;border-radius:2px;background:currentColor;transition:transform .5s var(--ease)}
+  .burger span:first-child{transform:translateY(-4px)}
+  .burger span:last-child{transform:translateY(4px)}
+  body.menu-open .burger span:first-child{transform:rotate(45deg)}
+  body.menu-open .burger span:last-child{transform:rotate(-45deg)}
+  body.menu-open .mbar,body.menu-open .pitch{opacity:0;pointer-events:none}
+  .hero{min-height:600px}
+  .hero-copy{padding-bottom:22px}
+  .hero-sub{font-size:1rem;margin-top:14px}
+  .book{grid-template-columns:1fr 1fr}
+  .field{padding:9px 10px;gap:10px}
+  .field-ico{width:34px;height:34px;border-radius:10px}
+  .field-ico svg{width:17px;height:17px}
+  .field-value{font-size:.97rem}
+  .scrim{display:block;position:fixed;inset:0;z-index:69;background:rgba(8,14,30,.45);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility 0s .4s}
+  .scrim.open{opacity:1;visibility:visible;transition:opacity .4s var(--ease)}
+  .pop{position:fixed;left:0!important;right:0;top:auto!important;bottom:0;width:auto;max-height:90svh;overflow:auto;overscroll-behavior:contain;border-radius:26px 26px 0 0;padding:6px 20px calc(18px + env(safe-area-inset-bottom));opacity:1;transform:translateY(105%);transition:transform .55s var(--ease),visibility 0s .55s}
+  .pop.open{transform:translateY(var(--drag,0px));transition:transform .55s var(--ease)}
+  .pop.dragging{transition:none}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:22px 0 14px;touch-action:none;position:relative;cursor:grab}
+  .sheet-head::before{content:"";position:absolute;left:50%;top:6px;width:40px;height:4px;margin-left:-20px;border-radius:4px;background:rgba(20,27,44,.16)}
+  .sheet-head h3{font-size:1.2rem;letter-spacing:-.02em}
+  .cal,.room-pop{width:auto}
+  .cal-months{grid-template-columns:1fr}
+  .day{height:46px}
+  .day span{width:44px;height:44px}
+  .day.in::before,.day.start.ranged::before,.day.end::before{height:44px}
+  .pop-foot{flex-wrap:wrap}
+  .pop-actions{flex:1;justify-content:flex-end}
+  .pop .btn{flex:1;max-width:220px}
+  .field:nth-child(3){grid-column:1/-1;margin-top:2px}
+  .field:nth-child(3)::before{left:14px;right:14px;top:0;bottom:auto;width:auto;height:1px}
+  .hero h1{font-size:2.5rem}
+  .line>.hero-name{margin-bottom:12px;font-size:.95rem}
+  .book .btn{grid-column:1/-1;margin:4px 0 0}
+  .book-perks{display:none}
+  .facts small{display:none}
+  .collage{height:420px}
+  .sec-head{flex-direction:column;align-items:flex-start;gap:16px}
+  .rooms-grid{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(var(--gutter) * -1);padding-inline:var(--gutter);scroll-padding-inline:var(--gutter);scrollbar-width:none;overscroll-behavior-x:contain}
+  .rooms-grid::-webkit-scrollbar{display:none}
+  .rooms-grid figure,.rooms-grid .a,.rooms-grid .b,.rooms-grid .c{flex:0 0 84%;aspect-ratio:4/5;min-height:0;grid-row:auto;width:auto;scroll-snap-align:start;transform:scale(var(--s,1));opacity:var(--o,1);transform-origin:center;transition:transform .25s ease-out,opacity .25s ease-out}
+  .rooms-grid .d,.rooms-grid .e{display:block}
+  .rooms-grid img{scale:1.25}
+  .dots{display:flex;justify-content:center;gap:6px;margin-top:20px}
+  .dots i{width:6px;height:6px;border-radius:99px;background:rgba(20,27,44,.18);cursor:pointer;transition:width .5s var(--ease),background .5s var(--ease)}
+  .dots i.on{width:26px;background:var(--ink)}
+  .journey-steps{gap:10px}
+  .step b{font-size:.98rem}
+  .step span{display:none}
+  .scene{height:230px}
+  .breakfast{height:80vh}
+  .bf-copy{flex-direction:column;align-items:flex-start;gap:14px}
+  .step b{font-size:1rem}
+  .step>span:last-child{font-size:.8rem;padding-inline:4px}
+  .review-grid{grid-template-columns:1fr}
+  .map,.map iframe{min-height:360px}
+  .foot-grid{grid-template-columns:1fr}
+  .legal a{margin:0 16px 0 0}
+  footer.site{padding-bottom:120px}
+  .mbar{display:grid;grid-template-columns:auto 1fr;gap:10px;position:fixed;transform:translateY(110%);transition:transform .5s var(--ease);inset:auto 0 0;z-index:50;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(244,242,237,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 -1px 0 var(--line)}
+  body.past-hero .mbar{transform:none}
+  .mbar .tel-btn{display:grid;place-items:center;width:50px;height:50px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--line);color:var(--ink)}
+  .mbar .tel-btn svg{width:20px;height:20px}
+  .pitch{bottom:84px;left:12px}
+  .pitch{transition:opacity .4s var(--ease)}
+  body:not(.past-hero) .pitch{opacity:0;pointer-events:none}
+  body.notes .note{position:relative;inset:auto!important;max-width:none;margin:14px 0;font-size:.82rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="#" aria-label="Parkhotel am Posthof, Startseite">
+      <img class="on-dark" src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2017/07/parkhotel-logo-white.png" alt="Parkhotel am Posthof">
+      <img class="on-light" src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/Parkhotel.png" alt="" aria-hidden="true">
+    </a>
+    <nav class="main" aria-label="Hauptnavigation">
+      <a href="#psf">Park, Sleep &amp; Fly</a>
+      <a href="#zimmer">Zimmer</a>
+      <a href="#tagungen">Tagungen</a>
+      <a href="#anfahrt">Anfahrt</a>
+    </nav>
+    <div class="head-right">
+      <a class="tel" href="tel:+49619089990">06190 89990</a>
+      <a class="lang" href="#" lang="en">EN</a>
+      <a class="btn" href="https://ibev5.hotels-online-buchen.de/ibe/posthofhattersheim"><span class="btn-track"><span>Buchen</span><span aria-hidden="true">Buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a>
+    </div>
+    <button class="burger" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="menu" id="menu">
+  <nav aria-label="Menü">
+    <a href="#psf" style="--i:0">Park, Sleep &amp; Fly</a>
+    <a href="#zimmer" style="--i:1">Zimmer</a>
+    <a href="#tagungen" style="--i:2">Tagungen</a>
+    <a href="#anfahrt" style="--i:3">Anfahrt</a>
+  </nav>
+  <div class="menu-foot">
+    <div class="row"><a href="tel:+49619089990">06190 89990</a><a href="#" lang="en">English</a></div>
+    <a class="btn light" href="https://ibev5.hotels-online-buchen.de/ibe/posthofhattersheim"><span class="btn-track"><span>Zimmer buchen</span><span aria-hidden="true">Zimmer buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a>
+  </div>
+</div>
+
+<main>
+  <section class="hero">
+    <div class="hero-media"><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8153-hdr-1.jpg" alt="Das Parkhotel am Posthof in Hattersheim von außen"></div>
+    <div class="wrap hero-copy rel">
+      <h1><span class="line"><span class="hero-name">Parkhotel am Posthof</span></span><span class="line"><span>Ruhig schlafen,</span></span><span class="line"><span>entspannt abfliegen.</span></span></h1>
+      <p class="hero-sub" data-fade>Ihr Hotel am Park in Hattersheim, nur wenige Minuten vom Frankfurter Flughafen.</p>
+      <span class="note" style="right:var(--gutter);bottom:40px"><i>1</i>Ihr Haus im ersten Bild, eine klare Aussage und die Buchung sofort sichtbar, ohne Scrollen.</span>
+    </div>
+    <div class="wrap book-wrap rel" data-fade>
+      <form class="book" action="https://ibev5.hotels-online-buchen.de/ibe/posthofhattersheim" method="get" aria-label="Verfügbarkeit prüfen">
+        <button class="field" type="button" data-open="cal" aria-haspopup="dialog" aria-expanded="false"><span class="field-ico"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="field-text"><span class="field-label">Anreise</span><span class="field-value" data-value="arr"></span></span></button>
+        <button class="field" type="button" data-open="cal" aria-haspopup="dialog" aria-expanded="false"><span class="field-ico"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="field-text"><span class="field-label">Abreise</span><span class="field-value" data-value="dep"></span></span></button>
+        <button class="field" type="button" data-open="rooms" aria-haspopup="dialog" aria-expanded="false"><span class="field-ico"><svg viewBox="0 0 24 24"><path d="M3 18v-5.5A2.5 2.5 0 0 1 5.5 10h13a2.5 2.5 0 0 1 2.5 2.5V18M3 15h18M3 18v2M21 18v2M6 10V7.5A1.5 1.5 0 0 1 7.5 6h9A1.5 1.5 0 0 1 18 7.5V10"/></svg></span><span class="field-text"><span class="field-label">Zimmer</span><span class="field-value" data-value="rooms"></span></span></button>
+        <button class="btn navy" type="submit"><span class="btn-track"><span>Verfügbarkeit prüfen</span><span aria-hidden="true">Verfügbarkeit prüfen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></button>
+        <input type="hidden" name="arrival" id="in-arr"><input type="hidden" name="nights" id="in-nights"><input type="hidden" name="ez" id="in-ez"><input type="hidden" name="dz" id="in-dz">
+      </form>
+      <div class="book-perks">
+        <span><svg class="ico" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Direkt beim Hotel buchen</span>
+        <span><svg class="ico" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Kostenlose Parkplätze</span>
+        <span><svg class="ico" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Frühstücksbuffet</span>
+      </div>
+      <span class="note" style="right:var(--gutter);top:-64px"><i>2</i>Gebucht wird über Ihr bestehendes System. Jede Direktbuchung spart Provision an Buchungsportale.</span>
+    </div>
+  </section>
+
+  <section class="intro">
+    <div class="wrap intro-grid">
+      <div>
+        <p class="statement">Ein ruhiges Hotel direkt am Park, mit kurzen Wegen zum Flughafen, zur Messe und in die Frankfurter Innenstadt.</p>
+        <ul class="facts" data-fade>
+          <li><svg class="ico" viewBox="0 0 24 24"><path d="M3 18v-5.5A2.5 2.5 0 0 1 5.5 10h13a2.5 2.5 0 0 1 2.5 2.5V18M3 15h18M3 18v2M21 18v2M6 10V7.5A1.5 1.5 0 0 1 7.5 6h9A1.5 1.5 0 0 1 18 7.5V10"/></svg>58 Zimmer<small>teils mit Balkon</small></li>
+          <li><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="4"/><path d="M10 16.5v-9h2.75a2.75 2.75 0 0 1 0 5.5H10"/></svg>Kostenlose Parkplätze<small>direkt am Haus</small></li>
+          <li><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Vier Tagungsräume<small>bis 80 Personen</small></li>
+        </ul>
+      </div>
+      <div class="collage">
+        <figure class="one photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8098-hdr-1.jpg" alt="Restaurant mit Fensterfront zum Park" loading="lazy"></figure>
+        <figure class="two photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8063-hdr-1.jpg" alt="Sitzecke mit zwei Sesseln vor bodentiefen Fenstern" loading="lazy"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="psf" id="psf">
+    <div class="wrap">
+      <div class="psf-grid rel">
+        <div class="psf-copy">
+          <h2 data-fade>Park, Sleep &amp; Fly</h2>
+          <p data-fade>Am Vorabend anreisen, ausschlafen und mit dem Shuttle zum Terminal. Ihr Auto bleibt bis zu 21 Tage auf unserem Parkplatz.</p>
+          <ul class="includes" data-fade><li>Übernachtung</li><li>Frühstücksbuffet</li><li>Parken bis zu 21 Tage</li><li>Shuttle zum Flughafen</li></ul>
+          <div data-fade><a class="btn light" href="https://ibev5.hotels-online-buchen.de/ibe/posthofhattersheim"><span class="btn-track"><span>Paket buchen</span><span aria-hidden="true">Paket buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a></div>
+          <p class="fine" data-fade>Buchbar mit gültigem Flugticket.</p>
+        </div>
+        <figure class="psf-media photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8143-hdr-1.jpg" alt="Parkhotel am Posthof mit hoteleigenem Parkplatz" loading="lazy"></figure>
+        <span class="note" style="right:24px;top:-40px"><i>3</i>Ein Angebot, das nur Sie so haben, steht heute nur in einem Pop-up. Ihre Angebotsseite nennt 119 €, das Pop-up 229 €. Welcher Preis gilt?</span>
+      </div>
+
+      <div class="journey">
+        <div class="journey-sticky">
+          <div class="journey-head"><p class="journey-title">Vom Parkplatz bis zum Gate</p><button class="replay" type="button"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5"/></svg>Nochmal abspielen</button></div>
+          <div class="scene" aria-hidden="true">
+            <div class="sky-night"></div>
+            <div class="sky-dawn"></div>
+            <div class="night-stars"></div>
+            <svg class="moon" viewBox="0 0 24 24"><path d="M20 14.6A8.4 8.4 0 0 1 9.4 4a8.6 8.6 0 1 0 10.6 10.6Z"/></svg>
+            <div class="ground"></div>
+            <svg class="hotel" viewBox="0 0 160 112">
+              <path d="M12 112V48h136v64"/>
+              <path d="M4 50 30 24h100l26 26z"/>
+              <path d="M46 24l14-14 14 14M86 24l14-14 14 14"/>
+              <path d="M80 30l6 3.5v7L80 44l-6-3.5v-7z"/>
+              <rect class="win" x="24" y="58" width="14" height="13" rx="2"/><rect class="win" x="46" y="58" width="14" height="13" rx="2"/><rect class="win" x="100" y="58" width="14" height="13" rx="2"/><rect class="win" x="122" y="58" width="14" height="13" rx="2"/>
+              <rect class="win" x="24" y="82" width="14" height="13" rx="2"/><rect class="win" x="46" y="82" width="14" height="13" rx="2"/><rect class="win" x="100" y="82" width="14" height="13" rx="2"/><rect class="win" x="122" y="82" width="14" height="13" rx="2"/>
+              <rect class="win" x="72" y="58" width="16" height="13" rx="2"/>
+              <path d="M70 112V86h20v26"/>
+            </svg>
+            <svg class="tower" viewBox="0 0 70 124">
+              <path d="M29 124V54h12v70"/>
+              <path d="M2 124v-22h66v22"/>
+              <path d="M16 54h38l-6-17H22z"/>
+              <path d="M22 41h26M20 37h30M35 37V25"/>
+              <circle class="beacon" cx="35" cy="22" r="2.6"/>
+              <path d="M10 110h8M26 110h8M42 110h8M56 110h6" stroke-width="2"/>
+            </svg>
+            <div class="vehicle">
+              <svg viewBox="0 0 64 30">
+                <path class="v-wing" d="M24 18.5 16 28h6l14-9.5"/>
+                <path class="v-body" d=""/>
+                <path class="v-car-detail" d="M16 14.5H44.5M30 8.2V14.5"/>
+                <path class="v-bus-detail" d="M8 8h8v5.5H8zM20 8h8v5.5h-8zM32 8h8v5.5h-8zM44 8h5.5l3.5 5.5H44zM3 18.5h58"/>
+                <path class="v-plane-detail" d="M32 16.4h.01M36 16.4h.01M40 16.4h.01M44 16.4h.01M48 16.4h.01M53 15.6l4 1.5" stroke-width="2.2"/>
+                <g class="wheel"><circle r="5"/><path d="M0-4v8M-4 0h8"/></g>
+                <g class="wheel"><circle r="5"/><path d="M0-4v8M-4 0h8"/></g>
+              </svg>
+            </div>
+          </div>
+          <ol class="journey-steps">
+            <li class="step"><b>Parken</b><span>Am Vorabend ankommen, das Auto bleibt bei uns.</span></li>
+            <li class="step"><b>Schlafen</b><span>Ruhige Nacht, Frühstück am Morgen.</span></li>
+            <li class="step"><b>Fliegen</b><span>Mit dem Shuttle direkt zum Terminal.</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rooms" id="zimmer">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2 data-fade>Zimmer für eine Nacht<br>oder die ganze Messewoche</h2>
+          <div class="amenities" data-fade><span>Dusche und WC</span><span>Schreibtisch</span><span>Minibar</span><span>Kabel-TV</span><span>WLAN</span><span>teils mit Balkon</span></div>
+        </div>
+        <a class="link" data-fade href="#">Alle Fotos ansehen</a>
+      </div>
+      <div class="rooms-grid">
+        <figure class="a photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8023-hdr-1.jpg" alt="Doppelzimmer mit großem Fenster und Sessel" loading="lazy"></figure>
+        <figure class="b photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8043-hdr-1.jpg" alt="Zimmer mit Balkontür zum Grünen" loading="lazy"></figure>
+        <figure class="c photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8062-hdr-1.jpg" alt="Zimmer mit Arbeitsplatz und Fernseher" loading="lazy"></figure>
+        <figure class="d photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8063-hdr-1.jpg" alt="Sitzecke mit Sesseln vor bodentiefen Fenstern" loading="lazy"></figure>
+        <figure class="e photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8003-hdr-1.jpg" alt="Doppelzimmer mit warmem Licht" loading="lazy"></figure>
+      </div>
+      <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+    </div>
+  </section>
+
+  <section class="breakfast" aria-label="Frühstück">
+    <div class="photo"><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8103-hdr-1.jpg" alt="Heller Frühstücksraum mit Fensterfront und Pflanzen" loading="lazy"></div>
+    <div class="bf-copy">
+      <h2 data-fade>Gut in den Tag starten</h2>
+      <p data-fade>Jeden Morgen ein reichhaltiges Buffet im hellen Frühstücksraum, mit Fensterfront zum Park.</p>
+    </div>
+  </section>
+
+  <section class="meet" id="tagungen">
+    <div class="wrap meet-grid">
+      <div class="meet-copy">
+        <h2 data-fade>Tagen zwischen Flughafen und Messe</h2>
+        <p class="lede" data-fade>Vier Räume mit Technik und Verpflegung, die Zimmer im selben Haus. Ihre Teilnehmenden parken kostenlos.</p>
+        <p class="meet-price" data-fade><strong>ab 42 €</strong>Tagungspauschale pro Person</p>
+        <div data-fade><a class="btn" href="#"><span class="btn-track"><span>Tagung anfragen</span><span aria-hidden="true">Tagung anfragen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a></div>
+      </div>
+      <div class="meet-card" data-fade>
+        <figure class="meet-media photo"><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/t1.jpg" alt="Tagungsraum mit Tischen in U-Form und Leinwand" loading="lazy"></figure>
+        <table>
+          <thead><tr><th scope="col">Raum</th><th scope="col">Fläche</th><th scope="col">Personen</th></tr></thead>
+          <tbody>
+            <tr><td>Mainz und Frankfurt</td><td>105 m²</td><td>bis 80</td></tr>
+            <tr><td>Frankfurt</td><td>69 m²</td><td>bis 60</td></tr>
+            <tr><td>Wiesbaden</td><td>42 m²</td><td>bis 20</td></tr>
+            <tr><td>Mainz</td><td>32 m²</td><td>bis 20</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="reviews">
+    <div class="wrap rel">
+      <div class="sec-head">
+        <h2 data-fade>Das sagen unsere Gäste</h2>
+        <a class="link" data-fade href="#">Alle Bewertungen auf Google</a>
+      </div>
+      <div class="review-grid">
+        <article class="review">
+          <header><span class="avatar" style="--c:#2f6f5e">S</span><div class="who"><b>Sabine K.</b><span>vor 2 Wochen</span></div><svg class="g" viewBox="0 0 48 48" role="img" aria-label="Google"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.5z"/></svg></header>
+          <div class="stars" role="img" aria-label="5 von 5 Sternen"><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg></div>
+          <p>Gute Ausstattung, sehr gutes Frühstück, kostenloser Parkplatz. Für die Nacht vor dem Flug genau richtig.</p>
+          <small>Park, Sleep &amp; Fly</small>
+        </article>
+        <article class="review">
+          <header><span class="avatar" style="--c:#8a5a2b">T</span><div class="who"><b>Thomas W.</b><span>vor 1 Monat</span></div><svg class="g" viewBox="0 0 48 48" role="img" aria-label="Google"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.5z"/></svg></header>
+          <div class="stars" role="img" aria-label="5 von 5 Sternen"><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg></div>
+          <p>Sehr freundliches Personal, absolut empfehlenswert. Wir kommen zur nächsten Messe wieder.</p>
+          <small>Geschäftsreise</small>
+        </article>
+        <article class="review">
+          <header><span class="avatar" style="--c:#3a4f8f">J</span><div class="who"><b>James R.</b><span>vor 2 Monaten</span></div><svg class="g" viewBox="0 0 48 48" role="img" aria-label="Google"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.5z"/></svg></header>
+          <div class="stars" role="img" aria-label="5 von 5 Sternen"><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg><svg viewBox="0 0 24 24"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg></div>
+          <p lang="en">Lovely hotel with professional staff. Quiet rooms and an easy drive to the airport.</p>
+          <small>Urlaub</small>
+        </article>
+      </div>
+      <span class="note" style="right:var(--gutter);top:-30px"><i>6</i>Beispieltexte. Auf der fertigen Seite erscheinen hier Ihre echten Google-Bewertungen.</span>
+    </div>
+  </section>
+
+  <section class="loc" id="anfahrt">
+    <div class="wrap rel">
+      <div class="loc-card" data-fade>
+        <div class="loc-copy">
+          <h2>Anfahrt</h2>
+          <address>Mainzer Landstraße 33<br>65795 Hattersheim am Main</address>
+          <a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Parkhotel%20am%20Posthof%2C%20Mainzer%20Landstra%C3%9Fe%2033%2C%2065795%20Hattersheim%20am%20Main">Route planen</a>
+          <dl class="routes">
+            <div><svg class="ico" viewBox="0 0 24 24"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg><span><dt>Mit dem Auto</dt><dd>A66, Abfahrt Hattersheim (12). Parkplätze direkt am Hotel.</dd></span></div>
+            <div><svg class="ico" viewBox="0 0 24 24"><path d="M10.5 4.5c0-1 .7-1.8 1.5-1.8s1.5.8 1.5 1.8V9l7 4v2l-7-2v4.5l2.2 1.6V21L12 20l-3.7 1v-1.9l2.2-1.6V13l-7 2v-2l7-4z"/></svg><span><dt>Vom Flughafen</dt><dd>Über B43 und B40a, wenige Minuten Fahrt.</dd></span></div>
+            <div><svg class="ico" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="14" rx="3"/><path d="M6 11h12M9 21l1.5-4M15 21l-1.5-4M9 14h.01M15 14h.01"/></svg><span><dt>Mit der Bahn</dt><dd>S1 bis Hattersheim, dann etwa 10 Minuten zu Fuß.</dd></span></div>
+          </dl>
+        </div>
+        <div class="map"><iframe title="Karte: Parkhotel am Posthof, Hattersheim am Main" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Parkhotel+am+Posthof,+Mainzer+Landstra%C3%9Fe+33,+65795+Hattersheim+am+Main&amp;z=15&amp;output=embed"></iframe></div>
+      </div>
+      <span class="note" style="right:calc(var(--gutter) + 24px);top:-30px"><i>4</i>Die Karte auf Ihrer aktuellen Seite zeigt eine Adresse in San Francisco. Hier stimmt der Standort.</span>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap rel">
+    <div class="foot-cta">
+      <div>
+        <h2 data-fade>Bis bald in Hattersheim.</h2>
+        <p data-fade>Fragen zu Zimmern, Gruppen oder Tagungen? Rufen Sie uns an unter <a href="tel:+49619089990">06190 89990</a>.</p>
+      </div>
+      <a class="btn light" data-fade href="https://ibev5.hotels-online-buchen.de/ibe/posthofhattersheim"><span class="btn-track"><span>Zimmer buchen</span><span aria-hidden="true">Zimmer buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a>
+    </div>
+    <div class="foot-grid">
+      <div>
+        <img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2017/07/parkhotel-logo-white.png" alt="Parkhotel am Posthof">
+        <p>Mainzer Landstraße 33<br>65795 Hattersheim am Main</p>
+      </div>
+      <div><h3>Kontakt</h3><ul><li><a href="tel:+49619089990">06190 89990</a></li><li><a href="mailto:info@frankfurtairport-hotel.de">info@frankfurtairport-hotel.de</a></li></ul></div>
+      <div><h3>Hotel</h3><ul><li><a href="#zimmer">Zimmer</a></li><li><a href="#psf">Park, Sleep &amp; Fly</a></li><li><a href="#">Fotogalerie</a></li><li><a href="#">Messetermine</a></li></ul></div>
+      <div><h3>Tagungen</h3><ul><li><a href="#tagungen">Räume</a></li><li><a href="#">Pauschalen</a></li><li><a href="https://www.facebook.com/ParkhotelAmPosthof">Facebook</a></li></ul></div>
+    </div>
+    <div class="legal"><span>© 2026 Parkhotel am Posthof</span><span><a href="#">Impressum</a><a href="#">Datenschutz</a></span></div>
+    <span class="note" style="left:var(--gutter);bottom:90px"><i>5</i>Ihr Footer verlinkt noch auf Google+, das 2019 eingestellt wurde. Hier stehen nur Kanäle, die es gibt.</span>
+  </div>
+</footer>
+
+<div class="mbar">
+  <a class="tel-btn" href="tel:+49619089990" aria-label="Anrufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a>
+  <a class="btn navy" href="https://ibev5.hotels-online-buchen.de/ibe/posthofhattersheim"><span class="btn-track"><span>Zimmer buchen</span><span aria-hidden="true">Zimmer buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a>
+</div>
+
+<div class="scrim"></div>
+<div class="pop cal" id="cal-pop" role="dialog" aria-label="Reisedaten wählen">
+  <div class="sheet-head"><h3>Reisedaten</h3><button class="icon-btn" type="button" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="cal-body">
+    <div class="cal-nav"><button class="icon-btn" type="button" data-prev aria-label="Vorheriger Monat"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><button class="icon-btn" type="button" data-next aria-label="Nächster Monat"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button></div>
+    <div class="cal-months"></div>
+  </div>
+  <div class="pop-foot">
+    <div class="pop-sum"><b data-sum></b><span data-range></span></div>
+    <div class="pop-actions"><button class="text-btn" type="button" data-reset>Zurücksetzen</button><button class="btn navy" type="button" data-done><span class="btn-track"><span>Übernehmen</span><span aria-hidden="true">Übernehmen</span></span></button></div>
+  </div>
+</div>
+<div class="pop room-pop" id="room-pop" role="dialog" aria-label="Zimmer wählen">
+  <div class="sheet-head"><h3>Zimmer</h3><button class="icon-btn" type="button" data-close aria-label="Schließen"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="stepper-row"><div><b>Einzelzimmer</b><span>für 1 Person</span></div><div class="stepper"><button class="icon-btn" type="button" data-k="ez" data-d="-1" aria-label="Einzelzimmer entfernen"><svg viewBox="0 0 24 24"><path d="M6 12h12"/></svg></button><output data-out="ez"></output><button class="icon-btn" type="button" data-k="ez" data-d="1" aria-label="Einzelzimmer hinzufügen"><svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></button></div></div>
+  <div class="stepper-row"><div><b>Doppelzimmer</b><span>für 2 Personen</span></div><div class="stepper"><button class="icon-btn" type="button" data-k="dz" data-d="-1" aria-label="Doppelzimmer entfernen"><svg viewBox="0 0 24 24"><path d="M6 12h12"/></svg></button><output data-out="dz"></output><button class="icon-btn" type="button" data-k="dz" data-d="1" aria-label="Doppelzimmer hinzufügen"><svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></button></div></div>
+  <div class="pop-foot">
+    <p class="pop-note">Gruppen ab 10 Zimmern: <a href="tel:+49619089990">06190 89990</a></p>
+    <div class="pop-actions"><button class="btn navy" type="button" data-done><span class="btn-track"><span>Übernehmen</span><span aria-hidden="true">Übernehmen</span></span></button></div>
+  </div>
+</div>
+
+<div class="pitch" role="group" aria-label="Suchio-Entwurf">
+  <b>suchi<i>o</i></b><span>Entwurf</span>
+  <button type="button" aria-pressed="false">Hinweise</button>
+</div>
+
+<script>
+  if (matchMedia('(max-width:760px)').matches) document.querySelectorAll('.rooms-grid [data-reveal]').forEach(f => f.removeAttribute('data-reveal'));
+  // Booking pickers: date range calendar and room steppers.
+  (() => {
+    const mq = matchMedia('(max-width:760px)');
+    const fmtField = new Intl.DateTimeFormat('de-DE', { weekday: 'short', day: 'numeric', month: 'short' });
+    const fmtShort = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'short' });
+    const fmtMonth = new Intl.DateTimeFormat('de-DE', { month: 'long', year: 'numeric' });
+    const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+    const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const parse = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+    const nights = (a, b) => Math.round((b - a) / 864e5);
+    const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const state = { start: addDays(today, 7), end: addDays(today, 9), ez: 0, dz: 1 };
+    let draft = { ...state }, hover = null, view, openPop = null;
+
+    const scrim = document.querySelector('.scrim');
+    const calPop = document.getElementById('cal-pop'), roomPop = document.getElementById('room-pop');
+    const months = calPop.querySelector('.cal-months');
+    const fieldBtns = [...document.querySelectorAll('.book .field')];
+    const val = k => document.querySelector(`[data-value="${k}"]`);
+    const roomsText = ({ ez, dz }) => ez && dz ? `${ez + dz} Zimmer` : ez ? `${ez} Einzelzimmer` : `${dz} Doppelzimmer`;
+    const replay = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
+    const setText = (el, text, animate) => { if (el.textContent === text) return; el.textContent = text; if (animate) replay(el, 'swap'); };
+
+    const sync = animate => {
+      setText(val('arr'), fmtField.format(state.start), animate);
+      setText(val('dep'), fmtField.format(state.end), animate);
+      setText(val('rooms'), roomsText(state), animate);
+      document.getElementById('in-arr').value = iso(state.start);
+      document.getElementById('in-nights').value = nights(state.start, state.end);
+      document.getElementById('in-ez').value = state.ez;
+      document.getElementById('in-dz').value = state.dz;
+    };
+
+    const renderCal = dir => {
+      const count = mq.matches ? 1 : 2;
+      const end = draft.end || (draft.start && hover && hover > draft.start ? hover : null);
+      const preview = !draft.end && end;
+      let html = '';
+      for (let m = 0; m < count; m++) {
+        const first = new Date(view.getFullYear(), view.getMonth() + m, 1);
+        const blanks = (first.getDay() + 6) % 7, total = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+        html += `<div class="month"><div class="month-title">${fmtMonth.format(first)}</div><div class="dow"><span>Mo</span><span>Di</span><span>Mi</span><span>Do</span><span>Fr</span><span>Sa</span><span>So</span></div><div class="days">`;
+        html += '<span></span>'.repeat(blanks);
+        for (let d = 1; d <= total; d++) {
+          const date = new Date(first.getFullYear(), first.getMonth(), d), t = +date, past = date < today;
+          const c = ['day'];
+          if (past) c.push('past');
+          if (t === +today) c.push('today');
+          if (draft.start && t === +draft.start) c.push('start', ...(end ? ['ranged'] : []));
+          if (end && t === +end) c.push('end', ...(preview ? ['preview'] : []));
+          if (draft.start && end && date > draft.start && date < end) c.push('in');
+          html += `<button type="button" class="${c.join(' ')}" data-date="${iso(date)}"${past ? ' disabled' : ''} aria-label="${fmtField.format(date)}"><span>${d}</span></button>`;
+        }
+        html += '</div></div>';
+      }
+      months.innerHTML = html;
+      if (dir) { months.classList.remove('next', 'prev'); replay(months, dir); }
+      calPop.querySelector('[data-prev]').disabled = view <= new Date(today.getFullYear(), today.getMonth(), 1);
+      const nn = draft.end ? nights(draft.start, draft.end) : 0;
+      calPop.querySelector('[data-sum]').textContent = draft.end ? `${nn} ${nn === 1 ? 'Nacht' : 'Nächte'}` : 'Abreise wählen';
+      calPop.querySelector('[data-range]').textContent = draft.end ? `${fmtShort.format(draft.start)} bis ${fmtShort.format(draft.end)}` : `Anreise ${fmtShort.format(draft.start)}`;
+      calPop.querySelector('[data-done]').disabled = !draft.end;
+    };
+
+    const renderRooms = bump => {
+      ['ez', 'dz'].forEach(k => {
+        const out = roomPop.querySelector(`[data-out="${k}"]`);
+        out.textContent = draft[k];
+        if (bump === k) replay(out, 'bump');
+      });
+      roomPop.querySelectorAll('[data-k]').forEach(b => {
+        const k = b.dataset.k, next = draft[k] + +b.dataset.d, other = draft[k === 'ez' ? 'dz' : 'ez'];
+        b.disabled = next < 0 || next > 9 || next + other < 1;
+      });
+    };
+
+    const place = (pop, field) => {
+      if (mq.matches) return;
+      const form = field.closest('form').getBoundingClientRect(), f = field.getBoundingClientRect();
+      const left = Math.max(16, Math.min(pop === calPop ? form.left : f.left, innerWidth - pop.offsetWidth - 16));
+      const above = form.top - pop.offsetHeight - 12 > 80;
+      pop.style.setProperty('--origin', above ? 'bottom left' : 'top left');
+      pop.style.left = left + scrollX + 'px';
+      pop.style.top = (above ? form.top - pop.offsetHeight - 12 : form.bottom + 12) + scrollY + 'px';
+    };
+
+    const open = (pop, field) => {
+      if (openPop) close(true);
+      draft = { ...state }; hover = null;
+      if (pop === calPop) { view = new Date(state.start.getFullYear(), state.start.getMonth(), 1); renderCal(); } else renderRooms();
+      openPop = pop;
+      fieldBtns.forEach(b => b.setAttribute('aria-expanded', b === field));
+      place(pop, field);
+      pop.classList.add('open'); scrim.classList.add('open');
+      if (mq.matches) document.documentElement.style.overflow = 'hidden';
+    };
+
+    const close = commit => {
+      if (!openPop) return;
+      if (commit) {
+        if (openPop === calPop && draft.end) { state.start = draft.start; state.end = draft.end; }
+        if (openPop === roomPop) { state.ez = draft.ez; state.dz = draft.dz; }
+        sync(true);
+      }
+      openPop.classList.remove('open', 'dragging'); openPop.style.removeProperty('--drag');
+      scrim.classList.remove('open');
+      fieldBtns.forEach(b => b.setAttribute('aria-expanded', 'false'));
+      document.documentElement.style.overflow = '';
+      openPop = null;
+    };
+
+    fieldBtns.forEach(b => b.addEventListener('click', () => {
+      const pop = b.dataset.open === 'cal' ? calPop : roomPop;
+      openPop === pop ? close(true) : open(pop, b);
+    }));
+    months.addEventListener('click', e => {
+      const b = e.target.closest('.day'); if (!b || b.disabled) return;
+      const d = parse(b.dataset.date);
+      if (!draft.start || draft.end || d <= draft.start) { draft.start = d; draft.end = null; } else draft.end = d;
+      renderCal();
+      if (draft.end && !mq.matches) setTimeout(() => close(true), 380);
+    });
+    months.addEventListener('mouseover', e => {
+      const b = e.target.closest('.day'); if (!b || draft.end || b.disabled) return;
+      const d = parse(b.dataset.date); if (+d !== +hover) { hover = d; renderCal(); }
+    });
+    calPop.querySelector('[data-prev]').addEventListener('click', () => { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); renderCal('prev'); });
+    calPop.querySelector('[data-next]').addEventListener('click', () => { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); renderCal('next'); });
+    calPop.querySelector('[data-reset]').addEventListener('click', () => {
+      draft.start = addDays(today, 7); draft.end = addDays(today, 9);
+      view = new Date(draft.start.getFullYear(), draft.start.getMonth(), 1); renderCal();
+    });
+    roomPop.addEventListener('click', e => {
+      const b = e.target.closest('[data-k]'); if (!b || b.disabled) return;
+      draft[b.dataset.k] += +b.dataset.d; renderRooms(b.dataset.k);
+    });
+    document.querySelectorAll('.pop [data-done]').forEach(b => b.addEventListener('click', () => close(true)));
+    document.querySelectorAll('.pop [data-close]').forEach(b => b.addEventListener('click', () => close(false)));
+    scrim.addEventListener('click', () => close(false));
+    document.addEventListener('pointerdown', e => {
+      if (openPop && !mq.matches && !openPop.contains(e.target) && !e.target.closest('.book .field')) close(true);
+    });
+    addEventListener('keydown', e => { if (e.key === 'Escape') close(true); });
+    addEventListener('resize', () => { if (openPop && !mq.matches) close(true); });
+    mq.addEventListener('change', () => close(true));
+
+    // Bottom sheet: drag the header down to dismiss.
+    document.querySelectorAll('.sheet-head').forEach(head => {
+      const pop = head.closest('.pop');
+      let y0 = null, dy = 0;
+      head.addEventListener('pointerdown', e => {
+        if (e.target.closest('button')) return;
+        y0 = e.clientY; dy = 0; pop.classList.add('dragging'); head.setPointerCapture(e.pointerId);
+      });
+      head.addEventListener('pointermove', e => { if (y0 === null) return; dy = Math.max(0, e.clientY - y0); pop.style.setProperty('--drag', dy + 'px'); });
+      head.addEventListener('pointerup', () => {
+        if (y0 === null) return;
+        y0 = null; pop.classList.remove('dragging');
+        dy > 110 ? close(false) : pop.style.setProperty('--drag', '0px');
+      });
+    });
+
+    sync(false);
+  })();
+
+  const header = document.querySelector('header.site');
+  const onScroll = () => {
+    header.classList.toggle('scrolled', scrollY > innerHeight * 0.6);
+    document.body.classList.toggle('past-hero', scrollY > innerHeight * 0.85);
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  const toggle = document.querySelector('.pitch button');
+  const setNotes = on => { document.body.classList.toggle('notes', on); toggle.setAttribute('aria-pressed', on); };
+  toggle.addEventListener('click', () => setNotes(!document.body.classList.contains('notes')));
+  if (new URLSearchParams(location.search).has('hinweise')) setNotes(true);
+
+  const statement = document.querySelector('.statement');
+  statement.innerHTML = statement.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' ');
+
+  // Park, Sleep & Fly: a short timed scene. One outline morphs car → shuttle → plane.
+  (() => {
+    const journey = document.querySelector('.journey');
+    const scene = journey.querySelector('.scene');
+    const vehicle = scene.querySelector('.vehicle');
+    const body = vehicle.querySelector('.v-body');
+    const carDetail = vehicle.querySelector('.v-car-detail');
+    const busDetail = vehicle.querySelector('.v-bus-detail');
+    const planeDetail = vehicle.querySelector('.v-plane-detail');
+    const wing = vehicle.querySelector('.v-wing');
+    const wheels = [...vehicle.querySelectorAll('.wheel')];
+    const steps = [...journey.querySelectorAll('.step')];
+    const replayBtn = journey.querySelector('.replay');
+
+    // Same number of points in the same order, so the outline can be interpolated directly.
+    const CAR = [[3,24],[3,18],[7,15.5],[15,14.5],[22,8],[38,7.5],[45.5,14],[55,15.2],[60.5,18],[61,24],[44,24],[20,24]];
+    const BUS = [[3,24],[3,7.5],[5.5,5],[28,5],[46,5],[51,5.6],[55,9],[58,15],[61,18.5],[61,24],[44,24],[20,24]];
+    const PLANE = [[9,21.5],[3,6.5],[9,6.5],[16,14],[30,13.4],[46,13.4],[56,14.8],[62,18.2],[57.5,21.4],[44,21.8],[24,21.8],[13,21.7]];
+    const WHEELS = { car: [15, 49], bus: [14, 50] };
+
+    const clamp = v => Math.min(1, Math.max(0, v));
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const io = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const easeIn = t => t * t * t;
+    const shape = (m1, m2) => 'M' + CAR.map((p, i) => [
+      lerp(lerp(p[0], BUS[i][0], m1), PLANE[i][0], m2).toFixed(2),
+      lerp(lerp(p[1], BUS[i][1], m1), PLANE[i][1], m2).toFixed(2)
+    ].join(' ')).join('L') + 'Z';
+
+    const DURATION = 4700;
+    let park = 30, gate = 78, half = 5, raf = 0, t0 = 0;
+
+    const measure = () => {
+      const s = scene.getBoundingClientRect();
+      const h = scene.querySelector('.hotel').getBoundingClientRect();
+      const t = scene.querySelector('.tower').getBoundingClientRect();
+      half = vehicle.offsetWidth / s.width * 50;
+      park = (h.right - s.left) / s.width * 100 + half + 2;
+      gate = (t.left - s.left) / s.width * 100 - half - 2;
+    };
+
+    const render = ms => {
+      const seg = (a, b) => clamp((ms - a) / (b - a));
+      const drive1 = io(seg(0, 1100));
+      const night = seg(1150, 1450) - seg(1950, 2250);
+      const dawn = seg(1900, 2200) - seg(2300, 2700);
+      const m1 = io(seg(2150, 2600));
+      const drive2 = io(seg(2650, 3600));
+      const m2 = io(seg(3600, 3950));
+      const lift = easeIn(seg(3950, 4700));
+      const x = -half * 2 + (park + half * 2) * drive1 + (gate - park) * drive2 + (115 - gate) * lift;
+      const y = -scene.offsetHeight * .65 * lift;
+      const squash = Math.sin(Math.PI * seg(2150, 2600)) + Math.sin(Math.PI * seg(3600, 3950));
+
+      vehicle.style.left = x + '%';
+      vehicle.style.transform = `translate(-50%, ${y}px) rotate(${-16 * clamp(seg(3950, 4700) * 2.5)}deg) scale(${1 + squash * .06}, ${1 - squash * .08})`;
+      body.setAttribute('d', shape(m1, m2));
+      carDetail.style.opacity = 1 - clamp(m1 * 2);
+      busDetail.style.opacity = clamp(m1 * 2 - 1) * (1 - clamp(m2 * 2));
+      planeDetail.style.opacity = clamp(m2 * 2 - .6);
+      wing.setAttribute('transform', `translate(30 19) scale(${m2}) translate(-30 -19)`);
+      wheels.forEach((w, i) => {
+        const cx = lerp(WHEELS.car[i], WHEELS.bus[i], m1);
+        w.setAttribute('transform', `translate(${cx} ${lerp(24, 21, m2)}) rotate(${x * 14}) scale(${1 - m2})`);
+      });
+      scene.style.setProperty('--night', night);
+      scene.style.setProperty('--dawn', dawn);
+      const fills = [seg(0, 1100), seg(1100, 2600), seg(2600, DURATION)];
+      steps.forEach((s, i) => { s.style.setProperty('--f', fills[i]); s.classList.toggle('on', fills[i] > 0); });
+    };
+
+    const frame = now => {
+      const ms = now - t0;
+      render(ms);
+      raf = ms < DURATION ? requestAnimationFrame(frame) : 0;
+    };
+    const play = () => {
+      cancelAnimationFrame(raf);
+      measure();
+      t0 = performance.now();
+      raf = requestAnimationFrame(frame);
+    };
+
+    measure();
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { render(1100); replayBtn.hidden = true; return; }
+    render(0);
+    new IntersectionObserver((entries, io) => {
+      if (entries[0].isIntersecting) { play(); io.disconnect(); }
+    }, { threshold: .6 }).observe(scene);
+    replayBtn.addEventListener('click', play);
+    addEventListener('resize', () => { measure(); if (!raf) render(performance.now() - t0); });
+  })();
+
+  // Mobile menu.
+  const burger = document.querySelector('.burger');
+  const menu = document.getElementById('menu');
+  const setMenu = open => {
+    document.body.classList.toggle('menu-open', open);
+    menu.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+    burger.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+  };
+  burger.addEventListener('click', () => setMenu(!menu.classList.contains('open')));
+  menu.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+  addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
+  // Mobile room carousel: depth while swiping, and the indicator follows.
+  (() => {
+    const rail = document.querySelector('.rooms-grid');
+    const slides = [...rail.children];
+    const dots = [...document.querySelectorAll('.dots i')];
+    const update = () => {
+      if (getComputedStyle(rail).display !== 'flex') return;
+      const r = rail.getBoundingClientRect(), start = r.left + parseFloat(getComputedStyle(rail).paddingLeft);
+      let best = 0, bestD = Infinity;
+      slides.forEach((s, i) => {
+        const b = s.getBoundingClientRect(), d = (b.left - start) / b.width;
+        if (Math.abs(d) < bestD) { bestD = Math.abs(d); best = i; }
+        s.style.setProperty('--s', 1 - Math.min(1, Math.abs(d)) * .07);
+        s.style.setProperty('--o', 1 - Math.min(1, Math.abs(d)) * .35);
+        const img = s.querySelector('img'); if (img) img.style.translate = `${Math.max(-1, Math.min(1, d)) * -12}% 0`;
+      });
+      dots.forEach((dot, i) => dot.classList.toggle('on', i === best));
+    };
+    rail.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+    addEventListener('resize', update); update();
+    dots.forEach((dot, i) => dot.addEventListener('click', () => rail.scrollTo({ left: slides[i].offsetLeft - slides[0].offsetLeft, behavior: 'smooth' })));
+  })();
+</script>
+
+<script type="module">
+  const root = document.documentElement;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let m;
+  try { m = await import('https://cdn.jsdelivr.net/npm/motion@12.23.12/+esm'); } catch { root.classList.add('static'); }
+
+  if (m && !reduce && !root.classList.contains('static')) {
+    window.__motion = true;
+    const { animate, scroll, inView, stagger } = m;
+    const ease = [0.16, 1, 0.3, 1];
+    const inOut = [0.65, 0, 0.35, 1];
+
+    // Hero entrance.
+    animate('.hero-media img', { scale: [1.12, 1.02] }, { duration: 2.4, ease });
+    animate('.hero .line > span', { y: ['105%', '0%'] }, { duration: 1.2, ease, delay: stagger(0.09, { startDelay: 0.2 }) });
+    animate('.hero-sub', { opacity: [0, 1], y: [14, 0] }, { duration: 1, ease, delay: 0.55 });
+    animate('.book-wrap', { opacity: [0, 1], y: [28, 0] }, { duration: 1.1, ease, delay: 0.7 });
+
+    // Hero photo drifts as the page scrolls away.
+    scroll(animate('.hero-media', { y: ['0%', '18%'] }, { ease: 'linear' }), { target: document.querySelector('.hero'), offset: ['start start', 'end start'] });
+
+    document.querySelectorAll('[data-fade]').forEach(el => { if (el.closest('.hero')) return;
+      inView(el, () => { animate(el, { opacity: [0, 1], y: [20, 0] }, { duration: 0.9, ease }); }, { amount: 0.3 });
+    });
+    inView('.review-grid', grid => { animate([...grid.children], { opacity: [0, 1], y: [28, 0] }, { duration: 0.9, ease, delay: stagger(0.12) }); }, { amount: 0.3 });
+
+    inView('[data-reveal]', el => {
+      const child = el.firstElementChild;
+      animate(child, { clipPath: ['inset(100% 0 0 0)', 'inset(0% 0 0 0)'] }, { duration: 1.3, ease });
+      animate(child, { scale: [1.18, 1] }, { duration: 1.8, ease });
+    }, { amount: 0.25 });
+
+    // Statement words light up while scrolling through.
+    const words = [...document.querySelectorAll('.statement .w')];
+    scroll(p => {
+      const t = p * (words.length + 3);
+      words.forEach((w, i) => { w.style.opacity = Math.min(1, Math.max(.18, t - i)); });
+    }, { target: document.querySelector('.statement'), offset: ['start 90%', 'end 55%'] });
+
+    // Breakfast photo moves slower than the page.
+    scroll(animate('.breakfast .photo', { y: ['-6%', '6%'] }, { ease: 'linear' }), { target: document.querySelector('.breakfast'), offset: ['start end', 'end start'] });
+  } else {
+    root.classList.add('static');
+  }
+</script>
+</body>
+</html>

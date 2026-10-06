@@ -27,9 +27,8 @@ const workflow = await Bun.file(".github/workflows/ci.yml").text();
 const commands = [...workflow.matchAll(/^\s+- run: (.+)$/gm)].map(match => match[1].trim().split(/\s+/));
 if (!commands.length || commands.some(command => command[0] !== "bun" && command[0] !== "bunx" || command.some(argument => !/^[\w./:=@-]+$/.test(argument)))) throw new Error("CI steps require review before deployment: expected simple Bun commands.");
 for (const command of commands) {
-  const args = process.platform === "win32" ? command.filter(argument => argument !== "--with-deps") : command;
-  console.log(`Verifying: ${args.join(" ")}`);
-  const child = Bun.spawn(args, { stdout: "inherit", stderr: "inherit", stdin: "inherit" });
+  console.log(`Verifying: ${command.join(" ")}`);
+  const child = Bun.spawn(command, { stdout: "inherit", stderr: "inherit", stdin: "inherit" });
   if (await child.exited !== 0) throw new Error("Release verification failed; deployment stopped.");
 }
 if (before !== await sourceFingerprint() || revision !== (await output(["git", "rev-parse", "HEAD"])).trim()) throw new Error("Source changed during verification; deployment stopped. Run verification again.");

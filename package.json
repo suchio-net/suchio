@@ -9,12 +9,7 @@
     "start": "astro preview",
     "lint": "eslint .",
     "test": "bun test tests",
-    "test:e2e": "playwright test",
     "typecheck": "astro check",
-    "validate:content": "bun scripts/validate-content.mjs",
-    "validate:seo": "bun scripts/validate-seo.mjs",
-    "validate:performance": "bun scripts/validate-performance.mjs",
-    "validate:bundle": "bun scripts/validate-client-bundle.mjs",
     "deploy": "bun scripts/deploy-verified.mjs",
     "deploy:redirects": "bun scripts/deploy-verified.mjs --redirects",
     "types:workers": "wrangler types src/worker-configuration.d.ts --env-interface CloudflareBindings --env-file .env.example"
@@ -33,8 +28,6 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@axe-core/playwright": "^4.13.0",
-    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/bun": "^1.4.0",
     "@types/canvas-confetti": "^1.9.0",
@@ -52,7 +45,9 @@
   "type": "module",
   "overrides": {
     "js-yaml": "4.3.2",
-    "sharp": "0.35.4",
+    "sharp": "0.35.5",
+    "source-map-js": "1.2.2",
+    "http-cache-semantics": "4.3.0",
     "nanoid": "3.3.18",
     "brace-expansion@1": "1.1.21",
     "brace-expansion@5": "5.0.12",

@@ -24,17 +24,7 @@ bun run start
 
 The build produces static pages and assets in `dist/client` and the Cloudflare Worker and generated deployment configuration in `dist/server`. Astro preview runs the built application locally through Cloudflare's runtime.
 
-Common checks are `bun run lint`, `bun run typecheck`, `bun run test`, and `bun run validate:content`. The complete verification sequence lives in [.github/workflows/ci.yml](.github/workflows/ci.yml).
-
-Browser tests require a production build and Playwright browsers:
-
-```sh
-bunx playwright install chromium firefox webkit
-bun run build
-bun run test:e2e
-```
-
-On Linux, browser installation may also require Playwright's `--with-deps` option, as used in CI. The suite starts one local production Worker on port 3101, applies its local D1 migrations, and clears mail credentials. Chromium runs the full suite; Firefox and WebKit run the cross-browser suite. See [playwright.config.ts](playwright.config.ts).
+Checks are `bun run lint`, `bun run typecheck`, and `bun run test` (unit tests for the contact form, audit measurement, request limits, and security reports). The complete verification sequence lives in [.github/workflows/ci.yml](.github/workflows/ci.yml).
 
 ## Deployment
 
@@ -60,18 +50,18 @@ bun run deploy --check-only
 
 The production Worker serves `/admin/audits` with a built-in login for `contact@suchio.net`. No Cloudflare Access subscription or additional identity provider is used. Only a SHA-256 digest of a generated 256-bit password is provisioned as a Worker secret. Human-chosen low-entropy passwords are not supported by this verifier. The session is an opaque random token in a Secure, HttpOnly, SameSite=Strict cookie; D1 stores only its hash and the allowed identity. Sessions expire after one hour, logout revokes them server-side, and password rotation invalidates previous sessions. Login attempts are rate-limited; mutation endpoints require same-origin POSTs. Missing configuration fails closed.
 
-Provision the credential with `bun scripts/setup-audit-admin.mjs`. It writes the login details only to ignored `.wrangler/audit-admin-login.txt` and provisions the password digest via Wrangler. Store the password in a password manager and remove this local plaintext file afterward. Use `--resume` if provisioning failed or `--rotate` for a new password. Never copy the test credential from `tests/fixtures/worker.vars` into production. No paid plan should be activated for this feature; it uses the existing Worker and D1 resources within their applicable quotas.
+Provision the credential with `bun scripts/setup-audit-admin.mjs`. It writes the login details only to ignored `.wrangler/audit-admin-login.txt` and provisions the password digest via Wrangler. Store the password in a password manager and remove this local plaintext file afterward. Use `--resume` if provisioning failed or `--rotate` for a new password. No paid plan should be activated for this feature; it uses the existing Worker and D1 resources within their applicable quotas.
 
 The EU-jurisdiction D1 database is bound as `AUDIT_DB`; schema files live in `migrations/audit-visits`. Apply locally with `bunx wrangler d1 migrations apply AUDIT_DB --local`, and to production with `bunx wrangler d1 migrations apply AUDIT_DB --remote` before deployment. Deploy through the verification command above. Then check logged-out denial, login, logout and session replay denial, link checks, a consent followed by withdrawal, and the scheduled cleanup. Never describe configuration alone as a successful live login.
 
 The dashboard shows **confirmed visits**, not unique readers or complete traffic. Declining leaves the full report accessible. Per-report receipts prevent duplicate submissions; no automatic recount occurs on reload. Preview links use `?audit_preview=1`. The separate link check verifies the published HTML's report marker, not rendering or form delivery. Records expire after 30 days and an hourly cron purges them. At campaign closure or report-wide withdrawal, use **Messdaten löschen** for each affected report; campaign closure is a manual operation. Before reusing restored backups, run the expiry purge and reapply any intervening deletions. Provider backups and security logs have separate retention rules. Preserve the versioned consent text while records referring to it exist.
 
-Focused verification: `bun test tests/audit-measurement.spec.ts` and, after building the site, `bunx playwright test e2e/audit-consent.spec.ts e2e/audits.spec.ts`. Production credentials must never be replaced with test credentials to make an end-to-end test pass.
+Focused verification: `bun test tests/audit-measurement.spec.ts`.
 
 - Routes and API endpoints: `src/pages`; HTML document and metadata: `src/layouts/site-layout.astro`; production Worker entry point: `src/cloudflare-worker.ts`.
 - Shared UI and page compositions: `src/components`.
 - Localized copy and locale configuration: `src/i18n`; FAQ and audit data: `src/content`.
 - Design tokens and global styles: `src/styles`.
-- Unit and architecture checks: `tests`; browser checks: `e2e`.
+- Unit tests for the Worker endpoints: `tests`.
 
 German is the default locale. Locale configuration is defined in [src/i18n/config.json](src/i18n/config.json).

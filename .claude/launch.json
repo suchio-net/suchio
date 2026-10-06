@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "parkhotel-mockup",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["output/mockup-parkhotel-am-posthof/serve.mjs"],
+      "port": 4325
+    }
+  ]
+}
