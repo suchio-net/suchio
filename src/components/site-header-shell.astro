@@ -1,10 +1,10 @@
 ---
-import { SiteHeader, localeSwitchPath, type SiteHeaderCopy } from "@/components/site-header";
+import { SiteHeader, type SiteHeaderCopy } from "@/components/site-header";
 import { publicContactEmail } from "@/lib/contact";
 import { t, type Locale } from "@/lib/i18n";
 import { getServiceCatalog } from "@/lib/service-catalog";
 import { localeConfig, locales } from "@/i18n/config";
-import { localizePath } from "@/lib/locale-path";
+import { alternatePath, localizePath } from "@/lib/locale-path";
 
 interface Props { locale: Locale; pathname: string }
 const { locale, pathname } = Astro.props;
@@ -34,7 +34,7 @@ const services = getServiceCatalog(locale).map(({ id, copy: serviceCopy, href })
         <a class="py-2" href={localizePath("/about", locale)}>{copy.about}</a>
         <a class="py-2" href={localizePath("/contact", locale)}>{copy.contact}</a>
         <span class="mt-2 font-medium">{copy.selectLocale}</span>
-        {locales.map(candidate => <a class="py-2" href={localeSwitchPath(pathname, locale, candidate)} hreflang={candidate} lang={candidate} aria-current={candidate === locale ? "page" : undefined}>{localeConfig[candidate].name}</a>)}
+        {locales.map(candidate => <a class="py-2" href={alternatePath(pathname, candidate)} hreflang={candidate} lang={candidate} aria-current={candidate === locale ? "page" : undefined}>{localeConfig[candidate].name}</a>)}
       </div>
     </details>
   </nav>

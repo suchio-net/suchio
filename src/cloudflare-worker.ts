@@ -20,6 +20,14 @@ function cookieLocale(request: Request) {
   return value && hasLocale(value) ? value : undefined;
 }
 
+function isInternalNavigation(request: Request, url: URL) {
+  if (request.headers.get("sec-fetch-site") === "same-origin") return true;
+  const referer = request.headers.get("referer");
+  if (!referer) return false;
+  try { return new URL(referer).origin === url.origin; }
+  catch { return false; }
+}
+
 function redirect(location: string, locale?: Locale, status = 307) {
   const headers = new Headers({ location });
   if (locale) {
@@ -87,7 +95,8 @@ const worker = {
       return redirect(`${legacyServiceRedirect}${url.search}`, locale, 308);
     }
 
-    if (url.pathname === "/" && (request.method === "GET" || request.method === "HEAD")) {
+    // Internal links (such as the language switcher) reach "/" deliberately; only external entries follow the stored locale.
+    if (url.pathname === "/" && (request.method === "GET" || request.method === "HEAD") && !isInternalNavigation(request, url)) {
       const locale = cookieLocale(request) ?? defaultLocale;
       if (locale !== defaultLocale) return redirect(`/${locale}${url.search}`);
     }

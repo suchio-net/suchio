@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import type { MouseEvent } from "react";
 import { BrandMark } from "@/components/brand-mark";
 import { CollapsePanel } from "@/components/collapse-panel";
-import { defaultLocale, localeConfig, locales, type Locale } from "@/i18n/config";
+import { localeConfig, locales, type Locale } from "@/i18n/config";
 import type { ServiceId } from "@/i18n/services";
 import { alternatePath, localizePath } from "@/lib/locale-path";
 import { requestRouteScrollTop, scrollToPageTopSmoothly } from "@/lib/route-scroll";
@@ -33,14 +33,6 @@ type SiteHeaderService = {
   navDescription: string;
   href: string;
 };
-
-
-
-export function localeSwitchPath(pathname: string, currentLocale: Locale, candidate: Locale) {
-  const path = alternatePath(pathname, candidate);
-  if (candidate !== defaultLocale || currentLocale === defaultLocale) return path;
-  return path === "/" ? `/${defaultLocale}` : `/${defaultLocale}${path}`;
-}
 
 function scrollToPageTop(event: MouseEvent<HTMLAnchorElement>) {
   if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.defaultPrevented) return;
@@ -115,7 +107,7 @@ function LanguageMenu({ dark = false, id, locale, mobile = false, onSelect, path
           {locales.map((candidate) => {
             const active = candidate === locale;
             const highlighted = highlightedLocale === null ? active : highlightedLocale === candidate;
-            return <a key={candidate} className={`flex h-9 items-center justify-between gap-6 rounded-inset px-3 text-sm font-medium transition-[background-color,scale] duration-150 active:scale-[.96] motion-reduce:transition-none motion-reduce:active:scale-100 ${dark ? highlighted ? "bg-white/8 text-white" : "text-inverse-muted" : highlighted ? "bg-interaction text-ink" : "text-muted"}`} href={localeSwitchPath(pathname, locale, candidate)} aria-current={active ? "page" : undefined} onPointerEnter={() => setHighlightedLocale(candidate)} onPointerLeave={() => setHighlightedLocale(null)} onFocus={() => setHighlightedLocale(candidate)} onBlur={() => setHighlightedLocale(null)} onClick={(event) => { if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) rememberLocale(candidate); scrollToPageTop(event); setOpen(false); onSelect?.(); }}><span>{localeConfig[candidate].name}</span><span className={`text-meta font-normal ${dark ? "text-inverse-muted" : "text-subtle"}`} aria-hidden="true">{localeConfig[candidate].shortLabel}</span></a>;
+            return <a key={candidate} className={`flex h-9 items-center justify-between gap-6 rounded-inset px-3 text-sm font-medium transition-[background-color,scale] duration-150 active:scale-[.96] motion-reduce:transition-none motion-reduce:active:scale-100 ${dark ? highlighted ? "bg-white/8 text-white" : "text-inverse-muted" : highlighted ? "bg-interaction text-ink" : "text-muted"}`} href={alternatePath(pathname, candidate)} aria-current={active ? "page" : undefined} onPointerEnter={() => setHighlightedLocale(candidate)} onPointerLeave={() => setHighlightedLocale(null)} onFocus={() => setHighlightedLocale(candidate)} onBlur={() => setHighlightedLocale(null)} onClick={(event) => { if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) rememberLocale(candidate); scrollToPageTop(event); setOpen(false); onSelect?.(); }}><span>{localeConfig[candidate].name}</span><span className={`text-meta font-normal ${dark ? "text-inverse-muted" : "text-subtle"}`} aria-hidden="true">{localeConfig[candidate].shortLabel}</span></a>;
           })}
         </div>
       </div>
