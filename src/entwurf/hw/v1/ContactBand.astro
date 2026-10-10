@@ -1,0 +1,45 @@
+---
+// Closing contact panel on every page.
+import Icon from "./Icon.astro";
+import { base, company } from "./data";
+
+interface Props { title?: string; vorhaben?: string }
+const { title = "Erzählen Sie uns von Ihrem Vorhaben", vorhaben } = Astro.props;
+const href = `${base}/kontakt${vorhaben ? `?vorhaben=${vorhaben}` : ""}#anfrage`;
+---
+<section class="contact-band" aria-labelledby="contact-band-title">
+  <div class="wrap">
+    <div class="panel dark">
+      <div class="copy">
+        <h2 id="contact-band-title">{title}</h2>
+        <p class="soft">Wir beraten Sie persönlich, koordinieren die passenden Gewerke und erstellen Ihnen ein unverbindliches Angebot. Die Besichtigung ist kostenlos.</p>
+        <div class="actions">
+          <a class="btn" href={href}>Besichtigung anfragen</a>
+          <a class="btn btn-line" href={company.whatsapp.href}><Icon name="message-circle" />Per WhatsApp schreiben</a>
+        </div>
+      </div>
+      <div class="phone">
+        <a class="number" href={company.phone.href}><Icon name="phone" size={28} />{company.phone.display}</a>
+        <dl class="hours">
+          {company.hours.map(slot => <div><dt>{slot.days}</dt><dd>{slot.opens}–{slot.closes} Uhr</dd></div>)}
+        </dl>
+        <a class="mail" href={`mailto:${company.email}`}>{company.email}</a>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .contact-band { padding-block: clamp(48px, 6vw, 96px); }
+  .panel { display: grid; gap: 48px; padding: clamp(32px, 6vw, 80px); border-radius: calc(var(--radius) * 1.5); }
+  @media (min-width: 960px) { .panel { grid-template-columns: 1.25fr 1fr; gap: 72px; align-items: end; } }
+  .copy { display: grid; gap: 22px; }
+  .copy h2 { max-width: 14ch; }
+  .phone { display: grid; gap: 18px; }
+  .number { display: inline-flex; align-items: center; gap: 14px; font-size: clamp(1.9rem, 1.2rem + 2.6vw, 3.2rem); font-weight: 650; letter-spacing: -0.03em; line-height: 1; color: #fff; text-decoration: none; font-variant-numeric: tabular-nums; white-space: nowrap; transition: color 0.2s; }
+  .number :global(.icon) { color: var(--copper-on-dark); flex: none; }
+  .number:hover { color: var(--copper-on-dark); }
+  .hours { display: grid; gap: 4px; color: var(--slate-on-dark); }
+  .hours div { display: flex; justify-content: space-between; gap: 16px; max-width: 360px; }
+  .hours dd { margin: 0; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .mail { color: #fff; text-decoration-color: var(--copper-on-dark); text-underline-offset: 0.25em; }
+</style>

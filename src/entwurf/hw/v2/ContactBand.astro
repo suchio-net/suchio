@@ -1,0 +1,34 @@
+---
+import { base, company } from "./data";
+
+interface Props { title?: string; vorhaben?: string }
+const { title = "Erzählen Sie uns von Ihrem Vorhaben", vorhaben } = Astro.props;
+const href = `${base}/kontakt${vorhaben ? `?vorhaben=${vorhaben}` : ""}#anfrage`;
+---
+<section class="contact-band dark band" aria-labelledby="contact-band-title">
+  <div class="wrap layout">
+    <div class="copy">
+      <h2 id="contact-band-title">{title}</h2>
+      <p class="soft">Wir beraten Sie persönlich, koordinieren die passenden Gewerke und erstellen Ihnen ein unverbindliches Angebot. Die Besichtigung ist kostenlos.</p>
+      <div class="actions">
+        <a class="btn" href={href}>Besichtigung anfragen</a>
+        <a class="btn btn-line" href={company.whatsapp.href}>Per WhatsApp schreiben</a>
+      </div>
+    </div>
+    <div class="phone">
+      <p class="soft">Anrufen</p>
+      <a class="number" href={company.phone.href}>{company.phone.display}</a>
+      <p class="soft">{company.hours[0].days} {company.hours[0].opens}–{company.hours[0].closes} Uhr, {company.hours[1].days} {company.hours[1].opens}–{company.hours[1].closes} Uhr</p>
+    </div>
+  </div>
+</section>
+<style>
+  .contact-band { padding-bottom: clamp(32px, 3vw, 40px); }
+  .layout { display: grid; gap: 40px; align-items: end; }
+  @media (min-width: 960px) { .layout { grid-template-columns: 1.2fr 1fr; gap: 64px; } }
+  .copy { display: grid; gap: 20px; }
+  .copy h2 { max-width: none; font-family: var(--text); font-size: clamp(2.3rem, 1.6rem + 2.4vw, 3.5rem); font-weight: 400; line-height: 1.12; }
+  .phone { display: grid; gap: 6px; }
+  .number { font-family: var(--display); font-size: clamp(2.6rem, 1.4rem + 4.6vw, 4.8rem); font-weight: 700; line-height: 1; color: #fff; text-decoration: none; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .number:hover { color: var(--copper-on-dark); }
+</style>

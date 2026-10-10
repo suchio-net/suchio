@@ -1,0 +1,77 @@
+---
+import Layout from "@/entwurf/hw/v1/Layout.astro";
+import Note from "@/entwurf/hw/v1/Note.astro";
+import Zoom from "@/entwurf/hw/v1/Zoom.astro";
+import PageHead from "@/entwurf/hw/v1/PageHead.astro";
+import ContactBand from "@/entwurf/hw/v1/ContactBand.astro";
+import { references, referenceTopics } from "@/entwurf/hw/v1/data";
+import { image } from "@/entwurf/hw/v1/images";
+import { breadcrumbNode, businessNode, webPageNode, websiteNode } from "@/entwurf/hw/v1/schema";
+
+const path = "/referenzen/";
+const title = "Referenzen: Bäder, Fliesen und Renovierungen | Handwerker.work";
+const description = "Fotos aus Projekten von Handwerker.work: sanierte Bäder, Fliesen und Naturstein, Arbeiten auf der Baustelle und Innenausbau in der Wetterau und im Rhein-Main-Gebiet.";
+const crumbs = [{ name: "Start", path: "/" }, { name: "Referenzen", path }];
+const schema = [businessNode(), websiteNode(), webPageNode(path, title, description, crumbs), breadcrumbNode(path, crumbs)];
+const items = references.map(item => ({ ...item, ratio: (image(item.name).width / image(item.name).height).toFixed(3) }));
+---
+<Layout title={title} description={description} livePath={path} schema={schema} current="referenzen">
+  <PageHead crumbs={[{ name: "Referenzen" }]} title="Referenzen" intro={["Fotos aus unseren Projekten: fertige Bäder, Fliesenarbeiten und Einblicke von der Baustelle."]} />
+
+  <section class="band" aria-label="Projektfotos">
+    <div class="wrap">
+      <div class="filters rel" role="group" aria-label="Fotos filtern" data-filters>
+        <button type="button" aria-pressed="true" data-topic="alle">Alle <span>{items.length}</span></button>
+        {referenceTopics.map(topic => <button type="button" aria-pressed="false" data-topic={topic.key}>{topic.label} <span>{items.filter(item => item.topic === topic.key).length}</span></button>)}
+        <Note n={1} style="right:0;top:-56px">Ihre Galerie, geordnet und ohne Vorlagenreste. Heute steht dort sichtbar „Gib hier deine Überschrift ein“. Mit Ort, Umfang und Dauer je Projekt werden daraus Fallstudien.</Note>
+      </div>
+      <ul class="masonry" data-grid>
+        {items.map(item => (
+          <li data-item={item.topic}>
+            <figure>
+              <div class="frame" style={`aspect-ratio:${item.ratio}`}><Zoom name={item.name} alt={item.alt} group="referenzen" sizes="(min-width: 1100px) 33vw, (min-width: 640px) 50vw, 100vw" /></div>
+              <figcaption>{item.alt}</figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <ContactBand />
+</Layout>
+
+<style>
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: clamp(28px, 4vw, 44px); }
+  .filters button { min-height: 44px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--grout); font-weight: 600; cursor: pointer; transition: background-color 0.3s var(--ease), color 0.3s; }
+  .filters button span { margin-left: 6px; color: var(--slate-soft); font-weight: 400; font-variant-numeric: tabular-nums; }
+  .filters button:hover { background: rgb(21 25 27 / 0.1); }
+  .filters button[aria-pressed="true"] { background: var(--slate); color: #fff; }
+  .filters button[aria-pressed="true"] span { color: var(--slate-on-dark); }
+  .masonry { columns: 1; column-gap: 20px; }
+  @media (min-width: 640px) { .masonry { columns: 2; } }
+  @media (min-width: 1100px) { .masonry { columns: 3; } }
+  .masonry li { break-inside: avoid; margin-bottom: 28px; }
+  .masonry li[hidden] { display: none; }
+  .masonry figure { margin: 0; display: grid; gap: 10px; }
+  .frame { overflow: hidden; border-radius: var(--radius); background: var(--grout); }
+  figcaption { font-size: 0.93rem; line-height: 1.45; color: var(--slate-soft); }
+  @media (prefers-reduced-motion: no-preference) { .masonry li.shown { animation: shown 0.6s var(--ease) both; } }
+  @keyframes shown { from { opacity: 0; transform: translateY(16px) scale(0.98); } }
+</style>
+
+<script>
+  const filters = document.querySelector<HTMLElement>("[data-filters]");
+  const grid = document.querySelector<HTMLElement>("[data-grid]");
+  if (filters && grid) {
+    filters.querySelectorAll<HTMLButtonElement>("button").forEach(button => button.addEventListener("click", () => {
+      filters.querySelectorAll("button").forEach(other => other.setAttribute("aria-pressed", String(other === button)));
+      const topic = button.dataset.topic;
+      grid.querySelectorAll<HTMLElement>("[data-item]").forEach((item, index) => {
+        item.hidden = topic !== "alle" && item.dataset.item !== topic;
+        item.classList.remove("shown");
+        if (!item.hidden) { void item.offsetWidth; item.style.animationDelay = `${Math.min(index, 8) * 30}ms`; item.classList.add("shown"); }
+      });
+    }));
+  }
+</script>

@@ -1,0 +1,152 @@
+---
+import Note from "./Note.astro";
+import { base } from "./data";
+
+const styleOptions = [
+  { id: "hell", label: "Hell und Eiche", swatch: ["#efece6", "#c9c0b2", "#b9895a"] },
+  { id: "anthrazit", label: "Anthrazit und Messing", swatch: ["#bdb7ae", "#4a4d50", "#c9a35f"] },
+  { id: "salbei", label: "Salbei und Weiß", swatch: ["#f2f0eb", "#97ab93", "#1f2123"] },
+];
+---
+<section class="band planner" id="badplanung-3d" aria-labelledby="planner-title">
+  <div class="wrap">
+    <h2 id="planner-title" class="section-title">3D-Badplanung</h2>
+    <div class="planner-grid rel">
+      <div class="stage" data-planner>
+        <canvas aria-hidden="true"></canvas>
+        <div class="stage-fallback" data-fallback>
+          <p class="js-only" data-fallback-text>Die 3D-Vorschau startet, sobald dieser Bereich sichtbar ist.</p>
+          <p class="nojs-only">Die interaktive 3D-Vorschau braucht JavaScript. Ihre Wünsche können Sie trotzdem anfragen.</p>
+          <button type="button" class="btn btn-line" data-load>3D-Ansicht laden</button>
+        </div>
+        <label class="angle">
+          <span class="sr-only">Blickwinkel</span>
+          <input type="range" min="8" max="142" value="62" data-angle aria-label="Blickwinkel der 3D-Ansicht" />
+        </label>
+      </div>
+      <div class="side">
+        <p>Mit unserer 3D-Badplanung sehen Sie Ihr Bad, bevor gebaut wird. Diese Stilvorschau in einem Beispielraum zeigt, wie unterschiedlich ein Bad wirken kann.</p>
+        <div class="controls" data-planner-controls>
+          <fieldset>
+            <legend>Stil</legend>
+            <div class="choices">
+              {styleOptions.map((option, index) => (
+                <button type="button" data-set="style" data-value={option.id} aria-pressed={index === 0 ? "true" : "false"}>
+                  <span class="swatch" aria-hidden="true">{option.swatch.map(color => <i style={`background:${color}`} />)}</span>{option.label}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Ausstattung</legend>
+            <div class="choices">
+              <button type="button" data-set="layout" data-value="wanne" aria-pressed="true">Badewanne</button>
+              <button type="button" data-set="layout" data-value="dusche" aria-pressed="false">Bodengleiche Dusche</button>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Licht</legend>
+            <div class="choices choices-row">
+              <button type="button" data-set="mood" data-value="tag" aria-pressed="true">Tag</button>
+              <button type="button" data-set="mood" data-value="abend" aria-pressed="false">Abend</button>
+            </div>
+          </fieldset>
+        </div>
+        <a class="btn" href={`${base}/kontakt?vorhaben=bad&stil=hell&variante=wanne#anfrage`} data-planner-cta>3D-Planung anfragen</a>
+      </div>
+      <Note n={4} style="left:12px;top:12px">Sie bieten 3D-Badplanung an, Ihre Seite zeigt sie nirgends. Hier probiert der Besucher es aus, und Stil und Ausstattung kommen mit der Anfrage bei Ihnen an.</Note>
+    </div>
+  </div>
+</section>
+
+<style>
+  .planner-grid { display: grid; gap: var(--joint); background: var(--grout); }
+  @media (min-width: 960px) { .planner-grid { grid-template-columns: 1.6fr 1fr; } }
+  .stage { position: relative; aspect-ratio: 5 / 4; background: #f1f2f0; }
+  .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: pan-y; }
+  .stage canvas:active { cursor: grabbing; }
+  .stage-fallback { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 24px; text-align: center; color: var(--slate-soft); transition: opacity 0.4s; }
+  .stage.ready .stage-fallback { opacity: 0; pointer-events: none; }
+  .stage-fallback [data-load] { display: none; }
+  .stage.manual .stage-fallback [data-load] { display: inline-flex; }
+  :global(html:not(.js)) .js-only, :global(.js) .nojs-only { display: none; }
+  .angle { position: absolute; left: 16px; right: 16px; bottom: 8px; opacity: 0; transition: opacity 0.4s; }
+  .stage.ready .angle { opacity: 1; }
+  :global(html:not(.js)) .angle, .stage.unavailable .angle { display: none; }
+  .angle input { width: 100%; accent-color: var(--copper); }
+  .side { display: grid; gap: 24px; align-content: start; padding: clamp(20px, 3vw, 32px); background: var(--board); }
+  .controls { display: grid; gap: 20px; }
+  fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+  legend { padding: 0; margin-bottom: 8px; font-weight: 700; }
+  .choices { display: grid; gap: 6px; }
+  .choices-row { grid-template-columns: 1fr 1fr; }
+  .choices button { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 14px; border: 2px solid var(--grout-line); border-radius: var(--radius-sm); background: var(--board); text-align: left; font-weight: 700; cursor: pointer; }
+  .choices button:hover { border-color: var(--slate-soft); }
+  .choices button[aria-pressed="true"] { border-color: var(--slate); box-shadow: inset 0 0 0 1.5px var(--copper); }
+  .swatch { display: inline-flex; }
+  .swatch i { width: 14px; height: 14px; border: 1px solid rgb(0 0 0 / 0.15); }
+  .side .btn { justify-self: start; }
+</style>
+
+<script>
+  import type { PlannerState } from "./bath3d/scene";
+
+  const stage = document.querySelector<HTMLElement>("[data-planner]");
+  const controls = document.querySelector<HTMLElement>("[data-planner-controls]");
+  if (stage && controls) {
+    const canvas = stage.querySelector("canvas")!;
+    const angle = stage.querySelector<HTMLInputElement>("[data-angle]")!;
+    const state: PlannerState = { style: "hell", layout: "wanne", mood: "tag" };
+    let planner: ReturnType<typeof import("./bath3d/scene").createPlanner> | undefined;
+    let loading = false;
+    const cta = controls.parentElement!.querySelector<HTMLAnchorElement>("[data-planner-cta]");
+    const fallbackText = stage.querySelector<HTMLElement>("[data-fallback-text]")!;
+    const syncCta = () => { if (cta) { const url = new URL(cta.href); url.searchParams.set("stil", state.style); url.searchParams.set("variante", state.layout === "dusche" ? "dusche" : "wanne"); cta.href = url.pathname + url.search + url.hash; } };
+    const unavailable = () => { stage.classList.remove("manual"); stage.classList.add("unavailable"); fallbackText.textContent = "Die interaktive Vorschau ist auf diesem Gerät nicht verfügbar. Ihre Wünsche können Sie trotzdem anfragen."; };
+
+    controls.querySelectorAll<HTMLButtonElement>("button[data-set]").forEach(button => {
+      button.addEventListener("click", () => {
+        const key = button.dataset.set as keyof PlannerState;
+        controls.querySelectorAll<HTMLButtonElement>(`button[data-set="${key}"]`).forEach(other => other.setAttribute("aria-pressed", String(other === button)));
+        (state as unknown as Record<string, string>)[key] = button.dataset.value!;
+        planner?.set({ [key]: button.dataset.value });
+        syncCta();
+        if (!planner) void load();
+      });
+    });
+    angle.addEventListener("input", () => planner?.setAngle(Number(angle.value) / 100));
+
+    // three.js r163+ renders with WebGL2 only.
+    const supportsWebGL = () => { try { return !!document.createElement("canvas").getContext("webgl2"); } catch { return false; } };
+    const load = async () => {
+      if (loading || planner) return;
+      if (!supportsWebGL()) return unavailable();
+      loading = true;
+      try {
+        const { createPlanner } = await import("./bath3d/scene");
+        planner = createPlanner(canvas, state, {
+          interactive: matchMedia("(pointer: fine)").matches,
+          reduceMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
+          lowPower: matchMedia("(pointer: coarse)").matches,
+        });
+        planner.onAngleChange(value => { angle.value = String(Math.round(value * 100)); });
+        requestAnimationFrame(() => stage.classList.add("ready"));
+      } catch {
+        stage.classList.add("manual");
+        fallbackText.textContent = "Die 3D-Vorschau konnte nicht geladen werden.";
+      } finally {
+        loading = false;
+      }
+    };
+
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    if (!supportsWebGL()) unavailable();
+    else if (connection?.saveData) {
+      stage.classList.add("manual");
+      stage.querySelector("[data-load]")?.addEventListener("click", () => void load());
+    } else {
+      const io = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) { io.disconnect(); void load(); } }, { rootMargin: "300px 0px" });
+      io.observe(stage);
+    }
+  }
+</script>

@@ -1,0 +1,65 @@
+---
+import Layout from "@/entwurf/hw/v2/Layout.astro";
+import Note from "@/entwurf/hw/v2/Note.astro";
+import Zoom from "@/entwurf/hw/v2/Zoom.astro";
+import PageHead from "@/entwurf/hw/v2/PageHead.astro";
+import ContactBand from "@/entwurf/hw/v2/ContactBand.astro";
+import { references, referenceTopics } from "@/entwurf/hw/v2/data";
+import { image } from "@/entwurf/hw/v2/images";
+import { breadcrumbNode, businessNode, webPageNode, websiteNode } from "@/entwurf/hw/v2/schema";
+
+const path = "/referenzen/";
+const title = "Referenzen: Bäder, Fliesen und Renovierungen | Handwerker.work";
+const description = "Fotos aus Projekten von Handwerker.work: sanierte Bäder, Fliesen und Naturstein, Arbeiten auf der Baustelle und Innenausbau in der Wetterau und im Rhein-Main-Gebiet.";
+const crumbs = [{ name: "Start", path: "/" }, { name: "Referenzen", path }];
+const schema = [businessNode(), websiteNode(), webPageNode(path, title, description, crumbs), breadcrumbNode(path, crumbs)];
+const items = references.map(item => ({ ...item, portrait: image(item.name).height > image(item.name).width }));
+---
+<Layout title={title} description={description} livePath={path} schema={schema} current="referenzen">
+  <PageHead crumbs={[{ name: "Referenzen" }]} title="Referenzen" intro={["Fotos aus unseren Projekten: fertige Bäder, Fliesenarbeiten und Einblicke von der Baustelle."]} />
+
+  <section class="band" aria-label="Projektfotos">
+    <div class="wrap">
+      <div class="filters rel" role="group" aria-label="Fotos filtern" data-filters>
+        <button type="button" aria-pressed="true" data-topic="alle">Alle <span>{items.length}</span></button>
+        {referenceTopics.map(topic => <button type="button" aria-pressed="false" data-topic={topic.key}>{topic.label} <span>{items.filter(item => item.topic === topic.key).length}</span></button>)}
+        <Note n={1} style="right:0;top:-56px">Ihre Galerie, geordnet und ohne Vorlagenreste. Heute steht dort sichtbar „Gib hier deine Überschrift ein“. Mit Ort, Umfang und Dauer je Projekt werden daraus Fallstudien.</Note>
+      </div>
+      <ul class="tiles grid" data-grid>
+        {items.map(item => (
+          <li class:list={["tile", { tall: item.portrait }]} data-item={item.topic}>
+            <Zoom name={item.name} alt={item.alt} group="referenzen" sizes="(min-width: 960px) 25vw, 50vw" />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <ContactBand />
+</Layout>
+
+<style>
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .filters button { min-height: 44px; padding: 0 16px; border: 2px solid var(--grout-line); border-radius: 2px; background: var(--board); font-weight: 700; cursor: pointer; }
+  .filters button span { margin-left: 4px; color: var(--slate-soft); font-weight: 400; }
+  .filters button:hover { border-color: var(--slate-soft); }
+  .filters button[aria-pressed="true"] { border-color: var(--slate); background: var(--slate); color: #fff; }
+  .filters button[aria-pressed="true"] span { color: var(--slate-on-dark); }
+  .grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 180px; grid-auto-flow: dense; }
+  @media (min-width: 760px) { .grid { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 220px; } }
+  @media (min-width: 1100px) { .grid { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 240px; } }
+  .grid .tall { grid-row: span 2; }
+  .grid [hidden] { display: none; }
+</style>
+
+<script>
+  const filters = document.querySelector<HTMLElement>("[data-filters]");
+  const grid = document.querySelector<HTMLElement>("[data-grid]");
+  if (filters && grid) {
+    filters.querySelectorAll<HTMLButtonElement>("button").forEach(button => button.addEventListener("click", () => {
+      filters.querySelectorAll("button").forEach(other => other.setAttribute("aria-pressed", String(other === button)));
+      const topic = button.dataset.topic;
+      grid.querySelectorAll<HTMLElement>("[data-item]").forEach(item => { item.hidden = topic !== "alle" && item.dataset.item !== topic; });
+    }));
+  }
+</script>

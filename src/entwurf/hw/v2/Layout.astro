@@ -1,0 +1,105 @@
+---
+import VersionSwitcher from "@/entwurf/hw/VersionSwitcher.astro";
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import Icon from "./Icon.astro";
+import Lightbox from "./Lightbox.astro";
+import { assetBase, base, company } from "./data";
+import { imageSources } from "./images";
+import "./styles.css";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Path the page would have on handwerker.work, used for og:url. */
+  livePath: string;
+  schema?: Record<string, unknown>[];
+  current?: string;
+  /** Image key of the largest above-the-fold image, preloaded for LCP. */
+  lcpImage?: string;
+  lcpSizes?: string;
+  actionBar?: boolean;
+}
+
+const { title, description, livePath, schema = [], current, lcpImage, lcpSizes = "100vw", actionBar = true } = Astro.props;
+const lcp = lcpImage ? imageSources(lcpImage) : undefined;
+const ogImage = new URL(`${assetBase}/img/og-handwerker-work.jpg`, Astro.site).href;
+---
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#2a383d" />
+    <link rel="preload" href={`${assetBase}/fonts/d-din.woff2`} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={`${assetBase}/fonts/d-din-condensed-bold.woff2`} as="font" type="font/woff2" crossorigin />
+    {lcp && <link rel="preload" as="image" type="image/avif" imagesrcset={lcp.avif} imagesizes={lcpSizes} fetchpriority="high" />}
+    <style is:inline>
+      @font-face { font-family: "D-DIN"; src: url(/entwurf/handwerker-work/fonts/d-din.woff2) format("woff2"); font-weight: 400; font-display: optional; }
+      @font-face { font-family: "D-DIN"; src: url(/entwurf/handwerker-work/fonts/d-din-bold.woff2) format("woff2"); font-weight: 700; font-display: optional; }
+      @font-face { font-family: "D-DIN Condensed"; src: url(/entwurf/handwerker-work/fonts/d-din-condensed-bold.woff2) format("woff2"); font-weight: 700; font-display: optional; }
+    </style>
+    <script is:inline>document.documentElement.classList.add("js");</script>
+    <link rel="icon" href={`${assetBase}/favicon.svg`} type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:site_name" content={company.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={`https://handwerker.work${livePath}`} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {schema.length > 0 && <script type="application/ld+json" is:inline set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": schema })} />}
+  </head>
+  <body class:list={{ "has-action-bar": actionBar }}>
+    <a class="skip" href="#main">Zum Inhalt springen</a>
+    <Header current={current} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <Lightbox />
+
+    {actionBar && (
+      <nav class="action-bar" aria-label="Schnellkontakt">
+        <a href={company.phone.href}><Icon name="phone" />Anrufen</a>
+        <a href={company.whatsapp.href}><Icon name="message-circle" />WhatsApp</a>
+        <a class="primary" href={`${base}/kontakt#anfrage`}>Anfrage stellen</a>
+      </nav>
+    )}
+
+    <div class="pitch" role="group" aria-label="Suchio-Entwurf">
+      <a class="pitch-brand" href={`${base}/konzept`}>Entwurf von <b>Suchio</b></a>
+      <button type="button" aria-pressed="false" data-notes-toggle>Hinweise</button>
+    </div>
+
+    <script>
+      import "./client";
+    </script>
+    <VersionSwitcher version="v2" />
+  </body>
+</html>
+
+<style is:global>
+  .action-bar { display: none; }
+  @media (max-width: 760px) {
+    .action-bar { position: fixed; inset: auto 0 0; z-index: 45; display: grid; grid-template-columns: 1fr 1fr 1.4fr; border-top: 1px solid var(--slate); background: var(--board); padding-bottom: env(safe-area-inset-bottom); }
+    .action-bar a { min-width: 0; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 56px; color: var(--slate); font-weight: 700; text-decoration: none; }
+    .action-bar a + a { border-left: 1px solid var(--grout-line); }
+    .action-bar a .icon { width: 18px; height: 18px; color: var(--copper); }
+    .action-bar a.primary { background: var(--copper); color: #fff; border-left: 0; }
+    .action-bar.hidden { display: none; }
+    .has-action-bar .site-footer { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+  }
+  .pitch { position: fixed; left: 12px; bottom: 12px; z-index: 60; display: flex; align-items: stretch; background: #fff; border: 1px solid var(--slate); font-size: 0.9rem; }
+  .pitch-brand { display: flex; align-items: center; gap: 0.3em; padding: 0 12px; color: var(--slate); text-decoration: none; }
+  .pitch button { border: 0; border-left: 1px solid var(--slate); background: #0050c8; color: #fff; padding: 8px 12px; font-weight: 700; cursor: pointer; min-height: 40px; }
+  .pitch button[aria-pressed="true"] { background: var(--slate); }
+  @media (max-width: 760px) { .has-action-bar .pitch { bottom: calc(68px + env(safe-area-inset-bottom)); left: 8px; } }
+</style>

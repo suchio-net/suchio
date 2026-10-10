@@ -1,0 +1,108 @@
+---
+import Layout from "@/entwurf/hw/v2/Layout.astro";
+import Icon from "@/entwurf/hw/v2/Icon.astro";
+import Note from "@/entwurf/hw/v2/Note.astro";
+import PageHead from "@/entwurf/hw/v2/PageHead.astro";
+import ContactBand from "@/entwurf/hw/v2/ContactBand.astro";
+import { base, company, tfm } from "@/entwurf/hw/v2/data";
+import { breadcrumbNode, businessNode, serviceNode, webPageNode, websiteNode } from "@/entwurf/hw/v2/schema";
+
+const path = "/gebaeudebetreuung/";
+const title = "Technische Gebäudebetreuung Rhein-Main & Wetterau | Handwerker.work";
+const description = "Technisches Facility Management vom Meisterbetrieb: Wartung und Inspektion, integrierte Kleinreparaturen, Notfallservice und Betreiberpflichten für Hausverwaltungen und Gewerbe.";
+const crumbs = [{ name: "Start", path: "/" }, { name: tfm.name, path }];
+const schema = [businessNode(), websiteNode(), webPageNode(path, title, description, crumbs), breadcrumbNode(path, crumbs), serviceNode(path, tfm.name, description, "Technisches Facility Management")];
+// The four blocks of the current TFM page, with the benefits listed there.
+const blocks = [
+  { title: "Präventive Wartung und Inspektion", text: "Regelmäßige technische Begehungen und Zustandskontrollen der Gewerke Elektro, SHK und Gebäudetechnik.", items: ["Früherkennung von Schäden", "Weniger ungeplante Ausfälle", "Längere Lebensdauer technischer Anlagen"] },
+  { title: "Integrierte Kleinreparaturen", text: "Kleinere technische Defekte werden innerhalb definierter Grenzen direkt behoben, ohne zusätzliche Einzelbeauftragung und ohne ständige Rechnungsstellung.", items: ["Hohe Kostensicherheit", "Schnelle Problemlösung", "Weniger Verwaltungsaufwand"] },
+  { title: "Express-Notfallservice", text: "Bei kritischen technischen Störungen reagieren wir schnell und leiten sofortige Maßnahmen ein.", items: ["Heizungsausfall", "Wasserschaden", "Elektrische und gebäudetechnische Störungen"] },
+  { title: "Compliance und Betreiberverantwortung", text: "Wir unterstützen Eigentümer bei der Erfüllung gesetzlicher Prüf- und Dokumentationspflichten.", items: ["VDE-Prüfungen", "Wartungsnachweise und Dokumentation", "Betreiberpflichten und Haftungsminimierung"] },
+];
+const audience = ["Hausverwaltungen", "Wohnanlagen", "Gewerbeimmobilien", "Immobiliengesellschaften", "Investoren und Family Offices"];
+---
+<Layout title={title} description={description} livePath={path} schema={schema} current="gebaeudebetreuung">
+  <PageHead crumbs={[{ name: tfm.name }]} title="Technische Gebäudebetreuung in Rhein-Main und der Wetterau" intro={["Werterhalt durch meisterliche Verantwortung. Wir übernehmen die technische Betreuung Ihrer Immobilien, mit der Rechtssicherheit eines Meisterbetriebs, kurzen Entscheidungswegen und einem festen Ansprechpartner, der Ihr Objekt kennt."]}>
+    <div class="actions">
+      <a class="btn" href={`${base}/kontakt?vorhaben=gebaeude#anfrage`}>Technische Erstbegehung anfordern</a>
+      <a class="btn btn-line" href={company.phone.href}><Icon name="phone" />{company.phone.display}</a>
+    </div>
+    <div class="sheet" slot="aside">
+      <p class="sheet-head">Technisches Facility Management</p>
+      <dl>
+      <div class="sheet-row"><dt>Leistungen</dt><dd><ul class="items">{blocks.map(block => <li>{block.title}</li>)}</ul></dd></div>
+      <div class="sheet-row"><dt>Für</dt><dd>{audience.slice(0, -1).join(", ")} und {audience.at(-1)}</dd></div>
+      <div class="sheet-row"><dt>Ansprechpartner</dt><dd>{company.owner}, <a href={company.phone.href}>{company.phone.display}</a></dd></div>
+      <div class="sheet-row"><dt>Gewerke</dt><dd>Elektro, SHK und Gebäudetechnik</dd></div>
+      </dl>
+    </div>
+  </PageHead>
+
+  <section class="band" aria-labelledby="blocks-title">
+    <div class="wrap rel">
+      <h2 id="blocks-title" class="section-title">Vier Leistungen für den Werterhalt</h2>
+      <div class="blocks">
+        {blocks.map(block => (
+          <div class="block">
+            <h3>{block.title}</h3>
+            <p class="soft">{block.text}</p>
+            <ul class="items">{block.items.map(item => <li>{item}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+      <Note n={1} style="right:0;top:-56px">Ihr TFM-Angebot auf einer eigenen, passenden Seite statt im Popup für alle Besucher. Heute trägt diese Seite den Titel „Badsanierung in Frankfurt am Main“.</Note>
+    </div>
+  </section>
+
+  <section class="band band-grout" aria-labelledby="why-title">
+    <div class="wrap">
+      <p class="statement">Immobilien verlieren ihren Wert nicht durch große Schäden, sondern durch viele kleine Probleme, die zu spät behoben werden.</p>
+      <h2 id="why-title" class="section-title why-title">Bewusst wenige Objekte</h2>
+      <p class="lead">Große Facility-Management-Konzerne verwalten oft hunderte Objekte gleichzeitig. Wir betreuen bewusst eine begrenzte Anzahl ausgewählter Immobilien. Jedes Objekt erhält einen festen Ansprechpartner auf Meister-Niveau.</p>
+      <div class="compare rel">
+        <div>
+          <h3>Bei großen Dienstleistern oft</h3>
+          <ul class="plain">
+            <li>Anonyme Hotline</li>
+            <li>Wechselndes Personal ohne Objektkenntnis</li>
+            <li>Lange, bürokratische Wege</li>
+            <li>Reine Schreibtisch-Koordination</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Bei Handwerker.work</h3>
+          <ul class="items">
+            <li>Fester Ansprechpartner auf Meister- und Ingenieur-Niveau</li>
+            <li>Kurze Entscheidungswege</li>
+            <li>TFM-Steuerung und handwerkliche Ausführung aus einer Hand</li>
+          </ul>
+        </div>
+        <Note n={2} style="right:0;top:-48px">Die Argumente aus Ihrem Flyer als lesbarer Text. Reaktionszeiten und Kleinreparatur-Grenzen ergänzen wir, sobald sie vertraglich feststehen. Der Notdienst steht heute noch als „in Planung“ in Ihren Leistungen.</Note>
+      </div>
+    </div>
+  </section>
+
+  <ContactBand title="Technische Erstbegehung anfordern" vorhaben="gebaeude" />
+</Layout>
+
+<style>
+  .sheet { align-self: stretch; margin: 0; background: var(--board); border: 3px solid var(--slate); }
+  .sheet-head { max-width: none; padding: 10px 20px; background: var(--slate); color: #fff; font-weight: 700; }
+  .sheet-row { display: grid; grid-template-columns: 150px 1fr; gap: 16px; padding: 16px 20px; border-top: 1px solid var(--grout-line); }
+  .sheet-row:first-child { border-top: 0; }
+  .sheet dl { margin: 0; }
+  .sheet-row dt { color: var(--slate-soft); }
+  .sheet-row dd { margin: 0; font-weight: 700; }
+  .sheet-row a { color: var(--slate); text-decoration-color: var(--copper); text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+  @media (max-width: 560px) { .sheet-row { grid-template-columns: 1fr; gap: 4px; padding: 12px 16px; } }
+  .blocks { display: grid; gap: 40px 48px; }
+  @media (min-width: 760px) { .blocks { grid-template-columns: 1fr 1fr; } }
+  .block { display: grid; gap: 12px; align-content: start; padding-top: 16px; border-top: 2px solid var(--slate); }
+  .statement { max-width: 28ch; margin-bottom: clamp(48px, 6vw, 80px); font-family: var(--display); font-size: var(--step-3); font-weight: 700; line-height: 1.1; }
+  .why-title { margin-bottom: 16px; }
+  .compare { display: grid; gap: var(--joint); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 36px; background: var(--grout); }
+  .compare > div { display: grid; gap: 14px; align-content: start; padding: 24px; background: var(--board); }
+  .compare > div:last-of-type { background: var(--slate); color: #fff; }
+  .compare > div:last-of-type .items li::before { background: var(--copper-on-dark); }
+  .plain { display: grid; gap: 8px; color: var(--slate-soft); }
+</style>

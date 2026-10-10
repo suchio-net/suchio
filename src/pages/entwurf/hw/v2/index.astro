@@ -1,0 +1,190 @@
+---
+import Layout from "@/entwurf/hw/v2/Layout.astro";
+import Icon from "@/entwurf/hw/v2/Icon.astro";
+import Note from "@/entwurf/hw/v2/Note.astro";
+import Picture from "@/entwurf/hw/v2/Picture.astro";
+import Zoom from "@/entwurf/hw/v2/Zoom.astro";
+import Reviews from "@/entwurf/hw/v2/Reviews.astro";
+import Faq from "@/entwurf/hw/v2/Faq.astro";
+import ContactBand from "@/entwurf/hw/v2/ContactBand.astro";
+import { base, company, faqsHome, references, services, tfm } from "@/entwurf/hw/v2/data";
+import { businessNode, faqNode, webPageNode, websiteNode } from "@/entwurf/hw/v2/schema";
+
+const title = "Renovierung, Sanierung & Badsanierung in Bad Nauheim, Wetterau & Frankfurt | Handwerker.work";
+const description = "Meisterbetrieb aus Bad Nauheim: Renovierung, Sanierung und Modernisierung mit Badsanierung, Fliesen, Elektro, Sanitär und Heizung aus einer Hand. Ein fester Ansprechpartner, kostenlose Besichtigung.";
+const schema = [businessNode(), websiteNode(), webPageNode("/", title, description), faqNode("/", faqsHome)];
+// One photo per trade, so the first view shows the whole range, not only bathrooms.
+const heroPhotos = [
+  { name: "elektro-raum", alt: "Ausgebauter Raum mit neuer Elektroinstallation, Wandleuchte und Einbauschränken" },
+  { name: "bad-doppelwaschtisch", alt: "Saniertes Bad mit Doppelwaschtisch und Holzoptik-Boden im Fischgrätmuster" },
+  { name: "fliesen-verlegung", alt: "Wandfliesen im Chevron-Muster während der Verlegung" },
+];
+const previews = ["bad-wanne-holz", "bad-mosaik", "fliesen-verlegung", "naturstein-wand", "bad-doppelwaschtisch"].map(name => references.find(item => item.name === name)!);
+const steps = [
+  { title: "Vorhaben schildern", text: "Erzählen Sie uns kurz, was Sie vorhaben, am Telefon, per WhatsApp oder über das Anfrageformular. Fotos helfen beim Einschätzen." },
+  { title: "Beratung vor Ort", text: "Wir sehen uns die Situation an und beraten Sie persönlich. Besichtigung und Angebot sind kostenlos." },
+  { title: "Angebot und Ausführung", text: "Sie erhalten ein individuelles, transparentes Angebot. Ein fester Ansprechpartner koordiniert alle Gewerke bis zur Abnahme." },
+];
+---
+<Layout title={title} description={description} livePath="/" schema={schema} lcpImage="elektro-raum" lcpSizes="(min-width: 960px) 40vw, 100vw">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="sign rel" data-sign>
+        <p class="sign-band">Meisterbetrieb in Bad Nauheim</p>
+        <h1 class="sign-title">Renovierung, Sanierung und Modernisierung aus einer Hand</h1>
+        <dl class="sign-rows">
+          <div class="row"><dt>Gewerke</dt><dd><ul class="trades">{services.map(service => <li><a href={`${base}/leistungen/${service.slug}`}>{service.name}</a></li>)}</ul></dd></div>
+          <div class="row"><dt>Ausführung</dt><dd>Eingetragener Meisterbetrieb für {company.credentials}</dd></div>
+          <div class="row"><dt>Ansprechpartner</dt><dd>{company.owner}, <a href={company.phone.href}>{company.phone.display}</a></dd></div>
+          <div class="row"><dt>Einsatzgebiet</dt><dd>Bad Nauheim und die Wetterau, Frankfurt und das Rhein-Main-Gebiet</dd></div>
+        </dl>
+        <Note n={1} style="right:-12px;top:-64px">Statt Werbe-Popup sieht der Besucher sofort, was Sie machen, wo und wer sein Ansprechpartner ist. Jede Zeile ist echt und führt weiter. Das Popup verzögert heute den Seitenaufbau mobil auf 10,2 s.</Note>
+      </div>
+      <div class="tiles hero-photos">
+        {heroPhotos.map((photo, index) => <figure class:list={["tile", `h${index + 1}`]}><Zoom name={photo.name} alt={photo.alt} group="hero" eager={index === 0} sizes={index === 0 ? "(min-width: 960px) 40vw, 100vw" : "(min-width: 960px) 20vw, 50vw"} /></figure>)}
+      </div>
+      <div class="hero-actions">
+        <div class="actions">
+          <a class="btn" href={`${base}/kontakt#anfrage`}>Kostenlose Besichtigung anfragen</a>
+          <a class="btn btn-line" href={company.phone.href}><Icon name="phone" />{company.phone.display}</a>
+        </div>
+        <p class="rating"><a href="https://g.page/handwerker-works" rel="noopener"><strong>{company.rating.value} von 5</strong> bei {company.rating.count} Google-Bewertungen</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="services-title">
+    <div class="wrap">
+      <div class="intro-row">
+        <h2 id="services-title" class="section-title">Leistungen</h2>
+        <p class="lead soft">Einzelne Arbeiten oder das ganze Projekt. Als Generalunternehmen koordinieren wir alle Gewerke, Sie haben einen Ansprechpartner.</p>
+      </div>
+      <ul class="tiles service-tiles rel">
+        {services.map(service => (
+          <li class="tile service">
+            <a href={`${base}/leistungen/${service.slug}`}>
+              <span class="service-photo"><Picture name={service.image} alt="" sizes="(min-width: 960px) 30vw, (min-width: 600px) 50vw, 100vw" /></span>
+              <span class="service-text"><strong>{service.name}</strong><span>{service.summary}</span></span>
+            </a>
+          </li>
+        ))}
+        <li class="tile service service-b2b">
+          <a href={tfm.href}>
+            <span class="service-text"><span class="b2b-label">Für Hausverwaltungen und Gewerbe</span><strong>{tfm.name}</strong><span>{tfm.summary}</span></span>
+          </a>
+        </li>
+        <Note n={2} style="right:0;top:-56px">Eine echte Seite pro Leistung, statt vier fast gleicher Standortseiten. Das TFM-Angebot hat seinen eigenen Platz für Hausverwaltungen.</Note>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band band-grout" aria-labelledby="steps-title">
+    <div class="wrap">
+      <h2 id="steps-title" class="section-title">Ein Ansprechpartner für alle Gewerke</h2>
+      <ol class="steps">
+        {steps.map((step, index) => (
+          <li><span class="step-num" aria-hidden="true">{index + 1}</span><h3>{step.title}</h3><p class="soft">{step.text}</p></li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="refs-title">
+    <div class="wrap">
+      <div class="intro-row projects-intro">
+        <h2 id="refs-title" class="section-title">Aus unseren Projekten</h2>
+        <a class="text-link" href={`${base}/referenzen`}>Alle Referenzen ansehen</a>
+      </div>
+      <div class="tiles ref-mosaic rel">
+        {previews.map((item, index) => <figure class:list={["tile", `m${index + 1}`]}><Zoom name={item.name} alt={item.alt} group="projekte" sizes={index === 0 ? "(min-width: 960px) 50vw, 100vw" : "(min-width: 960px) 25vw, 50vw"} /></figure>)}
+        <Note n={3} style="left:12px;top:12px">Ihre eigenen Projektfotos statt Stockbildern. Ein professioneller Fototag würde den Auftritt zusätzlich heben.</Note>
+      </div>
+    </div>
+  </section>
+
+  <Reviews />
+
+  <section class="band" aria-labelledby="faq-title">
+    <div class="wrap faq-wrap">
+      <h2 id="faq-title" class="section-title">Häufige Fragen</h2>
+      <Faq faqs={faqsHome} name="faq-home" />
+    </div>
+  </section>
+
+  <ContactBand />
+</Layout>
+
+<style>
+  .hero { padding-block: clamp(24px, 4vw, 56px) clamp(48px, 6vw, 80px); background: var(--grout); }
+  .hero-grid { display: grid; gap: 24px 40px; grid-template-columns: 1fr; }
+  @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.25fr 1fr; grid-template-rows: auto auto; } .hero-photos { grid-row: 1 / 3; grid-column: 2; } }
+  .hero-photos { grid-template-columns: 1fr 1fr; grid-template-rows: 3fr 2fr; min-height: 360px; }
+  .hero-photos .h1 { grid-column: 1 / -1; }
+  @media (max-width: 959px) { .hero-photos { order: 2; grid-template-rows: 200px 130px; min-height: 0; } }
+  @media (max-width: 560px) { .hero-photos { grid-template-rows: 170px 110px; } }
+
+  .sign { background: var(--board); border: 3px solid var(--slate); }
+  .sign-band { max-width: none; padding: 10px 20px; background: var(--slate); color: #fff; font-weight: 700; }
+  .sign-title { padding: 22px 20px 26px; font-size: clamp(2.4rem, 1.5rem + 2.6vw, 3.9rem); max-width: 22ch; }
+  .sign-rows { border-top: 3px solid var(--slate); }
+  .row { display: grid; grid-template-columns: 150px 1fr; gap: 16px; padding: 14px 20px; border-top: 1px solid var(--grout-line); }
+  .row:first-child { border-top: 0; }
+  .row dt { color: var(--slate-soft); }
+  .row dd { margin: 0; font-weight: 700; }
+  .row a { color: var(--slate); text-decoration-color: var(--copper); text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+  .row a:hover { color: var(--copper); }
+  .trades { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; gap: 2px; padding: 12px 16px; } .sign-title { padding: 20px 16px 22px; } .sign-band { padding: 10px 16px; } }
+  @media (prefers-reduced-motion: no-preference) {
+    .sign-rows .row { animation: mount 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+    .sign-rows .row:nth-child(2) { animation-delay: 0.08s; }
+    .sign-rows .row:nth-child(3) { animation-delay: 0.16s; }
+    .sign-rows .row:nth-child(4) { animation-delay: 0.24s; }
+  }
+  @keyframes mount { from { opacity: 0; transform: translateY(6px); } }
+
+  .hero-actions { display: grid; gap: 14px; align-content: start; }
+  .rating { font-size: 0.98rem; }
+  .rating a { text-decoration: none; }
+  .rating a:hover { text-decoration: underline; }
+
+  .intro-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 40px; margin-bottom: clamp(28px, 4vw, 48px); }
+  .intro-row .section-title { margin-bottom: 0; }
+  .intro-row .lead { max-width: 52ch; }
+  .projects-intro .section-title { max-width: none; }
+  @media (min-width: 700px) { .projects-intro .section-title { white-space: nowrap; } }
+
+  .service-tiles { grid-template-columns: 1fr; }
+  @media (min-width: 600px) { .service-tiles { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 960px) { .service-tiles { grid-template-columns: repeat(3, 1fr); } }
+  .service a { display: grid; grid-template-rows: auto 1fr; height: 100%; background: var(--board); text-decoration: none; }
+  .service-photo { display: block; aspect-ratio: 3 / 2; overflow: hidden; background: var(--grout); }
+  .service-photo :global(picture), .service-photo :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+  .service-text { display: grid; gap: 6px; align-content: start; padding: 18px 20px 22px; }
+  .service-text strong { font-family: var(--display); font-size: var(--step-2); line-height: 1.05; }
+  .service-text > span { color: var(--slate-soft); }
+  .service a:hover strong { color: var(--copper); }
+  .service a:hover .service-photo :global(img) { transform: scale(1.03); }
+  .service-b2b a { background: var(--slate); color: #fff; grid-template-rows: 1fr; align-content: end; min-height: 200px; }
+  .service-b2b .service-text { padding: 24px; }
+  .service-b2b .service-text > span { color: var(--slate-on-dark); }
+  .b2b-label { font-size: 0.95rem; }
+  .service-b2b a:hover strong { color: var(--copper-on-dark); }
+
+  .steps { display: grid; gap: 32px; }
+  @media (min-width: 860px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 0; } .steps li { padding-inline: 0 32px; } .steps li + li { padding-left: 32px; border-left: 1px solid var(--grout-line); } }
+  .steps li { display: grid; gap: 10px; align-content: start; }
+  .step-num { font-family: var(--display); font-size: 4.5rem; line-height: 0.9; color: var(--copper); }
+
+  .ref-mosaic { grid-template-columns: repeat(2, 1fr); }
+  .ref-mosaic .tile { aspect-ratio: 4 / 3; }
+  .ref-mosaic .m1 { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+  @media (min-width: 960px) {
+    .ref-mosaic { grid-template-columns: 2fr 1fr 1fr; grid-template-rows: repeat(2, minmax(0, 1fr)); aspect-ratio: 2.2 / 1; }
+    .ref-mosaic .tile { aspect-ratio: auto; }
+    .ref-mosaic .m1 { grid-column: 1; grid-row: 1 / 3; aspect-ratio: auto; }
+  }
+
+
+  .faq-wrap :global(.faq) { max-width: 860px; }
+</style>

@@ -1,0 +1,99 @@
+---
+import Icon from "./Icon.astro";
+import Logo from "./Logo.astro";
+import { base, company, nav, services } from "./data";
+
+interface Props { current?: string }
+const { current } = Astro.props;
+const servicesNav = nav[0];
+---
+<header class="site-header" data-header>
+  <div class="wrap bar">
+    <a class="brand" href={base} aria-label="Handwerker.work, zur Startseite"><Logo /></a>
+    <nav class="main-nav" aria-label="Hauptnavigation">
+      <ul>
+        <li class="has-menu">
+          <a class="nav-link" href={servicesNav.href} aria-current={current?.startsWith("leistungen") ? "page" : undefined}>{servicesNav.label}</a>
+          <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="leistungen-menu" data-menu-toggle><span class="sr-only">Leistungen aufklappen</span><Icon name="chevron-down" size={16} /></button>
+          <ul class="dropdown" id="leistungen-menu" data-menu>
+            {services.map(service => <li><a href={`${base}/leistungen/${service.slug}`} aria-current={current === `leistungen/${service.slug}` ? "page" : undefined}>{service.name}</a></li>)}
+          </ul>
+        </li>
+        {nav.slice(1).map(item => <li><a class="nav-link" href={item.href} aria-current={current === item.key ? "page" : undefined}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="bar-right">
+      <a class="tel" href={company.phone.href}><Icon name="phone" size={18} />{company.phone.display}</a>
+      <a class="btn btn-small" href={`${base}/kontakt#anfrage`}>Besichtigung anfragen</a>
+      <button class="burger" type="button" aria-controls="mobile-menu" aria-expanded="false" data-burger>Menü</button>
+    </div>
+  </div>
+</header>
+
+<dialog class="mobile-menu" id="mobile-menu" aria-label="Menü" data-mobile-menu>
+  <div class="mm-top wrap">
+    <Logo tone="light" />
+    <button class="mm-close" type="button" data-close>Schließen</button>
+  </div>
+  <nav class="wrap" aria-label="Mobile Navigation">
+    <p class="mm-group">Leistungen</p>
+    <ul class="mm-sub">
+      {services.map(service => <li><a href={`${base}/leistungen/${service.slug}`}>{service.name}</a></li>)}
+    </ul>
+    <ul class="mm-main">
+      {nav.slice(1).map(item => <li><a href={item.href}>{item.label}</a></li>)}
+    </ul>
+  </nav>
+  <div class="mm-foot wrap">
+    <a class="btn" href={`${base}/kontakt#anfrage`}>Besichtigung anfragen</a>
+    <a class="mm-tel" href={company.phone.href}>{company.phone.display}</a>
+  </div>
+</dialog>
+
+<style>
+  .site-header { position: sticky; top: 0; z-index: 50; height: var(--header-h); background: var(--board); border-bottom: 1px solid var(--grout-line); }
+  .bar { display: flex; align-items: center; gap: 32px; height: 100%; }
+  .brand { display: inline-flex; align-items: center; flex: none; text-decoration: none; color: var(--slate); }
+  .main-nav { margin-left: auto; }
+  .main-nav > ul { display: flex; align-items: center; gap: 28px; }
+  .nav-link { position: relative; display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; text-decoration: none; }
+  .nav-link:hover { color: var(--copper); }
+  .nav-link[aria-current="page"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: 6px; height: 3px; background: var(--copper); }
+  .has-menu { position: relative; display: flex; align-items: center; gap: 2px; }
+  .menu-toggle { display: grid; place-items: center; width: 32px; height: 44px; border: 0; background: none; cursor: pointer; color: var(--slate); }
+  .menu-toggle[aria-expanded="true"] :global(.icon) { transform: rotate(180deg); }
+  .dropdown { position: absolute; top: calc(100% + 13px); left: -20px; min-width: 260px; padding: 8px 0; background: var(--board); border: 1px solid var(--slate); display: none; }
+  .dropdown.open { display: block; }
+  .dropdown a { display: block; padding: 12px 20px; font-weight: 700; text-decoration: none; }
+  .dropdown a:hover, .dropdown a[aria-current="page"] { background: var(--grout); }
+  .bar-right { display: flex; align-items: center; gap: 20px; flex: none; }
+  .tel { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; text-decoration: none; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tel :global(.icon) { color: var(--copper); }
+  .btn-small { min-height: 44px; padding-inline: 18px; font-size: 1rem; }
+  .burger { display: none; min-height: 44px; padding: 0 16px; border: 2px solid var(--slate); border-radius: 2px; background: none; font-weight: 700; cursor: pointer; }
+  @media (max-width: 1180px) { .tel { display: none; } }
+  @media (max-width: 980px) {
+    .main-nav, .bar-right > .btn { display: none; }
+    .bar-right { margin-left: auto; }
+    .tel { display: inline-flex; }
+    .burger { display: block; }
+  }
+  @media (max-width: 600px) { .bar { gap: 12px; } .bar-right { gap: 6px; } .brand :global(.logo-word) { font-size: 1.2rem; } .brand :global(svg) { width: 32px; height: 32px; } }
+  @media (max-width: 359px) { .tel { display: none !important; } }
+  @media (max-width: 440px) { .tel { font-size: 0; gap: 0; width: 44px; justify-content: center; } .tel :global(.icon) { width: 22px; height: 22px; } }
+
+  .mobile-menu { width: 100%; max-width: 100%; height: 100%; max-height: 100%; margin: 0; padding: 0 0 calc(24px + env(safe-area-inset-bottom)); border: 0; background: var(--slate); color: #fff; display: none; flex-direction: column; }
+  .mobile-menu[open] { display: flex; }
+  .mobile-menu::backdrop { background: rgb(0 0 0 / 0.4); }
+  .mm-top { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); border-bottom: 1px solid rgb(255 255 255 / 0.2); }
+  .mm-close { min-height: 44px; padding: 0 16px; border: 2px solid #fff; border-radius: 2px; background: none; color: #fff; font-weight: 700; cursor: pointer; }
+  .mobile-menu nav { padding-top: 24px; }
+  .mm-group { font-size: 0.95rem; color: var(--slate-on-dark); margin-bottom: 4px; }
+  .mm-sub a, .mm-main a { display: flex; align-items: center; min-height: 48px; text-decoration: none; font-weight: 700; }
+  .mm-sub a { font-size: 1.15rem; }
+  .mm-main { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgb(255 255 255 / 0.2); }
+  .mm-main a { font-family: var(--display); font-size: 2rem; }
+  .mm-foot { display: grid; gap: 12px; margin-top: auto; }
+  .mm-foot .btn { width: 100%; }
+  .mm-tel { display: flex; align-items: center; justify-content: center; min-height: 48px; font-family: var(--display); font-size: 1.6rem; text-decoration: none; }
+</style>

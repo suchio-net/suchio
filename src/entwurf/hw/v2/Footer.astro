@@ -1,0 +1,61 @@
+---
+import Logo from "./Logo.astro";
+import Note from "./Note.astro";
+import { base, company, places, services, tfm } from "./data";
+---
+<footer class="site-footer dark">
+  <div class="wrap grid">
+    <div class="col brand-col">
+      <Logo tone="light" />
+      <address>
+        {company.street}<br />
+        {company.postalCode} {company.city}
+      </address>
+      <p><a href={company.phone.href}>{company.phone.display}</a><br /><a href={`mailto:${company.email}`}>{company.email}</a><br /><a href={company.whatsapp.href}>WhatsApp</a></p>
+    </div>
+    <div class="col rel">
+      <h2 class="col-title">Erreichbar</h2>
+      <dl class="hours">
+        {company.hours.map(slot => <div><dt>{slot.days}</dt><dd>{slot.opens}–{slot.closes} Uhr</dd></div>)}
+        <div><dt>Sonntag</dt><dd>geschlossen</dd></div>
+      </dl>
+      <Note n={9} style="left:0;bottom:calc(100% + 12px)">Eine Quelle für alle Öffnungszeiten: Footer, Google-Profil und strukturierte Daten. Heute nennt Ihr Code täglich 9–17 Uhr, der Footer Mo–Sa.</Note>
+    </div>
+    <div class="col">
+      <h2 class="col-title">Leistungen</h2>
+      <ul class="links">
+        {services.map(service => <li><a href={`${base}/leistungen/${service.slug}`}>{service.name}</a></li>)}
+        <li><a href={tfm.href}>{tfm.name}</a></li>
+      </ul>
+    </div>
+    <div class="col">
+      <h2 class="col-title">Einsatzgebiet</h2>
+      <p class="area">{places.map(place => place.name).join(", ")}</p>
+    </div>
+  </div>
+  <div class="wrap bottom">
+    <span>© 2026 {company.name}</span>
+    <a href="https://handwerker.work/impressum/" rel="noopener">Impressum</a>
+    <a href="https://handwerker.work/datenschutzerklaerung-2/" rel="noopener">Datenschutz</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer { padding-block: clamp(24px, 2.5vw, 32px) 24px; }
+  .grid { display: grid; gap: 40px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .col { display: grid; gap: 14px; align-content: start; color: var(--slate-on-dark); }
+  .col-title { font-family: var(--text); font-size: 1rem; font-weight: 700; color: #fff; }
+  address { font-style: normal; }
+  .col a { color: #fff; text-decoration: none; }
+  .col a:hover { text-decoration: underline; }
+  .links { display: grid; }
+  .links a { display: inline-flex; align-items: center; min-height: 40px; }
+  .hours { display: grid; gap: 6px; }
+  .hours div { display: grid; grid-template-columns: minmax(max-content, 1fr) auto; gap: 16px; max-width: 320px; }
+  .hours dd { margin: 0; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .area { line-height: 1.7; }
+  .bottom { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 56px; padding-top: 20px; border-top: 1px solid rgb(255 255 255 / 0.2); font-size: 0.95rem; color: var(--slate-on-dark); }
+  .bottom a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration: none; }
+  .bottom a:hover { color: #fff; text-decoration: underline; }
+  .bottom span { display: inline-flex; align-items: center; min-height: 44px; margin-right: auto; }
+</style>

@@ -1,0 +1,92 @@
+---
+import Layout from "@/entwurf/hw/v1/Layout.astro";
+import Note from "@/entwurf/hw/v1/Note.astro";
+import Picture from "@/entwurf/hw/v1/Picture.astro";
+import PageHead from "@/entwurf/hw/v1/PageHead.astro";
+import ContactBand from "@/entwurf/hw/v1/ContactBand.astro";
+import { base, services, tfm } from "@/entwurf/hw/v1/data";
+import { breadcrumbNode, businessNode, webPageNode, websiteNode } from "@/entwurf/hw/v1/schema";
+
+const path = "/leistungen/";
+const title = "Leistungen: Bad, Sanitär, Heizung, Elektro, Fliesen, Renovierung | Handwerker.work";
+const description = "Meisterbetrieb für Badsanierung, Elektroinstallation, Sanitär und Heizung, Fliesenverlegung sowie Sanierung und Renovierung in Bad Nauheim, der Wetterau und Frankfurt.";
+const crumbs = [{ name: "Start", path: "/" }, { name: "Leistungen", path }];
+const schema = [businessNode(), websiteNode(), webPageNode(path, title, description, crumbs), breadcrumbNode(path, crumbs)];
+// From the "Beratung und Planung" and "Service und Wartung" blocks of the current overview page.
+const extras = [
+  { title: "Beratung und Planung", items: ["Kostenlose Erstberatung vor Ort", "3D-Badplanung und Visualisierung", "Energie- und Fördermittelberatung"] },
+  { title: "Service und Wartung", items: ["Störungsbehebung", "Rohrbruch- und Leckageortung", "Wartungsverträge und Heizungswartung", "E-Check und Wartungsberichte"] },
+];
+---
+<Layout title={title} description={description} livePath={path} schema={schema} current="leistungen">
+  <PageHead crumbs={[{ name: "Leistungen" }]} title="Leistungen" intro={["Ihr Meisterbetrieb für Badsanierung, Elektroinstallation, Sanitär und Heizung, Fliesenverlegung sowie Sanierung und Renovierung. Einzelne Arbeiten oder das ganze Projekt, mit einem Ansprechpartner für alle Gewerke."]} />
+
+  <section class="list-section" aria-label="Alle Leistungen">
+    <div class="wrap rel">
+      <ul class="services">
+        {services.map((service, index) => (
+          <li class:list={["service", { wide: index === 0 }]}>
+            <a class="photo" href={`${base}/leistungen/${service.slug}`} data-reveal>
+              <Picture name={service.image} alt="" sizes={index === 0 ? "(min-width: 960px) 1320px, 100vw" : "(min-width: 960px) 50vw, 100vw"} />
+              <span class="name">{service.name}</span>
+            </a>
+            <div class="text">
+              <p>{service.summary}</p>
+              <ul class="items">{service.groups.flatMap(group => group.items).slice(0, 4).map(item => <li>{item}</li>)}</ul>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <Note n={1} style="right:0;top:-48px">Eine Übersicht mit kurzen Wegen in jede Leistung. Heute gibt es zwei Leistungsseiten mit gleichem Inhalt, eine davon mit „| 100%“ im Titel.</Note>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="extras-title">
+    <div class="wrap extras">
+      <h2 id="extras-title" class="sr-only">Beratung, Service und Gebäudebetreuung</h2>
+      {extras.map(extra => (
+        <div class="extra">
+          <h3>{extra.title}</h3>
+          <ul class="items">{extra.items.map(item => <li>{item}</li>)}</ul>
+        </div>
+      ))}
+      <a class="b2b dark" href={tfm.href}>
+        <span class="b2b-for">Für Hausverwaltungen und Gewerbe</span>
+        <strong>{tfm.name}</strong>
+        <span class="soft">{tfm.summary}</span>
+        <span class="text-link">Zur Gebäudebetreuung</span>
+      </a>
+    </div>
+  </section>
+
+  <ContactBand />
+</Layout>
+
+<style>
+  .list-section { padding-bottom: clamp(56px, 7vw, 104px); }
+  .services { display: grid; gap: clamp(40px, 5vw, 64px) var(--joint); }
+  @media (min-width: 960px) { .services { grid-template-columns: 1fr 1fr; } .wide { grid-column: 1 / -1; } }
+  .service { display: grid; gap: 20px; align-content: start; }
+  .photo { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--radius); background: var(--grout); color: #fff; text-decoration: none; }
+  .wide .photo { aspect-ratio: 21 / 9; }
+  @media (max-width: 959px) { .wide .photo { aspect-ratio: 4 / 3; } }
+  .photo :global(picture), .photo :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .photo :global(img) { transition: transform 0.9s var(--ease); }
+  .photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgb(18 22 24 / 0.72)); }
+  .name { position: absolute; left: clamp(20px, 3vw, 32px); right: 20px; bottom: clamp(18px, 2.6vw, 28px); z-index: 1; font-size: clamp(1.6rem, 1.1rem + 2vw, 2.8rem); font-weight: 650; letter-spacing: -0.035em; line-height: 1.05; }
+  @media (hover: hover) { .photo:hover :global(img) { transform: scale(1.04); } }
+  .text { display: grid; gap: 14px; }
+  .text > p { font-size: var(--step-1); }
+  .text .items { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 6px 28px; color: var(--slate-soft); }
+  .wide .text { grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 960px) { .wide .text { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 40px; align-items: start; } }
+
+  .extras { display: grid; gap: 40px 56px; }
+  @media (min-width: 960px) { .extras { grid-template-columns: 1fr 1fr 1.3fr; align-items: start; } }
+  .extra { display: grid; gap: 16px; align-content: start; }
+  .b2b { display: grid; gap: 10px; padding: clamp(24px, 3vw, 36px); border-radius: var(--radius); text-decoration: none; transition: transform 0.4s var(--ease); }
+  .b2b-for { color: var(--copper-on-dark); font-weight: 600; }
+  .b2b strong { font-size: var(--step-2); font-weight: 650; letter-spacing: -0.02em; line-height: 1.15; }
+  .b2b .text-link { justify-self: start; margin-top: 8px; }
+  .b2b:hover { transform: translateY(-3px); }
+</style>

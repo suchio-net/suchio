@@ -1,0 +1,218 @@
+{
+  "bad-wanne-holz": {
+    "width": 2000,
+    "height": 1500,
+    "widths": [
+      480,
+      640,
+      800,
+      1000,
+      1200,
+      1600,
+      2000
+    ],
+    "color": "#d8d8d8"
+  },
+  "bad-eckwanne": {
+    "width": 2000,
+    "height": 1500,
+    "widths": [
+      480,
+      640,
+      800,
+      1000,
+      1200,
+      1600,
+      2000
+    ],
+    "color": "#887878"
+  },
+  "bad-doppelwaschtisch": {
+    "width": 2000,
+    "height": 1500,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600,
+      2000
+    ],
+    "color": "#989898"
+  },
+  "bad-mosaik": {
+    "width": 1875,
+    "height": 1500,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600,
+      1875
+    ],
+    "color": "#787878"
+  },
+  "dusche-nische": {
+    "width": 750,
+    "height": 1000,
+    "widths": [
+      480,
+      750
+    ],
+    "color": "#787878"
+  },
+  "bad-led": {
+    "width": 2000,
+    "height": 1500,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600,
+      2000
+    ],
+    "color": "#686868"
+  },
+  "dusche-led": {
+    "width": 2048,
+    "height": 1536,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600,
+      2000
+    ],
+    "color": "#1838b8"
+  },
+  "bad-wc-fertig": {
+    "width": 2000,
+    "height": 1500,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600,
+      2000
+    ],
+    "color": "#7878a8"
+  },
+  "vorwand-rohbau": {
+    "width": 958,
+    "height": 1280,
+    "widths": [
+      480,
+      800,
+      958
+    ],
+    "color": "#888878"
+  },
+  "rueckbau-wc": {
+    "width": 1166,
+    "height": 933,
+    "widths": [
+      480,
+      800,
+      1166
+    ],
+    "color": "#787878"
+  },
+  "fliesen-verlegung": {
+    "width": 1000,
+    "height": 667,
+    "widths": [
+      480,
+      800,
+      1000
+    ],
+    "color": "#a8a8a8"
+  },
+  "fliesen-stemmen": {
+    "width": 1663,
+    "height": 1330,
+    "widths": [
+      480,
+      800,
+      1200,
+      1600
+    ],
+    "color": "#080808"
+  },
+  "fliesen-nische-rohbau": {
+    "width": 750,
+    "height": 1000,
+    "widths": [
+      480,
+      750
+    ],
+    "color": "#988878"
+  },
+  "fussbodenheizung": {
+    "width": 561,
+    "height": 748,
+    "widths": [
+      480,
+      561
+    ],
+    "color": "#484838"
+  },
+  "naturstein-wand": {
+    "width": 1024,
+    "height": 682,
+    "widths": [
+      480,
+      800,
+      1024
+    ],
+    "color": "#885828"
+  },
+  "theke-led": {
+    "width": 960,
+    "height": 719,
+    "widths": [
+      480,
+      800,
+      960
+    ],
+    "color": "#080808"
+  },
+  "elektro-raum": {
+    "width": 1024,
+    "height": 576,
+    "widths": [
+      480,
+      800,
+      1024
+    ],
+    "color": "#584838"
+  },
+  "renovierung-raum": {
+    "width": 1280,
+    "height": 766,
+    "widths": [
+      480,
+      800,
+      1200
+    ],
+    "color": "#888888"
+  },
+  "dusche-regen": {
+    "width": 1500,
+    "height": 2000,
+    "widths": [
+      480,
+      800,
+      1200,
+      1500
+    ],
+    "color": "#a8a898"
+  },
+  "fassade": {
+    "width": 690,
+    "height": 552,
+    "widths": [
+      480,
+      690
+    ],
+    "color": "#f8f8f8"
+  }
+}

@@ -1,0 +1,296 @@
+---
+import VersionSwitcher from "@/entwurf/hw/VersionSwitcher.astro";
+import { assetBase, base } from "@/entwurf/hw/v2/data";
+import "@/entwurf/hw/v2/styles.css";
+
+// Lighthouse 13.5 mobile, archived in output/audits/2026-10-08_handwerker-work/entwurf-messung/.
+const metrics = [
+  { label: "Performance, mobil", before: "65 von 100", after: "100 von 100" },
+  { label: "Größtes Element sichtbar (LCP), Startseite", before: "10,2 s", after: "1,7 s" },
+  { label: "Datenmenge beim Laden, Startseite", before: "2,0 MB", after: "0,2 MB" },
+  { label: "Anfragen an den Server, Startseite", before: "123", after: "14" },
+  { label: "Barrierefreiheit, automatische Prüfung", before: "82 von 100", after: "100 von 100" },
+  { label: "SEO-Grundlagen", before: "92 von 100", after: "100 von 100" },
+];
+
+type Status = "done" | "input" | "launch";
+const statusLabel: Record<Status, string> = { done: "Im Entwurf gelöst", input: "Braucht Ihre Angaben", launch: "Beim Umzug" };
+const groups: { title: string; rows: { problem: string; solution: string; status: Status; link?: string }[] }[] = [
+  { title: "Struktur und Navigation", rows: [
+    { problem: "Acht Menüpunkte, zwei Leistungsseiten mit gleichem Inhalt, ein Innenausbau-Link führt auf eine 404-Seite.", solution: "Vier Menüpunkte: Leistungen mit fünf Unterseiten, Gebäudebetreuung, Referenzen, Kontakt. Jede Seite hat eine klare Adresse.", status: "done", link: "/leistungen" },
+    { problem: "Vier Standortseiten sind zu 88–93 % gleich, die Frankfurt-Seite spricht von Düsseldorf.", solution: "Eine Seite je Leistung mit den Inhalten Ihrer bisherigen Seiten. Doppelte Standortseiten werden zusammengeführt.", status: "done", link: "/leistungen/badsanierung" },
+    { problem: "Rund 30 Ortslinks führen alle auf dieselbe Leistungsseite.", solution: "Das Einsatzgebiet steht als klare Liste im Footer und auf der Kontaktseite.", status: "done", link: "/kontakt" },
+    { problem: "Ein TFM-Werbe-Popup öffnet bei jedem Erstbesuch. Sein Bild erscheint mobil erst nach 10,2 s.", solution: "Die Startseite zeigt wie ein Bauschild Leistungen, Meisterbetrieb, Ansprechpartner und Einsatzgebiet. TFM hat eine eigene Seite.", status: "done", link: "/gebaeudebetreuung" },
+  ] },
+  { title: "Anfragen", rows: [
+    { problem: "Das Kontaktformular fragt nur Name, E-Mail und Nachricht. Nach Cookie-Ablehnung verlangt reCAPTCHA eine Marketing-Freigabe.", solution: "Anfrage in vier Schritten mit Vorhaben, Umfang, Postleitzahl, Zeitraum und Fotos, ohne reCAPTCHA. Im Entwurf als Vorschau, die Zustellung folgt beim Livegang.", status: "done", link: "/kontakt#anfrage" },
+    { problem: "Der Kostenrechner steht auf neun Seiten, teils unpassend zur Leistung, hängt bei „1/3“ und hat „$“-Reste im Code.", solution: "Ein Kostenrechner auf der Badseite. Die Angaben gehen direkt in die Anfrage über.", status: "input", link: "/leistungen/badsanierung#kosten" },
+    { problem: "Die Startseite ist mobil 454 px breit, das Telefon ist oben nicht sichtbar.", solution: "Kein Überstand von 320 bis 1920 px, unten eine feste Leiste mit Anrufen, WhatsApp und Anfrage.", status: "done" },
+    { problem: "Nur ein lokales Statistik-Plugin. Welche Seite Anfragen bringt, wird nicht gemessen.", solution: "Anfragen kommen vorsortiert an. Gemessen werden Anrufe, WhatsApp, Anfragen und daraus gewonnene Aufträge.", status: "launch" },
+  ] },
+  { title: "Vertrauen", rows: [
+    { problem: "Prozentbalken wie „Kompetent 96 %“ ohne Quelle, anonyme Kundenstimmen.", solution: "Wörtliche Zitate und die Google-Bewertung mit Link. Name, Datum und aktuelle Zahl kommen von Ihnen.", status: "input" },
+    { problem: "Auf der Referenzseite steht sichtbar „Gib hier deine Überschrift ein“ und ein interner SEO-Hinweis.", solution: "Alle Projektfotos auf einer Seite, nach Themen gefiltert, mit Großansicht.", status: "done", link: "/referenzen" },
+    { problem: "„Elektriker Frankfurt, eine Marke von Handwerker.work“ verlinkt auf eine geparkte Domain.", solution: "Elektro ist eine Leistung im eigenen Auftritt, ohne Link auf leere Domains.", status: "done", link: "/leistungen/elektro" },
+    { problem: "Sie bieten 3D-Badplanung an, die Seite zeigt sie nirgends.", solution: "Eine 3D-Stilvorschau auf der Badseite. Stil und Ausstattung kommen mit der Anfrage an.", status: "done", link: "/leistungen/badsanierung#badplanung-3d" },
+    { problem: "Kein Foto des Ansprechpartners.", solution: "Herr Aybas steht im Bauschild und auf der Kontaktseite. Ein Foto fehlt noch.", status: "input" },
+  ] },
+  { title: "Google und KI-Suche", rows: [
+    { problem: "Die Startseite hat nur „Handwerker.work“ als H1, mehrere Seiten haben doppelte Titel, die TFM-Seite heißt „Badsanierung in Frankfurt“.", solution: "Eine H1 und ein eigener Titel je Seite, passend zu Leistung und Region.", status: "done" },
+    { problem: "Strukturierte Daten fehlen auf allen Leistungsseiten, die Öffnungszeiten widersprechen sich.", solution: "Ein Datenmodell auf jeder Seite für Betrieb, Leistung, Einsatzgebiet, Fragen und Brotkrumen. Öffnungszeiten aus einer Quelle.", status: "input" },
+    { problem: "Der Ratgeber empfiehlt noch den KfW-Zuschuss 455, der seit dem 31.07.2026 keine Anträge mehr annimmt.", solution: "Aktuelle Angaben mit Datum und Quelle: Pflegekasse bis 4.180 €, Steuerbonus nach § 35a, KfW-Kredit 159.", status: "done", link: "/leistungen/badsanierung" },
+    { problem: "Die Heizungs-FAQ erklärt noch das GEG. Seit dem 29.07.2026 gilt das Gebäudemodernisierungsgesetz.", solution: "Die Antwort ist aktualisiert und verweist auf die Beratung im Einzelfall.", status: "done", link: "/leistungen/sanitaer-heizung" },
+    { problem: "badsanierung.ai konkurriert um dieselben Suchbegriffe und nennt eine andere USt-IdNr.", solution: "Domains bündeln, per 301 weiterleiten und die Rechtsangaben vereinheitlichen.", status: "input" },
+    { problem: "robots.txt sperrt CSS- und JavaScript-Ordner, die Sitemaps tragen „noindex“, llms.txt beschreibt alle Seiten mit demselben Elektriker-Text.", solution: "Saubere robots.txt und Sitemap. Die llms.txt wird korrigiert oder entfernt, Google braucht sie nicht.", status: "launch" },
+  ] },
+  { title: "Technik und Recht", rows: [
+    { problem: "123 Anfragen und rund 2 MB beim ersten Laden, 51 Script-Tags, ein verschachteltes HTML-Dokument in einem Widget.", solution: "Statische Seiten aus dem Cloudflare-Netz mit 14 Anfragen und wenigen KB JavaScript.", status: "done" },
+    { problem: "Das Impressum verweist auf die eingestellte EU-OS-Plattform und nennt weder Rechtsform noch Kammer.", solution: "Impressum mit Rechtsform, Handwerkskammer und Berufsbezeichnung.", status: "input" },
+    { problem: "Kein HSTS, kaum Sicherheits-Header, WordPress- und PHP-Version öffentlich sichtbar.", solution: "HTTPS-Erzwingung und Sicherheits-Header, keine Angriffsfläche durch Plugins.", status: "launch" },
+    { problem: "Der Cookie-Banner mischt Du und Sie, Deutsch und Englisch.", solution: "Datensparsame Messung ohne Banner vor der Anfrage. Ob eine Einwilligung nötig ist, prüfen wir vor dem Livegang.", status: "launch" },
+  ] },
+];
+const counts = groups.flatMap(group => group.rows).reduce((acc, row) => ({ ...acc, [row.status]: (acc[row.status] ?? 0) + 1 }), {} as Record<Status, number>);
+
+const urls = [
+  ["/", "/", "behalten"],
+  ["/leistungen/ und /leistungen-handwerker-leistungen-rhein-main-gebiet/", "/leistungen/", "zusammenführen, 301"],
+  ["/badsanierung-bad-nauheim/", "/leistungen/badsanierung/", "301"],
+  ["/badsanierung-frankfurt-am-main/", "/leistungen/badsanierung/, später eigene Frankfurt-Seite mit Frankfurter Projekten", "301"],
+  ["/sanitar/", "/leistungen/sanitaer-heizung/", "301"],
+  ["/elektriker-gesucht/", "/leistungen/elektro/", "301"],
+  ["/fliesenleger-frankfurt-rhein-main/", "/leistungen/fliesen/", "301"],
+  ["/renovierung/ und /innenausbau/ (heute 404)", "/leistungen/renovierung/", "301"],
+  ["/technical-facility-management-rhein-main/", "/gebaeudebetreuung/", "301"],
+  ["/bilder-referenzen/", "/referenzen/", "301"],
+  ["/kontakt/", "/kontakt/", "behalten"],
+  ["/handwerker-frankfurt/, /handwerker-rhein-main-gebiet/, /handwerker-in-der-naehe/", "/", "zusammenführen, 301"],
+  ["/handwerker-duesseldorf/", "nur bei echtem Einsatz in Düsseldorf", "Ihre Entscheidung"],
+  ["Neun Blogbeiträge", "/ratgeber/, Inhalte aktualisiert", "301"],
+  ["badsanierung.ai", "/leistungen/badsanierung/", "Ihre Entscheidung"],
+];
+const pages = [
+  { name: "Startseite", href: base, text: "Bauschild mit Leistungen, Meisterbetrieb, Ansprechpartner und Einsatzgebiet" },
+  { name: "Leistungen", href: `${base}/leistungen`, text: "Übersicht und fünf Leistungsseiten aus Ihren bisherigen Inhalten" },
+  { name: "Badsanierung", href: `${base}/leistungen/badsanierung`, text: "Kostenrechner, 3D-Stilvorschau, Ihr Ablauf in sechs Schritten" },
+  { name: "Gebäudebetreuung", href: `${base}/gebaeudebetreuung`, text: "Ihr TFM-Angebot für Hausverwaltungen auf einer eigenen Seite" },
+  { name: "Referenzen", href: `${base}/referenzen`, text: "Alle Projektfotos, nach Themen gefiltert" },
+  { name: "Kontakt", href: `${base}/kontakt`, text: "Alle Kontaktwege und die Anfrage in vier Schritten" },
+];
+const snippets = [
+  { label: "Startseite", oldT: "Handwerker Frankfurt | Renovierung, Badsanierung & Elektro ✅", oldD: "Handwerker Frankfurt für Renovierung, Badsanierung, Fliesenarbeiten und Elektro. 🔧 🏡 Ihr zuverlässiger Partner im Rhein-Main-Gebiet..💡", newT: "Badsanierung & Renovierung in Bad Nauheim, Wetterau & Frankfurt | Handwerker.work", newD: "Meisterbetrieb aus Bad Nauheim: Badsanierung, Renovierung, Fliesen, Elektro, Sanitär und Heizung aus einer Hand. Ein fester Ansprechpartner, kostenlose Besichtigung." },
+  { label: "Gebäudebetreuung", oldT: "Badsanierung in Frankfurt am Main - 360 Grad Handwerker", oldD: "Badsanierungs-Profis in Frankfurt am Main! ✅ Wir sind Ihre Ansprechpartner für Badrenovierung, Badsanierung und mehr ✅", newT: "Technische Gebäudebetreuung Rhein-Main & Wetterau | Handwerker.work", newD: "Technisches Facility Management vom Meisterbetrieb: Wartung und Inspektion, integrierte Kleinreparaturen, Notfallservice und Betreiberpflichten für Hausverwaltungen und Gewerbe." },
+];
+const questions = [
+  "Welche zwei, drei Auftragsarten möchten Sie häufiger gewinnen, welche eher nicht?",
+  "Ist Düsseldorf ein echtes Einsatzgebiet? Wie weit fahren Sie für ein Bad?",
+  "Welche Rechtsform, Kammer und Meistertitel dürfen wir nennen? Welche USt-IdNr. gilt?",
+  "Wie schnell können Sie auf Anfragen zusagen? Wie viele Google-Bewertungen hat Ihr Profil aktuell?",
+  "Welche Reaktionszeiten und Kleinreparatur-Grenzen gelten in der Gebäudebetreuung?",
+  "Welche Projekte dürfen wir mit Fotos, Ort, Umfang und Dauer zeigen?",
+  "Welche Preisspannen sind aus Ihrer Erfahrung realistisch?",
+  "Haben wir Zugang zu Google-Unternehmensprofil, Search Console, Domains und Hosting?",
+  "Soll badsanierung.ai eigenständig bleiben oder in die Hauptdomain einfließen?",
+];
+---
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Konzept für handwerker.work | Suchio</title>
+    <meta name="description" content="Entwurf und Analyse von Suchio für handwerker.work: Messwerte, Befunde und Lösungen, neue Seitenstruktur und nächste Schritte." />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="referrer" content="no-referrer" />
+    <link rel="preload" href={`${assetBase}/fonts/d-din.woff2`} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={`${assetBase}/fonts/d-din-condensed-bold.woff2`} as="font" type="font/woff2" crossorigin />
+    <style is:inline>
+      @font-face { font-family: "D-DIN"; src: url(/entwurf/handwerker-work/fonts/d-din.woff2) format("woff2"); font-weight: 400; font-display: optional; }
+      @font-face { font-family: "D-DIN"; src: url(/entwurf/handwerker-work/fonts/d-din-bold.woff2) format("woff2"); font-weight: 700; font-display: optional; }
+      @font-face { font-family: "D-DIN Condensed"; src: url(/entwurf/handwerker-work/fonts/d-din-condensed-bold.woff2) format("woff2"); font-weight: 700; font-display: optional; }
+    </style>
+    <link rel="icon" href="/suchio-favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Zum Inhalt springen</a>
+    <header class="ph">
+      <div class="wrap ph-bar">
+        <a class="ph-brand" href="https://suchio.net"><b>suchio</b> für Handwerker.work</a>
+        <a class="btn btn-blue" href={base}>Entwurf öffnen</a>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section class="band intro">
+        <div class="wrap">
+          <h1>Ein klarerer Auftritt für Handwerker.work</h1>
+          <p class="lead">Wir haben die heutige Website Seite für Seite geprüft und daraus einen funktionierenden Entwurf gebaut. Er verwendet nur Ihre Inhalte, Leistungen und Fotos, ordnet sie aber neu: klare Seiten, schnelle Ladezeiten und kurze Wege zur Anfrage.</p>
+          <div class="actions">
+            <a class="btn btn-blue" href={base}>Entwurf ansehen</a>
+            <a class="btn btn-line" href={`${base}?hinweise`}>Mit Hinweisen ansehen</a>
+          </div>
+          <ul class="pages">
+            {pages.map(page => <li><a href={page.href}><strong>{page.name}</strong><span>{page.text}</span></a></li>)}
+          </ul>
+        </div>
+      </section>
+
+      <section class="band band-grout" id="messwerte" aria-labelledby="m-title">
+        <div class="wrap">
+          <h2 id="m-title" class="section-title">Heute und im Entwurf</h2>
+          <table class="metrics">
+            <thead><tr><th scope="col">Messwert</th><th scope="col">Heute</th><th scope="col">Entwurf</th></tr></thead>
+            <tbody>{metrics.map(metric => <tr><th scope="row">{metric.label}</th><td>{metric.before}</td><td class="after">{metric.after}</td></tr>)}</tbody>
+          </table>
+          <p class="fine soft">Google Lighthouse 13.5, mobiles Profil mit gedrosselter Verbindung, gleiche Einstellungen wie in unserer Analyse vom 08.10.2026. Der Entwurf wurde lokal gebaut und gemessen. Laborwerte beim ersten Laden, keine Felddaten echter Besucher. Die 3D-Vorschau lädt erst beim Scrollen und ist nicht enthalten. Nach dem Livegang messen wir erneut.</p>
+        </div>
+      </section>
+
+      <section class="band" aria-labelledby="s-title">
+        <div class="wrap">
+          <h2 id="s-title" class="section-title">So könnte Google die Seiten zeigen</h2>
+          <p class="lead soft serp-lead">Vorschlag für Titel und Beschreibung. Google kann die Darstellung anpassen.</p>
+          <div class="serps">
+            {snippets.map(snippet => (
+              <div class="serp-pair">
+                <h3>{snippet.label}</h3>
+                <div class="serp"><p class="tag">Heute</p><p class="s-title">{snippet.oldT}</p><p class="s-desc">{snippet.oldD}</p></div>
+                <div class="serp new"><p class="tag">Entwurf</p><p class="s-title">{snippet.newT}</p><p class="s-desc">{snippet.newD}</p></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="band band-grout" id="befunde" aria-labelledby="f-title">
+        <div class="wrap">
+          <h2 id="f-title" class="section-title">Was der Entwurf löst</h2>
+          <p class="lead soft">Aus zwei unabhängigen Analysen und einer technischen Nachprüfung: {counts.done} Punkte sind im Entwurf gelöst, {counts.input} brauchen Ihre Angaben, {counts.launch} folgen beim Umzug.</p>
+          {groups.map(group => (
+            <div class="f-group">
+              <h3>{group.title}</h3>
+              <table class="findings">
+                <thead><tr><th scope="col">Heute</th><th scope="col">Im Entwurf</th><th scope="col">Stand</th></tr></thead>
+                <tbody>
+                  {group.rows.map(row => (
+                    <tr>
+                      <td>{row.problem}</td>
+                      <td>{row.solution}{row.link !== undefined && <> <a class="text-link" href={`${base}${row.link}`}>Ansehen</a></>}</td>
+                      <td><span class:list={["status", row.status]}>{statusLabel[row.status]}</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="band" id="struktur" aria-labelledby="u-title">
+        <div class="wrap">
+          <h2 id="u-title" class="section-title">Neue Adressen, gesicherter Umzug</h2>
+          <p class="lead soft">Jede heutige Seite bekommt ein Ziel. Dauerhafte Weiterleitungen (301) und Kontrollen in der Search Console sichern den Umzug ab. Vorübergehende Schwankungen sind möglich, Platzierungen lassen sich nicht garantieren.</p>
+          <div class="table-scroll" tabindex="0" role="region" aria-labelledby="u-title">
+            <table class="urls">
+              <thead><tr><th scope="col">Heutige Adresse</th><th scope="col">Neue Adresse</th><th scope="col">Vorgehen</th></tr></thead>
+              <tbody>{urls.map(([from, to, how]) => <tr><td><code>{from}</code></td><td><code>{to}</code></td><td>{how}</td></tr>)}</tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="band dark" aria-labelledby="r-title">
+        <div class="wrap">
+          <h2 id="r-title" class="section-title">Nächste Schritte</h2>
+          <ol class="road">
+            <li><h3>Woche 1 bis 2: sofort reparieren</h3><p class="soft">Popup entfernen, Düsseldorf-Texte, defekte Links und Platzhalter beheben, Impressum und Öffnungszeiten angleichen, robots.txt freigeben, Messung einrichten.</p></li>
+            <li><h3>Monat 1 bis 2: neuer Auftritt</h3><p class="soft">Die Seiten aus diesem Entwurf mit Ihren Freigaben, alle Weiterleitungen, Anfrage mit echter Zustellung.</p></li>
+            <li><h3>Monat 2 bis 3: Wachstum</h3><p class="soft">Bewertungen nach jeder Abnahme, Google-Profil pflegen, Projekte mit Ort und Dauer, Ratgeber zu Kosten und Förderung. Danach gezielt Anzeigen.</p></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="band" aria-labelledby="q-title">
+        <div class="wrap">
+          <h2 id="q-title" class="section-title">Was wir von Ihnen brauchen</h2>
+          <ol class="questions">{questions.map(question => <li>{question}</li>)}</ol>
+        </div>
+      </section>
+    </main>
+
+    <footer class="pf">
+      <div class="wrap pf-bar">
+        <span><b>suchio</b>, Websites, SEO und KI-Sichtbarkeit</span>
+        <a class="btn btn-blue" href={base}>Entwurf öffnen</a>
+      </div>
+    </footer>
+    <VersionSwitcher version="v2" />
+  </body>
+</html>
+
+<style>
+  body { --blue: #0050c8; }
+  .btn-blue { background: var(--blue); border-color: var(--blue); }
+  .btn-blue:hover { background: #003d99; border-color: #003d99; }
+  .ph { position: sticky; top: 0; z-index: 50; background: var(--board); border-bottom: 1px solid var(--grout-line); }
+  .ph-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 68px; }
+  .ph-brand { text-decoration: none; color: var(--slate-soft); }
+  .ph-brand b, .pf b { font-family: var(--display); font-size: 1.5rem; color: var(--blue); }
+  .ph .btn { min-height: 44px; }
+  .intro .wrap { display: grid; gap: 24px; }
+  .intro h1 { max-width: 16ch; }
+  .intro .lead { max-width: 62ch; }
+  .pages { display: grid; gap: var(--joint); grid-template-columns: 1fr; margin-top: 24px; background: var(--grout); border: var(--joint) solid var(--grout); }
+  @media (min-width: 640px) { .pages { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1000px) { .pages { grid-template-columns: repeat(3, 1fr); } }
+  .pages a { display: grid; gap: 4px; height: 100%; padding: 18px 20px; background: var(--board); text-decoration: none; }
+  .pages strong { font-family: var(--display); font-size: var(--step-2); line-height: 1.05; }
+  .pages span { color: var(--slate-soft); }
+  .pages a:hover strong { color: var(--blue); }
+  table { width: 100%; border-collapse: collapse; background: var(--board); }
+  th, td { padding: 14px 18px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--grout-line); }
+  thead th { background: var(--slate); color: #fff; font-weight: 700; }
+  .metrics { border: 3px solid var(--slate); }
+  .metrics tbody th { font-weight: 400; }
+  .metrics td { font-family: var(--display); font-size: 1.6rem; line-height: 1.1; white-space: nowrap; color: var(--slate-soft); }
+  .metrics td.after { color: var(--slate); }
+  .fine { margin-top: 16px; font-size: 0.95rem; }
+  .serp-lead { margin: -16px 0 32px; }
+  .serps { display: grid; gap: 32px; }
+  .serp-pair { display: grid; gap: var(--joint); background: var(--grout); }
+  @media (min-width: 900px) { .serp-pair { grid-template-columns: 180px 1fr 1fr; } }
+  .serp-pair h3 { padding: 16px 0; background: var(--board); }
+  .serp { padding: 16px 18px; background: var(--board); font-family: Arial, sans-serif; }
+  .serp .tag { font-family: var(--text); font-size: 0.9rem; font-weight: 700; color: var(--slate-soft); margin-bottom: 6px; }
+  .serp.new .tag { color: var(--blue); }
+  .s-title { font-size: 1.2rem; line-height: 1.3; color: #1a0dab; }
+  .s-desc { margin-top: 4px; font-size: 0.9rem; line-height: 1.5; color: #4d5156; }
+  .f-group { margin-top: 40px; }
+  .f-group h3 { font-family: var(--display); font-size: var(--step-2); margin-bottom: 12px; }
+  .findings { border: 3px solid var(--slate); }
+  .findings th:nth-child(1), .findings td:nth-child(1) { width: 42%; }
+  .findings td:nth-child(1) { color: var(--slate-soft); }
+  .findings th:nth-child(3), .findings td:nth-child(3) { width: 180px; }
+  .status { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
+  .status::before { content: ""; width: 10px; height: 10px; flex: none; }
+  .status.done::before { background: #2b7a4b; }
+  .status.input::before { background: var(--copper); }
+  .status.launch::before { background: var(--slate-soft); }
+  @media (max-width: 760px) {
+    .findings, .findings tbody, .findings tr, .findings td { display: block; width: auto !important; }
+    .findings thead { display: none; }
+    .findings tr { padding: 14px 16px; border-bottom: 1px solid var(--grout-line); }
+    .findings td { padding: 4px 0; border: 0; }
+  }
+  .table-scroll { overflow-x: auto; border: 3px solid var(--slate); }
+  .urls { min-width: 720px; }
+  code { font-size: 0.92rem; word-break: break-word; }
+  .road { display: grid; gap: 32px; }
+  @media (min-width: 860px) { .road { grid-template-columns: repeat(3, 1fr); } }
+  .road li { display: grid; gap: 10px; align-content: start; padding-top: 16px; border-top: 3px solid #fff; }
+  .questions { display: grid; gap: 0; max-width: 860px; border-top: 2px solid var(--slate); list-style: decimal inside; }
+  .questions li { padding: 14px 0; border-bottom: 1px solid var(--grout-line); }
+  .questions li::marker { font-weight: 700; color: var(--blue); }
+  .pf { padding-block: 32px; border-top: 1px solid var(--grout-line); }
+  .pf-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; color: var(--slate-soft); }
+</style>

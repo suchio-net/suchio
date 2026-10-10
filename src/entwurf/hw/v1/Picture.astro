@@ -1,0 +1,12 @@
+---
+import { imageSources } from "./images";
+
+interface Props { name: string; alt: string; sizes?: string; eager?: boolean; class?: string; imgClass?: string; style?: string }
+const { name, alt, sizes = "100vw", eager = false, class: className, imgClass, style } = Astro.props;
+const source = imageSources(name);
+---
+<picture class={className} style={`background-color:${source.color};${style ?? ""}`}>
+  <source type="image/avif" srcset={source.avif} sizes={sizes} />
+  <source type="image/webp" srcset={source.webp} sizes={sizes} />
+  <img class={imgClass} src={source.src} alt={alt} width={source.width} height={source.height} loading={eager ? "eager" : "lazy"} decoding={eager ? "sync" : "async"} fetchpriority={eager ? "high" : undefined} />
+</picture>

@@ -1,0 +1,114 @@
+---
+import Note from "./Note.astro";
+import { base } from "./data";
+---
+<section class="band band-grout" id="kosten" aria-labelledby="cost-title">
+  <div class="wrap">
+    <h2 id="cost-title" class="section-title">Was kostet Ihr neues Bad?</h2>
+    <form class="est rel" data-estimator novalidate>
+      <div class="inputs">
+        <fieldset>
+          <legend>Umfang</legend>
+          <div class="opts opts-2">
+            <label><input type="radio" name="umfang" value="komplett" checked /><span><strong>Komplettsanierung</strong><small>Vom Rückbau bis zur Abnahme</small></span></label>
+            <label><input type="radio" name="umfang" value="teil" /><span><strong>Teilsanierung</strong><small>Zum Beispiel Wanne zu Dusche</small></span></label>
+          </div>
+        </fieldset>
+        <fieldset data-size>
+          <legend>Badgröße <output name="m2out" for="m2">6 m²</output></legend>
+          <input type="range" id="m2" name="m2" aria-label="Badgröße in Quadratmetern" min="2" max="20" step="0.5" value="6" />
+        </fieldset>
+        <fieldset>
+          <legend>Ausstattung</legend>
+          <div class="opts opts-3">
+            <label><input type="radio" name="klasse" value="standard" /><span><strong>Standard</strong><small>Solide Markenqualität</small></span></label>
+            <label><input type="radio" name="klasse" value="komfort" checked /><span><strong>Komfort</strong><small>Großformat, bodengleich</small></span></label>
+            <label><input type="radio" name="klasse" value="premium" /><span><strong>Premium</strong><small>Naturstein, Design</small></span></label>
+          </div>
+        </fieldset>
+        <label class="check"><input type="checkbox" name="barrierefrei" /><span>Barrierefrei oder altersgerecht</span></label>
+      </div>
+      <div class="result dark" aria-live="polite">
+        <p class="soft">Orientierung für Material und Arbeit</p>
+        <p class="range"><span data-low>10.500</span> bis <span data-high>13.500</span> €</p>
+        <p class="sub" data-subsidy hidden>Mit Pflegegrad ist ein Zuschuss der Pflegekasse bis 4.180 € möglich.</p>
+        <p class="soft">Ihr verbindliches Angebot erhalten Sie nach der kostenlosen Besichtigung.</p>
+        <a class="btn" href={`${base}/kontakt?vorhaben=bad#anfrage`} data-cta>Mit diesen Angaben anfragen</a>
+      </div>
+      <Note n={3} style="right:0;top:-56px">Ersetzt den heutigen Rechner, der bei „1/3“ hängen bleibt und „$“-Reste im Code zeigt. Die Spannen sind Annahmen auf Basis einer Marktübersicht und werden durch Ihre Erfahrungswerte ersetzt.</Note>
+    </form>
+    <p class="fine soft">Richtwerte auf Basis einer Marktübersicht (Aroundhome, Stand 18.02.2026). Bäder unter 4 m² werden wie 4 m² gerechnet, weil Grundaufwand anfällt. Je nach Zustand der Leitungen und Wunschausstattung kann Ihr Angebot abweichen.</p>
+  </div>
+</section>
+
+<style>
+  .est { display: grid; gap: var(--joint); background: var(--grout); }
+  @media (min-width: 960px) { .est { grid-template-columns: 1.5fr 1fr; } }
+  .inputs { display: grid; gap: 28px; padding: clamp(20px, 3vw, 36px); background: var(--board); }
+  fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+  legend { display: flex; justify-content: space-between; width: 100%; padding: 0; margin-bottom: 10px; font-weight: 700; }
+  legend output { font-family: var(--display); font-size: 1.5rem; line-height: 1; }
+  .opts { display: grid; gap: 8px; }
+  .opts-2 { grid-template-columns: 1fr 1fr; }
+  .opts-3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 560px) { .opts-2, .opts-3 { grid-template-columns: 1fr; } }
+  .opts label { position: relative; cursor: pointer; }
+  .opts input { position: absolute; opacity: 0; pointer-events: none; }
+  .opts label > span { display: grid; gap: 2px; height: 100%; padding: 12px 14px; border: 2px solid var(--grout-line); border-radius: var(--radius-sm); transition: border-color 0.15s; }
+  .opts small { font-size: 0.92rem; color: var(--slate-soft); }
+  .opts label:hover > span { border-color: var(--slate-soft); }
+  .opts input:checked + span { border-color: var(--slate); box-shadow: inset 0 0 0 1.5px var(--copper); }
+  .opts input:focus-visible + span { outline: 3px solid var(--copper); outline-offset: 2px; }
+  input[type="range"] { width: 100%; accent-color: var(--copper); }
+  .check { display: flex; align-items: center; gap: 12px; min-height: 44px; font-weight: 700; cursor: pointer; }
+  .check input { width: 22px; height: 22px; accent-color: var(--copper); }
+  .result { display: grid; gap: 14px; align-content: start; padding: clamp(20px, 3vw, 36px); }
+  .range { font-family: var(--display); font-size: clamp(2.4rem, 1.6rem + 2.6vw, 3.6rem); font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .sub { color: var(--copper-on-dark); font-weight: 700; }
+  .result .btn { justify-self: start; max-width: 100%; white-space: normal; text-align: left; }
+  [hidden] { display: none !important; }
+  .fine { margin-top: 16px; font-size: 0.95rem; }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-estimator]");
+  if (form) {
+    // €/m² ranges per class (complete renovation) and a flat range for partial work.
+    const rates = { standard: [1050, 1350], komfort: [1750, 2250], premium: [3000, 4000] } as const;
+    const partial = { standard: [4500, 6500], komfort: [5500, 8500], premium: [8000, 11000] } as const;
+    const low = form.querySelector<HTMLElement>("[data-low]")!, high = form.querySelector<HTMLElement>("[data-high]")!;
+    const subsidy = form.querySelector<HTMLElement>("[data-subsidy]")!;
+    const cta = form.querySelector<HTMLAnchorElement>("[data-cta]")!, out = form.querySelector("output")!, size = form.querySelector<HTMLElement>("[data-size]")!;
+    const fmt = new Intl.NumberFormat("de-DE");
+    const round = (value: number) => Math.round(value / 500) * 500;
+    let shown = [0, 0], frame = 0;
+    const tween = (to: number[]) => {
+      cancelAnimationFrame(frame);
+      const from = [...shown], start = performance.now();
+      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const step = (now: number) => {
+        const t = reduce ? 1 : Math.min(1, (now - start) / 450), k = 1 - Math.pow(1 - t, 3);
+        shown = [from[0] + (to[0] - from[0]) * k, from[1] + (to[1] - from[1]) * k];
+        low.textContent = fmt.format(round(shown[0])); high.textContent = fmt.format(round(shown[1]));
+        if (t < 1) frame = requestAnimationFrame(step);
+      };
+      frame = requestAnimationFrame(step);
+    };
+    const update = () => {
+      const data = new FormData(form);
+      const umfang = data.get("umfang") as "komplett" | "teil", klasse = data.get("klasse") as keyof typeof rates;
+      const m2 = Number(data.get("m2")), barrierefrei = data.get("barrierefrei") === "on";
+      out.textContent = `${fmt.format(m2)} m²`;
+      size.hidden = umfang === "teil";
+      const range = umfang === "teil" ? partial[klasse] : [rates[klasse][0] * Math.max(m2, 4), rates[klasse][1] * Math.max(m2, 4)];
+      tween([round(range[0]), round(range[1])]);
+      subsidy.hidden = !barrierefrei;
+      const params = new URLSearchParams({ vorhaben: "bad", umfang, klasse });
+      if (umfang !== "teil") params.set("m2", String(m2));
+      if (barrierefrei) params.set("barrierefrei", "1");
+      cta.href = `${cta.pathname}?${params}#anfrage`;
+    };
+    form.addEventListener("input", update);
+    update();
+  }
+</script>

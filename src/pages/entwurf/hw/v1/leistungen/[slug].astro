@@ -1,0 +1,165 @@
+---
+import type { GetStaticPaths } from "astro";
+import Layout from "@/entwurf/hw/v1/Layout.astro";
+import Icon from "@/entwurf/hw/v1/Icon.astro";
+import Note from "@/entwurf/hw/v1/Note.astro";
+import Picture from "@/entwurf/hw/v1/Picture.astro";
+import PageHead from "@/entwurf/hw/v1/PageHead.astro";
+import Faq from "@/entwurf/hw/v1/Faq.astro";
+import Steps from "@/entwurf/hw/v1/Steps.astro";
+import PhotoRail from "@/entwurf/hw/v1/PhotoRail.astro";
+import ContactBand from "@/entwurf/hw/v1/ContactBand.astro";
+import CostEstimator from "@/entwurf/hw/v1/CostEstimator.astro";
+import BathPlanner from "@/entwurf/hw/v1/BathPlanner.astro";
+import { base, company, services, sources, tfm, type Service } from "@/entwurf/hw/v1/data";
+import { breadcrumbNode, businessNode, faqNode, serviceNode, servicePath, webPageNode, websiteNode } from "@/entwurf/hw/v1/schema";
+
+export const getStaticPaths = (() => services.map(service => ({ params: { slug: service.slug }, props: { service } }))) satisfies GetStaticPaths;
+
+interface Props { service: Service }
+const { service } = Astro.props;
+const path = servicePath(service.slug);
+const crumbs = [{ name: "Start", path: "/" }, { name: "Leistungen", path: "/leistungen/" }, { name: service.name, path }];
+const schema = [
+  businessNode(), websiteNode(), webPageNode(path, service.title, service.description, crumbs), breadcrumbNode(path, crumbs),
+  serviceNode(path, service.name, service.description, service.name), faqNode(path, service.faqs),
+];
+const isBath = service.slug === "badsanierung";
+const others = services.filter(other => other.slug !== service.slug);
+const request = `${base}/kontakt?vorhaben=${service.formValue}#anfrage`;
+const faqTitles: Record<string, string> = { badsanierung: "Fragen zur Badsanierung", "sanitaer-heizung": "Fragen zu Sanitär und Heizung", elektro: "Fragen zur Elektroinstallation", fliesen: "Fragen zu Fliesenarbeiten", renovierung: "Fragen zur Renovierung" };
+const faqTitle = faqTitles[service.slug] ?? "Häufige Fragen";
+const tabId = (index: number) => `${service.slug}-gruppe-${index + 1}`;
+---
+<Layout title={service.title} description={service.description} livePath={path} schema={schema} current={`leistungen/${service.slug}`} lcpImage={service.image} lcpSizes="(min-width: 1400px) 1320px, 100vw">
+  <PageHead crumbs={[{ name: "Leistungen", href: `${base}/leistungen` }, { name: service.name }]} title={service.h1} intro={service.intro} image={service.image} imageAlt={service.imageAlt}>
+    <div class="actions">
+      <a class="btn" href={request}>Kostenlose Besichtigung anfragen</a>
+      <a class="btn btn-line" href={company.phone.href}><Icon name="phone" />{company.phone.display}</a>
+    </div>
+  </PageHead>
+
+  <section class="band scope-band" aria-labelledby="scope-title">
+    <div class="wrap rel">
+      <div class="scope" data-tabs>
+        <div class="scope-head">
+          <h2 id="scope-title">Was wir übernehmen</h2>
+          <div class="tabs" role="tablist" aria-label="Leistungsbereiche" data-tablist>
+            {service.groups.map((group, index) => <button type="button" role="tab" id={`${tabId(index)}-tab`} aria-controls={tabId(index)} aria-selected={index === 0 ? "true" : "false"} tabindex={index === 0 ? 0 : -1}>{group.title}</button>)}
+          </div>
+        </div>
+        <div class="panels">
+          {service.groups.map((group, index) => (
+            <div class="panel" role="tabpanel" id={tabId(index)} aria-labelledby={`${tabId(index)}-tab`} data-panel>
+              <h3 class="panel-title">{group.title}</h3>
+              <ul class="items">{group.items.map(item => <li>{item}</li>)}</ul>
+            </div>
+          ))}
+        </div>
+      </div>
+      {isBath && <Note n={1} style="right:0;top:-56px">Eine Badseite für Bad Nauheim und die Wetterau mit Ihren echten Leistungen. Heute gibt es zwei Badseiten und vier fast gleiche Standortseiten, die Frankfurt-Seite spricht von Düsseldorf.</Note>}
+    </div>
+  </section>
+
+  {service.points && (
+    <section class:list={["band", { "band-grout": !service.points.sequence }]} aria-labelledby="points-title">
+      <div class="wrap rel">
+        <h2 id="points-title" class="section-title">{service.points.title}</h2>
+        {service.points.sequence
+          ? <Steps steps={service.points.items.map(title => ({ title }))} />
+          : <ul class="items points">{service.points.items.map(item => <li>{item}</li>)}</ul>}
+        {isBath && <Note n={2} style="right:0;top:-56px">Ihr eigener Ablauf in sechs Schritten, heute als Fließtext versteckt.</Note>}
+      </div>
+    </section>
+  )}
+
+  {isBath && <CostEstimator />}
+  {isBath && <BathPlanner />}
+
+  {service.gallery.length > 0 && <PhotoRail id="gallery-title" title="Aus unseren Projekten" items={service.gallery} link={{ href: `${base}/referenzen`, label: "Weitere Projektfotos" }} />}
+
+  <section class="band" aria-labelledby="faq-title">
+    <div class="wrap faq-wrap">
+      <h2 id="faq-title">{faqTitle}</h2>
+      <div>
+        <Faq faqs={service.faqs} name={`faq-${service.slug}`} />
+        {isBath && <p class="sources soft">Quellen, Stand Oktober 2026: {sources.map((source, index) => <>{index > 0 && ", "}<a href={source.href} rel="noopener">{source.label}</a></>)}</p>}
+      </div>
+    </div>
+  </section>
+
+  <section class="others" aria-labelledby="others-title">
+    <div class="wrap">
+      <h2 id="others-title" class="others-title">Weitere Leistungen</h2>
+      <ul class="others-list">
+        {others.map(other => (
+          <li><a href={`${base}/leistungen/${other.slug}`}><span class="thumb"><Picture name={other.image} alt="" sizes="88px" /></span><span><strong>{other.name}</strong><span class="soft">{other.summary}</span></span></a></li>
+        ))}
+        <li><a href={tfm.href}><span class="thumb thumb-b2b" aria-hidden="true"><Icon name="building-2" size={30} /></span><span><strong>{tfm.name}</strong><span class="soft">{tfm.summary}</span></span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <ContactBand vorhaben={service.formValue} />
+</Layout>
+
+<style>
+  .scope-band { padding-top: clamp(24px, 3vw, 48px); }
+  .scope-head { display: grid; gap: 24px; margin-bottom: clamp(28px, 4vw, 44px); }
+  @media (min-width: 960px) { .scope-head { grid-template-columns: auto 1fr; align-items: end; gap: 48px; } .tabs { justify-self: end; } }
+  .tabs { display: none; flex-wrap: wrap; gap: 6px; padding: 6px; border-radius: 999px; background: var(--grout); }
+  :global(.js) .tabs { display: flex; }
+  .tabs button { min-height: 44px; padding: 0 20px; border: 0; border-radius: 999px; background: none; font-weight: 600; color: var(--slate-soft); cursor: pointer; transition: background-color 0.3s var(--ease), color 0.3s, box-shadow 0.3s; }
+  .tabs button:hover { color: var(--slate); }
+  .tabs button[aria-selected="true"] { background: var(--board); color: var(--slate); box-shadow: 0 1px 2px rgb(21 25 27 / 0.08); }
+  @media (max-width: 600px) { .tabs { border-radius: 22px; } .tabs button { flex: 1 1 auto; } }
+  .panels { display: grid; gap: 40px; }
+  .panel .items { columns: 1; column-gap: 48px; display: block; font-size: var(--step-1); }
+  .panel .items li { break-inside: avoid; margin-bottom: 12px; }
+  @media (min-width: 760px) { .panel .items { columns: 2; } }
+  @media (min-width: 1100px) { .panel .items { columns: 3; } }
+  .panel-title { margin-bottom: 18px; }
+  :global(.js) .panel-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  :global(.js) .panel[hidden] { display: none; }
+  @media (prefers-reduced-motion: no-preference) { :global(.js) .panel:not([hidden]) { animation: panel-in 0.5s var(--ease); } }
+  @keyframes panel-in { from { opacity: 0; transform: translateY(10px); } }
+
+  .points { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px 48px; font-size: var(--step-1); }
+  .faq-wrap { display: grid; gap: clamp(28px, 4vw, 48px); }
+  @media (min-width: 1024px) { .faq-wrap { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); } }
+  .faq-wrap h2 { font-size: var(--step-3); max-width: 14ch; }
+  .sources { margin-top: 20px; font-size: 0.95rem; }
+  .sources a { color: inherit; }
+  .others { padding-bottom: clamp(24px, 3vw, 48px); }
+  .others-title { font-size: var(--step-3); margin-bottom: 24px; }
+  .others-list { display: grid; gap: 4px 32px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); border-top: 1px solid var(--grout-line); }
+  .others-list li { border-bottom: 1px solid var(--grout-line); }
+  .others-list a { display: grid; grid-template-columns: 72px 1fr; gap: 18px; align-items: center; padding: 16px 0; text-decoration: none; }
+  .others-list a > span:last-child { display: grid; gap: 2px; }
+  .others-list strong { font-size: 1.15rem; font-weight: 640; letter-spacing: -0.02em; transition: color 0.2s; }
+  .others-list .soft { font-size: 0.95rem; line-height: 1.45; }
+  .others-list a:hover strong { color: var(--copper-text); }
+  .thumb { width: 72px; height: 72px; overflow: hidden; border-radius: 14px; background: var(--grout); }
+  .thumb :global(picture), .thumb :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .thumb-b2b { display: grid; place-items: center; background: var(--night); color: var(--copper-on-dark); }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-tabs]").forEach(root => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>("[role=tab]")];
+    const panels = [...root.querySelectorAll<HTMLElement>("[data-panel]")];
+    const select = (index: number, focus = false) => {
+      tabs.forEach((tab, position) => { tab.setAttribute("aria-selected", String(position === index)); tab.tabIndex = position === index ? 0 : -1; });
+      panels.forEach((panel, position) => { panel.hidden = position !== index; });
+      if (focus) tabs[index].focus();
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => select(index));
+      tab.addEventListener("keydown", event => {
+        const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+        if (step) { event.preventDefault(); select((index + step + tabs.length) % tabs.length, true); }
+      });
+    });
+    select(0);
+  });
+</script>

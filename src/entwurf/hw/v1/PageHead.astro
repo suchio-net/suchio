@@ -1,0 +1,55 @@
+---
+// Page head. With an image, the title spans the page and a wide photo follows;
+// with an aside, title and aside sit side by side; otherwise the title stands alone.
+import Zoom from "./Zoom.astro";
+import { base } from "./data";
+
+interface Crumb { name: string; href?: string }
+interface Props { crumbs: Crumb[]; title: string; intro?: string[]; image?: string; imageAlt?: string }
+const { crumbs, title, intro = [], image, imageAlt = "" } = Astro.props;
+const aside = Astro.slots.has("aside");
+const extra = Astro.slots.has("default");
+---
+<section class:list={["page-head", { "has-aside": aside }]}>
+  <div class="wrap">
+    <nav aria-label="Brotkrumen"><ol class="crumbs">
+      <li><a href={base}>Start</a></li>
+      {crumbs.map(crumb => <li>{crumb.href ? <a href={crumb.href}>{crumb.name}</a> : <span aria-current="page">{crumb.name}</span>}</li>)}
+    </ol></nav>
+    <div class="grid">
+      <div class="main">
+        <h1>{title}</h1>
+        {(intro.length > 0 || extra) && (
+          <div class="below">
+            <div class="intro">{intro.map((paragraph, index) => <p class:list={{ lead: index === 0, soft: true }}>{paragraph}</p>)}</div>
+            {extra && <div class="extra"><slot /></div>}
+          </div>
+        )}
+      </div>
+      {aside && <div class="aside"><slot name="aside" /></div>}
+    </div>
+    {image && <figure class="photo"><Zoom name={image} alt={imageAlt} group="head" eager sizes="(min-width: 1400px) 1320px, 100vw" /></figure>}
+  </div>
+</section>
+<style>
+  .page-head { padding-block: 8px clamp(48px, 6vw, 88px); }
+  .grid { display: grid; gap: 40px 64px; margin-top: clamp(16px, 3vw, 40px); }
+  .main { display: grid; gap: clamp(24px, 3vw, 36px); align-content: start; }
+  h1 { max-width: 18ch; }
+  .below { display: grid; gap: 24px 64px; }
+  .intro { display: grid; gap: 12px; }
+  .intro p { max-width: 58ch; }
+  .extra { display: grid; gap: 14px; align-content: start; }
+  @media (min-width: 1024px) {
+    .page-head:not(.has-aside) .below { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: end; }
+    .page-head:not(.has-aside) .extra { justify-items: end; }
+    .has-aside .grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: end; }
+  }
+  .photo { height: clamp(260px, 42vw, 600px); margin: clamp(32px, 4vw, 56px) 0 0; overflow: hidden; border-radius: var(--radius); background: var(--grout); }
+  @media (prefers-reduced-motion: no-preference) {
+    .photo { animation: head-in 1.2s var(--ease) both; }
+    .photo :global(img) { animation: head-zoom 1.8s var(--ease) both; }
+  }
+  @keyframes head-in { from { transform: translateY(40px); } }
+  @keyframes head-zoom { from { transform: scale(1.14); } }
+</style>

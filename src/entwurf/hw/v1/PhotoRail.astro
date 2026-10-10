@@ -1,0 +1,79 @@
+---
+// Project photos in a horizontal rail at their natural proportions. Touch and
+// trackpads scroll it natively, a mouse can drag it, and every photo opens full size.
+import Zoom from "./Zoom.astro";
+import Icon from "./Icon.astro";
+import { image } from "./images";
+
+interface Props { id: string; title: string; items: { name: string; alt: string }[]; link?: { href: string; label: string } }
+const { id, title, items, link } = Astro.props;
+const photos = items.map(item => ({ ...item, ratio: image(item.name).width / image(item.name).height }));
+---
+<section class="rail-section" aria-labelledby={id}>
+  <div class="wrap top">
+    <h2 id={id}>{title}</h2>
+    <div class="controls">
+      {link && <a class="text-link" href={link.href}>{link.label}</a>}
+      <div class="arrows" data-rail-arrows>
+        <button type="button" data-dir="-1"><Icon name="chevron-left" size={22} /><span class="sr-only">Vorherige Fotos</span></button>
+        <button type="button" data-dir="1"><Icon name="chevron-right" size={22} /><span class="sr-only">Weitere Fotos</span></button>
+      </div>
+    </div>
+  </div>
+  <ul class="rail" data-rail>
+    {photos.map(photo => (
+      <li style={`--r:${photo.ratio.toFixed(3)}`}><Zoom name={photo.name} alt={photo.alt} group={id} sizes="(min-width: 1024px) 40vw, 80vw" /></li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .rail-section { padding-block: clamp(72px, 9vw, 136px); }
+  .top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 20px 40px; margin-bottom: clamp(28px, 4vw, 48px); }
+  .top h2 { max-width: 14ch; }
+  .controls { display: flex; align-items: center; gap: 24px; }
+  .arrows { display: none; gap: 6px; }
+  :global(.js) .arrows { display: flex; }
+  .arrows button { display: grid; place-items: center; width: 48px; height: 48px; border: 0; border-radius: 50%; background: var(--board); box-shadow: inset 0 0 0 1.5px var(--grout-line); color: var(--slate); cursor: pointer; transition: box-shadow 0.2s, opacity 0.2s; }
+  .arrows button:hover:not(:disabled) { box-shadow: inset 0 0 0 1.5px var(--slate); }
+  .arrows button:disabled { opacity: 0.35; cursor: default; }
+  .rail { --h: clamp(240px, 46vh, 520px); display: flex; gap: 14px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); padding-inline: max(var(--gutter), calc((100vw - var(--max)) / 2)); padding-bottom: 14px; scrollbar-width: thin; scrollbar-color: var(--grout-line) transparent; }
+  .rail.dragging { scroll-snap-type: none; cursor: grabbing; user-select: none; }
+  .rail.dragging :global(.zoom) { pointer-events: none; }
+  .rail li { flex: none; width: min(calc(var(--h) * var(--r)), 82vw); height: min(var(--h), calc(82vw / var(--r))); overflow: hidden; border-radius: var(--radius); background: var(--grout); scroll-snap-align: start; }
+  @media (pointer: fine) { .rail { cursor: grab; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-rail]").forEach(rail => {
+    const buttons = [...(rail.parentElement!.querySelector("[data-rail-arrows]")?.querySelectorAll<HTMLButtonElement>("button") ?? [])];
+    const update = () => {
+      if (buttons.length < 2) return;
+      buttons[0].disabled = rail.scrollLeft < 8;
+      buttons[1].disabled = rail.scrollLeft + rail.clientWidth > rail.scrollWidth - 8;
+    };
+    buttons.forEach(button => button.addEventListener("click", () => {
+      rail.scrollBy({ left: Number(button.dataset.dir) * rail.clientWidth * 0.7, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    }));
+    rail.addEventListener("scroll", update, { passive: true });
+    update();
+
+    // Mouse drag; a short click still opens the photo.
+    rail.addEventListener("pointerdown", event => {
+      if (event.pointerType !== "mouse" || event.button !== 0) return;
+      const startX = event.clientX, startLeft = rail.scrollLeft;
+      let moved = false;
+      const move = (next: PointerEvent) => {
+        const delta = next.clientX - startX;
+        if (!moved && Math.abs(delta) > 5) { moved = true; rail.classList.add("dragging"); }
+        if (moved) rail.scrollLeft = startLeft - delta;
+      };
+      const up = () => {
+        removeEventListener("pointermove", move);
+        requestAnimationFrame(() => rail.classList.remove("dragging"));
+      };
+      addEventListener("pointermove", move);
+      addEventListener("pointerup", up, { once: true });
+    });
+  });
+</script>

@@ -1,0 +1,76 @@
+---
+// Shared full-size photo viewer for every [data-zoom] button on the page.
+import Icon from "./Icon.astro";
+---
+<dialog class="lightbox" aria-label="Foto" data-lightbox>
+  <div class="lb-bar">
+    <p class="lb-count" data-lb-count></p>
+    <button type="button" class="lb-btn" data-lb-close><Icon name="x" size={20} /><span>Schließen</span></button>
+  </div>
+  <figure class="lb-figure">
+    <img alt="" data-lb-img />
+    <figcaption data-lb-caption></figcaption>
+  </figure>
+  <button type="button" class="lb-nav lb-prev" data-lb-step="-1"><Icon name="chevron-left" size={28} /><span class="sr-only">Vorheriges Foto</span></button>
+  <button type="button" class="lb-nav lb-next" data-lb-step="1"><Icon name="chevron-right" size={28} /><span class="sr-only">Nächstes Foto</span></button>
+</dialog>
+
+<style>
+  .lightbox { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; padding: 0; border: 0; background: rgb(20 28 31 / 0.96); color: #fff; }
+  .lightbox[open] { display: grid; grid-template-rows: auto minmax(0, 1fr); }
+  .lightbox::backdrop { background: rgb(20 28 31 / 0.6); }
+  .lb-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px clamp(12px, 3vw, 32px); }
+  .lb-count { font-variant-numeric: tabular-nums; color: var(--slate-on-dark); }
+  .lb-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid rgb(255 255 255 / 0.4); background: none; color: #fff; font-weight: 700; cursor: pointer; }
+  .lb-figure { display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 12px; min-height: 0; margin: 0; padding: 0 clamp(12px, 8vw, 96px) 20px; }
+  .lb-figure img { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+  .lb-figure figcaption { max-width: 70ch; margin-inline: auto; text-align: center; color: var(--slate-on-dark); }
+  .lb-nav { position: absolute; top: 50%; display: grid; place-items: center; width: 52px; height: 72px; margin-top: -36px; border: 0; background: rgb(255 255 255 / 0.1); color: #fff; cursor: pointer; }
+  .lb-nav:hover { background: rgb(255 255 255 / 0.2); }
+  .lb-prev { left: clamp(4px, 2vw, 24px); }
+  .lb-next { right: clamp(4px, 2vw, 24px); }
+  .lightbox.single .lb-nav, .lightbox.single .lb-count { visibility: hidden; }
+  .lightbox :focus-visible { outline-color: #fff; }
+  @media (max-width: 600px) { .lb-nav { top: auto; bottom: 16px; margin: 0; height: 52px; } .lb-figure { padding-bottom: 84px; } .lb-figure figcaption { font-size: 0.95rem; } }
+</style>
+
+<script>
+  const box = document.querySelector<HTMLDialogElement>("[data-lightbox]");
+  if (box) {
+    const img = box.querySelector<HTMLImageElement>("[data-lb-img]")!;
+    const caption = box.querySelector<HTMLElement>("[data-lb-caption]")!;
+    const count = box.querySelector<HTMLElement>("[data-lb-count]")!;
+    let items: HTMLElement[] = [], index = 0, opener: HTMLElement | null = null;
+    const show = (next: number) => {
+      index = (next + items.length) % items.length;
+      const item = items[index];
+      img.src = item.dataset.zoom!;
+      img.alt = item.dataset.zoomAlt ?? "";
+      caption.textContent = item.dataset.zoomAlt ?? "";
+      count.textContent = `${index + 1} von ${items.length}`;
+    };
+    document.addEventListener("click", event => {
+      const trigger = (event.target as Element).closest<HTMLElement>("[data-zoom]");
+      if (!trigger) return;
+      // Only photos that are currently shown, e.g. not those hidden by a filter.
+      items = [...document.querySelectorAll<HTMLElement>(`[data-zoom][data-zoom-group="${trigger.dataset.zoomGroup}"]`)].filter(item => item.offsetParent !== null);
+      if (!items.includes(trigger)) items = [trigger];
+      opener = trigger;
+      box.classList.toggle("single", items.length < 2);
+      show(items.indexOf(trigger));
+      box.showModal();
+    });
+    box.querySelectorAll<HTMLButtonElement>("[data-lb-step]").forEach(button => button.addEventListener("click", () => show(index + Number(button.dataset.lbStep))));
+    box.querySelector("[data-lb-close]")!.addEventListener("click", () => box.close());
+    box.addEventListener("click", event => { if (event.target === box || event.target === box.querySelector(".lb-figure")) box.close(); });
+    box.addEventListener("keydown", event => {
+      if (items.length < 2) return;
+      if (event.key === "ArrowRight") show(index + 1);
+      if (event.key === "ArrowLeft") show(index - 1);
+    });
+    let startX = 0;
+    box.addEventListener("touchstart", event => { startX = event.touches[0].clientX; }, { passive: true });
+    box.addEventListener("touchend", event => { const delta = event.changedTouches[0].clientX - startX; if (items.length > 1 && Math.abs(delta) > 50) show(index + (delta < 0 ? 1 : -1)); });
+    box.addEventListener("close", () => { img.removeAttribute("src"); opener?.focus(); });
+  }
+</script>

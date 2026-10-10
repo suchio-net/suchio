@@ -1,0 +1,6 @@
+---
+// Pitch annotation: hidden by default, shown when the "Hinweise" toggle is on.
+interface Props { n: number; class?: string; style?: string }
+const { n, class: className, style } = Astro.props;
+---
+<aside class:list={["note", className]} style={style} aria-label={`Hinweis ${n}`}><i>{n}</i><span><slot /></span></aside>

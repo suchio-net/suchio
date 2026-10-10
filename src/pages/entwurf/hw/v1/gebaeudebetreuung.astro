@@ -1,0 +1,144 @@
+---
+import Layout from "@/entwurf/hw/v1/Layout.astro";
+import Icon from "@/entwurf/hw/v1/Icon.astro";
+import Note from "@/entwurf/hw/v1/Note.astro";
+import ContactBand from "@/entwurf/hw/v1/ContactBand.astro";
+import { base, company, tfm } from "@/entwurf/hw/v1/data";
+import { breadcrumbNode, businessNode, serviceNode, webPageNode, websiteNode } from "@/entwurf/hw/v1/schema";
+import type { IconName } from "@/entwurf/hw/v1/icons";
+
+const path = "/gebaeudebetreuung/";
+const title = "Technische Gebäudebetreuung Rhein-Main & Wetterau | Handwerker.work";
+const description = "Technisches Facility Management vom Meisterbetrieb: Wartung und Inspektion, integrierte Kleinreparaturen, Notfallservice und Betreiberpflichten für Hausverwaltungen und Gewerbe.";
+const crumbs = [{ name: "Start", path: "/" }, { name: tfm.name, path }];
+const schema = [businessNode(), websiteNode(), webPageNode(path, title, description, crumbs), breadcrumbNode(path, crumbs), serviceNode(path, tfm.name, description, "Technisches Facility Management")];
+// The four blocks of the current TFM page, with the benefits listed there.
+const blocks: { icon: IconName; title: string; text: string; items: string[] }[] = [
+  { icon: "wrench", title: "Präventive Wartung und Inspektion", text: "Regelmäßige technische Begehungen und Zustandskontrollen der Gewerke Elektro, SHK und Gebäudetechnik.", items: ["Früherkennung von Schäden", "Weniger ungeplante Ausfälle", "Längere Lebensdauer technischer Anlagen"] },
+  { icon: "hammer", title: "Integrierte Kleinreparaturen", text: "Kleinere technische Defekte werden innerhalb definierter Grenzen direkt behoben, ohne zusätzliche Einzelbeauftragung und ohne ständige Rechnungsstellung.", items: ["Hohe Kostensicherheit", "Schnelle Problemlösung", "Weniger Verwaltungsaufwand"] },
+  { icon: "siren", title: "Express-Notfallservice", text: "Bei kritischen technischen Störungen reagieren wir schnell und leiten sofortige Maßnahmen ein.", items: ["Heizungsausfall", "Wasserschaden", "Elektrische und gebäudetechnische Störungen"] },
+  { icon: "clipboard-check", title: "Compliance und Betreiberverantwortung", text: "Wir unterstützen Eigentümer bei der Erfüllung gesetzlicher Prüf- und Dokumentationspflichten.", items: ["VDE-Prüfungen", "Wartungsnachweise und Dokumentation", "Betreiberpflichten und Haftungsminimierung"] },
+];
+const audience = ["Hausverwaltungen", "Wohnanlagen", "Gewerbeimmobilien", "Immobiliengesellschaften", "Investoren und Family Offices"];
+---
+<Layout title={title} description={description} livePath={path} schema={schema} current="gebaeudebetreuung">
+  <section class="head dark">
+    <div class="wrap">
+      <nav aria-label="Brotkrumen"><ol class="crumbs">
+        <li><a href={base}>Start</a></li>
+        <li><span aria-current="page">{tfm.name}</span></li>
+      </ol></nav>
+      <div class="head-grid">
+        <div class="head-copy">
+          <h1>Technische Gebäudebetreuung in Rhein-Main und der Wetterau</h1>
+          <p class="lead soft">Werterhalt durch meisterliche Verantwortung. Wir übernehmen die technische Betreuung Ihrer Immobilien, mit der Rechtssicherheit eines Meisterbetriebs, kurzen Entscheidungswegen und einem festen Ansprechpartner, der Ihr Objekt kennt.</p>
+          <div class="actions">
+            <a class="btn" href={`${base}/kontakt?vorhaben=gebaeude#anfrage`}>Technische Erstbegehung anfordern</a>
+            <a class="btn btn-line" href={company.phone.href}><Icon name="phone" />{company.phone.display}</a>
+          </div>
+        </div>
+        <div class="audience">
+          <p class="soft">Für</p>
+          <ul>{audience.map(item => <li>{item}</li>)}</ul>
+          <p class="soft contact">Ansprechpartner: {company.owner}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="blocks-title">
+    <div class="wrap rel">
+      <h2 id="blocks-title" class="section-title">Vier Leistungen für den Werterhalt</h2>
+      <ul class="blocks">
+        {blocks.map(block => (
+          <li class="block">
+            <span class="ico" aria-hidden="true"><Icon name={block.icon} size={26} /></span>
+            <h3>{block.title}</h3>
+            <p class="soft">{block.text}</p>
+            <ul class="pills">{block.items.map(item => <li>{item}</li>)}</ul>
+          </li>
+        ))}
+      </ul>
+      <Note n={1} style="right:0;top:-56px">Ihr TFM-Angebot auf einer eigenen, passenden Seite statt im Popup für alle Besucher. Heute trägt diese Seite den Titel „Badsanierung in Frankfurt am Main“.</Note>
+    </div>
+  </section>
+
+  <section class="band band-grout" aria-labelledby="why-title">
+    <div class="wrap">
+      <blockquote class="statement"><p>Immobilien verlieren ihren Wert nicht durch große Schäden, sondern durch viele kleine Probleme, die zu spät behoben werden.</p></blockquote>
+      <div class="why">
+        <div class="why-copy">
+          <h2 id="why-title">Bewusst wenige Objekte</h2>
+          <p class="lead soft">Große Facility-Management-Konzerne verwalten oft hunderte Objekte gleichzeitig. Wir betreuen bewusst eine begrenzte Anzahl ausgewählter Immobilien. Jedes Objekt erhält einen festen Ansprechpartner auf Meister-Niveau.</p>
+        </div>
+        <div class="compare rel">
+          <div class="side side-them">
+            <h3>Bei großen Dienstleistern oft</h3>
+            <ul>
+              <li>Anonyme Hotline</li>
+              <li>Wechselndes Personal ohne Objektkenntnis</li>
+              <li>Lange, bürokratische Wege</li>
+              <li>Reine Schreibtisch-Koordination</li>
+            </ul>
+          </div>
+          <div class="side side-us dark">
+            <h3>Bei Handwerker.work</h3>
+            <ul class="items">
+              <li>Fester Ansprechpartner auf Meister- und Ingenieur-Niveau</li>
+              <li>Kurze Entscheidungswege</li>
+              <li>TFM-Steuerung und handwerkliche Ausführung aus einer Hand</li>
+            </ul>
+          </div>
+          <Note n={2} style="right:0;top:-48px">Die Argumente aus Ihrem Flyer als lesbarer Text. Reaktionszeiten und Kleinreparatur-Grenzen ergänzen wir, sobald sie vertraglich feststehen. Der Notdienst steht heute noch als „in Planung“ in Ihren Leistungen.</Note>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ContactBand title="Technische Erstbegehung anfordern" vorhaben="gebaeude" />
+</Layout>
+
+<style>
+  .head { padding-block: 8px clamp(64px, 8vw, 120px); }
+  .head .crumbs { color: var(--slate-on-dark); }
+  .head .crumbs a:hover { color: #fff; }
+  .head-grid { display: grid; gap: 48px 72px; margin-top: clamp(20px, 3vw, 40px); }
+  @media (min-width: 1024px) { .head-grid { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: end; } }
+  .head-copy { display: grid; gap: 28px; }
+  .head-copy h1 { max-width: 16ch; }
+  .head-copy .lead { max-width: 52ch; }
+  .audience { display: grid; gap: 10px; padding-left: clamp(0px, 2vw, 32px); border-left: 2px solid var(--copper-on-dark); }
+  .audience ul { display: grid; gap: 2px; }
+  .audience li { font-size: clamp(1.35rem, 1rem + 1.4vw, 2.1rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.2; }
+  @media (prefers-reduced-motion: no-preference) {
+    .audience li { animation: word-in 0.9s var(--ease) both; }
+    .audience li:nth-child(2) { animation-delay: 0.08s; }
+    .audience li:nth-child(3) { animation-delay: 0.16s; }
+    .audience li:nth-child(4) { animation-delay: 0.24s; }
+    .audience li:nth-child(5) { animation-delay: 0.32s; }
+  }
+  @keyframes word-in { from { opacity: 0; transform: translateX(-16px); } }
+  .contact { margin-top: 8px; }
+  @media (max-width: 1023px) { .audience { padding-left: 20px; } }
+
+  .blocks { display: grid; gap: clamp(36px, 4vw, 56px) 64px; }
+  @media (min-width: 860px) { .blocks { grid-template-columns: 1fr 1fr; } }
+  .block { display: grid; gap: 14px; align-content: start; }
+  .ico { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: var(--copper-wash); color: var(--copper-text); }
+  .block h3 { font-size: var(--step-2); }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .pills li { padding: 7px 14px; border-radius: 999px; background: var(--grout); font-size: 0.95rem; font-weight: 560; }
+
+  .statement { margin: 0 0 clamp(56px, 7vw, 96px); }
+  .statement p { max-width: 24ch; font-size: clamp(1.9rem, 1.3rem + 2.4vw, 3.4rem); font-weight: 620; letter-spacing: -0.035em; line-height: 1.12; text-wrap: balance; }
+  .statement p::before { content: "„"; }
+  .statement p::after { content: "“"; }
+  .why { display: grid; gap: 40px 64px; }
+  @media (min-width: 1024px) { .why { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); align-items: start; } }
+  .why-copy { display: grid; gap: 18px; }
+  .compare { display: grid; gap: 12px; }
+  @media (min-width: 700px) { .compare { grid-template-columns: 1fr 1fr; } }
+  .side { display: grid; gap: 16px; align-content: start; padding: clamp(22px, 3vw, 32px); border-radius: var(--radius); }
+  .side-them { background: var(--paper); }
+  .side-them ul { display: grid; gap: 8px; color: var(--slate-soft); }
+</style>

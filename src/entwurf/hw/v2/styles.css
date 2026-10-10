@@ -1,0 +1,111 @@
+/* handwerker.work draft. A construction-sign vocabulary: white boards, slate
+   type set in DIN, grout-grey joints between photos, copper only for actions. */
+:root {
+  --board: #ffffff;
+  --grout: #e6e8e5;
+  --grout-line: #cdd2ce;
+  --slate: #2a383d;
+  --slate-soft: #55656b;
+  --slate-on-dark: #c9d1d3;
+  --copper: #a44e1c;
+  --copper-hover: #873f15;
+  --copper-on-dark: #e8a37a;
+  --joint: 6px;
+  --gutter: clamp(20px, 4vw, 48px);
+  --max: 1240px;
+  --header-h: 72px;
+  --text: "D-DIN", "DIN Alternate", "Bahnschrift", "Arial Narrow", Arial, sans-serif;
+  --display: "D-DIN Condensed", "DIN Condensed", "Bahnschrift SemiBold Condensed", "Arial Narrow", Arial, sans-serif;
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: 1.6rem;
+  --step-3: clamp(2rem, 1.5rem + 2vw, 2.8rem);
+  --step-4: clamp(2.6rem, 1.6rem + 4vw, 4.4rem);
+  --step-5: clamp(3rem, 1.6rem + 5.6vw, 5.8rem);
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + 16px); background: var(--board); }
+body { margin: 0; background: var(--board); color: var(--slate); font: 400 var(--step-0)/1.6 var(--text); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+input[type="range"] { min-height: 44px; }
+h1, h2, h3, h4, p, figure, blockquote, dl, dd, ol, ul { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+h1, h2 { font-family: var(--display); font-weight: 700; line-height: 1; letter-spacing: 0; text-wrap: balance; }
+h1 { font-size: var(--step-5); }
+h2 { font-size: var(--step-4); }
+h3 { font-size: var(--step-1); font-weight: 700; line-height: 1.25; }
+p { text-wrap: pretty; max-width: 66ch; }
+strong, b { font-weight: 700; }
+:focus-visible { outline: 3px solid var(--copper); outline-offset: 3px; }
+.dark :focus-visible { outline-color: var(--copper-on-dark); }
+::selection { background: var(--slate); color: #fff; }
+.dark::selection, .dark ::selection { background: var(--copper-on-dark); color: var(--slate); }
+
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skip { position: fixed; left: 12px; top: -60px; z-index: 100; padding: 12px 18px; background: var(--slate); color: #fff; text-decoration: none; font-weight: 700; }
+.skip:focus { top: 12px; }
+
+.wrap { width: 100%; max-width: calc(var(--max) + var(--gutter) * 2); margin-inline: auto; padding-inline: var(--gutter); }
+.band { padding-block: clamp(64px, 8vw, 112px); }
+.band-grout { background: var(--grout); }
+.dark { background: var(--slate); color: #fff; }
+.dark .soft { color: var(--slate-on-dark); }
+.soft { color: var(--slate-soft); }
+.lead { font-size: var(--step-1); line-height: 1.5; }
+.section-title { margin-bottom: clamp(28px, 4vw, 48px); max-width: 18ch; }
+
+/* The slight top inset optically centers DIN's glyphs within the button. */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 4px 24px 0; border: 2px solid var(--copper); border-radius: 2px; background: var(--copper); color: #fff; font-weight: 700; font-size: 1.0625rem; line-height: 1.1; text-align: center; text-decoration: none; cursor: pointer; transition: background-color 0.2s, border-color 0.2s, color 0.2s; }
+.btn:hover { background: var(--copper-hover); border-color: var(--copper-hover); }
+.btn-line { background: transparent; color: var(--slate); border-color: var(--slate); }
+.btn-line:hover { background: var(--slate); border-color: var(--slate); color: #fff; }
+.dark .btn-line { color: #fff; border-color: #fff; }
+.dark .btn-line:hover { background: #fff; color: var(--slate); }
+.btn .icon { width: 20px; height: 20px; flex: none; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.text-link { color: var(--copper); font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+.text-link:hover { color: var(--copper-hover); }
+.dark .text-link { color: var(--copper-on-dark); }
+
+/* Lists with a square marker, like positions on a specification sheet. */
+.items { display: grid; gap: 8px; }
+.items li { position: relative; padding-left: 22px; }
+.items li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 8px; height: 8px; background: var(--copper); }
+.dark .items li::before { background: var(--copper-on-dark); }
+
+/* Photo tiles separated by grout joints. */
+.tiles { display: grid; gap: var(--joint); background: var(--grout); }
+.tile { position: relative; overflow: hidden; background: var(--grout); margin: 0; }
+.tile picture, .tile img { width: 100%; height: 100%; object-fit: cover; }
+
+/* FAQ */
+.faq { display: grid; border-top: 2px solid var(--slate); }
+.faq details { border-bottom: 1px solid var(--grout-line); }
+.faq summary { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 20px 0; cursor: pointer; list-style: none; font-size: var(--step-1); font-weight: 700; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; flex: none; font-family: var(--display); font-size: 1.8rem; line-height: 1; color: var(--copper); }
+.faq details[open] summary::after { content: "–"; }
+.faq .answer { display: grid; gap: 10px; padding: 0 0 24px; color: var(--slate-soft); }
+
+/* Breadcrumb */
+.crumbs { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 0.95rem; color: var(--slate-soft); }
+.crumbs li { display: flex; align-items: center; min-height: 44px; }
+.crumbs a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; }
+.crumbs a:hover { text-decoration: underline; }
+.crumbs li + li::before { content: "/"; margin-right: 10px; color: var(--grout-line); }
+
+/* Pitch layer (Suchio annotations), hidden unless switched on. */
+.note { display: none; }
+body.notes .note { position: absolute; z-index: 30; display: flex; gap: 10px; align-items: flex-start; max-width: 300px; padding: 10px 14px 11px 10px; background: #0050c8; color: #fff; font: 400 0.92rem/1.35 var(--text); text-align: left; }
+body.notes .note i { flex: none; display: grid; place-items: center; width: 22px; height: 22px; background: #fff; color: #0050c8; font-style: normal; font-weight: 700; font-size: 0.8rem; }
+@media (max-width: 760px) { body.notes .note { position: relative !important; inset: auto !important; max-width: none; margin: 12px 0; } }
+.rel { position: relative; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

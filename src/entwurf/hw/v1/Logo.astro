@@ -1,0 +1,25 @@
+---
+// Vector redraw of the existing house-and-tools mark, so it stays sharp at every size.
+interface Props { class?: string; tone?: "dark" | "light" }
+const { class: className, tone = "dark" } = Astro.props;
+---
+<span class:list={["logo", `logo-${tone}`, className]}>
+  <svg viewBox="0 0 64 64" width="40" height="40" aria-hidden="true" focusable="false">
+    <path d="M7 31.5 32 9l25 22.5" fill="none" stroke="var(--copper)" stroke-width="5.5" stroke-linejoin="miter" />
+    <path d="M44.5 20V11.5h6.5v14.5" fill="none" stroke="var(--copper)" stroke-width="4.5" />
+    <path d="M14.5 29.5V55h35V29.5" fill="none" stroke="var(--logo-wall)" stroke-width="5" />
+    <path d="m27.5 32.5 15 15" stroke="var(--logo-wall)" stroke-width="4.5" stroke-linecap="round" />
+    <rect x="18" y="26.5" width="15" height="6.5" rx="1.6" transform="rotate(-45 25.5 29.75)" fill="var(--logo-wall)" />
+    <path d="m42 29-8.5 8.5" stroke="var(--logo-wall)" stroke-width="2.6" stroke-linecap="round" />
+    <path d="m33 38-6.5 6.5" stroke="var(--logo-wall)" stroke-width="5.5" stroke-linecap="round" />
+  </svg>
+  <span class="logo-word">Handwerker<span>.work</span></span>
+</span>
+<style>
+  .logo { display: inline-flex; align-items: center; gap: 10px; --logo-wall: #36454a; }
+  .logo-light { --logo-wall: #e9e4dc; }
+  .logo svg { width: 40px; height: 40px; flex: none; }
+  .logo-word { font-weight: 750; font-size: 1.12rem; letter-spacing: -0.02em; line-height: 1; }
+  .logo-word span { color: var(--copper-text, var(--copper)); }
+  .logo-light .logo-word span { color: var(--copper-light); }
+</style>
