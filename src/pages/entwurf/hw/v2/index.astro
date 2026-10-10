@@ -5,9 +5,11 @@ import Note from "@/entwurf/hw/v2/Note.astro";
 import Picture from "@/entwurf/hw/v2/Picture.astro";
 import Zoom from "@/entwurf/hw/v2/Zoom.astro";
 import Reviews from "@/entwurf/hw/v2/Reviews.astro";
+import Proofs from "@/entwurf/hw/v2/Proofs.astro";
 import Faq from "@/entwurf/hw/v2/Faq.astro";
 import ContactBand from "@/entwurf/hw/v2/ContactBand.astro";
 import { base, company, faqsHome, references, services, tfm } from "@/entwurf/hw/v2/data";
+import type { IconName } from "@/entwurf/hw/v2/icons";
 import { businessNode, faqNode, webPageNode, websiteNode } from "@/entwurf/hw/v2/schema";
 
 const title = "Renovierung, Sanierung & Badsanierung in Bad Nauheim, Wetterau & Frankfurt | Handwerker.work";
@@ -18,6 +20,13 @@ const heroPhotos = [
   { name: "elektro-raum", alt: "Ausgebauter Raum mit neuer Elektroinstallation, Wandleuchte und Einbauschränken" },
   { name: "bad-doppelwaschtisch", alt: "Saniertes Bad mit Doppelwaschtisch und Holzoptik-Boden im Fischgrätmuster" },
   { name: "fliesen-verlegung", alt: "Wandfliesen im Chevron-Muster während der Verlegung" },
+];
+// The four services of the Gebäudebetreuung page, so the card without a photo still shows what is offered.
+const tfmBlocks: { icon: IconName; title: string }[] = [
+  { icon: "wrench", title: "Wartung und Inspektion" },
+  { icon: "hammer", title: "Integrierte Kleinreparaturen" },
+  { icon: "siren", title: "Express-Notfallservice" },
+  { icon: "clipboard-check", title: "Betreiberpflichten und Prüfungen" },
 ];
 const previews = ["bad-wanne-holz", "bad-mosaik", "fliesen-verlegung", "naturstein-wand", "bad-doppelwaschtisch"].map(name => references.find(item => item.name === name)!);
 const steps = [
@@ -33,9 +42,9 @@ const steps = [
         <p class="sign-band">Meisterbetrieb in Bad Nauheim</p>
         <h1 class="sign-title">Renovierung, Sanierung und Modernisierung aus einer Hand</h1>
         <dl class="sign-rows">
-          <div class="row"><dt>Gewerke</dt><dd><ul class="trades">{services.map(service => <li><a href={`${base}/leistungen/${service.slug}`}>{service.name}</a></li>)}</ul></dd></div>
+          <div class="row row-trades"><dt>Gewerke</dt><dd><ul class="trades">{services.map(service => <li><a href={`${base}/leistungen/${service.slug}`}>{service.name}</a></li>)}</ul></dd></div>
           <div class="row"><dt>Ausführung</dt><dd>Eingetragener Meisterbetrieb für {company.credentials}</dd></div>
-          <div class="row"><dt>Ansprechpartner</dt><dd>{company.owner}, <a href={company.phone.href}>{company.phone.display}</a></dd></div>
+          <div class="row row-contact"><dt>Ansprechpartner</dt><dd>{company.owner}, <a href={company.phone.href}>{company.phone.display}</a></dd></div>
           <div class="row"><dt>Einsatzgebiet</dt><dd>Bad Nauheim und die Wetterau, Frankfurt und das Rhein-Main-Gebiet</dd></div>
         </dl>
         <Note n={1} style="right:-12px;top:-64px">Statt Werbe-Popup sieht der Besucher sofort, was Sie machen, wo und wer sein Ansprechpartner ist. Jede Zeile ist echt und führt weiter. Das Popup verzögert heute den Seitenaufbau mobil auf 10,2 s.</Note>
@@ -48,10 +57,11 @@ const steps = [
           <a class="btn" href={`${base}/kontakt#anfrage`}>Kostenlose Besichtigung anfragen</a>
           <a class="btn btn-line" href={company.phone.href}><Icon name="phone" />{company.phone.display}</a>
         </div>
-        <p class="rating"><a href="https://g.page/handwerker-works" rel="noopener"><strong>{company.rating.value} von 5</strong> bei {company.rating.count} Google-Bewertungen</a></p>
       </div>
     </div>
   </section>
+
+  <Proofs />
 
   <section class="band" aria-labelledby="services-title">
     <div class="wrap">
@@ -70,10 +80,15 @@ const steps = [
         ))}
         <li class="tile service service-b2b">
           <a href={tfm.href}>
-            <span class="service-text"><span class="b2b-label">Für Hausverwaltungen und Gewerbe</span><strong>{tfm.name}</strong><span>{tfm.summary}</span></span>
+            <span class="service-text">
+              <span class="b2b-label">Für Hausverwaltungen und Gewerbe</span>
+              <strong>{tfm.name}</strong>
+              <span class="b2b-list">{tfmBlocks.map(block => <span class="b2b-item"><Icon name={block.icon} size={20} />{block.title}</span>)}</span>
+              <span class="b2b-more">Zur Gebäudebetreuung</span>
+            </span>
           </a>
         </li>
-        <Note n={2} style="right:0;top:-56px">Eine echte Seite pro Leistung, statt vier fast gleicher Standortseiten. Das TFM-Angebot hat seinen eigenen Platz für Hausverwaltungen.</Note>
+        <Note n={3} style="right:0;top:-56px">Eine echte Seite pro Leistung, statt vier fast gleicher Standortseiten. Das TFM-Angebot hat seinen eigenen Platz für Hausverwaltungen.</Note>
       </ul>
     </div>
   </section>
@@ -97,7 +112,7 @@ const steps = [
       </div>
       <div class="tiles ref-mosaic rel">
         {previews.map((item, index) => <figure class:list={["tile", `m${index + 1}`]}><Zoom name={item.name} alt={item.alt} group="projekte" sizes={index === 0 ? "(min-width: 960px) 50vw, 100vw" : "(min-width: 960px) 25vw, 50vw"} /></figure>)}
-        <Note n={3} style="left:12px;top:12px">Ihre eigenen Projektfotos statt Stockbildern. Ein professioneller Fototag würde den Auftritt zusätzlich heben.</Note>
+        <Note n={4} style="left:12px;top:12px">Ihre eigenen Projektfotos statt Stockbildern. Ein professioneller Fototag würde den Auftritt zusätzlich heben.</Note>
       </div>
     </div>
   </section>
@@ -115,12 +130,19 @@ const steps = [
 </Layout>
 
 <style>
-  .hero { padding-block: clamp(24px, 4vw, 56px) clamp(48px, 6vw, 80px); background: var(--grout); }
+  .hero { padding-block: clamp(24px, 4vw, 56px) clamp(28px, 3.5vw, 48px); background: var(--grout); }
   .hero-grid { display: grid; gap: 24px 40px; grid-template-columns: 1fr; }
   @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.25fr 1fr; grid-template-rows: auto auto; } .hero-photos { grid-row: 1 / 3; grid-column: 2; } }
   .hero-photos { grid-template-columns: 1fr 1fr; grid-template-rows: 3fr 2fr; min-height: 360px; }
   .hero-photos .h1 { grid-column: 1 / -1; }
-  @media (max-width: 959px) { .hero-photos { order: 2; grid-template-rows: 200px 130px; min-height: 0; } }
+  @media (max-width: 959px) { .hero-photos { grid-template-rows: 200px 130px; min-height: 0; } }
+  /* Phones get the short version: the bottom bar already offers call, WhatsApp and request,
+     and the trades follow right below in the services section. */
+  @media (max-width: 760px) {
+    .sign-rows .row-trades, .sign-rows .row-contact, .hero-actions .actions { display: none; }
+    .sign-rows .row:nth-child(2) { border-top: 0; }
+    .hero-grid { gap: 16px; }
+  }
   @media (max-width: 560px) { .hero-photos { grid-template-rows: 170px 110px; } }
 
   .sign { background: var(--board); border: 3px solid var(--slate); }
@@ -165,9 +187,13 @@ const steps = [
   .service-text > span { color: var(--slate-soft); }
   .service a:hover strong { color: var(--copper); }
   .service a:hover .service-photo :global(img) { transform: scale(1.03); }
-  .service-b2b a { background: var(--slate); color: #fff; grid-template-rows: 1fr; align-content: end; min-height: 200px; }
-  .service-b2b .service-text { padding: 24px; }
+  .service-b2b a { background: var(--slate); color: #fff; grid-template-rows: 1fr; min-height: 200px; }
+  .service-b2b .service-text { gap: 10px; align-content: stretch; grid-template-rows: auto auto 1fr auto; padding: 24px; }
   .service-b2b .service-text > span { color: var(--slate-on-dark); }
+  .b2b-list { display: grid; align-content: start; margin-top: 10px; border-top: 1px solid rgb(255 255 255 / 0.18); }
+  .b2b-item { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid rgb(255 255 255 / 0.18); color: #fff; font-weight: 700; }
+  .b2b-item :global(.icon) { flex: none; color: var(--copper-on-dark); }
+  .service-b2b .service-text > .b2b-more { justify-self: start; margin-top: 8px; color: var(--copper-on-dark); font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
   .b2b-label { font-size: 0.95rem; }
   .service-b2b a:hover strong { color: var(--copper-on-dark); }
 
@@ -186,5 +212,6 @@ const steps = [
   }
 
 
-  .faq-wrap :global(.faq) { max-width: 860px; }
+  .wrap.faq-wrap { max-width: calc(860px + var(--gutter) * 2); }
+  .faq-wrap .section-title { max-width: none; text-align: center; }
 </style>

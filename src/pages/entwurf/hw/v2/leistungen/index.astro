@@ -4,6 +4,7 @@ import Note from "@/entwurf/hw/v2/Note.astro";
 import Picture from "@/entwurf/hw/v2/Picture.astro";
 import PageHead from "@/entwurf/hw/v2/PageHead.astro";
 import ContactBand from "@/entwurf/hw/v2/ContactBand.astro";
+import Proofs from "@/entwurf/hw/v2/Proofs.astro";
 import { base, services, tfm } from "@/entwurf/hw/v2/data";
 import { breadcrumbNode, businessNode, webPageNode, websiteNode } from "@/entwurf/hw/v2/schema";
 
@@ -58,6 +59,8 @@ const extras = [
       </div>
     </div>
   </section>
+
+  <Proofs full />
 
   <ContactBand />
 </Layout>

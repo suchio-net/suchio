@@ -120,9 +120,12 @@ const faqTitle = faqTitles[service.slug] ?? "Häufige Fragen";
   .gallery .tile { aspect-ratio: 4 / 3; }
   @media (min-width: 960px) { .gallery.n3 { grid-template-columns: repeat(3, 1fr); } }
   .gallery-link { margin-top: 20px; }
-  .faq-wrap :global(.faq) { max-width: 860px; }
+  .wrap.faq-wrap { max-width: calc(860px + var(--gutter) * 2); }
+  .faq-wrap .section-title { max-width: none; text-align: center; }
   .sources { margin-top: 20px; font-size: 0.95rem; }
   .sources a { color: inherit; }
+  .band.others { padding-bottom: clamp(56px, 6vw, 88px); }
+  .band:not(.band-grout) + .band.others { padding-top: clamp(56px, 6vw, 88px); }
   .others-title { font-size: var(--step-3); margin-bottom: 24px; }
   .others-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--joint); }
   .others-list a { display: grid; gap: 6px; height: 100%; padding: 20px; background: var(--board); text-decoration: none; }

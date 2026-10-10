@@ -53,6 +53,8 @@ strong, b { font-weight: 700; }
 .wrap { width: 100%; max-width: calc(var(--max) + var(--gutter) * 2); margin-inline: auto; padding-inline: var(--gutter); }
 .band { padding-block: clamp(64px, 8vw, 112px); }
 .band-grout { background: var(--grout); }
+/* Two neighbouring bands on the same background share one gap instead of two. */
+.band-grout + .band-grout, .band:not(.band-grout, .dark) + .band:not(.band-grout, .dark) { padding-top: 0; }
 .dark { background: var(--slate); color: #fff; }
 .dark .soft { color: var(--slate-on-dark); }
 .soft { color: var(--slate-soft); }
