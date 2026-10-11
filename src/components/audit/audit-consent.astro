@@ -1,0 +1,23 @@
+---
+import { AuditVisitChoice } from "@/components/audit/audit-visit-choice";
+import { measurementConsentVersion, measurementCopy } from "@/i18n/audit-measurement";
+import type { Locale } from "@/i18n/config";
+interface Props {
+  code: string;
+  locale: Locale;
+}
+const { code, locale } = Astro.props;
+// The long privacy text belongs to the privacy page; the island only receives its control labels.
+const { title, explanation, accept, decline, withdraw, accepted, declined, error, privacy, preview } =
+  measurementCopy[locale];
+const copy = { title, explanation, accept, decline, withdraw, accepted, declined, error, privacy, preview };
+const privacyHref = `${locale === "de" ? "/datenschutz" : `/${locale}/privacy`}#audit-auswertung`;
+---
+
+<AuditVisitChoice
+  client:load
+  code={code}
+  copy={copy}
+  consentVersion={measurementConsentVersion}
+  privacyHref={privacyHref}
+/>

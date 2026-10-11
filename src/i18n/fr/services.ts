@@ -1,6 +1,6 @@
-import type { ServicesCopy } from "./services";
+import type { ServicesCopy } from "../services";
 
-export const frServices: ServicesCopy = {
+const services: ServicesCopy = {
   services: [
     {
       id: "websites-apps",
@@ -718,3 +718,5 @@ export const frServices: ServicesCopy = {
     review: "Vérifier",
   },
 };
+
+export default services;

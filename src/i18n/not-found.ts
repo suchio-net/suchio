@@ -1,4 +1,7 @@
 import type { Locale } from "@/i18n/config";
+import de from "./de/not-found";
+import en from "./en/not-found";
+import fr from "./fr/not-found";
 
 export type NotFoundCopy = {
   title: string;
@@ -6,20 +9,4 @@ export type NotFoundCopy = {
   back: string;
 };
 
-export const notFoundMessages = {
-  de: {
-    title: "Seite nicht gefunden.",
-    copy: "Die gesuchte Seite existiert nicht oder wurde verschoben.",
-    back: "Zurück zur Startseite",
-  },
-  en: {
-    title: "Page not found.",
-    copy: "The page you’re looking for does not exist or has moved.",
-    back: "Back to the homepage",
-  },
-  fr: {
-    title: "Page introuvable.",
-    copy: "La page que vous recherchez n’existe pas ou a été déplacée.",
-    back: "Retour à l’accueil",
-  },
-} as const satisfies Record<Locale, NotFoundCopy>;
+export const notFoundMessages = { de, en, fr } as const satisfies Record<Locale, NotFoundCopy>;

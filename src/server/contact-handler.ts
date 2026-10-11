@@ -1,12 +1,13 @@
 import { contactError } from "@/server/contact-response";
 import { readLimitedJson } from "@/server/request-body";
-import { getServiceCopy } from "@/i18n/services";
-import { hasLocale, t, type Locale } from "@/lib/i18n";
+import { hasLocale, type Locale } from "@/i18n/config";
+// Contact emails are always written in German, so only that copy is bundled.
+import messages from "@/i18n/de/messages";
+import services from "@/i18n/de/services";
 import { isServiceId } from "@/lib/service-routes";
 import { budgetOptions, isBudgetId, type BudgetId } from "@/lib/contact-options";
 import { emailPattern, isHttpUrl } from "@/lib/contact-validation";
 
-const contactEmailLocale = "de" satisfies Locale;
 const languageLabels = {
   de: "Deutsch",
   en: "Englisch",
@@ -134,34 +135,34 @@ export function buildContactEmail({
   locale: Locale;
 }) {
   const service = isServiceId(serviceId)
-    ? getServiceCopy(contactEmailLocale, serviceId).name
-    : t(contactEmailLocale, "contact.formServiceUnsure");
-  const budget = budgetLabel(contactEmailLocale, budgetId);
-  const notProvided = t(contactEmailLocale, "contact.formNotProvided");
+    ? (services.services.find((entry) => entry.id === serviceId)?.name ?? serviceId)
+    : messages["contact.formServiceUnsure"];
+  const budget = budgetLabel(budgetId);
+  const notProvided = messages["contact.formNotProvided"];
   const text = [
-    `${t(contactEmailLocale, "contact.formBodyName")}: ${name}`,
-    `${t(contactEmailLocale, "contact.formBodyEmail")}: ${email}`,
+    `${messages["contact.formBodyName"]}: ${name}`,
+    `${messages["contact.formBodyEmail"]}: ${email}`,
     `Sprache: ${languageLabels[locale]} (${locale})`,
-    `${t(contactEmailLocale, "contact.formCompany")}: ${company || notProvided}`,
-    `${t(contactEmailLocale, "contact.formCompanyUrl")}: ${companyUrl || notProvided}`,
-    `${t(contactEmailLocale, "contact.formService")}: ${service}`,
-    `${t(contactEmailLocale, "contact.formBudget")}: ${budget}`,
+    `${messages["contact.formCompany"]}: ${company || notProvided}`,
+    `${messages["contact.formCompanyUrl"]}: ${companyUrl || notProvided}`,
+    `${messages["contact.formService"]}: ${service}`,
+    `${messages["contact.formBudget"]}: ${budget}`,
     "",
-    `${t(contactEmailLocale, "contact.formBodyMessage")}:`,
+    `${messages["contact.formBodyMessage"]}:`,
     message,
   ].join("\n");
   const details = [
-    { label: t(contactEmailLocale, "contact.formBodyName"), value: name },
-    { label: t(contactEmailLocale, "contact.formBodyEmail"), value: email, href: `mailto:${email}` },
+    { label: messages["contact.formBodyName"], value: name },
+    { label: messages["contact.formBodyEmail"], value: email, href: `mailto:${email}` },
     { label: "Sprache", value: `${languageLabels[locale]} (${locale})` },
-    { label: t(contactEmailLocale, "contact.formCompany"), value: company || notProvided },
+    { label: messages["contact.formCompany"], value: company || notProvided },
     {
-      label: t(contactEmailLocale, "contact.formCompanyUrl"),
+      label: messages["contact.formCompanyUrl"],
       value: companyUrl || notProvided,
       href: companyUrl || undefined,
     },
-    { label: t(contactEmailLocale, "contact.formService"), value: service },
-    { label: t(contactEmailLocale, "contact.formBudget"), value: budget },
+    { label: messages["contact.formService"], value: service },
+    { label: messages["contact.formBudget"], value: budget },
   ];
   const html = `<!doctype html>
 <html lang="de">
@@ -193,7 +194,7 @@ export function buildContactEmail({
             </tr>
             <tr>
               <td style="padding:0 36px 36px;">
-                <h2 style="margin:0 0 12px;color:#171717;font-size:16px;line-height:1.4;font-weight:600;">${escapeHtml(t(contactEmailLocale, "contact.formBodyMessage"))}</h2>
+                <h2 style="margin:0 0 12px;color:#171717;font-size:16px;line-height:1.4;font-weight:600;">${escapeHtml(messages["contact.formBodyMessage"])}</h2>
                 <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0" style="width:100%;background-color:#f2f7ff;border:1px solid #d7e7ff;border-radius:12px;">
                   <tr>
                     <td style="padding:20px 22px;color:#171717;font-size:16px;line-height:1.6;">${escapeHtml(message).replaceAll("\n", "<br>")}</td>
@@ -210,7 +211,7 @@ export function buildContactEmail({
 </html>`;
 
   return {
-    subject: `${t(contactEmailLocale, "contact.formSubject")}: ${name}`,
+    subject: `${messages["contact.formSubject"]}: ${name}`,
     text,
     html,
   };
@@ -240,8 +241,8 @@ function cleanString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function budgetLabel(locale: Locale, budgetId: BudgetId): string {
+function budgetLabel(budgetId: BudgetId): string {
   const option = budgetOptions.find(({ id }) => id === budgetId);
   if (!option) throw new Error(`Missing contact budget option ${budgetId}.`);
-  return t(locale, option.messageKey);
+  return messages[option.messageKey];
 }

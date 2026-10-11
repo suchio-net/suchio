@@ -1,6 +1,6 @@
-import type { MessageKey } from "./translations";
+import type { MessageKey } from "../translations";
 
-export const frMessages: Readonly<Record<MessageKey, string>> = {
+const messages: Readonly<Record<MessageKey, string>> = {
   "nav.services": "Services",
   "nav.about": "À propos",
   "nav.contact": "Contact",
@@ -117,3 +117,5 @@ export const frMessages: Readonly<Record<MessageKey, string>> = {
   "imprint.title": "Mentions légales",
   "privacy.title": "Politique de confidentialité",
 };
+
+export default messages;

@@ -1,11 +1,11 @@
-"use client";
-
 import { useRef, useState } from "react";
 import { useHydrated } from "@/components/use-hydrated";
-import { measurementCopy, measurementConsentVersion } from "@/i18n/audit-measurement";
-import type { Locale } from "@/i18n/config";
+import type { measurementCopy } from "@/i18n/audit-measurement";
 
-export function AuditVisitChoice(props: { code: string; locale: Locale }) {
+type Copy = Omit<(typeof measurementCopy)["de"], "privacyTitle" | "privacyBody">;
+type Props = { code: string; copy: Copy; consentVersion: string; privacyHref: string };
+
+export function AuditVisitChoice(props: Props) {
   const hydrated = useHydrated();
   return hydrated ? <BrowserVisitChoice key={props.code} {...props} /> : null;
 }
@@ -30,8 +30,7 @@ function readChoice(storageKey: string): { state: "preview" | "accepted" | "choi
   return { state: "choice", receipt: null };
 }
 
-function BrowserVisitChoice({ code, locale }: { code: string; locale: Locale }) {
-  const copy = measurementCopy[locale];
+function BrowserVisitChoice({ code, copy, consentVersion, privacyHref }: Props) {
   const storageKey = `suchio:audit-consent:${code}`;
   const [initial] = useState(() => readChoice(storageKey));
   const [state, setState] = useState<"choice" | "accepted" | "declined" | "preview">(initial.state);
@@ -59,7 +58,7 @@ function BrowserVisitChoice({ code, locale }: { code: string; locale: Locale }) 
           code,
           receipt: receipt.current,
           consent: !withdraw,
-          version: measurementConsentVersion,
+          version: consentVersion,
         }),
       });
       if (!response.ok) throw new Error("Unavailable");
@@ -81,7 +80,6 @@ function BrowserVisitChoice({ code, locale }: { code: string; locale: Locale }) 
 
   const button =
     "min-h-12 rounded-card border border-line px-4 py-3 text-sm font-medium hover:bg-surface disabled:opacity-60";
-  const privacy = `${locale === "de" ? "/datenschutz" : `/${locale}/privacy`}#audit-auswertung`;
   return (
     <section
       aria-label={copy.title}
@@ -125,7 +123,7 @@ function BrowserVisitChoice({ code, locale }: { code: string; locale: Locale }) 
           {copy.error}
         </p>
       )}
-      <a href={privacy} className="mt-3 inline-block text-sm text-accent underline underline-offset-4">
+      <a href={privacyHref} className="mt-3 inline-block text-sm text-accent underline underline-offset-4">
         {copy.privacy}
       </a>
     </section>

@@ -1,5 +1,5 @@
 ---
-import { AuditVisitChoice } from "@/components/audit-visit-choice";
+import AuditConsent from "@/components/audit/audit-consent.astro";
 import CtaButton from "@/components/cta-button.astro";
 import Disclosure from "@/components/disclosure.astro";
 import type { Locale } from "@/i18n/config";
@@ -295,7 +295,7 @@ const tel = publicContactPhoneHref;
       </div>
     </section>
     <div class={styles.consent}>
-      <AuditVisitChoice client:load code={audit.code} locale={locale} />
+      <AuditConsent code={audit.code} locale={locale} />
     </div>
     <p class={styles.endNote}>{text.linkNote}</p>
     <a

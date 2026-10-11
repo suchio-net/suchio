@@ -2,7 +2,7 @@
 import type { GetStaticPaths } from "astro";
 import SiteLayout from "@/layouts/site-layout.astro";
 import CtaButton from "@/components/cta-button.astro";
-import { AuditVisitChoice } from "@/components/audit-visit-choice";
+import AuditConsent from "@/components/audit/audit-consent.astro";
 import EditorialHero from "@/components/editorial-hero.astro";
 import CampaignAuditPage from "@/components/audit/campaign-audit-page.astro";
 import { auditUi } from "@/i18n/audit-ui";
@@ -49,7 +49,7 @@ const format = new Intl.NumberFormat(locale, { maximumFractionDigits: 3 });
         </a>
       </EditorialHero>
       <div class="px-page pb-section">
-        <AuditVisitChoice client:load code={audit.code} locale={locale} />
+        <AuditConsent code={audit.code} locale={locale} />
         <div class="mx-auto max-w-layout">
           <section
             id="findings"
