@@ -170,9 +170,12 @@ const total = pad(steps.length);
   .step-card :global(.step-title) { font-size: clamp(2.6rem, 1.6rem + 4vw, 5rem); line-height: 0.95; letter-spacing: -0.06em; }
   .step-text { max-width: 30ch; font-size: 1.02rem; color: var(--ink-2); }
   .stage-track, .snaps { display: none; }
-  /* Wide layout: a fast fling stops at the next trade instead of passing it. */
+  /* Wide layout on touch: a fast fling stops at the next trade instead of
+     passing it. With a mouse or trackpad Lenis turns this off and the script
+     snaps instead (theme.css, smooth.ts). */
   @media (min-width: 960px), (orientation: landscape) {
     :global(html) { scroll-snap-type: y proximity; }
+    .hero { scroll-snap-align: start; }
     .step { scroll-snap-align: center; scroll-snap-stop: always; }
   }
 
@@ -224,7 +227,8 @@ const total = pad(steps.length);
 </style>
 
 <script>
-  import type { HeroScene } from "./scene";
+  import type { createHero } from "./scene";
+  import { gsap, lenis, ScrollTrigger, scrollToY } from "../smooth";
 
   const stage = document.querySelector<HTMLElement>("[data-stage]");
   if (stage) {
@@ -247,33 +251,41 @@ const total = pad(steps.length);
       hudName.textContent = index >= layerCount - 1 ? `${names[shown]} ✓` : names[shown];
     };
 
-    // Position in the steps: -1 for the hero, then 0..5. On wide screens each
-    // step counts as it crosses the middle of the viewport; on phones the
-    // screen is pinned and every snap point along the track is one state.
+    // States: 0 is the hero, 1..6 the trade steps. stateY holds the scroll
+    // position of each. On wide screens a step is in its state when its centre
+    // crosses the middle of the viewport; on phones the screen is pinned and
+    // every snap point along the track is one state.
     const hero = stage.querySelector<HTMLElement>("[data-hero]")!;
     const split = matchMedia("(max-width: 959px) and (orientation: portrait)");
     const snaps = [...stage.querySelectorAll<HTMLElement>("[data-snap]")];
-    const progress = () => {
+    const last = steps.length;
+    let stateY: number[] = [];
+    const measureStates = () => {
+      const top = stage.getBoundingClientRect().top + scrollY;
       if (split.matches) {
-        // Each snap point is one state: hero at -1, then the steps 0..5.
         const unit = Math.max(1, snaps[1].offsetTop - snaps[0].offsetTop);
-        return Math.min(steps.length - 0.4, Math.max(-1, -1 + -stage.getBoundingClientRect().top / unit));
+        stateY = snaps.map((_, k) => top + k * unit);
+      } else {
+        stateY = [top, ...steps.map(step => { const r = step.getBoundingClientRect(); return r.top + scrollY + r.height / 2 - innerHeight / 2; })];
       }
-      const mid = innerHeight / 2;
-      const centers = steps.map(step => { const r = step.getBoundingClientRect(); return r.top + r.height / 2; });
-      if (mid <= centers[0]) return Math.max(-1, -(centers[0] - mid) / innerHeight);
-      for (let i = 0; i < centers.length - 1; i++) {
-        if (mid <= centers[i + 1]) return i + (mid - centers[i]) / (centers[i + 1] - centers[i]);
+    };
+    /** Continuous state at a scroll position: 0 hero, 6 Komplettbad, above 6 on the way out. */
+    const stateAt = (y: number) => {
+      if (y <= stateY[0]) return 0;
+      for (let k = 0; k < last; k++) {
+        if (y < stateY[k + 1]) return k + (y - stateY[k]) / Math.max(1, stateY[k + 1] - stateY[k]);
       }
-      return centers.length - 1 + Math.min(1, (mid - centers[centers.length - 1]) / innerHeight);
+      return last + (y - stateY[last]) / innerHeight;
     };
 
     // The model is framed in the space the copy leaves free. On phones that is
     // between the tallest copy panel and the progress row (or the draft menu,
     // whichever is higher); on wide screens it is right of the hero copy,
-    // between the top row and the progress row. Measured relative to the hero,
-    // which covers the canvas exactly while the page is at the top.
+    // between the top row and the progress row, clear of the step rail.
+    // Measured relative to the hero, which covers the canvas exactly while the
+    // page is at the top.
     const draft = document.querySelector<HTMLElement>("[data-draft]");
+    const rail = stage.querySelector<HTMLElement>(".trades-rail");
     const region = () => {
       const box = hero.getBoundingClientRect();
       const rel = (el: Element) => { const r = el.getBoundingClientRect(); return { top: r.top - box.top, bottom: r.bottom - box.top, left: r.left - box.left, right: r.right - box.left }; };
@@ -283,11 +295,12 @@ const total = pad(steps.length);
         const panels = [hero.querySelector(".hero-copy")!, ...steps.map(step => step.querySelector(".step-card")!)];
         const textBottom = Math.max(...panels.map(panel => rel(panel).bottom));
         const draftTop = draft ? draft.getBoundingClientRect().top - box.top : Infinity;
-        return { top: textBottom + 16, bottom: Math.min(floor, draftTop) - 12, left: 8, right: box.width - 8 };
+        return { top: textBottom + 16, bottom: Math.min(floor, draftTop) - 12, left: gutter, right: box.width - gutter };
       }
       const copy = [...hero.querySelectorAll(".hero-copy .w, .hero-lead, .hero-actions > *")];
       const textRight = Math.max(...copy.map(el => rel(el).right));
-      return { top: rel(hero.querySelector(".hero-top")!).bottom + 24, bottom: floor - 20, left: textRight + 40, right: box.width - gutter };
+      const railWidth = rail && getComputedStyle(rail).display !== "none" ? 64 : 0;
+      return { top: rel(hero.querySelector(".hero-top")!).bottom + 24, bottom: floor - 20, left: textRight + 40, right: box.width - gutter - railWidth };
     };
 
     // Re-run the word and fade reveals of a panel each time it comes back.
@@ -299,65 +312,58 @@ const total = pad(steps.length);
       parts.forEach(part => part.classList.add("in"));
     };
 
-    let scene: HeroScene | undefined;
-    let current = -2, ticking = false;
+    let scene: ReturnType<typeof createHero> | undefined;
+    let current = -2;
     const sync = () => {
-      ticking = false;
-      const p = progress();
-      scene?.setProgress(p);
-      const active = p < -0.5 ? -1 : Math.max(0, Math.min(steps.length - 1, Math.round(p)));
-      if (active !== current) {
-        const first = current === -2;
-        current = active;
-        hero.classList.toggle("on", active === -1);
-        steps.forEach((step, i) => step.classList.toggle("on", i === active));
-        railTicks.forEach((tick, i) => tick.classList.toggle("on", i === active));
-        if (split.matches && !first && active >= 0) replay(steps[active]);
-      }
+      if (!stateY.length) return;
+      const state = stateAt(scrollY);
+      scene?.setProgress(Math.min(last, state) - 1);
+      const active = state < 0.5 ? -1 : Math.min(last, Math.round(state)) - 1;
+      if (active === current) return;
+      const first = current === -2;
+      current = active;
+      hero.classList.toggle("on", active === -1);
+      steps.forEach((step, i) => step.classList.toggle("on", i === active));
+      railTicks.forEach((tick, i) => tick.classList.toggle("on", i === active));
+      if (split.matches && !first && active >= 0) replay(steps[active]);
     };
-    const measure = () => { scene?.setRegion(region()); sync(); };
-    addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(sync); } }, { passive: true });
+    const measure = () => { measureStates(); scene?.setRegion(region()); sync(); };
 
-    // One swipe or fling, one step. Snap points do most of the work; if a fling
-    // still carries the page past more than one state, it eases back to the
-    // next one, so no trade is skipped. States are 0 (hero) to 6 (Komplettbad),
-    // 7 means below the stage.
-    const last = steps.length;
-    const unit = () => Math.max(1, snaps[1].offsetTop - snaps[0].offsetTop);
-    const stateNow = () => {
-      if (split.matches) {
-        const raw = -stage.getBoundingClientRect().top / unit();
-        return raw > last + 0.75 ? last + 1 : Math.max(0, Math.round(raw));
-      }
-      const p = progress();
-      return p > last - 0.25 ? last + 1 : Math.round(p) + 1;
-    };
-    const stateTop = (state: number) => {
-      const top = stage.getBoundingClientRect().top + scrollY;
-      if (split.matches) return top + state * unit();
-      if (state === 0) return top;
-      const r = steps[state - 1].getBoundingClientRect();
-      return r.top + scrollY + r.height / 2 - innerHeight / 2;
-    };
-    let settled = stateNow(), touching = false, endTimer = 0;
-    const settle = () => {
-      if (touching) return;
-      const now = stateNow();
-      // Coming back up from below the stage (or jumping to the top) is never held.
-      if (Math.abs(now - settled) <= 1 || settled === last + 1) { settled = now; return; }
-      settled += Math.sign(now - settled);
-      scrollTo({ top: stateTop(Math.min(settled, last)), behavior: reduceMotion ? "auto" : "smooth" });
-    };
-    addEventListener("touchstart", () => { touching = true; }, { passive: true });
-    addEventListener("touchend", () => { touching = false; clearTimeout(endTimer); endTimer = window.setTimeout(settle, 180); }, { passive: true });
-    if ("onscrollend" in window) addEventListener("scrollend", settle);
-    else addEventListener("scroll", () => { clearTimeout(endTimer); endTimer = window.setTimeout(settle, 180); }, { passive: true });
-    addEventListener("resize", measure);
-    split.addEventListener("change", measure);
-    document.fonts?.ready.then(measure);
+    // ScrollTrigger reads the scroll (from Lenis where it runs) and re-measures
+    // on every refresh: resize, orientation change, fonts.
+    ScrollTrigger.create({ trigger: stage, start: "top top", end: "bottom top", onUpdate: sync, onRefresh: measure });
+    measure();
+    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    split.addEventListener("change", () => ScrollTrigger.refresh());
     // Pitch notes change the height of the copy on phones.
-    document.querySelector("[data-notes-toggle]")?.addEventListener("click", () => requestAnimationFrame(measure));
-    sync();
+    document.querySelector("[data-notes-toggle]")?.addEventListener("click", () => requestAnimationFrame(() => ScrollTrigger.refresh()));
+
+    // One wheel or trackpad gesture, one step. Touch uses CSS scroll snap (see
+    // the styles); with Lenis that is off and the stage snaps here instead,
+    // once the eased scroll has come to rest. A gesture that carries the page
+    // past more than one state eases back to the next one, so no trade is
+    // skipped. Jumps that do not come from the wheel (keys, scrollbar, links)
+    // settle on the nearest state, and coming back up from below the stage is
+    // never held.
+    if (lenis) {
+      const smooth = lenis;
+      let settled = Math.round(Math.min(last + 1, stateAt(scrollY))), snapping = false, wheel = false, timer = 0;
+      const settle = () => {
+        const y = scrollY, s = stateAt(y), gesture = wheel;
+        wheel = false;
+        if (s > last + 0.02) { settled = last + 1; return; }
+        let to: number;
+        if (!gesture || settled > last || Math.abs(s - settled) < 0.12) to = Math.round(s);
+        else if (s > settled) to = Math.min(settled + 1, Math.floor(s) + (s - Math.floor(s) > 0.12 ? 1 : 0));
+        else to = Math.max(settled - 1, Math.ceil(s) - (Math.ceil(s) - s > 0.12 ? 1 : 0));
+        to = Math.max(0, Math.min(last, to));
+        if (Math.abs(stateY[to] - y) < 1) { settled = to; return; }
+        snapping = true;
+        scrollToY(stateY[to], () => { snapping = false; settled = to; });
+      };
+      smooth.on("virtual-scroll", () => { snapping = false; wheel = true; });
+      smooth.on("scroll", () => { if (snapping) return; clearTimeout(timer); timer = window.setTimeout(settle, 140); });
+    }
 
     import("./scene").then(({ createHero }) => {
       try {
@@ -367,8 +373,9 @@ const total = pad(steps.length);
         showIntro(layerCount - 1);
         return;
       }
-      stage.classList.add("ready");
       measure();
+      gsap.ticker.add(scene.tick);
+      scene.ready.then(() => stage.classList.add("ready"));
       if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
         addEventListener("pointermove", (event: PointerEvent) => scene?.setPointer(event.clientX / innerWidth * 2 - 1, event.clientY / innerHeight * 2 - 1), { passive: true });
       }

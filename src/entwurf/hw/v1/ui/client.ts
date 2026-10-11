@@ -2,6 +2,7 @@
 // scroll reveals. Everything degrades to plain, visible content without JS
 // and stays still with reduced motion.
 import { animate } from "motion";
+import "./smooth";
 
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;

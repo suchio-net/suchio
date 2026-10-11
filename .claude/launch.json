@@ -6,6 +6,12 @@
       "runtimeExecutable": "bun",
       "runtimeArgs": ["output/mockup-parkhotel-am-posthof/serve.mjs"],
       "port": 4325
+    },
+    {
+      "name": "astro-dev",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
     }
   ]
 }

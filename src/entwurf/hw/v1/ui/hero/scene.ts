@@ -1,9 +1,16 @@
-// Exploded bathroom corner for the v1 home page. Six layers, one per trade, sit
-// in the same white "architectural model": shell, wiring, plumbing, underfloor
-// heating, tiles and the finished fixtures. On load the layers hang apart and
-// glide together; while the visitor scrolls through the trade steps the model
-// opens again and the current trade is solid while the others turn to x-ray.
-// Renders on demand only: nothing runs while the values are at rest.
+// Bathroom corner for the v1 home page, built the way a bathroom is built. Six
+// layers, one per trade, sit in the same white "architectural model": shell,
+// wiring, plumbing, underfloor heating, tiles and the finished fixtures.
+//
+// On load the layers drop in one after another until the room is finished.
+// Scrolling into the trade steps lifts everything back off down to the bare
+// shell, then each step lowers its own trade into place, in site order, so
+// every state is a real stage of the job: the new trade lands on top of the
+// earlier ones and covers them where it would on site (tiles over pipes).
+//
+// The whole scene is a pure function of two inputs, the intro clock and the
+// scroll position, so scrubbing back and forth always lands on the same frame.
+// It renders on demand only: nothing runs while both are at rest.
 import {
   ACESFilmicToneMapping, BoxGeometry, CanvasTexture, CurvePath, CylinderGeometry, DirectionalLight, EdgesGeometry,
   Group, HemisphereLight, LatheGeometry, LineBasicMaterial, LineCurve3, LineSegments, Mesh, MeshPhysicalMaterial,
@@ -13,6 +20,7 @@ import {
 } from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { gsap } from "gsap";
 
 export const layerCount = 6;
 
@@ -20,7 +28,7 @@ export interface HeroOptions {
   canvas: HTMLCanvasElement;
   labels: HTMLElement[];
   reduceMotion: boolean;
-  /** Called while the intro assembles, with the index of the layer that just landed. */
+  /** Called while the intro assembles, with the index of the layer that is landing. */
   onIntroStep?: (index: number) => void;
 }
 
@@ -33,6 +41,8 @@ export interface HeroScene {
   setRegion(region: Region | undefined): void;
   /** Pointer position, -1..1 on both axes. */
   setPointer(x: number, y: number): void;
+  /** Draws the next frame if anything changed; call once per animation frame. */
+  tick(): void;
   dispose(): void;
 }
 
@@ -41,7 +51,10 @@ const S = 1.6, T = 0.18, H = 2.5, SLAB = 0.16;
 const BACK = -S, LEFT = -S;
 const SKIN = 0.07, TILE = 0.012, FACE = SKIN + TILE; // wall tiles sit on a 7 cm installation layer
 const FLOOR = 0.062;
-const GAP = 0.62;
+/** How far above its place a layer starts when it is lowered in. */
+const DROP = 1.1;
+/** Bounding box of the whole model, which the camera keeps in frame. */
+const BOUNDS = { min: new Vector3(LEFT - T, -SLAB, BACK - T), max: new Vector3(S, H, S) };
 
 const ink = "#141416";
 
@@ -50,14 +63,17 @@ type Mat = MeshStandardMaterial | MeshPhysicalMaterial | LineBasicMaterial;
 class Layer {
   group = new Group();
   mats: { mat: Mat; base: number }[] = [];
-  edges: { mat: LineBasicMaterial; base: number }[] = [];
   meshes: Mesh[] = [];
-  explode = 1;
-  opacity = 0;
-  constructor(public anchor: Vector3) {}
+  shown = -1;
+  constructor(public index: number, public anchor: Vector3) {}
 
+  // Every material can fade, so all of them are transparent. They still write
+  // depth (only the glass does not), and each layer draws in a fixed order
+  // after the ones below it, so the order never flips between frames and
+  // nothing flickers through a surface while it fades.
   mat<M extends Mat>(mat: M): M {
     mat.transparent = true;
+    mat.depthWrite = mat.opacity > 0.5;
     this.mats.push({ mat, base: mat.opacity });
     return mat;
   }
@@ -68,10 +84,11 @@ class Layer {
     if (options.rotate) mesh.rotation.set(...options.rotate);
     mesh.castShadow = options.shadow ?? true;
     mesh.receiveShadow = true;
+    mesh.renderOrder = this.index * 10 + (mat.opacity > 0.5 ? 0 : 5);
     if (options.edges) {
-      const material = new LineBasicMaterial({ color: ink, transparent: true, opacity: 0.2 });
-      this.edges.push({ mat: material, base: 0.2 });
-      mesh.add(new LineSegments(new EdgesGeometry(geometry, 30), material));
+      const lines = new LineSegments(new EdgesGeometry(geometry, 30), this.mat(new LineBasicMaterial({ color: ink, opacity: 0.2 })));
+      lines.renderOrder = this.index * 10 + 1;
+      mesh.add(lines);
     }
     this.meshes.push(mesh);
     this.group.add(mesh);
@@ -86,6 +103,20 @@ class Layer {
 
   tube(points: [number, number, number][], radius: number, mat: Mat, corner = 0.06) {
     return this.add(new TubeGeometry(polyline(points, corner), Math.max(24, points.length * 28), radius, 10, false), mat, [0, 0, 0]);
+  }
+
+  /** shown: 0 lifted off and invisible, 1 in place. */
+  set(shown: number, drop: number) {
+    if (shown === this.shown) return;
+    this.shown = shown;
+    this.group.visible = shown > 0.001;
+    this.group.position.y = (1 - shown) * drop;
+    // The layer fades in over the first part of its way down, so it is solid
+    // well before it reaches the layers below it.
+    const fade = smooth(0, 0.6, shown);
+    for (const { mat, base } of this.mats) mat.opacity = base * fade;
+    const casts = fade > 0.5;
+    for (const mesh of this.meshes) if (mesh.castShadow !== casts) mesh.castShadow = casts;
   }
 }
 
@@ -134,13 +165,13 @@ function tiled(base: CanvasTexture, width: number, height: number, tileW: number
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const smooth = (a: number, b: number, v: number) => { const t = clamp01((v - a) / (b - a)); return t * t * (3 - 2 * t); };
 const easeInOut = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-const easeOut = (t: number) => 1 - Math.pow(1 - t, 4);
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 function buildLayers() {
   const clay = (color = "#f6f6f6") => new MeshStandardMaterial({ color, roughness: 0.82, metalness: 0 });
 
   // 01 Innenausbau: slab and the two walls, cut like an architectural section.
-  const shell = new Layer(new Vector3(S, 1.9, BACK - T / 2));
+  const shell = new Layer(0, new Vector3(S, 1.9, BACK - T / 2));
   {
     const wall = shell.mat(clay());
     const cut = shell.mat(new MeshStandardMaterial({ color: "#1b1b1d", roughness: 0.6 }));
@@ -157,7 +188,7 @@ function buildLayers() {
   }
 
   // 02 Elektro: cables in the wall, flush boxes, the junction above the mirror.
-  const elektro = new Layer(new Vector3(1.45, 1.7, BACK + 0.02));
+  const elektro = new Layer(1, new Vector3(1.45, 1.7, BACK + 0.02));
   {
     const cable = elektro.mat(new MeshStandardMaterial({ color: "#151517", roughness: 0.45 }));
     const box = elektro.mat(new MeshStandardMaterial({ color: "#2a2a2d", roughness: 0.5 }));
@@ -172,7 +203,7 @@ function buildLayers() {
   }
 
   // 03 Sanitär: supply lines, drain, the WC frame and the shower channel.
-  const sanitaer = new Layer(new Vector3(-0.15, 1.05, BACK + 0.04));
+  const sanitaer = new Layer(2, new Vector3(-0.15, 1.05, BACK + 0.04));
   {
     const pipe = sanitaer.mat(new MeshStandardMaterial({ color: "#8f9296", roughness: 0.32, metalness: 0.75 }));
     const drain = sanitaer.mat(new MeshStandardMaterial({ color: "#58595d", roughness: 0.55 }));
@@ -196,7 +227,7 @@ function buildLayers() {
   }
 
   // 04 Heizung: underfloor heating loop and its manifold on the left wall.
-  const heizung = new Layer(new Vector3(1.45, 0.03, 0.9));
+  const heizung = new Layer(3, new Vector3(1.45, 0.03, 0.9));
   {
     const loop = heizung.mat(new MeshStandardMaterial({ color: "#a9abae", roughness: 0.45 }));
     const metal = heizung.mat(new MeshStandardMaterial({ color: "#2e2f32", roughness: 0.4, metalness: 0.5 }));
@@ -215,7 +246,7 @@ function buildLayers() {
   }
 
   // 05 Fliesen: large-format tiles, dark in the shower, white elsewhere.
-  const fliesen = new Layer(new Vector3(0.3, 1.75, BACK + FACE));
+  const fliesen = new Layer(4, new Vector3(0.3, 1.75, BACK + FACE));
   {
     const white = tileTexture("#f3f3f4", "#d6d6d9", 2);
     const dark = tileTexture("#2c2c2f", "#1a1a1c", 2);
@@ -238,7 +269,7 @@ function buildLayers() {
   }
 
   // 06 Komplettbad: the finished room.
-  const fertig = new Layer(new Vector3(0.95, 1.25, BACK + 0.3));
+  const fertig = new Layer(5, new Vector3(0.95, 0.68, BACK + FACE + 0.46));
   {
     const graphite = fertig.mat(new MeshStandardMaterial({ color: "#1d1d20", roughness: 0.42 }));
     const matte = fertig.mat(new MeshStandardMaterial({ color: "#121214", roughness: 0.35, metalness: 0.55 }));
@@ -290,10 +321,45 @@ function buildLayers() {
   return [shell, elektro, sanitaer, heizung, fliesen, fertig];
 }
 
-export function createHero(options: HeroOptions): HeroScene {
+/**
+ * How far layer i is in place at scroll position p (-1 hero, 0..5 the steps).
+ * Hero to step 1 lifts the trades off, finished fixtures first; from there each
+ * step lowers its own trade in on the way to it.
+ */
+function placed(i: number, p: number) {
+  if (i === 0) return 1;
+  if (p <= 0) {
+    const start = (layerCount - 1 - i) * 0.12;
+    return 1 - smooth(start, start + 0.4, p + 1);
+  }
+  return smooth(i - 0.85, i - 0.15, p);
+}
+
+// Camera per state: the hero, then each step framed for its trade. Azimuth
+// and elevation in radians, zoom relative to the fitted distance.
+const views = [
+  { az: 0.74, el: 0.5, zoom: 1 }, // hero: the finished room
+  { az: 0.8, el: 0.56, zoom: 1 }, // Innenausbau: the bare shell
+  { az: 0.6, el: 0.42, zoom: 1.04 }, // Elektro: squarer on to the back wall
+  { az: 0.56, el: 0.38, zoom: 1.06 }, // Sanitär: low, at the pre-wall frame
+  { az: 0.84, el: 0.84, zoom: 1 }, // Heizung: from above, onto the floor loop
+  { az: 0.7, el: 0.5, zoom: 1 }, // Fliesen
+  { az: 0.74, el: 0.5, zoom: 1 }, // Komplettbad: back to the hero view
+];
+
+function viewAt(p: number) {
+  const s = Math.min(views.length - 1, Math.max(0, p + 1));
+  const i = Math.min(views.length - 2, Math.floor(s));
+  const t = easeInOut(s - i);
+  const a = views[i], b = views[i + 1];
+  return { az: lerp(a.az, b.az, t), el: lerp(a.el, b.el, t), zoom: lerp(a.zoom, b.zoom, t) };
+}
+
+export function createHero(options: HeroOptions): HeroScene & { ready: Promise<void> } {
   const { canvas, labels, reduceMotion } = options;
+  const small = innerWidth < 760;
   const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth < 760 ? 1.75 : 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, small ? 1.5 : 2));
   renderer.outputColorSpace = SRGBColorSpace;
   renderer.toneMapping = ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
@@ -310,7 +376,7 @@ export function createHero(options: HeroOptions): HeroScene {
   const sun = new DirectionalLight("#ffffff", 2.4);
   sun.position.set(-3.5, 8, 5.5);
   sun.castShadow = true;
-  sun.shadow.mapSize.set(innerWidth < 760 ? 1024 : 2048, innerWidth < 760 ? 1024 : 2048);
+  sun.shadow.mapSize.set(small ? 1024 : 2048, small ? 1024 : 2048);
   sun.shadow.camera.left = -6; sun.shadow.camera.right = 6; sun.shadow.camera.top = 7; sun.shadow.camera.bottom = -4;
   sun.shadow.camera.far = 30;
   sun.shadow.bias = -0.0004;
@@ -332,207 +398,162 @@ export function createHero(options: HeroOptions): HeroScene {
   scene.add(model);
 
   const camera = new PerspectiveCamera(22, 1, 0.1, 100);
-  const target = new Vector3();
   const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
-
-  // Scroll-driven state, eased towards its target every frame.
+  const drop = reduceMotion ? 0 : DROP;
   let progress = -1;
-  const scroll = { explode: 0, ghost: 0, weights: layers.map(() => 0), turn: 0, lift: 0 };
-  // The intro clock starts once the first frame is on screen: that frame
-  // compiles every material and can take a moment, which would otherwise eat
-  // into the assembly before anyone sees it.
-  let start = Infinity;
-  const timeline = layers.map((_, i) => ({
-    appear: i * 0.07,
-    land: i === 0 ? 0 : 1.0 + (i - 1) * 0.24,
-  }));
-  const landDuration = 0.8;
-  const introEnd = timeline[layers.length - 1].land + landDuration + 0.35;
-  let introDone = reduceMotion;
-  let lastStep = -1;
+  let dirty = true, visible = true, live = false;
 
-  const targets = () => {
-    const p = progress;
-    const open = reduceMotion ? 0 : smooth(-0.75, -0.05, p) * (1 - smooth(4.15, 4.9, p));
-    const ghost = smooth(-0.75, -0.05, p) * (1 - smooth(4.15, 4.9, p));
-    return {
-      explode: open,
-      ghost,
-      weights: layers.map((_, i) => 1 - smooth(0.32, 0.62, Math.abs(p - i))),
-      turn: reduceMotion ? 0 : smooth(-0.6, 0.4, p) * (1 - smooth(4.2, 5, p)),
-      lift: reduceMotion ? 0 : (1 - smooth(0.32, 0.62, Math.abs(p - 3))) * open,
-    };
-  };
+  // Intro: each layer is lowered into place in site order. Its value is how far
+  // the layer is in; the scroll can only hold a layer further out, never in.
+  const intro = layers.map(() => ({ v: reduceMotion ? 1 : 0 }));
+  let timeline: gsap.core.Timeline | undefined;
+  const invalidate = () => { dirty = true; };
 
   let width = 1, height = 1;
-  // Tangent factor of the vertical field of view: visible height per unit of distance.
-  const view = 2 * Math.tan((camera.fov * Math.PI) / 360);
   let region: Region | undefined;
+  const frameRegion = () => region ?? { top: 0, bottom: height, left: width * 0.34, right: width };
   const layout = () => {
     camera.aspect = width / height;
-    // Centre the model in the free region: right of the copy on wide screens,
-    // below it on phones. Without a region it simply sits right of centre.
-    if (!region) camera.setViewOffset(width, height, -width * 0.17, 0, width, height);
-    else camera.setViewOffset(width, height, width / 2 - (region.left + region.right) / 2, height / 2 - (region.top + region.bottom) / 2, width, height);
+    // The camera looks at the middle of the free region: right of the copy on
+    // wide screens, below it on phones.
+    const r = frameRegion();
+    camera.setViewOffset(width, height, width / 2 - (r.left + r.right) / 2, height / 2 - (r.top + r.bottom) / 2, width, height);
     camera.updateProjectionMatrix();
   };
 
-  const place = (frame: number) => {
-    const az = 0.74 + scroll.turn * 0.28 + pointer.x * 0.1;
-    const el = 0.5 + scroll.lift * 0.18 + pointer.y * 0.05;
-    let distance: number;
-    if (!region) distance = 19.5 + frame * 4;
-    else {
-      // Fit the model (about 5.4 x 3.8 units on screen, taller when opened) into the region.
-      const tall = Math.max(0.2, (region.bottom - region.top) / height);
-      const across = Math.max(0.2, (region.right - region.left) / width);
-      distance = Math.max((3.8 + 2.7 * frame) / (view * tall), 5.4 / (view * camera.aspect * across));
+  // Frame the model: orbit around it at the current view, at the distance where
+  // all eight corners of its box fit the free region, then shift the target so
+  // the box sits in the middle of it rather than its centre point.
+  const corners = [0, 1, 2, 3, 4, 5, 6, 7].map(n => new Vector3(n & 1 ? BOUNDS.max.x : BOUNDS.min.x, n & 2 ? BOUNDS.max.y : BOUNDS.min.y, n & 4 ? BOUNDS.max.z : BOUNDS.min.z));
+  const centre = BOUNDS.min.clone().add(BOUNDS.max).multiplyScalar(0.5);
+  const target = new Vector3(), axisX = new Vector3(), axisY = new Vector3(), axisZ = new Vector3(), rel = new Vector3();
+  const up = new Vector3(0, 1, 0);
+  const tan = Math.tan((camera.fov * Math.PI) / 360);
+  const fit = (tx: number, ty: number) => {
+    let distance = 0;
+    for (const corner of corners) {
+      rel.subVectors(corner, target);
+      const u = rel.dot(axisX), v = rel.dot(axisY), w = rel.dot(axisZ);
+      distance = Math.max(distance, w + Math.abs(u) / tx, w + Math.abs(v) / ty);
     }
-    target.set(0.1, 1.05 + frame * 1.55, 0.1);
-    camera.position.set(target.x + Math.sin(az) * Math.cos(el) * distance, target.y + Math.sin(el) * distance, target.z + Math.cos(az) * Math.cos(el) * distance);
+    return distance;
+  };
+  const place = () => {
+    const view = viewAt(progress);
+    const az = view.az + pointer.x * 0.08, el = view.el + pointer.y * 0.04;
+    axisZ.set(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el));
+    axisX.crossVectors(up, axisZ).normalize();
+    axisY.crossVectors(axisZ, axisX);
+    const r = frameRegion();
+    const ty = tan * Math.max(0.15, (r.bottom - r.top) / height) * 0.9;
+    const tx = tan * camera.aspect * Math.max(0.15, (r.right - r.left) / width) * 0.9;
+    target.copy(centre);
+    let distance = fit(tx, ty);
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    for (const corner of corners) {
+      rel.subVectors(corner, target);
+      const depth = distance - rel.dot(axisZ);
+      const x = rel.dot(axisX) / depth, y = rel.dot(axisY) / depth;
+      minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+    }
+    target.addScaledVector(axisX, ((minX + maxX) / 2) * distance).addScaledVector(axisY, ((minY + maxY) / 2) * distance);
+    distance = fit(tx, ty) / view.zoom;
+    camera.position.copy(target).addScaledVector(axisZ, distance);
     camera.lookAt(target);
   };
 
+  // One label at a time: the trade of the current step, pointing away from the
+  // model into free space, and turned around where it would leave the region.
   const projected = new Vector3();
-  const anchorWorld = new Vector3();
-  const columnPoint = new Vector3();
   const textWidths: number[] = [];
-  const positionLabels = (labelOpacity: number[]) => {
-    columnPoint.set(S + 0.6, 0, S + 0.6);
-    let columnX = 0;
+  const positionLabels = (shown: number[]) => {
+    const r = frameRegion();
+    const mid = (r.left + r.right) / 2;
+    const length = width < 600 ? 18 : 32;
     labels.forEach((label, i) => {
-      const opacity = labelOpacity[i];
+      const opacity = progress < -0.5 ? 0 : (1 - smooth(0.2, 0.45, Math.abs(progress - i))) * smooth(0.85, 1, shown[i]);
       label.style.opacity = opacity.toFixed(3);
       label.style.visibility = opacity < 0.01 ? "hidden" : "visible";
       if (opacity < 0.01) return;
-      anchorWorld.copy(layers[i].anchor).applyMatrix4(layers[i].group.matrixWorld);
-      projected.copy(anchorWorld).project(camera);
+      projected.copy(layers[i].anchor).applyMatrix4(layers[i].group.matrixWorld).project(camera);
       const x = (projected.x + 1) / 2 * width, y = (1 - projected.y) / 2 * height;
-      if (!columnX) {
-        let max = 0;
-        for (const layer of layers) {
-          projected.copy(layer.anchor).applyMatrix4(layer.group.matrixWorld).project(camera);
-          max = Math.max(max, (projected.x + 1) / 2 * width);
-        }
-        columnX = Math.min(max + 40, width - (width < 600 ? 120 : 170));
-      }
-      // Labels point right towards a shared column; where that would run off
-      // a narrow screen they point left instead.
       textWidths[i] ||= (label.lastElementChild as HTMLElement).offsetWidth;
-      const flip = x + 40 + textWidths[i] > width - 8 && x - 40 - textWidths[i] > 0;
+      const reach = length + 10 + textWidths[i];
+      let flip = x < mid;
+      if (flip && x - reach < r.left) flip = false;
+      else if (!flip && x + reach > r.right) flip = true;
       label.classList.toggle("flip", flip);
       label.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)${flip ? " translateX(-100%)" : ""}`;
-      label.style.setProperty("--len", `${flip ? 24 : Math.max(16, columnX - x).toFixed(1)}px`);
+      label.style.setProperty("--len", `${length}px`);
     });
   };
 
-  // enter: 0..1 progress of the layer flying in during the intro.
-  // solid: 1 for a normal layer, 0 for the x-ray ghost while scrolling the trades.
-  const applyLayer = (layer: Layer, index: number, explode: number, enter: number, solid: number) => {
-    layer.group.position.y = explode * index * GAP + (1 - enter) * 1.2;
-    layer.group.visible = enter > 0.001;
-    // Solid layers keep their own opacity; x-ray layers fade to a ghost that
-    // keeps its edges, like a technical drawing.
-    const fill = enter * (0.07 + 0.93 * solid);
-    // Only the x-ray ghost stops writing depth (and the glass, which never
-    // does); a layer that is merely flying in stays solid in the depth buffer,
-    // so the draw order never flips and nothing flickers through it.
-    const opaque = solid > 0.95;
-    for (const { mat, base } of layer.mats) {
-      mat.opacity = base * fill;
-      mat.depthWrite = opaque && base > 0.5;
-    }
-    for (const { mat, base } of layer.edges) mat.opacity = enter * (base + (1 - solid) * 0.22);
-    const casts = solid > 0.5 && enter > 0.6;
-    for (const mesh of layer.meshes) if (mesh.castShadow !== casts) mesh.castShadow = casts;
-  };
+  let last = performance.now();
+  const render = () => {
+    const now = performance.now();
+    const dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    if (!live || !visible) return;
+    // The pointer tilt eases on its own clock; everything else follows its inputs directly.
+    const k = 1 - Math.exp(-dt * 5);
+    pointer.x += (pointer.tx - pointer.x) * k;
+    pointer.y += (pointer.ty - pointer.y) * k;
+    const settling = Math.abs(pointer.tx - pointer.x) + Math.abs(pointer.ty - pointer.y) > 0.0005;
+    if (!dirty && !settling) return;
+    dirty = false;
+    if (!settling) { pointer.x = pointer.tx; pointer.y = pointer.ty; } else dirty = true;
 
-  let raf = 0, visible = true;
-  const frame = (now: number) => {
-    raf = 0;
-    let active = false;
-    const t = Math.max(0, (now - start) / 1000);
-    const goal = targets();
-    const ease = reduceMotion ? 1 : 0.085;
-    const step = (from: number, to: number) => {
-      const next = from + (to - from) * ease;
-      if (Math.abs(to - next) > 0.0005) active = true;
-      return Math.abs(to - next) > 0.0005 ? next : to;
-    };
-    scroll.explode = step(scroll.explode, goal.explode);
-    scroll.ghost = step(scroll.ghost, goal.ghost);
-    scroll.turn = step(scroll.turn, goal.turn);
-    scroll.lift = step(scroll.lift, goal.lift);
-    scroll.weights = scroll.weights.map((w, i) => step(w, goal.weights[i]));
-    pointer.x = step(pointer.x, pointer.tx);
-    pointer.y = step(pointer.y, pointer.ty);
-
-    const labelOpacity: number[] = [];
-    let frameAmount = 0;
-    layers.forEach((layer, i) => {
-      let introExplode = 0, introOpacity = 1, introLabel = 0;
-      if (!introDone) {
-        const { appear, land } = timeline[i];
-        introOpacity = easeOut(clamp01((t - appear) / 0.45));
-        introExplode = i === 0 ? 0 : 1 - easeInOut(clamp01((t - land) / landDuration));
-        const landed = i === 0 ? timeline[1].land + landDuration : land + landDuration;
-        introLabel = introOpacity * (1 - smooth(landed - 0.05, landed + 0.3, t));
-      }
-      const explode = Math.max(introExplode, scroll.explode);
-      const solid = 1 - scroll.ghost * (1 - scroll.weights[i]);
-      applyLayer(layer, i, explode, introOpacity, solid);
-      frameAmount = Math.max(frameAmount, explode * (i / (layers.length - 1)));
-      labelOpacity.push(Math.max(introLabel, scroll.ghost * scroll.weights[i]));
+    const shown = layers.map((layer, i) => {
+      const value = Math.min(intro[i].v, placed(i, progress));
+      layer.set(value, drop);
+      return value;
     });
-
-    if (!introDone) {
-      const landedCount = timeline.filter((item, i) => i > 0 && t >= item.land + landDuration).length;
-      const stepNow = t < timeline[0].appear ? -1 : landedCount;
-      if (stepNow !== lastStep) { lastStep = stepNow; options.onIntroStep?.(stepNow); }
-      if (t >= introEnd) introDone = true;
-      active = true;
-    }
-
-    place(frameAmount);
+    place();
     model.updateMatrixWorld();
     renderer.render(scene, camera);
-    if (start === Infinity) { start = performance.now() + 150; active = true; }
-    positionLabels(labelOpacity);
-    if (active && visible) raf = requestAnimationFrame(frame);
+    positionLabels(shown);
   };
-  const wake = () => { if (!raf && visible) raf = requestAnimationFrame(frame); };
 
   const resize = () => {
     width = canvas.clientWidth; height = canvas.clientHeight;
     if (!width || !height) return;
     renderer.setSize(width, height, false);
     layout();
-    wake();
+    dirty = true;
   };
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(canvas);
-  const io = new IntersectionObserver(([entry]) => {
-    visible = entry.isIntersecting;
-    if (visible) wake();
-    else if (raf) { cancelAnimationFrame(raf); raf = 0; }
-  });
+  const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; dirty = true; });
   io.observe(canvas);
-  if (reduceMotion) options.onIntroStep?.(layers.length - 1);
   resize();
 
+  // Compile every material up front (all layers visible), so the intro does
+  // not stall on its first frames, then start it.
+  for (const layer of layers) layer.set(1, 0);
+  place();
+  const ready = renderer.compileAsync(scene, camera).catch(() => undefined).then(() => {
+    live = true;
+    dirty = true;
+    if (reduceMotion) { options.onIntroStep?.(layers.length - 1); return; }
+    timeline = gsap.timeline({ delay: 0.1, onUpdate: invalidate });
+    layers.forEach((_, i) => timeline!.to(intro[i], { v: 1, duration: 1.1, ease: "power3.out", onStart: () => options.onIntroStep?.(i) }, i * 0.3));
+  });
+
   return {
-    setProgress(value) { if (value !== progress) { progress = value; wake(); } },
+    ready,
+    tick: render,
+    setProgress(value) { if (value !== progress) { progress = value; dirty = true; } },
     setRegion(next) {
       if (next && region && next.top === region.top && next.bottom === region.bottom && next.left === region.left && next.right === region.right) return;
       region = next;
       layout();
-      wake();
+      dirty = true;
     },
-    setPointer(x, y) { if (reduceMotion) return; pointer.tx = x; pointer.ty = y; wake(); },
+    setPointer(x, y) { if (reduceMotion) return; pointer.tx = x; pointer.ty = y; },
     dispose() {
+      timeline?.kill();
       resizeObserver.disconnect();
       io.disconnect();
-      if (raf) cancelAnimationFrame(raf);
       renderer.dispose();
     },
   };
