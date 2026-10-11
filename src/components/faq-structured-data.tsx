@@ -1,5 +1,5 @@
 import { StructuredData } from "@/components/structured-data";
-import type { Faq } from "@/lib/content-core";
+import type { Faq } from "@/lib/faqs";
 
 export function FaqStructuredData({ items }: { items: readonly Pick<Faq, "question" | "answer">[] }) {
   const schema = {

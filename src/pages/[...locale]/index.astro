@@ -10,7 +10,7 @@ import Reveal from "@/components/reveal.astro";
 import SectionHeading from "@/components/section-heading.astro";
 import SiteLayout from "@/layouts/site-layout.astro";
 import { SiteStructuredData } from "@/components/site-structured-data";
-import { getFaqs } from "@/lib/content";
+import { getFaqs } from "@/lib/faqs";
 import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
 
 export const getStaticPaths = (() => localeStaticPaths()) satisfies GetStaticPaths;
