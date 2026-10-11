@@ -338,13 +338,16 @@ export function createHero(options: HeroOptions): HeroScene {
   // Scroll-driven state, eased towards its target every frame.
   let progress = -1;
   const scroll = { explode: 0, ghost: 0, weights: layers.map(() => 0), turn: 0, lift: 0 };
-  const start = performance.now();
+  // The intro clock starts once the first frame is on screen: that frame
+  // compiles every material and can take a moment, which would otherwise eat
+  // into the assembly before anyone sees it.
+  let start = Infinity;
   const timeline = layers.map((_, i) => ({
-    appear: 0.12 + i * 0.1,
-    land: i === 0 ? 0 : 1.35 + (i - 1) * 0.42,
+    appear: i * 0.07,
+    land: i === 0 ? 0 : 1.0 + (i - 1) * 0.24,
   }));
-  const landDuration = 1.05;
-  const introEnd = timeline[layers.length - 1].land + landDuration + 0.6;
+  const landDuration = 0.8;
+  const introEnd = timeline[layers.length - 1].land + landDuration + 0.35;
   let introDone = reduceMotion;
   let lastStep = -1;
 
@@ -423,26 +426,32 @@ export function createHero(options: HeroOptions): HeroScene {
     });
   };
 
-  const applyLayer = (layer: Layer, index: number, explode: number, opacity: number, solid: number) => {
-    layer.group.position.y = explode * index * GAP + (1 - opacity) * 0.5;
-    layer.group.visible = opacity > 0.005;
+  // enter: 0..1 progress of the layer flying in during the intro.
+  // solid: 1 for a normal layer, 0 for the x-ray ghost while scrolling the trades.
+  const applyLayer = (layer: Layer, index: number, explode: number, enter: number, solid: number) => {
+    layer.group.position.y = explode * index * GAP + (1 - enter) * 1.2;
+    layer.group.visible = enter > 0.001;
     // Solid layers keep their own opacity; x-ray layers fade to a ghost that
     // keeps its edges, like a technical drawing.
-    const fill = opacity * (0.07 + 0.93 * solid);
+    const fill = enter * (0.07 + 0.93 * solid);
+    // Only the x-ray ghost stops writing depth (and the glass, which never
+    // does); a layer that is merely flying in stays solid in the depth buffer,
+    // so the draw order never flips and nothing flickers through it.
+    const opaque = solid > 0.95;
     for (const { mat, base } of layer.mats) {
       mat.opacity = base * fill;
-      mat.depthWrite = mat.opacity > 0.95;
+      mat.depthWrite = opaque && base > 0.5;
     }
-    for (const { mat, base } of layer.edges) mat.opacity = opacity * (base + (1 - solid) * 0.22);
-    const casts = fill > 0.5;
-    for (const mesh of layer.meshes) mesh.castShadow = casts;
+    for (const { mat, base } of layer.edges) mat.opacity = enter * (base + (1 - solid) * 0.22);
+    const casts = solid > 0.5 && enter > 0.6;
+    for (const mesh of layer.meshes) if (mesh.castShadow !== casts) mesh.castShadow = casts;
   };
 
   let raf = 0, visible = true;
   const frame = (now: number) => {
     raf = 0;
     let active = false;
-    const t = (now - start) / 1000;
+    const t = Math.max(0, (now - start) / 1000);
     const goal = targets();
     const ease = reduceMotion ? 1 : 0.085;
     const step = (from: number, to: number) => {
@@ -464,10 +473,10 @@ export function createHero(options: HeroOptions): HeroScene {
       let introExplode = 0, introOpacity = 1, introLabel = 0;
       if (!introDone) {
         const { appear, land } = timeline[i];
-        introOpacity = easeOut(clamp01((t - appear) / 0.8));
+        introOpacity = easeOut(clamp01((t - appear) / 0.45));
         introExplode = i === 0 ? 0 : 1 - easeInOut(clamp01((t - land) / landDuration));
         const landed = i === 0 ? timeline[1].land + landDuration : land + landDuration;
-        introLabel = introOpacity * (1 - smooth(landed - 0.1, landed + 0.45, t));
+        introLabel = introOpacity * (1 - smooth(landed - 0.05, landed + 0.3, t));
       }
       const explode = Math.max(introExplode, scroll.explode);
       const solid = 1 - scroll.ghost * (1 - scroll.weights[i]);
@@ -487,6 +496,7 @@ export function createHero(options: HeroOptions): HeroScene {
     place(frameAmount);
     model.updateMatrixWorld();
     renderer.render(scene, camera);
+    if (start === Infinity) { start = performance.now() + 150; active = true; }
     positionLabels(labelOpacity);
     if (active && visible) raf = requestAnimationFrame(frame);
   };
