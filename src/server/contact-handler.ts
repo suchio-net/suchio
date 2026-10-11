@@ -1,5 +1,5 @@
-import { contactError } from "@/lib/contact-response";
-import { readLimitedJson } from "@/lib/request-body";
+import { contactError } from "@/server/contact-response";
+import { readLimitedJson } from "@/server/request-body";
 import { getServiceCopy } from "@/i18n/services";
 import { hasLocale, t, type Locale } from "@/lib/i18n";
 import { isServiceId } from "@/lib/service-routes";

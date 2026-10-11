@@ -1,4 +1,4 @@
-import type { ContactEmailConfig } from "@/lib/contact-handler";
+import type { ContactEmailConfig } from "@/server/contact-handler";
 
 export function healthResponse(config: ContactEmailConfig) {
   const ok = Boolean(config.apiKey && config.to && config.from);

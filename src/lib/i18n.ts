@@ -7,3 +7,11 @@ export { defaultLocale, hasLocale, localeConfig, locales, prefixedLocales, type 
 export function t(locale: Locale, key: MessageKey): string {
   return dictionaries[locale][key];
 }
+
+/** Static paths for routes under `[...locale]`: the default locale has no URL prefix. */
+export function localeStaticPaths(candidates: readonly Locale[] = locales) {
+  return candidates.map((locale) => ({
+    params: { locale: locale === defaultLocale ? undefined : locale },
+    props: { locale },
+  }));
+}

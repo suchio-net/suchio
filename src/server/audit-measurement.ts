@@ -1,9 +1,11 @@
-import reports from "../content/audits.json";
+import { measurementConsentVersion } from "@/i18n/audit-measurement";
 import { readLimitedBytes } from "./request-body";
 
-export const consentVersion = "2026-09-26-v1";
 export const retentionSeconds = 30 * 24 * 60 * 60;
-export const auditReports = reports.map(({ code, company }) => ({ code, company }));
+
+/** The published audit reports that can be measured, identified by their link code. */
+export type AuditReport = { code: string; company: string };
+
 export const privateHeaders = {
   "Cache-Control": "private, no-store",
   "X-Robots-Tag": "noindex, nofollow, noarchive",
@@ -51,7 +53,12 @@ export async function purgeAuditVisits(db: D1Database, now = Date.now()) {
     .run();
 }
 
-export async function handleAuditVisit(request: Request, db: D1Database | undefined, now = Date.now()) {
+export async function handleAuditVisit(
+  request: Request,
+  db: D1Database | undefined,
+  reports: readonly AuditReport[],
+  now = Date.now(),
+) {
   if (request.method !== "POST" && request.method !== "DELETE") return measurementResponse({ error: "method" }, 405);
   if (!sameOrigin(request)) return measurementResponse({ error: "origin" }, 403);
   if (!db) return measurementResponse({ error: "unavailable" }, 503);
@@ -59,7 +66,7 @@ export async function handleAuditVisit(request: Request, db: D1Database | undefi
   if (
     !body ||
     typeof body.code !== "string" ||
-    !auditReports.some((report) => report.code === body.code) ||
+    !reports.some((report) => report.code === body.code) ||
     typeof body.receipt !== "string" ||
     !/^[a-f0-9]{64}$/.test(body.receipt)
   )
@@ -69,7 +76,7 @@ export async function handleAuditVisit(request: Request, db: D1Database | undefi
     await db.prepare("DELETE FROM audit_visits WHERE receipt_hash = ? AND report_code = ?").bind(hash, body.code).run();
     return measurementResponse({ ok: true });
   }
-  if (body.consent !== true || body.version !== consentVersion)
+  if (body.consent !== true || body.version !== measurementConsentVersion)
     return measurementResponse({ error: "consent_required" }, 400);
   // This endpoint is called only after a voluntary click. No passive page-view counting.
   if (
@@ -84,7 +91,7 @@ export async function handleAuditVisit(request: Request, db: D1Database | undefi
     .prepare(
       "INSERT OR IGNORE INTO audit_visits (receipt_hash, report_code, day, consent_version, expires_at) VALUES (?, ?, ?, ?, ?)",
     )
-    .bind(hash, body.code, day, consentVersion, seconds + retentionSeconds)
+    .bind(hash, body.code, day, measurementConsentVersion, seconds + retentionSeconds)
     .run();
   return measurementResponse({ ok: true });
 }

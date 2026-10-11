@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { readLimitedBytes, readLimitedJson } from "../src/lib/request-body";
-import { boundedText } from "../src/lib/audit-measurement";
+import { readLimitedBytes, readLimitedJson } from "../src/server/request-body";
+import { boundedText } from "../src/server/audit-measurement";
 
 function stream(chunks: Uint8Array[], onCancel?: () => void) {
   return new ReadableStream<Uint8Array>({

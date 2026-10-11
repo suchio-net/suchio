@@ -1,5 +1,5 @@
 import { expect, spyOn, test } from "bun:test";
-import { handleSecurityReport } from "../src/lib/security-report";
+import { handleSecurityReport } from "../src/server/security-report";
 
 function reportRequest(body: unknown, contentType = "application/csp-report", origin = "https://suchio.net") {
   return new Request("https://suchio.net/api/security-report", {

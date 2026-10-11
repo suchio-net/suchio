@@ -7,13 +7,14 @@ import {
   type AuditAdminConfig,
 } from "./audit-admin-auth";
 import {
-  auditReports,
   boundedText,
   measurementResponse,
   privateHeaders,
   purgeAuditVisits,
   sameOrigin,
+  type AuditReport,
 } from "./audit-measurement";
+import { withinRateLimit } from "./rate-limit";
 
 type Env = AuditAdminConfig & Pick<CloudflareBindings, "AUDIT_DB" | "ASSETS" | "CONTACT_RATE_LIMITER">;
 // Preserve same-origin form Origin headers; no-referrer can turn them into "null".
@@ -42,14 +43,19 @@ function html(value: string) {
 type DayCount = { report_code: string; day: string; count: number };
 type LinkCheck = { report_code: string; checked_at: string; ok: number };
 
-export function renderAuditDashboard(rows: DayCount[], checks: LinkCheck[], notice = "") {
+export function renderAuditDashboard(
+  reports: readonly AuditReport[],
+  rows: DayCount[],
+  checks: LinkCheck[],
+  notice = "",
+) {
   const total = rows.reduce((sum, row) => sum + row.count, 0);
   return `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Audit-Auswertung · Suchio</title><style>
   *{box-sizing:border-box}body{margin:0;background:#f5f7fa;color:#172130;font:16px/1.6 system-ui,sans-serif}main{max-width:1160px;margin:auto;padding:40px 24px}h1{font-size:clamp(28px,5vw,44px);line-height:1.2}a{color:#005bbe}button{font:inherit;cursor:pointer;border:1px solid #aab4c2;border-radius:6px;background:white;color:#172130;padding:10px 14px;min-height:44px}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #0064d1;outline-offset:3px}.lead{max-width:780px;color:#475569}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px}.card{background:white;border:1px solid #dce2e9;border-radius:12px;padding:24px;min-width:0}.card h2{margin-top:0;font-size:22px;overflow-wrap:anywhere}.number{font-size:32px;font-weight:700}.muted{font-size:14px;color:#475569}.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}.actions a{padding:10px 0}details{margin-top:18px}summary{cursor:pointer;min-height:40px}table{width:100%;border-collapse:collapse;text-align:left}th,td{padding:6px;border-bottom:1px solid #e2e8f0}.notice{padding:16px;background:#e8f1fc;border-left:4px solid #0064d1}header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}</style></head><body><main>
   <header><strong>Suchio · Interner Bereich</strong><form method="post" action="/admin/audits/logout"><button>Abmelden</button></form></header>
   <h1>Berichtaufrufe im Blick</h1><p class="lead">${total} bestätigte Aufrufe in den letzten 30 Tagen. Gezählt wird nur nach freiwilliger Zustimmung. Das sind keine eindeutigen Personen, vollständigen Besucherzahlen oder bestätigten Anfragen. Tage werden in UTC angegeben.</p>
   <p class="muted">Vorschaulinks zählen nicht. Die technische Prüfung kontrolliert die veröffentlichte Datei unabhängig von Besucherzustimmungen. Ohne Prüfung erscheint kein grüner Status.</p>
-  ${notice ? `<p class="notice" role="status">${html(notice)}</p>` : ""}<div class="cards">${auditReports
+  ${notice ? `<p class="notice" role="status">${html(notice)}</p>` : ""}<div class="cards">${reports
     .map((report) => {
       const days = rows.filter((row) => row.report_code === report.code).sort((a, b) => b.day.localeCompare(a.day));
       const count = days.reduce((sum, row) => sum + row.count, 0);
@@ -64,7 +70,7 @@ export function renderAuditDashboard(rows: DayCount[], checks: LinkCheck[], noti
     )}</div><p class="muted">Messdaten verlassen die Auswertung nach 30 Tagen; die automatische Bereinigung läuft stündlich. <a href="/datenschutz#audit-auswertung">Datenschutz</a></p></main></body></html>`;
 }
 
-export async function handleAuditAdmin(request: Request, env: Env) {
+export async function handleAuditAdmin(request: Request, env: Env, reports: readonly AuditReport[]) {
   const path = new URL(request.url).pathname;
   if (!adminConfigured(env)) return measurementResponse({ error: "Admin-Zugang noch nicht eingerichtet." }, 503);
   if (!env.AUDIT_DB) return measurementResponse({ error: "Auswertung nicht verfügbar." }, 503);
@@ -72,9 +78,8 @@ export async function handleAuditAdmin(request: Request, env: Env) {
   if (path === "/admin/audits/login") {
     if (request.method === "GET") return loginPage();
     if (request.method !== "POST") return measurementResponse({ error: "method" }, 405);
-    const ip = request.headers.get("cf-connecting-ip") ?? "local";
-    const limit = await env.CONTACT_RATE_LIMITER.limit({ key: `suchio:audit-login:${ip}` });
-    if (!limit.success) return loginPage("Zu viele Versuche. Bitte in einer Minute erneut versuchen.", 429);
+    if (!(await withinRateLimit(request, env.CONTACT_RATE_LIMITER, "audit-login")))
+      return loginPage("Zu viele Versuche. Bitte in einer Minute erneut versuchen.", 429);
     if (!request.headers.get("content-type")?.startsWith("application/x-www-form-urlencoded"))
       return measurementResponse({ error: "content_type" }, 400);
     const text = await boundedText(request.body, 1024);
@@ -110,7 +115,7 @@ export async function handleAuditAdmin(request: Request, env: Env) {
     const text = await boundedText(request.body, 1024);
     if (text === null) return measurementResponse({ error: "size" }, 413);
     const form = new URLSearchParams(text);
-    const report = auditReports.find((item) => item.code === form.get("code"));
+    const report = reports.find((item) => item.code === form.get("code"));
     if (!report) return measurementResponse({ error: "unknown_report" }, 400);
     if (path.endsWith("/delete")) {
       if (form.get("confirm") !== "yes") return measurementResponse({ error: "confirmation" }, 400);
@@ -152,6 +157,7 @@ export async function handleAuditAdmin(request: Request, env: Env) {
   const done = new URL(request.url).searchParams.get("done");
   return new Response(
     renderAuditDashboard(
+      reports,
       rows.results,
       checks.results,
       done === "deleted"

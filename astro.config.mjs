@@ -1,15 +1,28 @@
 import { defineConfig } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
-import { redirects } from "./src/entwurf/hw/v1/routes.mjs";
+import i18nConfig from "./src/i18n/config.json" with { type: "json" };
+import { redirects as draftRedirects } from "./src/entwurf/hw/v1/routes.mjs";
+import { auditReportsIntegration } from "./src/integrations/audit-reports";
+import { securityHeadersIntegration } from "./src/integrations/security-headers";
+import { legacyServiceRoutes } from "./src/lib/public-routes";
 
 export default defineConfig({
   site: "https://suchio.net",
   trailingSlash: "never",
   build: { format: "file" },
-  redirects,
+  i18n: {
+    locales: Object.keys(i18nConfig.locales),
+    defaultLocale: i18nConfig.defaultLocale,
+    routing: { prefixDefaultLocale: false },
+  },
+  redirects: {
+    ...draftRedirects,
+    // Old service slugs stay reachable.
+    ...Object.fromEntries(legacyServiceRoutes.map(({ from, to }) => [from, { status: 308, destination: to }])),
+  },
   adapter: cloudflare({ imageService: "passthrough" }),
-  integrations: [react()],
+  integrations: [react(), auditReportsIntegration(), securityHeadersIntegration()],
   session: false,
   server: { host: "127.0.0.1", port: 3000 },
   vite: {

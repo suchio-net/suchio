@@ -17,8 +17,7 @@ import type { Locale } from "@/i18n/config";
 import type { ServiceId } from "@/i18n/services";
 import type { BudgetId } from "@/lib/contact-options";
 import { useContactDraft, type ContactDraft } from "@/components/contact-draft";
-import { retryAfterSeconds } from "@/lib/contact-response";
-import { emailPattern, isHttpUrl } from "@/lib/contact-validation";
+import { emailPattern, isHttpUrl, retryAfterSeconds } from "@/lib/contact-validation";
 import { useHydrated } from "@/components/use-hydrated";
 
 type FieldName = "name" | "email" | "companyUrl" | "service" | "budget" | "message";

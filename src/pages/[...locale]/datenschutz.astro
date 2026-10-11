@@ -1,0 +1,28 @@
+---
+// German alias of the privacy policy, printed in postal campaigns; it canonicalizes to /privacy.
+import type { GetStaticPaths } from "astro";
+import LegalPage from "@/components/legal-page.astro";
+import SiteLayout from "@/layouts/site-layout.astro";
+import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
+
+export const getStaticPaths = (() => localeStaticPaths()) satisfies GetStaticPaths;
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const description =
+  locale === "de"
+    ? "Datenschutz beim Websitebesuch, bei Kontaktanfragen und bei unserer Briefwerbung."
+    : t(locale, "meta.privacyDescription");
+---
+
+<SiteLayout
+  locale={locale}
+  canonicalPathname={localizePath("/privacy", locale)}
+  title={t(locale, "privacy.title")}
+  description={description}
+  noindex
+>
+  <LegalPage locale={locale} kind="privacy" />
+</SiteLayout>

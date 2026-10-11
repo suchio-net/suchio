@@ -10,7 +10,6 @@ import "@/styles/site.css";
 
 interface Props {
   locale: Locale;
-  pathname: string;
   canonicalPathname?: string;
   documentTitle?: string;
   title?: string;
@@ -18,9 +17,14 @@ interface Props {
   noindex?: boolean;
   referrer?: "no-referrer";
 }
+// Prerendered files are emitted as "/about.html" and "/index.html"; public URLs drop the file name and trailing slash.
+const pathname =
+  Astro.url.pathname
+    .replace(/\.html$/, "")
+    .replace(/\/index$/, "")
+    .replace(/\/$/, "") || "/";
 const {
   locale,
-  pathname,
   canonicalPathname = pathname,
   documentTitle,
   title,

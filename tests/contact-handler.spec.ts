@@ -1,6 +1,6 @@
 import { expect, spyOn, test } from "bun:test";
-import { buildContactEmail, handleContactRequest } from "../src/lib/contact-handler";
-import { retryAfterSeconds } from "../src/lib/contact-response";
+import { buildContactEmail, handleContactRequest } from "../src/server/contact-handler";
+import { retryAfterSeconds } from "../src/lib/contact-validation";
 
 const validEnquiry = {
   name: "Audit example",

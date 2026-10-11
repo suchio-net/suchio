@@ -1,11 +1,15 @@
 ---
+import type { GetStaticPaths } from "astro";
+import SiteLayout from "@/layouts/site-layout.astro";
 import { ContactForm, type ContactFormCopy } from "@/components/contact-form";
 import EditorialHero from "@/components/editorial-hero.astro";
 import { getServiceCopy } from "@/i18n/services";
 import { publicContactEmail } from "@/lib/contact";
 import { budgetOptions } from "@/lib/contact-options";
-import { localizePath, t, type Locale } from "@/lib/i18n";
+import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
 import { serviceOrder } from "@/lib/service-routes";
+export const getStaticPaths = (() => localeStaticPaths()) satisfies GetStaticPaths;
+
 interface Props {
   locale: Locale;
 }
@@ -44,28 +48,30 @@ const formCopy = {
 } satisfies ContactFormCopy;
 ---
 
-<main id="main-content">
-  <EditorialHero title={t(locale, "contact.title")} copy={t(locale, "contact.copy")} />
-  <section class="px-page pb-section">
-    <div class="reveal mx-auto max-w-[50rem]" data-reveal>
-      <div class="rounded-shell bg-white p-10 shadow-surface max-narrow:p-card-padding">
-        <noscript>
-          <p class="text-sm text-error">
-            {formCopy.error}{" "}
-            <a class="underline" href={`mailto:${publicContactEmail}`}>
-              {publicContactEmail}
-            </a>
-          </p>
-        </noscript>
-        <ContactForm
-          client:load
-          contactEmail={publicContactEmail}
-          copy={formCopy}
-          locale={locale}
-          services={services}
-          privacy={{ href: localizePath("/privacy", locale), label: t(locale, "footer.privacy") }}
-        />
+<SiteLayout locale={locale} title={t(locale, "nav.contact")} description={t(locale, "contact.copy")}>
+  <main id="main-content">
+    <EditorialHero title={t(locale, "contact.title")} copy={t(locale, "contact.copy")} />
+    <section class="px-page pb-section">
+      <div class="reveal mx-auto max-w-[50rem]" data-reveal>
+        <div class="rounded-shell bg-white p-10 shadow-surface max-narrow:p-card-padding">
+          <noscript>
+            <p class="text-sm text-error">
+              {formCopy.error}{" "}
+              <a class="underline" href={`mailto:${publicContactEmail}`}>
+                {publicContactEmail}
+              </a>
+            </p>
+          </noscript>
+          <ContactForm
+            client:load
+            contactEmail={publicContactEmail}
+            copy={formCopy}
+            locale={locale}
+            services={services}
+            privacy={{ href: localizePath("/privacy", locale), label: t(locale, "footer.privacy") }}
+          />
+        </div>
       </div>
-    </div>
-  </section>
-</main>
+    </section>
+  </main>
+</SiteLayout>

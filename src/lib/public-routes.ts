@@ -1,11 +1,8 @@
-import { defaultLocale, locales } from "../i18n/config";
+import { locales } from "../i18n/config";
 import { localizePath } from "./locale-path";
 import { serviceOrder, serviceRouteSlugs } from "./service-routes";
 
-export const localeDefinitions = locales.map((locale) => ({
-  locale,
-  prefix: locale === defaultLocale ? "" : `/${locale}`,
-}));
+// Shared by the sitemap, the Astro redirects and the production availability check.
 export const indexableBasePaths = [
   "/",
   "/about",

@@ -1,21 +1,14 @@
 import { expect, test } from "bun:test";
 import { Database } from "bun:sqlite";
-import {
-  auditReports,
-  consentVersion,
-  handleAuditVisit,
-  purgeAuditVisits,
-  receiptHash,
-  retentionSeconds,
-} from "../src/lib/audit-measurement";
+import { handleAuditVisit, purgeAuditVisits, receiptHash, retentionSeconds } from "../src/server/audit-measurement";
 import {
   createAdminSession,
   deleteAdminSession,
   isAuditAdmin,
   purgeAdminSessions,
   validAdminPassword,
-} from "../src/lib/audit-admin-auth";
-import { handleAuditAdmin, renderAuditDashboard } from "../src/lib/audit-admin";
+} from "../src/server/audit-admin-auth";
+import { handleAuditAdmin, renderAuditDashboard } from "../src/server/audit-admin";
 import { measurementConsentVersion, measurementCopy } from "../src/i18n/audit-measurement";
 
 const awaitedSessionSchema = await Bun.file("migrations/audit-visits/0002_admin_sessions.sql").text();
@@ -47,8 +40,9 @@ function database() {
   } as unknown as D1Database;
   return { db, sqlite };
 }
-const code = auditReports[0].code;
-const body = { code, receipt: "a".repeat(64), consent: true, version: consentVersion };
+const reports = [{ code: "8d8558899dfe506aed6f", company: "Beispiel GmbH" }];
+const code = reports[0].code;
+const body = { code, receipt: "a".repeat(64), consent: true, version: measurementConsentVersion };
 function request(value: unknown = body, method = "POST", origin = "https://suchio.net") {
   return new Request("https://suchio.net/api/audit-visits", {
     method,
@@ -66,7 +60,7 @@ test("no consent, cross-origin, unknown codes and passive GET cannot create stat
     request({ ...body, code: "unknown" }),
     request(body, "POST", "https://evil.example"),
   ]) {
-    expect((await handleAuditVisit(req, db)).status).toBeGreaterThanOrEqual(400);
+    expect((await handleAuditVisit(req, db, reports)).status).toBeGreaterThanOrEqual(400);
   }
   expect(sqlite.query("SELECT COUNT(*) AS n FROM audit_visits").get()).toEqual({ n: 0 });
   sqlite.close();
@@ -75,13 +69,13 @@ test("no consent, cross-origin, unknown codes and passive GET cannot create stat
 test("one consent is idempotent, has no stored IP or raw receipt, and can be withdrawn", async () => {
   const { db, sqlite } = database();
   const now = Date.parse("2026-09-26T12:00:00Z");
-  for (let i = 0; i < 2; i++) expect((await handleAuditVisit(request(), db, now)).status).toBe(200);
+  for (let i = 0; i < 2; i++) expect((await handleAuditVisit(request(), db, reports, now)).status).toBe(200);
   const rows = sqlite.query("SELECT * FROM audit_visits").all();
   expect(rows).toHaveLength(1);
   expect(rows[0]).toMatchObject({
     report_code: code,
     day: "2026-09-26",
-    consent_version: consentVersion,
+    consent_version: measurementConsentVersion,
     expires_at: now / 1000 + retentionSeconds,
   });
   expect(JSON.stringify(rows)).not.toContain(body.receipt);
@@ -92,9 +86,9 @@ test("one consent is idempotent, has no stored IP or raw receipt, and can be wit
     "receipt_hash",
     "report_code",
   ]);
-  await handleAuditVisit(request({ ...body, receipt: "b".repeat(64) }, "DELETE"), db, now);
+  await handleAuditVisit(request({ ...body, receipt: "b".repeat(64) }, "DELETE"), db, reports, now);
   expect(sqlite.query("SELECT COUNT(*) AS n FROM audit_visits").get()).toEqual({ n: 1 });
-  expect((await handleAuditVisit(request(body, "DELETE"), db, now)).status).toBe(200);
+  expect((await handleAuditVisit(request(body, "DELETE"), db, reports, now)).status).toBe(200);
   expect(sqlite.query("SELECT COUNT(*) AS n FROM audit_visits").get()).toEqual({ n: 0 });
   sqlite.close();
 });
@@ -102,8 +96,8 @@ test("one consent is idempotent, has no stored IP or raw receipt, and can be wit
 test("retention expires at 30 days and cleanup removes only expired receipts", async () => {
   const { db, sqlite } = database();
   const now = Date.parse("2026-09-26T12:00:00Z");
-  await handleAuditVisit(request(), db, now);
-  await handleAuditVisit(request({ ...body, receipt: "b".repeat(64) }), db, now + 86400000);
+  await handleAuditVisit(request(), db, reports, now);
+  await handleAuditVisit(request({ ...body, receipt: "b".repeat(64) }), db, reports, now + 86400000);
   await purgeAuditVisits(db, now + retentionSeconds * 1000);
   expect(sqlite.query("SELECT COUNT(*) AS n FROM audit_visits").get()).toEqual({ n: 1 });
   sqlite.close();
@@ -111,11 +105,11 @@ test("retention expires at 30 days and cleanup removes only expired receipts", a
 
 test("oversized bodies and previews are not counted; responses cannot be cached", async () => {
   const { db, sqlite } = database();
-  expect((await handleAuditVisit(request({ ...body, padding: "x".repeat(3000) }), db)).status).toBe(400);
+  expect((await handleAuditVisit(request({ ...body, padding: "x".repeat(3000) }), db, reports)).status).toBe(400);
   const preview = request();
   preview.headers.set("sec-purpose", "prefetch");
-  expect((await handleAuditVisit(preview, db)).status).toBe(400);
-  const response = await handleAuditVisit(request(), undefined);
+  expect((await handleAuditVisit(preview, db, reports)).status).toBe(400);
+  const response = await handleAuditVisit(request(), undefined, reports);
   expect(response.status).toBe(503);
   expect(response.headers.get("cache-control")).toContain("no-store");
   sqlite.close();
@@ -176,20 +170,26 @@ test("admin login enforces origin, size and rate limit before issuing a session"
       headers: { Origin: origin, "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ email: env.AUDIT_ADMIN_EMAIL, password: value }),
     });
-  expect((await handleAuditAdmin(login("https://evil.example"), env)).status).toBe(403);
-  expect((await handleAuditAdmin(login(undefined, "x".repeat(2000)), env)).status).toBe(413);
-  expect((await handleAuditAdmin(login(undefined, "wrong"), env)).status).toBe(401);
+  expect((await handleAuditAdmin(login("https://evil.example"), env, reports)).status).toBe(403);
+  expect((await handleAuditAdmin(login(undefined, "x".repeat(2000)), env, reports)).status).toBe(413);
+  expect((await handleAuditAdmin(login(undefined, "wrong"), env, reports)).status).toBe(401);
   expect(
-    (await handleAuditAdmin(login(), { ...env, CONTACT_RATE_LIMITER: { limit: async () => ({ success: false }) } }))
-      .status,
+    (
+      await handleAuditAdmin(
+        login(),
+        { ...env, CONTACT_RATE_LIMITER: { limit: async () => ({ success: false }) } },
+        reports,
+      )
+    ).status,
   ).toBe(429);
   expect(sqlite.query("SELECT COUNT(*) AS n FROM audit_admin_sessions").get()).toEqual({ n: 0 });
-  const accepted = await handleAuditAdmin(login(), env);
+  const accepted = await handleAuditAdmin(login(), env, reports);
   expect(accepted.status).toBe(303);
   const cookie = accepted.headers.get("set-cookie")!;
   const dashboard = await handleAuditAdmin(
     new Request("https://suchio.net/admin/audits", { headers: { cookie } }),
     env,
+    reports,
   );
   expect(dashboard.status).toBe(200);
   expect(await dashboard.text()).toContain("Berichtaufrufe im Blick");
@@ -199,6 +199,7 @@ test("admin login enforces origin, size and rate limit before issuing a session"
       headers: { Origin: "https://evil.example", cookie },
     }),
     env,
+    reports,
   );
   expect(forbidden.status).toBe(403);
   const loggedOut = await handleAuditAdmin(
@@ -207,6 +208,7 @@ test("admin login enforces origin, size and rate limit before issuing a session"
       headers: { Origin: "https://suchio.net", cookie },
     }),
     env,
+    reports,
   );
   expect(loggedOut.status).toBe(303);
   expect(
@@ -216,7 +218,7 @@ test("admin login enforces origin, size and rate limit before issuing a session"
 });
 
 test("dashboard distinguishes empty statistics from untested links and escapes notices", () => {
-  const html = renderAuditDashboard([], [], "<script>bad()</script>");
+  const html = renderAuditDashboard(reports, [], [], "<script>bad()</script>");
   expect(html).toContain("Link noch nicht geprüft");
   expect(html).toContain("keine Zustimmung erfasst");
   expect(html).toContain("audit_preview=1");
@@ -224,8 +226,7 @@ test("dashboard distinguishes empty statistics from untested links and escapes n
   expect(html).toContain("&lt;script&gt;");
 });
 
-test("client and server consent version match, with an explicit decline in every locale", () => {
-  expect(measurementConsentVersion).toBe(consentVersion);
+test("every locale offers an explicit decline", () => {
   for (const copy of Object.values(measurementCopy)) {
     expect(copy.accept.length).toBeGreaterThan(0);
     expect(copy.decline.length).toBeGreaterThan(0);

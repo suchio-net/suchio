@@ -1,0 +1,20 @@
+---
+// Localized error pages; the Worker serves them for missing URLs under /en and /fr.
+import type { GetStaticPaths } from "astro";
+import NotFoundPage from "@/components/not-found-page.astro";
+import SiteLayout from "@/layouts/site-layout.astro";
+import { notFoundMessages } from "@/i18n/not-found";
+import { localeStaticPaths, localizePath, prefixedLocales, type Locale } from "@/lib/i18n";
+
+export const getStaticPaths = (() => localeStaticPaths(prefixedLocales)) satisfies GetStaticPaths;
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const copy = notFoundMessages[locale];
+---
+
+<SiteLayout locale={locale} documentTitle={copy.title} title={copy.title} description={copy.copy} noindex>
+  <NotFoundPage copy={copy} homeHref={localizePath("/", locale)} />
+</SiteLayout>

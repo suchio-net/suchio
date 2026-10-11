@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { env } from "cloudflare:workers";
-import { healthResponse } from "@/lib/health";
+import { healthResponse } from "@/server/health";
 
 export const prerender = false;
 export const ALL: APIRoute = ({ request }) => {
