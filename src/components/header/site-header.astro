@@ -441,7 +441,7 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
       if (!root.contains(event.relatedTarget as Node | null)) setOpen(false);
     });
     root.addEventListener("keydown", (event) => {
-      if (event.key !== "Escape") return;
+      if (event.key !== "Escape" || !isOpen(button)) return;
       event.preventDefault();
       event.stopPropagation();
       setOpen(false);

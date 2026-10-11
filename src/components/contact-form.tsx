@@ -13,7 +13,7 @@ import {
   Workflow,
 } from "lucide-react";
 import {
-  type FormEvent,
+  type SubmitEvent,
   type ReactNode,
   useEffect,
   useLayoutEffect,
@@ -132,6 +132,22 @@ export function ContactForm({
   useEffect(() => () => pendingRequest.current?.abort(), []);
 
   useEffect(() => {
+    const restoreFromHistory = (event: PageTransitionEvent) => {
+      if (!event.persisted) return;
+      pendingRequest.current?.abort();
+      pendingRequest.current = null;
+      setStatus("idle");
+      setErrors({});
+      setIsDirty(false);
+      setBudgetOpen(false);
+      setSelectedBudget(undefined);
+      setSelectedServiceId(undefined);
+    };
+    window.addEventListener("pageshow", restoreFromHistory);
+    return () => window.removeEventListener("pageshow", restoreFromHistory);
+  }, []);
+
+  useEffect(() => {
     if (!retrySeconds) return;
     const timer = window.setTimeout(() => setRetrySeconds((value) => Math.max(0, value - 1)), 1000);
     return () => window.clearTimeout(timer);
@@ -205,7 +221,12 @@ export function ContactForm({
     );
   }
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+  function changeField(field: FieldName) {
+    clearError(field);
+    saveDraft();
+  }
+
+  async function onSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (pendingRequest.current || retrySeconds > 0) return;
     const form = event.currentTarget;
@@ -329,7 +350,6 @@ export function ContactForm({
       action="/api/contact"
       aria-busy={status === "sending"}
       noValidate
-      onChange={() => saveDraft()}
       onSubmit={onSubmit}
     >
       {preselectedServiceLabel ? (
@@ -345,14 +365,14 @@ export function ContactForm({
             id="contact-name"
             className={`min-h-12 ${fieldControlClass}`}
             name="name"
-            defaultValue={draft?.name}
+            value={draft?.name ?? ""}
             autoComplete="name"
             placeholder={copy.namePlaceholder}
             maxLength={100}
             required
             aria-invalid={Boolean(errors.name)}
             aria-describedby={errors.name ? "contact-name-error" : undefined}
-            onChange={() => clearError("name")}
+            onChange={() => changeField("name")}
           />
         </Field>
         <Field id="contact-email" label={copy.email} error={errors.email} required={copy.requiredLabel}>
@@ -362,7 +382,7 @@ export function ContactForm({
             className={`min-h-12 ${fieldControlClass}`}
             type="email"
             name="email"
-            defaultValue={draft?.email}
+            value={draft?.email ?? ""}
             autoComplete="email"
             placeholder={copy.emailPlaceholder}
             inputMode="email"
@@ -371,7 +391,7 @@ export function ContactForm({
             required
             aria-invalid={Boolean(errors.email)}
             aria-describedby={errors.email ? "contact-email-error" : undefined}
-            onChange={() => clearError("email")}
+            onChange={() => changeField("email")}
           />
         </Field>
       </div>
@@ -383,7 +403,8 @@ export function ContactForm({
             id="contact-company"
             className={`min-h-12 ${fieldControlClass}`}
             name="company"
-            defaultValue={draft?.company}
+            value={draft?.company ?? ""}
+            onChange={() => saveDraft()}
             autoComplete="organization"
             placeholder={copy.companyPlaceholder}
             maxLength={120}
@@ -396,7 +417,7 @@ export function ContactForm({
             className={`min-h-12 ${fieldControlClass}`}
             type="url"
             name="companyUrl"
-            defaultValue={draft?.companyUrl}
+            value={draft?.companyUrl ?? ""}
             autoComplete="url"
             placeholder={copy.companyUrlPlaceholder}
             inputMode="url"
@@ -404,7 +425,7 @@ export function ContactForm({
             spellCheck={false}
             aria-invalid={Boolean(errors.companyUrl)}
             aria-describedby={errors.companyUrl ? "contact-company-url-error" : undefined}
-            onChange={() => clearError("companyUrl")}
+            onChange={() => changeField("companyUrl")}
           />
         </Field>
       </div>
@@ -434,6 +455,7 @@ export function ContactForm({
                   onChange={() => {
                     setSelectedServiceId(service.id);
                     clearError("service");
+                    saveDraft({ service: service.id });
                   }}
                 />
                 <span
@@ -566,7 +588,7 @@ export function ContactForm({
           id="contact-message"
           className={`min-h-44 resize-y p-4 ${fieldControlClass}`}
           name="message"
-          defaultValue={draft?.message}
+          value={draft?.message ?? ""}
           autoComplete="off"
           placeholder={copy.placeholder}
           minLength={20}
@@ -574,7 +596,7 @@ export function ContactForm({
           required
           aria-invalid={Boolean(errors.message)}
           aria-describedby={errors.message ? "contact-message-error" : "contact-form-note"}
-          onChange={() => clearError("message")}
+          onChange={() => changeField("message")}
         />
       </Field>
 

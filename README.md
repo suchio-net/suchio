@@ -1,10 +1,10 @@
 # Suchio
 
-The German, English, and French website for Suchio, an independent digital growth and technology studio. Built with Astro, TypeScript, and Tailwind CSS on Cloudflare Workers. React islands retain the existing Motion animations, navigation, contact form, and audit consent controls. Public pages are prerendered HTML; dynamic handlers use Workers, D1, and Resend.
+The German, English, and French website for Suchio, an independent digital growth and technology studio. Built with Astro, TypeScript, and Tailwind CSS on Cloudflare Workers. React islands retain the existing Motion illustrations, contact form, and audit consent controls. Navigation uses an Astro component and a small browser script. Public pages are prerendered HTML; dynamic handlers use Workers, D1, and Resend.
 
 ## Local development
 
-Use Bun 1.4.0, as pinned in `package.json` and CI.
+Use Bun 1.4.0, as pinned in `package.json` and CI, with Node 24 for the Astro CLI and preview host.
 
 ```sh
 bun ci
@@ -24,7 +24,7 @@ bun run start
 
 The build produces static pages and assets in `dist/client` and the Cloudflare Worker and generated deployment configuration in `dist/server`. Astro preview runs the built application locally through Cloudflare's runtime.
 
-Checks are `bun run lint`, `bun run typecheck`, and `bun run test` (unit tests for the contact form, audit measurement, request limits, and security reports). The complete verification sequence lives in [.github/workflows/ci.yml](.github/workflows/ci.yml).
+Checks are `bun run format:check`, `bun run lint`, `bun run typecheck`, and `bun run test`. Tests cover contact delivery, audit consent and administration, request limits, security reports, locale paths, redirects, and the sitemap. After building, `bun run check:preview` starts the built Worker with local bindings, checks public routes, localized 404s, legacy redirects, metadata, draft pages, and draft assets, then closes the preview. A local health response may indicate missing mail configuration; the production availability check requires it to be ready. The complete verification sequence lives in [.github/workflows/ci.yml](.github/workflows/ci.yml).
 
 ## Deployment
 
@@ -36,7 +36,7 @@ bun run deploy
 
 Use `bun run deploy:redirects` for the separate domain-redirect Worker. Both commands run the CI verification sequence first and stop if checks fail or the source changes during verification. Configuration lives in [wrangler.jsonc](wrangler.jsonc) and [wrangler.redirects.jsonc](wrangler.redirects.jsonc). Deployments use the generated `dist/server/wrangler.json`; the source configuration identifies the custom Worker entrypoint used by Astro in development and builds.
 
-For the existing Cloudflare Git integration, set **Settings → Builds → Build command** to `bun run build` and **Deploy command** to `bunx wrangler deploy --config dist/server/wrangler.json`. These dashboard settings are separate from repository scripts; remove any old `build:vinext` or `deploy:vinext` commands. GitHub CI runs the browser and release checks; the Cloudflare build generates and deploys the application.
+For the existing Cloudflare Git integration, set **Settings → Builds → Build command** to `bun run deploy --check-only` and **Deploy command** to `bunx wrangler deploy --config dist/server/wrangler.json`. Use Bun 1.4.0 and Node 24 in that build environment. This runs the same verification sequence before Cloudflare can deploy; GitHub CI alone does not gate a separate Cloudflare build. The [build and deploy commands are separate Cloudflare trigger settings](https://developers.cloudflare.com/workers/ci-cd/builds/api-reference/). Remove any old `build:vinext` or `deploy:vinext` commands. Dashboard settings have to be applied to the account; editing this README does not change them.
 
 To verify the release without publishing:
 
@@ -58,10 +58,36 @@ The dashboard shows **confirmed visits**, not unique readers or complete traffic
 
 Focused verification: `bun test tests/audit-measurement.spec.ts`.
 
-- Routes and API endpoints: `src/pages`; HTML document and metadata: `src/layouts/site-layout.astro`; production Worker entry point: `src/cloudflare-worker.ts`.
+- Routes and API endpoints: `src/pages`; HTML document and metadata: `src/layouts/site-layout.astro`; production Worker entry point: `src/worker.ts`.
 - Shared UI and page compositions: `src/components`.
 - Localized copy and locale configuration: `src/i18n`; FAQ and audit data: `src/content`.
 - Design tokens and global styles: `src/styles`.
 - Unit tests for the Worker endpoints: `tests`.
 
 German is the default locale. Locale configuration is defined in [src/i18n/config.json](src/i18n/config.json).
+
+Contact drafts use tab-scoped `sessionStorage` to survive page and language changes. Successful submission clears the draft and retry ID; server rendering never reads either. Blocked browser storage falls back to page memory with the existing unload warning. The privacy policy describes this behavior in each locale.
+
+### Fonts, images, and client drafts
+
+The [Astro Fonts API](https://docs.astro.build/en/guides/fonts/) reads the locked Fontsource packages locally and serves hashed WOFF2 files. Only the DM Sans Latin subset is preloaded. Font display and fallback behavior are preserved. No font sync script or font CDN request is needed.
+
+Drafts stay in this app and are excluded from indexing. Their GSAP, Lenis, and Three.js modules load only on draft routes. Suchio's 2D illustrations keep Motion. Static pages such as About load no React runtime.
+
+Both Handwerker versions share `src/entwurf/hw/content.ts`, the photo manifest, schema helpers, and picture/note components. Each version owns its layout and navigation. The 20 original photos live in `src/assets/entwurf/hw`; `src/integrations/draft-images.ts` generates shared AVIF/WebP files for development and builds. Derivatives and the `.astro/draft-images` cache are ignored by Git. The cache key includes the original, widths, encoder versions, and processing settings. Generation preserves the approved sharpening and quality; Astro's default image transforms do not reproduce that treatment, so these prepared assets use the passthrough service. Change photos or widths in the manifest and restart/build to regenerate. Old published asset URLs redirect to the shared files.
+
+Parkhotel's finished HTML lives in `src/entwurf/parkhotel/index.html` and is emitted unchanged by an Astro page. Its original `/entwurf/parkhotel` URL remains valid. Page-specific 1200×630 social images for About, Contact, and services are generated during builds from each locale's metadata and the existing DM Sans font. The homepage keeps its approved brand cards. An unused social banner is preserved in `src/assets/brand` instead of being deployed.
+
+### Dependency maintenance
+
+Dependabot checks the Bun lockfile through the [npm ecosystem](https://docs.github.com/en/code-security/reference/supply-chain-security/supported-ecosystems-and-repositories), and checks GitHub Actions weekly. Review major upgrades against the existing animations and interaction behavior. Fontsource, Fontkit, and Sharp are build tooling; they stay in devDependencies.
+
+The inherited `overrides` deliberately retain these transitive versions while framework dependencies move: `js-yaml` (YAML parsing), `source-map-js` (source maps), `http-cache-semantics` (HTTP caching), `nanoid` (IDs), `brace-expansion@1` and `brace-expansion@5` (glob expansion), and `undici` (HTTP transport). These are resolution constraints, not evidence of a specific vulnerability. `sharp` is pinned to the tested encoder so responsive-image output remains reproducible. Check `bun audit`, upstream requirements, and the full verification sequence when changing or removing a pin; avoid treating a newer major as a drop-in fix. The current resolved tree passes `bun audit`.
+
+### Account configuration and SEO follow-ups
+
+Review [AI Crawl Control](https://developers.cloudflare.com/ai-crawl-control/features/manage-ai-crawlers/) and [managed robots.txt](https://developers.cloudflare.com/bots/additional-configurations/managed-robots-txt/) in the Cloudflare zone so search and answer crawlers intended to discover Suchio are allowed. Repository robots rules cannot override edge blocks. [Crawler Hints](https://developers.cloudflare.com/cache/advanced-configuration/crawler-hints/) can notify participating search engines when cached content changes. These account settings are separate from the deployed code.
+
+The sitemap omits `lastmod` until content has reliable modification timestamps; build time and repository-wide commit time are not page modification dates. Structured data describes only published business facts, with Organization, owner, WebSite, page, service, breadcrumb, and FAQ nodes. `llms.txt` supplies a public text summary, with no claim that it guarantees AI citations.
+
+The domain redirect Worker remains in service. Cloudflare's HTTPS and Redirect Rules can replace it after equivalent rules are configured and verified for HTTP, `www`, paths, and query strings. Removing it first would break those entry points.

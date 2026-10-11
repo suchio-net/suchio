@@ -1,6 +1,6 @@
 ---
 import VersionSwitcher from "@/entwurf/hw/VersionSwitcher.astro";
-import { assetBase, base } from "@/entwurf/hw/v2/data";
+import { base } from "@/entwurf/hw/v2/data";
 import "@/entwurf/hw/v2/styles.css";
 
 // Lighthouse 13.5 mobile, archived in output/audits/2026-10-08_handwerker-work/entwurf-messung/.
@@ -278,30 +278,24 @@ const questions = [
     />
     <meta name="robots" content="noindex, nofollow, noarchive" />
     <meta name="referrer" content="no-referrer" />
-    <link rel="preload" href={`${assetBase}/fonts/d-din.woff2`} as="font" type="font/woff2" crossorigin />
-    <link
-      rel="preload"
-      href={`${assetBase}/fonts/d-din-condensed-bold.woff2`}
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <link rel="preload" href={`${base}/fonts/d-din.woff2`} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={`${base}/fonts/d-din-condensed-bold.woff2`} as="font" type="font/woff2" crossorigin />
     <style is:inline>
       @font-face {
         font-family: "D-DIN";
-        src: url(/entwurf/handwerker-work/fonts/d-din.woff2) format("woff2");
+        src: url(/entwurf/hw/v2/fonts/d-din.woff2) format("woff2");
         font-weight: 400;
         font-display: optional;
       }
       @font-face {
         font-family: "D-DIN";
-        src: url(/entwurf/handwerker-work/fonts/d-din-bold.woff2) format("woff2");
+        src: url(/entwurf/hw/v2/fonts/d-din-bold.woff2) format("woff2");
         font-weight: 700;
         font-display: optional;
       }
       @font-face {
         font-family: "D-DIN Condensed";
-        src: url(/entwurf/handwerker-work/fonts/d-din-condensed-bold.woff2) format("woff2");
+        src: url(/entwurf/hw/v2/fonts/d-din-condensed-bold.woff2) format("woff2");
         font-weight: 700;
         font-display: optional;
       }

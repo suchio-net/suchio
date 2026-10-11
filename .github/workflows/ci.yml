@@ -18,6 +18,9 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.4.0
@@ -28,5 +31,6 @@ jobs:
       - run: bun run types:workers --check
       - run: bun run test
       - run: bun run build
+      - run: bun run check:preview
       - run: bunx wrangler deploy --config dist/server/wrangler.json --dry-run
       - run: bunx wrangler deploy --config wrangler.redirects.jsonc --dry-run

@@ -69,6 +69,7 @@ const legal: LegalContent = {
         id: "3-contact-form-and-email-communication",
         title: "3. Contact form and email communication",
         paragraphs: [
+          "While you fill in the form, your draft is saved in this browser tab’s session storage so it survives page and language changes. It is not sent to us until you submit. The draft is removed after a successful submission or when the tab session ends. If browser storage is disabled, it remains only in the current page’s memory.",
           "When you contact us, we process the information you provide. This may include your name, email address, company, company website, selected service, budget range, message, and language. An invisible honeypot field is used only to prevent spam. The information is not stored in a separate website database.",
           "We process this information to handle and respond to your enquiry. Article 6(1)(b) GDPR applies where the enquiry concerns a contract or pre-contractual steps. In other cases, Article 6(1)(f) GDPR applies; our legitimate interest is responding appropriately to business enquiries.",
           "We use Resend, a service of Plus Five Five, Inc., 2261 Market Street #5039, San Francisco, CA 94114, USA, to send the message. Resend processes at least sender and recipient addresses, message content, and delivery metadata and, according to its documentation, generally retains email data for 30 days. Transfers to the United States are safeguarded through the EU-U.S. Data Privacy Framework and the EU Standard Contractual Clauses.",

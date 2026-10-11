@@ -2,7 +2,7 @@
 import type { GetStaticPaths } from "astro";
 import Layout from "@/entwurf/hw/v2/Layout.astro";
 import Icon from "@/entwurf/hw/v2/Icon.astro";
-import Note from "@/entwurf/hw/v2/Note.astro";
+import Note from "@/entwurf/hw/Note.astro";
 import Zoom from "@/entwurf/hw/v2/Zoom.astro";
 import PageHead from "@/entwurf/hw/v2/PageHead.astro";
 import Faq from "@/entwurf/hw/v2/Faq.astro";
@@ -18,7 +18,7 @@ import {
   servicePath,
   webPageNode,
   websiteNode,
-} from "@/entwurf/hw/v2/schema";
+} from "@/entwurf/hw/schema";
 
 export const getStaticPaths = (() =>
   services.map((service) => ({ params: { slug: service.slug }, props: { service } }))) satisfies GetStaticPaths;

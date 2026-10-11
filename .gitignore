@@ -1,14 +1,16 @@
-.next/
 .astro/
+# Archived local output from the former framework.
+.next/
+.vinext/
 next-env.d.ts
 node_modules/
 .env*
 !.env.example
-next-dev.*.log
-next-start.*.log
 *.tsbuildinfo
 /dist/
-.vinext/
 .wrangler/
 /output/
 /tmp/
+# Responsive draft derivatives are generated from src/assets/entwurf/hw.
+/public/entwurf/hw/img/*.avif
+/public/entwurf/hw/img/*.webp

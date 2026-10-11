@@ -32,7 +32,7 @@ export interface LegalPageContent {
 
 export type LegalContent = Record<LegalPageKind, LegalPageContent>;
 
-export const legalUpdatedAt = "2026-09-26";
+export const legalUpdatedAt = "2026-10-11";
 export const updatedLabel = (locale: Locale) => {
   const prefix = { de: "Stand: ", en: "Last updated: ", fr: "Mise à jour : " }[locale];
   const date = new Intl.DateTimeFormat(locale === "en" ? "en-GB" : locale, {

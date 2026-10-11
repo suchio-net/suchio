@@ -5,7 +5,7 @@ import Footer from "./Footer.astro";
 import Icon from "./Icon.astro";
 import Lightbox from "./Lightbox.astro";
 import { assetBase, base, company } from "./data";
-import { imageSources } from "./images";
+import { imageSources } from "@/entwurf/hw/images";
 import "./styles.css";
 
 interface Props {
@@ -45,14 +45,8 @@ const ogImage = new URL(`${assetBase}/img/og-handwerker-work.jpg`, Astro.site).h
     <meta name="robots" content="noindex, nofollow, noarchive" />
     <meta name="referrer" content="no-referrer" />
     <meta name="theme-color" content="#2a383d" />
-    <link rel="preload" href={`${assetBase}/fonts/d-din.woff2`} as="font" type="font/woff2" crossorigin />
-    <link
-      rel="preload"
-      href={`${assetBase}/fonts/d-din-condensed-bold.woff2`}
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <link rel="preload" href={`${base}/fonts/d-din.woff2`} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={`${base}/fonts/d-din-condensed-bold.woff2`} as="font" type="font/woff2" crossorigin />
     {lcp && (
       <link
         rel="preload"
@@ -66,19 +60,19 @@ const ogImage = new URL(`${assetBase}/img/og-handwerker-work.jpg`, Astro.site).h
     <style is:inline>
       @font-face {
         font-family: "D-DIN";
-        src: url(/entwurf/handwerker-work/fonts/d-din.woff2) format("woff2");
+        src: url(/entwurf/hw/v2/fonts/d-din.woff2) format("woff2");
         font-weight: 400;
         font-display: optional;
       }
       @font-face {
         font-family: "D-DIN";
-        src: url(/entwurf/handwerker-work/fonts/d-din-bold.woff2) format("woff2");
+        src: url(/entwurf/hw/v2/fonts/d-din-bold.woff2) format("woff2");
         font-weight: 700;
         font-display: optional;
       }
       @font-face {
         font-family: "D-DIN Condensed";
-        src: url(/entwurf/handwerker-work/fonts/d-din-condensed-bold.woff2) format("woff2");
+        src: url(/entwurf/hw/v2/fonts/d-din-condensed-bold.woff2) format("woff2");
         font-weight: 700;
         font-display: optional;
       }

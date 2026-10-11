@@ -7,3 +7,5 @@ tmp/
 public/
 src/worker-configuration.d.ts
 migrations/
+# A finished draft file, published byte for byte.
+src/entwurf/parkhotel/

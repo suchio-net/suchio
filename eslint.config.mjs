@@ -13,6 +13,7 @@ export default defineConfig([
   },
   globalIgnores([
     ".astro/**",
+    // Archived local build output; these directories are no longer development paths.
     ".next/**",
     ".vinext/**",
     ".wrangler/**",
@@ -20,7 +21,6 @@ export default defineConfig([
     "output/**",
     "tmp/**",
     "node_modules/**",
-    "next-env.d.ts",
     "src/worker-configuration.d.ts",
   ]),
 ]);
