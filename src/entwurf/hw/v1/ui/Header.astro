@@ -1,0 +1,111 @@
+---
+import Logo from "./Logo.astro";
+import { base, company, nav, services } from "../data";
+
+interface Props { current?: string }
+const { current } = Astro.props;
+const servicesNav = nav[0];
+const pad = (n: number) => String(n).padStart(2, "0");
+---
+<header class="site-header" data-header>
+  <div class="wrap bar">
+    <a class="brand" href={base} aria-label="Handwerker.work, zur Startseite"><Logo /></a>
+    <nav class="main-nav" aria-label="Hauptnavigation">
+      <ul>
+        <li class="has-menu">
+          <a class="nav-link" href={servicesNav.href} aria-current={current?.startsWith("leistungen") ? "page" : undefined}>{servicesNav.label}</a>
+          <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="leistungen-menu" data-menu-toggle><span class="sr-only">Leistungen aufklappen</span><i aria-hidden="true"></i></button>
+          <ul class="dropdown" id="leistungen-menu" data-menu>
+            {services.map((service, index) => <li><a href={`${base}/leistungen/${service.slug}`} aria-current={current === `leistungen/${service.slug}` ? "page" : undefined}><span class="mono">{pad(index + 1)}</span>{service.name}</a></li>)}
+          </ul>
+        </li>
+        {nav.slice(1).map(item => <li><a class="nav-link" href={item.href} aria-current={current === item.key ? "page" : undefined}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="bar-right">
+      <a class="tel mono" href={company.phone.href}>{company.phone.display}</a>
+      <a class="btn btn-small" href={`${base}/kontakt#anfrage`}>Anfrage<span class="arrow" aria-hidden="true"></span></a>
+      <button class="burger" type="button" aria-controls="mobile-menu" aria-expanded="false" data-burger><span class="sr-only">Menü öffnen</span><i aria-hidden="true"></i><i aria-hidden="true"></i></button>
+    </div>
+  </div>
+</header>
+
+<dialog class="mobile-menu" id="mobile-menu" aria-label="Menü" data-mobile-menu>
+  <div class="mm-top wrap">
+    <Logo />
+    <button class="mm-close mono" type="button" data-close>Schließen</button>
+  </div>
+  <nav class="wrap" aria-label="Mobile Navigation">
+    <p class="mono mute">Leistungen</p>
+    <ul class="mm-sub">
+      {services.map((service, index) => <li style={`--i:${index}`}><a href={`${base}/leistungen/${service.slug}`}><span class="mono">{pad(index + 1)}</span>{service.name}</a></li>)}
+    </ul>
+    <ul class="mm-main">
+      {nav.slice(1).map((item, index) => <li style={`--i:${index + services.length}`}><a href={item.href}>{item.label}</a></li>)}
+    </ul>
+  </nav>
+  <div class="mm-foot wrap">
+    <a class="btn" href={`${base}/kontakt#anfrage`}>Besichtigung anfragen<span class="arrow" aria-hidden="true"></span></a>
+    <a class="mm-tel mono" href={company.phone.href}>{company.phone.display}</a>
+  </div>
+</dialog>
+
+<style>
+  .site-header { position: fixed; inset: 0 0 auto; z-index: 50; height: var(--header-h); color: var(--ink); transition: transform 0.7s var(--ease), background-color 0.5s var(--ease), color 0.5s var(--ease), box-shadow 0.5s var(--ease); }
+  .site-header:global(.scrolled) { background: rgb(255 255 255 / 0.78); backdrop-filter: blur(18px) saturate(1.6); -webkit-backdrop-filter: blur(18px) saturate(1.6); box-shadow: 0 1px 0 var(--line); }
+  .site-header:global(.away) { transform: translateY(-100%); }
+  .site-header:global(.on-dark) { color: var(--on-night); }
+  .site-header:global(.on-dark.scrolled) { background: rgb(11 11 12 / 0.7); box-shadow: 0 1px 0 var(--line-night); }
+  .bar { display: flex; align-items: center; gap: 28px; height: 100%; }
+  .brand { flex: none; display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration: none; }
+  .main-nav { margin-left: auto; }
+  .main-nav > ul { display: flex; align-items: center; gap: 4px; }
+  .nav-link { position: relative; display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font-size: 0.9rem; font-weight: 500; letter-spacing: -0.01em; text-decoration: none; }
+  .nav-link::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: 10px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform 0.5s var(--ease); }
+  .nav-link:hover::after, .nav-link[aria-current="page"]::after { transform: scaleX(1); transform-origin: left; }
+  .has-menu { position: relative; display: flex; align-items: center; }
+  .has-menu .nav-link { padding-right: 2px; }
+  .has-menu .nav-link::after { right: 2px; }
+  .menu-toggle { display: grid; place-items: center; width: 28px; height: 44px; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; }
+  .menu-toggle i { width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg); transition: transform 0.5s var(--ease); }
+  .menu-toggle[aria-expanded="true"] i { transform: translateY(2px) rotate(225deg); }
+  .dropdown { position: absolute; top: calc(100% + 10px); left: 0; min-width: 300px; padding: 8px; border: 1px solid var(--line); border-radius: 14px; background: rgb(255 255 255 / 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: var(--ink); box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.35); opacity: 0; visibility: hidden; transform: translateY(-8px) scale(0.98); transform-origin: top left; transition: opacity 0.3s var(--ease), transform 0.5s var(--ease), visibility 0s 0.3s; }
+  .dropdown:global(.open) { opacity: 1; visibility: visible; transform: none; transition: opacity 0.3s var(--ease), transform 0.5s var(--ease); }
+  .dropdown a { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 8px; font-size: 0.92rem; font-weight: 500; text-decoration: none; transition: background-color 0.25s, padding 0.4s var(--ease); }
+  .dropdown a .mono { color: var(--mute); }
+  .dropdown a:hover, .dropdown a[aria-current="page"] { background: var(--mist); padding-left: 18px; }
+  .bar-right { display: flex; align-items: center; gap: 18px; flex: none; }
+  .tel { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; white-space: nowrap; }
+  .tel:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .btn-small { min-height: 38px; padding: 0 16px; font-size: 0.86rem; }
+  .on-dark .btn-small { background: var(--white); color: var(--ink); border-color: var(--white); }
+  .burger { display: none; place-content: center; gap: 6px; width: 44px; height: 44px; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; }
+  .burger i { display: block; width: 22px; height: 1.5px; background: currentColor; }
+  @media (max-width: 1180px) { .tel { display: none; } }
+  @media (max-width: 960px) {
+    .main-nav, .bar-right > .btn { display: none; }
+    .bar-right { margin-left: auto; gap: 4px; }
+    .tel { display: inline-flex; }
+    .burger { display: grid; }
+  }
+  @media (max-width: 420px) { .tel { display: none; } }
+
+  .mobile-menu { width: 100%; max-width: 100%; height: 100%; max-height: 100%; margin: 0; padding: 0 0 calc(24px + env(safe-area-inset-bottom)); border: 0; background: var(--white); color: var(--ink); display: none; flex-direction: column; }
+  .mobile-menu[open] { display: flex; animation: menu-in 0.7s var(--ease) both; }
+  .mobile-menu::backdrop { background: rgb(0 0 0 / 0.2); }
+  @keyframes menu-in { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+  .mm-top { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); }
+  .mm-close { min-height: 44px; padding: 0 4px; border: 0; background: none; cursor: pointer; }
+  .mobile-menu nav { padding-top: 20px; }
+  .mm-sub { margin-top: 8px; }
+  .mm-sub a, .mm-main a { display: flex; align-items: baseline; gap: 14px; min-height: 48px; padding-block: 6px; text-decoration: none; letter-spacing: -0.03em; }
+  .mm-sub a { font-size: 1.35rem; font-weight: 500; border-bottom: 1px solid var(--line); }
+  .mm-sub a .mono { color: var(--mute); letter-spacing: 0.06em; }
+  .mm-main { margin-top: 28px; }
+  .mm-main a { font-size: clamp(1.9rem, 8vw, 2.4rem); font-weight: 500; letter-spacing: -0.05em; line-height: 1.05; }
+  .mobile-menu[open] nav li { animation: item-in 0.8s var(--ease) both; animation-delay: calc(0.12s + var(--i) * 0.04s); }
+  @keyframes item-in { from { opacity: 0; transform: translateY(18px); } }
+  .mm-foot { display: grid; gap: 12px; margin-top: auto; }
+  .mm-foot .btn { width: 100%; min-height: 52px; }
+  .mm-tel { display: flex; align-items: center; justify-content: center; min-height: 48px; font-size: 0.95rem; text-decoration: none; }
+</style>

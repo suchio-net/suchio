@@ -10,4 +10,27 @@ export default defineConfig({
   integrations: [react()],
   session: false,
   server: { host: "127.0.0.1", port: 3000 },
+  vite: {
+    plugins: [{
+      name: "suchio:parkhotel-draft",
+      apply: "serve",
+      enforce: "post",
+      configureServer(server) {
+        return () => {
+          // Resolve the public HTML draft before Astro's trailing-slash guard.
+          server.middlewares.stack.unshift({
+            route: "",
+            handle(request, _response, next) {
+              const url = new URL(request.url ?? "/", "http://localhost");
+              if ((request.method === "GET" || request.method === "HEAD") &&
+                  (url.pathname === "/entwurf/parkhotel" || url.pathname === "/entwurf/parkhotel/")) {
+                request.url = `/entwurf/parkhotel/index.html${url.search}`;
+              }
+              next();
+            },
+          });
+        };
+      },
+    }],
+  },
 });

@@ -280,7 +280,7 @@ body.menu-open header.site .on-light{opacity:0}
 .meet-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(40px,6vw,100px);align-items:center}
 .meet-copy .lede{margin-top:20px}
 .meet-price{display:flex;align-items:baseline;gap:12px;margin:34px 0 28px;color:var(--muted)}
-.meet-price strong{color:var(--ink);font-size:clamp(2.2rem,3vw,2.8rem);font-weight:500;letter-spacing:-.04em;line-height:1}
+.meet-price strong{white-space:nowrap;color:var(--ink);font-size:clamp(2.2rem,3vw,2.8rem);font-weight:500;letter-spacing:-.04em;line-height:1}
 .meet-card{background:var(--white);border-radius:24px;padding:10px;box-shadow:0 0 0 1px var(--line),0 30px 60px -40px rgba(20,27,44,.35)}
 .meet-media{aspect-ratio:16/9;border-radius:16px}
 table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;margin:8px 0 4px}
@@ -442,6 +442,10 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
   .line>.hero-name{margin-bottom:12px;font-size:.95rem}
   .book .btn{grid-column:1/-1;margin:4px 0 0}
   .book-perks{display:none}
+  .intro-grid,.psf-grid,.meet-grid,.loc-card{grid-template-columns:minmax(0,1fr)}
+  .psf-media{order:-1}
+  .meet-card th,.meet-card td{padding-inline:12px;white-space:nowrap}
+  .meet-card th:first-child,.meet-card td:first-child{white-space:normal}
   .facts small{display:none}
   .collage{height:420px}
   .sec-head{flex-direction:column;align-items:flex-start;gap:16px}
@@ -474,6 +478,9 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
   .pitch{transition:opacity .4s var(--ease)}
   body:not(.past-hero) .pitch{opacity:0;pointer-events:none}
   body.notes .note{position:relative;inset:auto!important;max-width:none;margin:14px 0;font-size:.82rem}
+}
+@media (max-width:400px){
+  .includes{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}

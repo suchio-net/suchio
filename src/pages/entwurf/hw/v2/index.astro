@@ -157,6 +157,19 @@ const steps = [
   .row a:hover { color: var(--copper); }
   .trades { display: flex; flex-wrap: wrap; gap: 4px 18px; }
   @media (max-width: 560px) { .row { grid-template-columns: 1fr; gap: 2px; padding: 12px 16px; } .sign-title { padding: 20px 16px 22px; } .sign-band { padding: 10px 16px; } }
+  /* Laptop windows: the whole sign and its two actions fit above the fold. */
+  @media (min-width: 960px) and (max-height: 860px) {
+    .hero { padding-block: 28px 36px; }
+    .hero-grid { gap: 20px 32px; }
+    .sign-band { padding-block: 8px; }
+    .sign-title { padding: 16px 20px 20px; font-size: clamp(2.3rem, 1rem + 2.4vw, 3.2rem); }
+    .row { grid-template-columns: 120px 1fr; padding-block: 10px; }
+  }
+  @media (min-width: 960px) and (max-height: 700px) {
+    .hero { padding-top: 20px; }
+    .sign-title { padding-block: 12px 16px; font-size: clamp(2.3rem, 1rem + 2vw, 2.7rem); }
+    .row { padding-block: 7px; }
+  }
   @media (prefers-reduced-motion: no-preference) {
     .sign-rows .row { animation: mount 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
     .sign-rows .row:nth-child(2) { animation-delay: 0.08s; }

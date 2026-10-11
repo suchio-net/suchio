@@ -1,0 +1,23 @@
+---
+// The house-and-tools mark in one colour, so it follows the text colour around it.
+interface Props { class?: string }
+const { class: className } = Astro.props;
+---
+<span class:list={["logo", className]}>
+  <svg viewBox="0 0 64 64" width="28" height="28" aria-hidden="true" focusable="false">
+    <path d="M7 31.5 32 9l25 22.5" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linejoin="miter" />
+    <path d="M44.5 20V11.5h6.5v14.5" fill="none" stroke="currentColor" stroke-width="4.5" />
+    <path d="M14.5 29.5V55h35V29.5" fill="none" stroke="currentColor" stroke-width="5" />
+    <path d="m27.5 32.5 15 15" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" />
+    <rect x="18" y="26.5" width="15" height="6.5" rx="1.6" transform="rotate(-45 25.5 29.75)" fill="currentColor" />
+    <path d="m42 29-8.5 8.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" />
+    <path d="m33 38-6.5 6.5" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" />
+  </svg>
+  <span class="logo-word">Handwerker<span>.work</span></span>
+</span>
+<style>
+  .logo { display: inline-flex; align-items: center; gap: 10px; }
+  .logo svg { width: 28px; height: 28px; flex: none; }
+  .logo-word { font-weight: 600; font-size: 1.02rem; letter-spacing: -0.035em; line-height: 1; }
+  .logo-word span { opacity: 0.45; }
+</style>

@@ -26,6 +26,7 @@ const aside = Astro.slots.has("aside");
 </section>
 <style>
   .page-head { padding-block: 8px clamp(48px, 6vw, 80px); border-bottom: 1px solid var(--grout-line); }
+  @media (min-width: 960px) and (max-height: 860px) { .page-head { padding-bottom: 56px; } }
   .head-grid { display: grid; gap: 32px; margin-top: clamp(16px, 3vw, 32px); }
   @media (min-width: 960px) { .head-grid.with-image { grid-template-columns: 1fr 1fr; gap: 56px; align-items: end; } }
   .copy { display: grid; gap: 18px; align-content: start; }

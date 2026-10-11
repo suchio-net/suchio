@@ -1,0 +1,144 @@
+/* handwerker.work draft, version 1: monochrome and technical. White page, ink
+   text, grey only for hierarchy; DM Sans for words, JetBrains Mono for labels
+   and numbers. Motion lives here as reveal states; ui/client.ts sets them. */
+:root {
+  --white: #ffffff;
+  --mist: #f4f4f5;
+  --fog: #e9e9eb;
+  --ink: #0b0b0c;
+  --ink-2: #2b2b2e;
+  --mute: #6b6b70;
+  --line: rgb(11 11 12 / 0.1);
+  --line-2: rgb(11 11 12 / 0.2);
+  --night: #0b0b0c;
+  --on-night: #f4f4f5;
+  --mute-night: #9b9ba1;
+  --line-night: rgb(255 255 255 / 0.14);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --gutter: clamp(20px, 4vw, 56px);
+  --max: 1440px;
+  --header-h: 68px;
+  --sans: "DM Sans", "DM Sans Fallback", ui-sans-serif, system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --radius: 4px;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + 16px); background: var(--white); }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body { margin: 0; background: var(--white); color: var(--ink); font: 400 1rem/1.55 var(--sans); font-optical-sizing: auto; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: clip; }
+img, svg, canvas { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3, h4, p, figure, blockquote, dl, dd, ol, ul { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+h1, h2, h3 { font-weight: 500; text-wrap: balance; }
+h1 { font-size: clamp(2.6rem, 1.4rem + 4.6vw, 5.75rem); line-height: 0.96; letter-spacing: -0.055em; }
+h2 { font-size: clamp(2rem, 1.2rem + 3vw, 4rem); line-height: 1; letter-spacing: -0.05em; }
+h3 { font-size: clamp(1.15rem, 1rem + 0.5vw, 1.4rem); line-height: 1.2; letter-spacing: -0.025em; }
+p { text-wrap: pretty; max-width: 52ch; }
+strong, b { font-weight: 600; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.dark :focus-visible { outline-color: var(--on-night); }
+::selection { background: var(--ink); color: var(--white); }
+
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skip { position: fixed; left: 12px; top: -60px; z-index: 100; padding: 12px 18px; background: var(--ink); color: var(--white); text-decoration: none; font-weight: 600; }
+.skip:focus { top: 12px; }
+
+.wrap { width: 100%; max-width: calc(var(--max) + var(--gutter) * 2); margin-inline: auto; padding-inline: var(--gutter); }
+.dark { background: var(--night); color: var(--on-night); }
+.mute { color: var(--mute); }
+.dark .mute { color: var(--mute-night); }
+.rel { position: relative; }
+
+/* Mono labels: section indices, coordinates, counters. */
+.mono { font-family: var(--mono); font-size: 0.72rem; font-weight: 400; line-height: 1.4; letter-spacing: 0.06em; text-transform: uppercase; }
+.index { display: flex; align-items: center; gap: 12px; color: var(--mute); }
+.index::before { content: ""; width: 6px; height: 6px; background: currentColor; }
+.dark .index { color: var(--mute-night); }
+
+/* Buttons: hard-edged pills. The fill wipes up on hover, the arrow slides out
+   and back in. */
+.btn { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: 14px; min-height: 48px; padding: 0 22px; overflow: hidden; border: 1px solid var(--ink); border-radius: 999px; background: var(--ink); color: var(--white); font-size: 0.94rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1; text-decoration: none; cursor: pointer; transition: color 0.5s var(--ease), border-color 0.5s var(--ease); }
+.btn::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--white); transform: translateY(101%); border-radius: inherit; transition: transform 0.6s var(--ease); }
+.btn-line { background: transparent; color: var(--ink); border-color: var(--line-2); }
+.btn-line::before { background: var(--ink); }
+.dark .btn { background: var(--white); color: var(--ink); border-color: var(--white); }
+.dark .btn::before { background: var(--night); }
+.dark .btn-line { background: transparent; color: var(--on-night); border-color: var(--line-night); }
+.dark .btn-line::before { background: var(--white); }
+@media (hover: hover) {
+  .btn:hover { color: var(--ink); }
+  .btn:hover::before { transform: none; }
+  .btn-line:hover { color: var(--white); border-color: var(--ink); }
+  .dark .btn:hover { color: var(--on-night); border-color: var(--line-night); }
+  .dark .btn-line:hover { color: var(--ink); border-color: var(--white); }
+}
+.btn:active { scale: 0.98; }
+.arrow { position: relative; display: inline-block; width: 14px; height: 14px; overflow: hidden; flex: none; }
+.arrow::before, .arrow::after { content: "→"; position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--mono); font-size: 13px; line-height: 1; transition: transform 0.55s var(--ease); }
+.arrow::after { transform: translateX(-140%); }
+@media (hover: hover) {
+  :is(a, button):hover > .arrow::before, :is(a, button):hover .arrow::before { transform: translateX(140%); }
+  :is(a, button):hover > .arrow::after, :is(a, button):hover .arrow::after { transform: none; }
+}
+.btn .icon { width: 17px; height: 17px; flex: none; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* Text link with an underline that draws in from the left. */
+.link { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: inherit; font-weight: 500; text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 calc(50% + 0.75em) / 100% 1px no-repeat; transition: background-size 0.6s var(--ease); }
+@media (hover: hover) { .link:hover { background-size: 0 1px; background-position: 100% calc(50% + 0.75em); } }
+
+/* Word-by-word reveal for headings (ui/Split.astro). Without JS the text
+   simply shows; with JS, ui/client.ts adds .in once the element is in view. */
+.split .w { display: inline-block; overflow: clip; overflow-clip-margin: 0.12em; vertical-align: top; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.split .w > span { display: inline-block; }
+html.js .split:not(.in) .w > span { transform: translateY(105%); }
+html.js .split .w > span { transition: transform 1.1s var(--ease) calc(var(--i, 0) * 45ms); }
+
+/* Fade-up for blocks marked data-reveal. */
+html.js [data-reveal]:not(.in) { opacity: 0; transform: translateY(24px); }
+html.js [data-reveal] { transition: opacity 1s var(--ease) var(--delay, 0s), transform 1.2s var(--ease) var(--delay, 0s); }
+
+/* Photos: grey until they reach the middle of the screen or are hovered. */
+.photo { position: relative; overflow: hidden; margin: 0; background: var(--fog); }
+.photo picture, .photo img { width: 100%; height: 100%; object-fit: cover; }
+.photo img { filter: grayscale(1) contrast(1.05); transform: scale(1.06); transition: filter 1.4s var(--ease), transform 1.6s var(--ease); }
+.photo.color img { filter: none; transform: none; }
+@media (hover: hover) { .photo:hover img { filter: none; transform: none; } }
+html.js .photo[data-wipe]:not(.in) { clip-path: inset(100% 0 0 0); }
+html.js .photo[data-wipe] { transition: clip-path 1.3s var(--ease-in-out); }
+
+/* Hairline that draws across when its section comes into view. */
+.rule { height: 1px; background: var(--line-2); transform-origin: left; }
+html.js .rule:not(.in) { transform: scaleX(0); }
+html.js .rule { transition: transform 1.6s var(--ease); }
+.dark .rule { background: var(--line-night); }
+
+.faq { border-top: 1px solid var(--line-2); }
+.faq details { border-bottom: 1px solid var(--line-2); }
+.faq summary { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px; padding: 22px 0; cursor: pointer; list-style: none; font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem); font-weight: 500; letter-spacing: -0.015em; line-height: 1.35; transition: padding 0.5s var(--ease); }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: ""; width: 14px; height: 14px; background: linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat, linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat; transition: transform 0.6s var(--ease); }
+.faq details[open] summary::after { transform: rotate(135deg); }
+@media (hover: hover) { .faq summary:hover { padding-left: 12px; } }
+.faq .answer { display: grid; gap: 10px; padding: 0 48px 26px 0; color: var(--mute); }
+@supports (interpolate-size: allow-keywords) {
+  .faq { interpolate-size: allow-keywords; }
+  .faq details::details-content { height: 0; overflow: clip; transition: height 0.6s var(--ease), content-visibility 0.6s allow-discrete; }
+  .faq details[open]::details-content { height: auto; }
+}
+
+/* Suchio pitch notes, shown with the "Hinweise" toggle. */
+.note { display: none; }
+body.notes .note { position: absolute; z-index: 30; display: flex; gap: 10px; align-items: flex-start; max-width: 300px; padding: 11px 15px 12px 11px; border-radius: 14px; background: #0050c8; color: #fff; font: 500 0.84rem/1.4 var(--sans); text-align: left; letter-spacing: 0; text-transform: none; }
+body.notes .note i { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #fff; color: #0050c8; font-style: normal; font-weight: 700; font-size: 0.78rem; }
+@media (max-width: 760px) { body.notes .note { position: relative !important; inset: auto !important; max-width: none; margin: 12px 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; transition-delay: 0s !important; }
+}
