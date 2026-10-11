@@ -1,6 +1,7 @@
 import { defineConfig } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
+import tailwindcss from "@tailwindcss/vite";
 import i18nConfig from "./src/i18n/config.json" with { type: "json" };
 import { redirects as draftRedirects } from "./src/entwurf/hw/v1/routes.mjs";
 import { auditReportsIntegration } from "./src/integrations/audit-reports";
@@ -29,6 +30,7 @@ export default defineConfig({
   server: { host: "127.0.0.1", port: 3000 },
   vite: {
     plugins: [
+      tailwindcss(),
       {
         name: "suchio:parkhotel-draft",
         apply: "serve",
