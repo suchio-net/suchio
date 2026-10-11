@@ -1,11 +1,12 @@
 ---
-// Both drafts share the same routes, so the switch keeps the visitor on the same page.
+import { v1Destination } from "./v1/routes.mjs";
+// V1 now shows its matching homepage section; V2 retains all of its subpages.
 interface Props { version: "v1" | "v2" }
 const { version } = Astro.props;
-const suffix = Astro.url.pathname.replace(/\/$/, "").replace(/^\/entwurf\/(?:hw\/v[12]|handwerker-work)/, "");
+const suffix = Astro.url.pathname.replace(/\.html$/, "").replace(/\/$/, "").replace(/^\/entwurf\/(?:hw\/v[12]|handwerker-work)/, "");
 ---
 <nav class="hw-versions" aria-label="Entwurfsversion">
-  <a href={`/entwurf/hw/v1${suffix}`} aria-current={version === "v1" ? "page" : undefined}>V1</a>
+  <a href={suffix === "/konzept" ? "/entwurf/hw/v1" : v1Destination(suffix)} aria-current={version === "v1" ? "page" : undefined}>V1</a>
   <a href={`/entwurf/hw/v2${suffix}`} aria-current={version === "v2" ? "page" : undefined}>V2</a>
 </nav>
 <style>

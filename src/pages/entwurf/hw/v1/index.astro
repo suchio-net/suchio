@@ -4,7 +4,7 @@ import Stage from "@/entwurf/hw/v1/ui/hero/Stage.astro";
 import Split from "@/entwurf/hw/v1/ui/Split.astro";
 import Rail from "@/entwurf/hw/v1/ui/Rail.astro";
 import Reviews from "@/entwurf/hw/v1/ui/Reviews.astro";
-import { base, company, faqsHome, places, references, tfm } from "@/entwurf/hw/v1/data";
+import { company, faqsHome, places, references, sections, tfm } from "@/entwurf/hw/v1/data";
 import { businessNode, faqNode, webPageNode, websiteNode } from "@/entwurf/hw/v1/schema";
 
 const title = "Renovierung, Sanierung & Badsanierung in Bad Nauheim, Wetterau & Frankfurt | Handwerker.work";
@@ -47,7 +47,7 @@ const process = [
     </div>
   </div>
 
-  <Rail id="refs-title" index="Projekte" title="Echte Projekte. Keine Renderings." items={rail} link={{ href: `${base}/referenzen`, label: "Alle Referenzen" }} />
+  <Rail id="referenzen" index="Projekte" title="Echte Projekte. Keine Renderings." items={rail} />
 
   <section class="process wrap" aria-labelledby="process-title">
     <p class="index mono">Ablauf</p>
@@ -64,8 +64,8 @@ const process = [
     </ol>
   </section>
 
-  <section class="wrap tfm-wrap" aria-label={tfm.name}>
-    <a class="tfm" href={tfm.href}>
+  <section class="wrap tfm-wrap" id="gebaeudebetreuung" aria-label={tfm.name}>
+    <a class="tfm" href={sections.kontakt}>
       <span class="mono tfm-kicker">Für Hausverwaltungen &amp; Gewerbe</span>
       <span class="tfm-title">{tfm.name}<span class="arrow" aria-hidden="true"></span></span>
       <span class="tfm-text">{tfm.summary}</span>

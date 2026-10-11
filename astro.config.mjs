@@ -1,11 +1,13 @@
 import { defineConfig } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
+import { redirects } from "./src/entwurf/hw/v1/routes.mjs";
 
 export default defineConfig({
   site: "https://suchio.net",
   trailingSlash: "never",
   build: { format: "file" },
+  redirects,
   adapter: cloudflare({ imageService: "passthrough" }),
   integrations: [react()],
   session: false,

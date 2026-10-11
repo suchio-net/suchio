@@ -3,14 +3,14 @@
 // an oversized wordmark that rises in from below.
 import Note from "../Note.astro";
 import Split from "./Split.astro";
-import { base, company, places, services, tfm } from "../data";
+import { company, places, serviceHref, services, tfm } from "../data";
 
 interface Props { title?: string; vorhaben?: string }
 const { title = "Projekt besprechen.", vorhaben } = Astro.props;
-const href = `${base}/kontakt${vorhaben ? `?vorhaben=${vorhaben}` : ""}#anfrage`;
+const href = `mailto:${company.email}?subject=${encodeURIComponent(vorhaben ? `Anfrage: ${vorhaben}` : "Anfrage zur kostenlosen Besichtigung")}`;
 ---
 <footer class="site-footer dark" data-dark>
-  <section class="wrap cta" aria-labelledby="cta-title">
+  <section class="wrap cta" id="kontakt" aria-labelledby="cta-title">
     <p class="index mono">Kontakt</p>
     <Split as="h2" id="cta-title" text={title} class="cta-title" />
     <div class="cta-row" data-reveal>
@@ -18,7 +18,7 @@ const href = `${base}/kontakt${vorhaben ? `?vorhaben=${vorhaben}` : ""}#anfrage`
       <div class="cta-side">
         <p class="mute">Besichtigung und Angebot sind kostenlos und unverbindlich.</p>
         <div class="actions">
-          <a class="btn" href={href}>Anfrage stellen<span class="arrow" aria-hidden="true"></span></a>
+          <a class="btn" href={href}>Anfrage per E-Mail<span class="arrow" aria-hidden="true"></span></a>
           <a class="btn btn-line" href={company.whatsapp.href}>WhatsApp</a>
         </div>
       </div>
@@ -43,7 +43,7 @@ const href = `${base}/kontakt${vorhaben ? `?vorhaben=${vorhaben}` : ""}#anfrage`
     <div class="col">
       <p class="mono mute">Leistungen</p>
       <ul class="links">
-        {services.map(service => <li><a href={`${base}/leistungen/${service.slug}`}>{service.name}</a></li>)}
+        {services.map(service => <li><a href={serviceHref(service.slug)}>{service.name}</a></li>)}
         <li><a href={tfm.href}>{tfm.name}</a></li>
       </ul>
     </div>

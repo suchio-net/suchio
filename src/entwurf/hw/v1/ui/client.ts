@@ -13,6 +13,7 @@ if (toggle && menu) {
   const item = toggle.parentElement!;
   const set = (open: boolean) => { menu.classList.toggle("open", open); toggle.setAttribute("aria-expanded", String(open)); };
   toggle.addEventListener("click", () => set(toggle.getAttribute("aria-expanded") !== "true"));
+  menu.querySelectorAll("a").forEach(link => link.addEventListener("click", () => set(false)));
   if (finePointer) {
     let timer = 0;
     item.addEventListener("mouseenter", () => { clearTimeout(timer); set(true); });

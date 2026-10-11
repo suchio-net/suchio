@@ -5,16 +5,15 @@
 import Note from "../../Note.astro";
 import Picture from "../../Picture.astro";
 import Split from "../Split.astro";
-import { base, company } from "../../data";
+import { company, sections } from "../../data";
 
-const leistung = (slug: string) => `${base}/leistungen/${slug}`;
 const steps = [
-  { name: "Innenausbau", text: "Rückbau, Trockenbau, Estrich und Böden.", href: leistung("renovierung"), link: "Renovierung & Innenausbau" },
-  { name: "Elektro", text: "Leitungen nach VDE, Licht, Smart Home, Wallbox.", href: leistung("elektro"), link: "Elektroinstallation" },
-  { name: "Sanitär", text: "Trinkwasser, Abwasser und Vorwandinstallation.", href: leistung("sanitaer-heizung"), link: "Sanitär & Heizung" },
-  { name: "Heizung", text: "Fußbodenheizung, Wärmepumpe und Regelung.", href: leistung("sanitaer-heizung"), link: "Sanitär & Heizung" },
-  { name: "Fliesen", text: "Großformat und Naturstein, abgedichtet nach DIN 18534.", href: leistung("fliesen"), link: "Fliesenarbeiten" },
-  { name: "Komplettbad", text: "Alle Gewerke in einer Hand, koordiniert von einem Ansprechpartner.", href: leistung("badsanierung"), link: "Badsanierung" },
+  { id: "renovierung", name: "Innenausbau", text: "Rückbau, Trockenbau, Estrich und Böden.", link: "Renovierung anfragen" },
+  { id: "elektro", name: "Elektro", text: "Leitungen nach VDE, Licht, Smart Home, Wallbox.", link: "Elektroinstallation anfragen" },
+  { id: "sanitaer-heizung", name: "Sanitär", text: "Trinkwasser, Abwasser und Vorwandinstallation.", link: "Sanitär anfragen" },
+  { id: "heizung", name: "Heizung", text: "Fußbodenheizung, Wärmepumpe und Regelung.", link: "Heizung anfragen" },
+  { id: "fliesen", name: "Fliesen", text: "Großformat und Naturstein, abgedichtet nach DIN 18534.", link: "Fliesenarbeiten anfragen" },
+  { id: "badsanierung", name: "Komplettbad", text: "Alle Gewerke in einer Hand, koordiniert von einem Ansprechpartner.", link: "Badsanierung anfragen" },
 ];
 const pad = (n: number) => String(n).padStart(2, "0");
 const total = pad(steps.length);
@@ -40,7 +39,7 @@ const total = pad(steps.length);
         </h1>
         <p class="hero-lead mute">Meisterbetrieb für Elektrotechnik, Sanitär-Heizung und Fliesen.</p>
         <div class="actions hero-actions">
-          <a class="btn" href={`${base}/kontakt#anfrage`}>Kostenlose Besichtigung<span class="arrow" aria-hidden="true"></span></a>
+          <a class="btn" href={sections.kontakt}>Kostenlose Besichtigung<span class="arrow" aria-hidden="true"></span></a>
           <a class="btn btn-line" href={company.phone.href}>{company.phone.display}</a>
         </div>
         <Note n={1} style="left:0;top:-80px">Statt Werbe-Popup sieht der Besucher sofort, was Sie machen, wo und wer sein Ansprechpartner ist. Das Popup verzögert heute den Seitenaufbau mobil auf 10,2 s.</Note>
@@ -57,19 +56,19 @@ const total = pad(steps.length);
       </div>
     </div>
 
-    <div class="trades wrap rel" aria-labelledby="trades-title">
+    <div class="trades wrap rel" id="leistungen" aria-labelledby="trades-title">
       <div class="trades-rail" aria-hidden="true">
         {steps.map((_, index) => <i data-rail-tick><span class="mono">{pad(index + 1)}</span></i>)}
       </div>
       <h2 id="trades-title" class="trades-title mono">Leistungen · {steps.length} Gewerke</h2>
       <ol class="steps">
         {steps.map((step, index) => (
-          <li class="step" data-step>
+          <li class="step" id={step.id} data-step>
             <div class="step-card">
               <p class="mono mute">{pad(index + 1)} / {total}</p>
               <Split as="h3" text={step.name} class="step-title" />
               <p class="step-text" data-reveal>{step.text}</p>
-              <a class="link" href={step.href} data-reveal style="--delay:0.08s">{step.link}<span class="arrow" aria-hidden="true"></span></a>
+              <a class="link" href={sections.kontakt} data-reveal style="--delay:0.08s">{step.link}<span class="arrow" aria-hidden="true"></span></a>
               {index === 0 && <Note n={2} style="left:0;top:-64px">Eine echte Seite pro Leistung, statt vier fast gleicher Standortseiten. Das TFM-Angebot hat seinen eigenen Platz für Hausverwaltungen.</Note>}
             </div>
           </li>
@@ -318,6 +317,7 @@ const total = pad(steps.length);
       if (split.matches && !first && active >= 0) replay(steps[active]);
     };
     const measure = () => { measureStates(); scene?.setRegion(region()); sync(); };
+    let scrollToState = (to: number) => scrollToY(stateY[to]);
 
     // ScrollTrigger reads the scroll (from Lenis where it runs) and re-measures
     // on every refresh: resize, orientation change, fonts.
@@ -337,6 +337,12 @@ const total = pad(steps.length);
     if (lenis) {
       const smooth = lenis;
       let settled = Math.round(Math.min(last + 1, stateAt(scrollY))), snapping = false, wheel = false, timer = 0;
+      scrollToState = to => {
+        clearTimeout(timer);
+        wheel = false;
+        snapping = true;
+        scrollToY(stateY[to], () => { snapping = false; settled = to; });
+      };
       const settle = () => {
         const y = scrollY, s = stateAt(y), gesture = wheel;
         wheel = false;
@@ -351,7 +357,7 @@ const total = pad(steps.length);
         scrollToY(stateY[to], () => { snapping = false; settled = to; });
       };
       smooth.on("virtual-scroll", () => { snapping = false; wheel = true; });
-      smooth.on("scroll", () => { if (snapping) return; clearTimeout(timer); timer = window.setTimeout(settle, 140); });
+      smooth.on("scroll", () => { clearTimeout(timer); if (snapping) return; timer = window.setTimeout(settle, 140); });
     } else if (matchMedia("(pointer: coarse)").matches) {
       // Touch: a native fling can carry the page past several trades before it
       // stops, so inside the stage the swipe itself is held and every swipe
@@ -390,6 +396,7 @@ const total = pad(steps.length);
         if (to > last) go(last + 1, Math.min(ScrollTrigger.maxScroll(window), stateY[last] + innerHeight * 0.6), () => observer.disable());
         else go(to);
       };
+      scrollToState = to => { observer.enable(); go(to); };
       // Hold the steps whenever the page has come to rest inside the stage. A
       // native swipe back into it is left to finish, finger and fling, first.
       let touching = false;
@@ -412,6 +419,30 @@ const total = pad(steps.length);
         if (observer.isEnabled && !tween && target <= last) scrollTo({ top: stateY[target], behavior: "instant" });
       });
     }
+
+    // On portrait screens the trade panels overlap. Navigate to their measured
+    // scroll states so menu links select the right copy and model on every screen.
+    const navigateToTrade = (hash: string) => {
+      const id = hash.slice(1);
+      const index = steps.findIndex(step => step.id === id);
+      if (index < 0 && id !== "leistungen") return false;
+      scrollToState(index < 0 ? 1 : index + 1);
+      return true;
+    };
+    document.addEventListener("click", event => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = (event.target as Element).closest<HTMLAnchorElement>("a[href]");
+      if (!link || link.target || link.hasAttribute("download")) return;
+      const url = new URL(link.href);
+      if (url.origin !== location.origin || url.pathname !== location.pathname || !navigateToTrade(url.hash)) return;
+      event.preventDefault();
+      // The mobile menu's link handler has closed the dialog; keep Lenis's
+      // generic anchor handler from scrolling to an overlapping panel afterward.
+      event.stopPropagation();
+      if (location.hash !== url.hash) history.pushState(null, "", url);
+    });
+    addEventListener("hashchange", () => navigateToTrade(location.hash));
+    document.fonts.ready.then(() => navigateToTrade(location.hash));
 
     import("./scene").then(({ createHero }) => {
       try {

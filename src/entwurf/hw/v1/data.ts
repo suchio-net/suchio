@@ -4,9 +4,10 @@
 // by the client are flagged through pitch notes, not invented.
 
 import { googleRating } from "../google-reviews";
+import { sections } from "./routes.mjs";
 export { google, googleReviews as testimonials } from "../google-reviews";
 
-export const base = "/entwurf/hw/v1";
+export { base, sections, serviceHref } from "./routes.mjs";
 export const assetBase = "/entwurf/hw/v1";
 export const liveOrigin = "https://handwerker.work";
 
@@ -221,16 +222,16 @@ export const services: Service[] = [
 export const tfm = {
   name: "Technische Gebäudebetreuung",
   nav: "Gebäudebetreuung",
-  href: `${base}/gebaeudebetreuung`,
+  href: sections.gebaeudebetreuung,
   livePath: "/technical-facility-management-rhein-main/",
   summary: "Wartung, Kleinreparaturen und Notfälle für Hausverwaltungen und Gewerbe.",
 };
 
 export const nav = [
-  { label: "Leistungen", href: `${base}/leistungen`, key: "leistungen" },
+  { label: "Leistungen", href: sections.leistungen, key: "leistungen" },
   { label: "Gebäudebetreuung", href: tfm.href, key: "gebaeudebetreuung" },
-  { label: "Referenzen", href: `${base}/referenzen`, key: "referenzen" },
-  { label: "Kontakt", href: `${base}/kontakt`, key: "kontakt" },
+  { label: "Referenzen", href: sections.referenzen, key: "referenzen" },
+  { label: "Kontakt", href: sections.kontakt, key: "kontakt" },
 ];
 
 // Service area named on the current site (home, Bad Nauheim and Fliesen pages).

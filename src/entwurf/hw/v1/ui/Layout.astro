@@ -2,7 +2,7 @@
 import Header from "./Header.astro";
 import Footer from "./Footer.astro";
 import Lightbox from "./Lightbox.astro";
-import { assetBase, base, company } from "../data";
+import { assetBase, base, company, sections } from "../data";
 import "./theme.css";
 
 interface Props {
@@ -21,8 +21,6 @@ interface Props {
 const { title, description, livePath, schema = [], current, actionBar = true, ctaTitle, vorhaben } = Astro.props;
 const ogImage = new URL(`${assetBase}/img/og-handwerker-work.jpg`, Astro.site).href;
 const fonts = `${assetBase}/fonts`;
-// Both drafts share their routes, so the version switch keeps the visitor on the same page.
-const suffix = Astro.url.pathname.replace(/\/$/, "").replace(/^\/entwurf\/hw\/v[12]/, "");
 ---
 <!doctype html>
 <html lang="de">
@@ -69,17 +67,17 @@ const suffix = Astro.url.pathname.replace(/\/$/, "").replace(/^\/entwurf\/hw\/v[
       <nav class="action-bar" aria-label="Schnellkontakt">
         <a href={company.phone.href}>Anrufen</a>
         <a href={company.whatsapp.href}>WhatsApp</a>
-        <a class="primary" href={`${base}/kontakt#anfrage`}>Anfrage</a>
+        <a class="primary" href={sections.kontakt}>Anfrage</a>
       </nav>
     )}
 
     <div class="draft" data-draft>
       <div class="draft-panel" id="draft-panel" hidden data-draft-panel>
-        <a class="draft-brand" href={`${base}/konzept`}>Entwurf von <b>Suchio</b><span aria-hidden="true">→</span></a>
+        <a class="draft-brand" href="/entwurf/hw/v2/konzept">Entwurf von <b>Suchio</b><span aria-hidden="true">→</span></a>
         <button type="button" class="draft-notes" aria-pressed="false" data-notes-toggle>Hinweise<i aria-hidden="true"></i></button>
         <nav class="draft-versions" aria-label="Entwurfsversion">
-          <a href={`/entwurf/hw/v1${suffix}`} aria-current="page">V1</a>
-          <a href={`/entwurf/hw/v2${suffix}`}>V2</a>
+          <a href={base} aria-current="page">V1</a>
+          <a href="/entwurf/hw/v2">V2</a>
         </nav>
       </div>
       <button type="button" class="draft-toggle mono" aria-expanded="false" aria-controls="draft-panel" data-draft-toggle><i aria-hidden="true"></i>Entwurf</button>
