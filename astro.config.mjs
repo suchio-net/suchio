@@ -21,6 +21,8 @@ export default defineConfig({
     // Old service slugs stay reachable.
     ...Object.fromEntries(legacyServiceRoutes.map(({ from, to }) => [from, { status: 308, destination: to }])),
   },
+  // Hovered links load ahead of the click, as the former client router did.
+  prefetch: { prefetchAll: true, defaultStrategy: "hover" },
   adapter: cloudflare({ imageService: "passthrough" }),
   integrations: [react(), auditReportsIntegration(), securityHeadersIntegration()],
   session: false,

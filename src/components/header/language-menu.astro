@@ -1,0 +1,88 @@
+---
+import { ChevronDown, Languages } from "@lucide/astro";
+import { localeConfig, locales, type Locale } from "@/i18n/config";
+import { alternatePath } from "@/lib/locale-path";
+interface Props {
+  id: string;
+  locale: Locale;
+  pathname: string;
+  label: string;
+  /** Light text on the dark mobile menu. */
+  dark?: boolean;
+  /** Shown below the navigation breakpoint instead of above it. */
+  mobile?: boolean;
+}
+const { id, locale, pathname, label, dark = false, mobile = false } = Astro.props;
+const linkTone = dark
+  ? "text-inverse-muted data-highlighted:bg-white/8 data-highlighted:text-white"
+  : "text-muted data-highlighted:bg-interaction data-highlighted:text-ink";
+---
+
+<div
+  class={`relative ${mobile ? "ml-auto nav:hidden" : "max-nav:hidden"}`}
+  data-language-menu
+  data-locale={locale}
+  data-hover={mobile ? undefined : ""}
+>
+  <button
+    class={`group/language header-language inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-control px-3 text-sm font-medium transition-transform duration-150 active:scale-[.96] motion-reduce:transition-none motion-reduce:active:scale-100 max-narrow:gap-1 max-narrow:px-2 ${dark ? "menu-language bg-transparent text-white shadow-dark-surface" : "bg-white text-subtle shadow-surface"}`}
+    type="button"
+    aria-label={`${label}: ${localeConfig[locale].shortLabel}`}
+    aria-expanded="false"
+    aria-controls={id}
+  >
+    <span
+      class={`relative size-[19px] flex-none overflow-hidden ${dark ? "text-white" : "text-ink"}`}
+      aria-hidden="true"
+    >
+      <Languages
+        class="header-language__icon header-language__icon--out absolute inset-0 size-[19px]"
+        stroke-width={1.7}
+      />
+      <Languages
+        class="header-language__icon header-language__icon--in absolute inset-0 size-[19px] [transform:translate(-6px,6px)_scale(.8)] opacity-0"
+        stroke-width={1.7}
+      />
+    </span>
+    <span
+      class={`relative grid w-[2ch] overflow-hidden font-medium ${dark ? "text-white" : "text-ink"}`}
+      aria-hidden="true"
+      data-language-code
+    >
+      <span class="header-language__code col-start-1 row-start-1 opacity-100 group-data-previewing/language:[transform:translate(6px,-6px)_scale(.8)] group-data-previewing/language:opacity-0">
+        {localeConfig[locale].shortLabel}
+      </span>
+    </span>
+    <ChevronDown
+      class={`size-3.5 transition-transform duration-200 group-aria-expanded/language:rotate-180 motion-reduce:transition-none max-narrow:hidden ${dark ? "text-white/60" : "text-subtle"}`}
+      stroke-width={1.8}
+      aria-hidden="true"
+    />
+  </button>
+  <div
+    id={id}
+    class="pointer-events-none absolute top-full left-1/2 w-44 -translate-x-1/2 -translate-y-1 pt-2 opacity-0 transition-[opacity,translate] duration-200 ease-[var(--ease-out)] data-open:pointer-events-auto data-open:translate-y-0 data-open:opacity-100 motion-reduce:duration-0"
+    aria-hidden="true"
+    inert
+  >
+    <div
+      class={`rounded-control p-1 ${dark ? "bg-inverse-surface-raised shadow-dark-surface" : "bg-white shadow-floating"}`}
+    >
+      {locales.map((candidate) => (
+        <a
+          class={`flex h-9 items-center justify-between gap-6 rounded-inset px-3 text-sm font-medium transition-[background-color,scale] duration-150 active:scale-[.96] motion-reduce:transition-none motion-reduce:active:scale-100 ${linkTone}`}
+          href={alternatePath(pathname, candidate)}
+          aria-current={candidate === locale ? "page" : undefined}
+          data-locale-link={candidate}
+          data-short-label={localeConfig[candidate].shortLabel}
+          data-highlighted={candidate === locale ? "" : undefined}
+        >
+          <span>{localeConfig[candidate].name}</span>
+          <span class={`text-meta font-normal ${dark ? "text-inverse-muted" : "text-subtle"}`} aria-hidden="true">
+            {localeConfig[candidate].shortLabel}
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</div>

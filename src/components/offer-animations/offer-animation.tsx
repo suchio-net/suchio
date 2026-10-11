@@ -1,5 +1,3 @@
-"use client";
-
 import { Component, lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import type { ServiceAnimation as ServiceAnimationDefinition } from "@/lib/service-catalog";
 import type { Locale } from "@/lib/i18n";

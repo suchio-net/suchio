@@ -1,5 +1,3 @@
-"use client";
-
 import { Bot, BrainCircuit, Database, GitBranch, ListTodo, Search, UserRoundPlus, Webhook } from "lucide-react";
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";

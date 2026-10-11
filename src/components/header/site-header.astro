@@ -1,0 +1,478 @@
+---
+import { ArrowUpRight, ChevronDown, ChevronRight, Menu, X } from "@lucide/astro";
+import BrandMark from "@/components/brand-mark.astro";
+import LanguageMenu from "@/components/header/language-menu.astro";
+import { serviceIcons } from "@/components/service-icons";
+import { serviceStyles } from "@/components/service-styles";
+import { localeConfig, locales } from "@/i18n/config";
+import { publicContactEmail } from "@/lib/contact";
+import { t, type Locale } from "@/lib/i18n";
+import { alternatePath, localizePath } from "@/lib/locale-path";
+import { getServiceCatalog } from "@/lib/service-catalog";
+interface Props {
+  locale: Locale;
+  pathname: string;
+}
+const { locale, pathname } = Astro.props;
+const services = getServiceCatalog(locale);
+const navItems = [
+  { href: localizePath("/about", locale), label: t(locale, "nav.about") },
+  { href: localizePath("/contact", locale), label: t(locale, "nav.contact") },
+];
+const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+const servicesActive = pathname.startsWith(localizePath("/services/", locale));
+const selectLocale = t(locale, "nav.selectLocale");
+const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduce:active:scale-100";
+---
+
+<noscript>
+  <style is:inline>
+    [data-navigation-enhanced] {
+      display: none !important;
+    }
+  </style>
+  <nav
+    data-navigation-fallback
+    aria-label={t(locale, "nav.mainMenu")}
+    class="fixed inset-x-4 top-6 z-50 max-h-[80vh] overflow-y-auto rounded-control bg-white p-3 shadow-floating"
+  >
+    <details>
+      <summary class="min-h-11 cursor-pointer text-sm font-medium">{t(locale, "nav.mainMenu")}</summary>
+      <div class="grid min-w-0 gap-2 py-2 text-sm">
+        <a class="py-2" href={localizePath("/", locale)}>
+          {t(locale, "nav.brandHome")}
+        </a>
+        {services.map((service) => (
+          <a class="py-2" href={service.href}>
+            {service.copy.name}
+          </a>
+        ))}
+        {navItems.map((item) => (
+          <a class="py-2" href={item.href}>
+            {item.label}
+          </a>
+        ))}
+        <span class="mt-2 font-medium">{selectLocale}</span>
+        {locales.map((candidate) => (
+          <a
+            class="py-2"
+            href={alternatePath(pathname, candidate)}
+            hreflang={candidate}
+            lang={candidate}
+            aria-current={candidate === locale ? "page" : undefined}
+          >
+            {localeConfig[candidate].name}
+          </a>
+        ))}
+      </div>
+    </details>
+  </nav>
+</noscript>
+
+<header
+  data-navigation-enhanced
+  class="fixed left-1/2 z-50 flex w-max -translate-x-1/2 items-center gap-2 max-nav:right-4 max-nav:left-4 max-nav:w-auto max-nav:[translate:none] max-narrow:gap-1"
+  style="top: max(1.5rem, env(safe-area-inset-top))"
+>
+  <a
+    href={localizePath("/", locale)}
+    class={`group/brand inline-flex h-11 min-w-0 items-center justify-center rounded-control bg-white px-4.5 shadow-surface transition-[transform,box-shadow] duration-150 hover:shadow-surface-hover ${pressable} max-narrow:px-2`}
+    aria-label={t(locale, "nav.brandHome")}
+    data-scroll-top
+  >
+    <BrandMark />
+  </a>
+  <nav
+    class="relative inline-flex h-11 items-center justify-center gap-px rounded-control bg-white p-1 shadow-surface max-nav:hidden"
+    aria-label={t(locale, "nav.mainMenu")}
+  >
+    <div class="relative" data-services>
+      <button
+        class={`group/services relative z-1 inline-flex h-9 cursor-pointer items-center gap-1 rounded-inset px-3.5 text-sm font-medium transition-[color,background-color,scale] duration-150 ${pressable} ${servicesActive ? "bg-interaction text-ink" : "text-muted hover:bg-interaction hover:text-ink aria-expanded:bg-interaction aria-expanded:text-ink"}`}
+        type="button"
+        aria-expanded="false"
+        aria-controls="services-menu"
+      >
+        {t(locale, "nav.services")}
+        <ChevronDown
+          class="size-3.5 transition-transform duration-200 group-aria-expanded/services:rotate-180 motion-reduce:transition-none max-narrow:hidden"
+          stroke-width={1.8}
+          aria-hidden="true"
+        />
+      </button>
+      <div
+        id="services-menu"
+        class="pointer-events-none absolute top-full left-1/2 w-[35rem] -translate-x-1/2 -translate-y-1 pt-3 opacity-0 transition-[opacity,translate] duration-200 ease-[var(--ease-out)] will-change-[opacity,translate] data-open:pointer-events-auto data-open:translate-y-0 data-open:opacity-100 motion-reduce:duration-0"
+        aria-hidden="true"
+        inert
+      >
+        <div class="grid grid-cols-2 gap-1.5 rounded-shell bg-white p-2 shadow-floating">
+          {services.map((service) => {
+            const Icon = serviceIcons[service.id];
+            const active = pathname === service.href;
+            const styles = serviceStyles[service.id];
+            return (
+              <a
+                class={`group/service flex min-w-0 gap-3 rounded-inset p-3.5 transition-colors duration-150 ${active ? styles.background : "hover:bg-interaction"}`}
+                href={service.href}
+                aria-current={active ? "page" : undefined}
+                data-scroll-top
+              >
+                <span
+                  class={`grid size-9 shrink-0 place-items-center rounded-inset transition-colors duration-150 ${active ? styles.activeIcon : styles.icon}`}
+                >
+                  <Icon class="size-4.5" stroke-width={1.7} aria-hidden="true" />
+                </span>
+                <span class="min-w-0">
+                  <strong class="block text-sm font-semibold text-ink">{service.copy.name}</strong>
+                  <span class="mt-1 block text-meta leading-snug text-muted">{service.copy.navDescription}</span>
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+    {navItems.map((item) => (
+      <a
+        href={item.href}
+        class={`relative z-1 inline-flex h-9 items-center rounded-inset px-3.5 text-sm font-medium transition-[color,background-color,scale] duration-150 ${pressable} ${isActive(item.href) ? "bg-interaction text-ink" : "text-muted hover:bg-interaction hover:text-ink"}`}
+        aria-current={isActive(item.href) ? "page" : undefined}
+        data-scroll-top
+      >
+        {item.label}
+      </a>
+    ))}
+  </nav>
+  <LanguageMenu id="desktop-language-menu" locale={locale} pathname={pathname} label={selectLocale} />
+  <LanguageMenu id="mobile-language-menu" locale={locale} pathname={pathname} label={selectLocale} mobile />
+  <button
+    class={`inline-flex size-[44px] shrink-0 items-center justify-center rounded-control bg-white shadow-surface transition-[transform,box-shadow] duration-150 hover:shadow-surface-hover ${pressable} nav:hidden`}
+    type="button"
+    aria-label={t(locale, "nav.openMenu")}
+    aria-expanded="false"
+    aria-controls="site-menu"
+    data-menu-open
+  >
+    <Menu class="w-[17px]" stroke-width={1.7} aria-hidden="true" />
+  </button>
+</header>
+
+<div
+  id="site-menu"
+  class="pointer-events-none fixed inset-0 z-100 flex -translate-y-3 flex-col overscroll-contain bg-inverse-surface text-white opacity-0 transition-[opacity,translate] duration-300 ease-[var(--ease-out)] will-change-[opacity,translate] data-open:pointer-events-auto data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none max-nav:overflow-y-auto nav:hidden"
+  style="padding: max(1.5rem, env(safe-area-inset-top)) max(var(--spacing-menu), env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(var(--spacing-menu), env(safe-area-inset-left))"
+  aria-hidden="true"
+  inert
+  role="dialog"
+  aria-modal="true"
+  aria-label={t(locale, "nav.siteMenu")}
+>
+  <div
+    class="menu-top fixed right-4 left-4 z-2 flex items-center gap-2"
+    style="top: max(1.5rem, env(safe-area-inset-top))"
+  >
+    <a
+      href={localizePath("/", locale)}
+      class={`group/brand inline-flex h-11 min-w-0 items-center rounded-control bg-inverse-surface px-4.5 shadow-dark-surface transition-[background-color,scale] duration-150 hover:bg-white/8 ${pressable}`}
+      data-scroll-top
+      data-menu-link
+    >
+      <BrandMark inverse />
+    </a>
+    <LanguageMenu id="mobile-menu-language-menu" locale={locale} pathname={pathname} label={selectLocale} dark mobile />
+    <button
+      type="button"
+      class={`grid size-11 place-items-center rounded-control bg-transparent text-white shadow-dark-surface transition-[background-color,scale] duration-150 hover:bg-white/8 ${pressable}`}
+      aria-label={t(locale, "nav.closeMenu")}
+      data-menu-close
+    >
+      <X class="w-[19px]" stroke-width={1.7} aria-hidden="true" />
+    </button>
+  </div>
+  <nav
+    class="menu-links my-auto flex flex-col self-stretch py-24 max-nav:w-full max-nav:max-w-[44rem]"
+    aria-label={t(locale, "nav.mainMenu")}
+  >
+    <div>
+      <button
+        id="mobile-services-button"
+        class="group/mobile-services grid min-h-16 w-full cursor-pointer grid-cols-[2rem_minmax(0,1fr)_1.5rem] items-center border-b border-inverse-line bg-transparent px-0 py-2.5 text-left text-heading-md transition-colors duration-150 hover:bg-white/8"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-services-menu"
+      >
+        <span class="text-meta text-inverse-muted tabular-nums" aria-hidden="true">
+          01
+        </span>
+        <span>{t(locale, "nav.services")}</span>
+        <span class="grid size-6 place-items-center justify-self-end" aria-hidden="true">
+          <ChevronRight
+            class="size-5 transition-transform duration-200 ease-[var(--ease-out)] group-aria-expanded/mobile-services:rotate-90 motion-reduce:transition-none"
+            stroke-width={1.7}
+          />
+        </span>
+      </button>
+      <div
+        id="mobile-services-menu"
+        aria-labelledby="mobile-services-button"
+        class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 ease-[cubic-bezier(.4,0,.2,1)] data-open:grid-rows-[1fr] motion-reduce:transition-none"
+        inert
+      >
+        <div class="min-h-0 overflow-hidden">
+          <div class="max-h-[60vh] overflow-y-auto">
+            {services.map((service) => (
+              <a
+                class="group/menu-link grid min-h-14 grid-cols-[minmax(0,1fr)_1.5rem] items-center border-b border-inverse-line py-2 pl-8 text-heading-sm transition-colors duration-150 hover:bg-white/8"
+                href={service.href}
+                aria-current={pathname === service.href ? "page" : undefined}
+                data-scroll-top
+                data-menu-link
+              >
+                <span>{service.copy.name}</span>
+                <ArrowUpRight
+                  class="w-5 justify-self-end transition-transform duration-250 ease-[var(--ease-out)] group-hover/menu-link:translate-x-1 group-hover/menu-link:-translate-y-1 motion-reduce:transform-none motion-reduce:transition-none"
+                  stroke-width={1.7}
+                  aria-hidden="true"
+                />
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+    {navItems.map((item, index) => (
+      <a
+        class="group/menu-link grid min-h-16 grid-cols-[2rem_minmax(0,1fr)_1.5rem] items-center border-b border-inverse-line py-2.5 text-heading-md transition-colors duration-150 hover:bg-white/8"
+        href={item.href}
+        data-scroll-top
+        data-menu-link
+      >
+        <span class="text-meta text-inverse-muted tabular-nums">{String(index + 2).padStart(2, "0")}</span>
+        <span>{item.label}</span>
+        <ArrowUpRight
+          class="w-6 justify-self-end transition-transform duration-250 ease-[var(--ease-out)] group-hover/menu-link:translate-x-1 group-hover/menu-link:-translate-y-1 motion-reduce:transform-none motion-reduce:transition-none"
+          stroke-width={1.7}
+          aria-hidden="true"
+        />
+      </a>
+    ))}
+  </nav>
+  <div class="menu-bottom flex items-center justify-end text-meta text-inverse-muted max-narrow:flex-col max-narrow:items-start max-narrow:gap-5">
+    <a class="transition-colors duration-150 hover:text-white" href={`mailto:${publicContactEmail}`}>
+      {publicContactEmail}
+    </a>
+  </div>
+</div>
+
+<script>
+  import { alternatePath } from "@/lib/locale-path";
+  import { rememberLocale } from "@/lib/locale-preference";
+  import { hasLocale } from "@/i18n/config";
+
+  const header = document.querySelector<HTMLElement>("[data-navigation-enhanced]")!;
+  const menu = document.getElementById("site-menu")!;
+  const openButton = header.querySelector<HTMLButtonElement>("[data-menu-open]")!;
+  const closeButton = menu.querySelector<HTMLButtonElement>("[data-menu-close]")!;
+  const mobileServicesButton = document.getElementById("mobile-services-button") as HTMLButtonElement;
+  const mobileServicesPanel = document.getElementById("mobile-services-menu")!;
+  const services = header.querySelector<HTMLElement>("[data-services]")!;
+  const servicesButton = services.querySelector<HTMLButtonElement>("button")!;
+  const servicesPanel = document.getElementById("services-menu")!;
+
+  /** Opens or closes a disclosure: the trigger's aria-expanded and the panel's data-open, inert and aria-hidden. */
+  function setPanel(trigger: HTMLElement, panel: HTMLElement, open: boolean, { hidden = true } = {}) {
+    trigger.setAttribute("aria-expanded", String(open));
+    panel.toggleAttribute("data-open", open);
+    panel.inert = !open;
+    if (hidden) panel.setAttribute("aria-hidden", String(!open));
+  }
+  const isOpen = (trigger: HTMLElement) => trigger.getAttribute("aria-expanded") === "true";
+  const isPlainClick = (event: MouseEvent) =>
+    event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+
+  // A link to the current page scrolls back to the top instead of reloading it.
+  function scrollToPageTop(event: MouseEvent, link: HTMLAnchorElement) {
+    if (!isPlainClick(event) || event.defaultPrevented) return;
+    const destination = new URL(link.href);
+    if (
+      destination.pathname + destination.search + destination.hash !==
+      location.pathname + location.search + location.hash
+    )
+      return;
+    event.preventDefault();
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    scrollTo({ top: 0, left: 0, behavior: reducedMotion ? "auto" : "smooth" });
+  }
+
+  // Site menu (below the navigation breakpoint)
+  function setMobileServices(open: boolean) {
+    setPanel(mobileServicesButton, mobileServicesPanel, open, { hidden: false });
+  }
+  function setMenu(open: boolean, { restoreFocus = false } = {}) {
+    setMobileServices(false);
+    setPanel(openButton, menu, open);
+    openButton.setAttribute("aria-expanded", String(open));
+    document.body.style.overflow = open ? "hidden" : "";
+    if (open) {
+      window.setTimeout(() => {
+        if (!menu.contains(document.activeElement)) closeButton.focus();
+      }, 50);
+    } else if (restoreFocus) openButton.focus();
+  }
+  openButton.addEventListener("click", () => setMenu(true));
+  closeButton.addEventListener("click", () => setMenu(false, { restoreFocus: true }));
+  mobileServicesButton.addEventListener("click", () => setMobileServices(!isOpen(mobileServicesButton)));
+  for (const link of menu.querySelectorAll<HTMLAnchorElement>("[data-menu-link]")) {
+    link.addEventListener("click", () => setMenu(false));
+  }
+  matchMedia("(min-width: 900px)").addEventListener("change", (event) => {
+    if (event.matches) setMenu(false);
+  });
+
+  // Services dropdown: opens on mouse hover, click and ArrowDown.
+  let servicesOpenedByHover = false;
+  let closeServicesTimer: number | undefined;
+  const setServices = (open: boolean) => {
+    window.clearTimeout(closeServicesTimer);
+    setPanel(servicesButton, servicesPanel, open);
+  };
+  services.addEventListener("pointerenter", (event) => {
+    if (event.pointerType !== "mouse") return;
+    servicesOpenedByHover = !isOpen(servicesButton);
+    setServices(true);
+  });
+  services.addEventListener("pointerleave", () => {
+    closeServicesTimer = window.setTimeout(() => setServices(false), 120);
+  });
+  services.addEventListener("focusout", (event) => {
+    if (!services.contains(event.relatedTarget as Node | null)) setServices(false);
+  });
+  servicesButton.addEventListener("click", () => {
+    const keepOpen = servicesOpenedByHover;
+    servicesOpenedByHover = false;
+    setServices(keepOpen || !isOpen(servicesButton));
+  });
+  servicesButton.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowDown") return;
+    event.preventDefault();
+    setServices(true);
+    window.setTimeout(() => servicesPanel.querySelector<HTMLAnchorElement>("a[href]")?.focus(), 0);
+  });
+  for (const link of servicesPanel.querySelectorAll("a")) link.addEventListener("click", () => setServices(false));
+  document.addEventListener("pointerdown", (event) => {
+    if (isOpen(servicesButton) && !services.contains(event.target as Node)) setServices(false);
+  });
+
+  for (const link of document.querySelectorAll<HTMLAnchorElement>("[data-scroll-top]")) {
+    link.addEventListener("click", (event) => scrollToPageTop(event, link));
+  }
+
+  // Escape closes the innermost open layer; Tab stays inside the open site menu.
+  document.addEventListener("keydown", (event) => {
+    const menuOpen = isOpen(openButton);
+    if (event.key === "Escape") {
+      if (menuOpen && isOpen(mobileServicesButton)) {
+        setMobileServices(false);
+        mobileServicesButton.focus();
+      } else if (isOpen(servicesButton)) {
+        setServices(false);
+        servicesButton.focus();
+      } else if (menuOpen) {
+        setMenu(false, { restoreFocus: true });
+      }
+      return;
+    }
+    if (!menuOpen || event.key !== "Tab") return;
+    const focusables = [
+      ...menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'),
+    ].filter((element) => !element.closest("[inert]"));
+    const first = focusables[0];
+    const last = focusables.at(-1);
+    if (!first || !last) return;
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  // Language menus: a hovered or focused language previews its code in the button.
+  for (const root of document.querySelectorAll<HTMLElement>("[data-language-menu]")) {
+    const button = root.querySelector<HTMLButtonElement>("button")!;
+    const panel = root.querySelector<HTMLElement>("[id]")!;
+    const code = root.querySelector<HTMLElement>("[data-language-code]")!;
+    const links = [...root.querySelectorAll<HTMLAnchorElement>("[data-locale-link]")];
+    const current = root.dataset.locale!;
+    const inMenu = menu.contains(root);
+    let openedByHover = false;
+
+    function highlight(locale: string | null) {
+      for (const link of links) {
+        link.toggleAttribute("data-highlighted", link.dataset.localeLink === (locale ?? current));
+      }
+      code.querySelector("[data-preview]")?.remove();
+      const previewing = locale !== null && locale !== current;
+      button.toggleAttribute("data-previewing", previewing);
+      if (!previewing) return;
+      // A new element replays the entrance animation for each previewed language.
+      const preview = document.createElement("span");
+      preview.className = "header-language__code-preview col-start-1 row-start-1";
+      preview.dataset.preview = "";
+      preview.textContent = links.find((link) => link.dataset.localeLink === locale)?.dataset.shortLabel ?? "";
+      code.appendChild(preview);
+    }
+    function setOpen(open: boolean) {
+      setPanel(button, panel, open);
+      if (!open) highlight(null);
+    }
+
+    if (root.hasAttribute("data-hover")) {
+      root.addEventListener("pointerenter", (event) => {
+        if (event.pointerType !== "mouse") return;
+        openedByHover = !isOpen(button);
+        setPanel(button, panel, true);
+      });
+      root.addEventListener("pointerleave", () => setOpen(false));
+    }
+    root.addEventListener("focusout", (event) => {
+      if (!root.contains(event.relatedTarget as Node | null)) setOpen(false);
+    });
+    root.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      event.stopPropagation();
+      setOpen(false);
+      button.focus();
+    });
+    button.addEventListener("click", () => {
+      const keepOpen = openedByHover;
+      openedByHover = false;
+      setOpen(keepOpen || !isOpen(button));
+    });
+    button.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowDown") return;
+      event.preventDefault();
+      setPanel(button, panel, true);
+      window.setTimeout(() => links[0]?.focus(), 0);
+    });
+    for (const link of links) {
+      const locale = link.dataset.localeLink ?? "";
+      if (!hasLocale(locale)) continue;
+      // The error page can be served at any missing URL; switching language keeps that URL.
+      link.href = alternatePath(location.pathname, locale);
+      link.addEventListener("pointerenter", () => highlight(locale));
+      link.addEventListener("pointerleave", () => highlight(null));
+      link.addEventListener("focus", () => highlight(locale));
+      link.addEventListener("blur", () => highlight(null));
+      link.addEventListener("click", (event) => {
+        if (isPlainClick(event)) rememberLocale(locale);
+        scrollToPageTop(event, link);
+        setOpen(false);
+        if (inMenu) setMenu(false);
+      });
+    }
+  }
+</script>

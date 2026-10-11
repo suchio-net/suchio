@@ -1,5 +1,3 @@
-"use client";
-
 import { animate, motion, useInView, useMotionValue, useTransform } from "motion/react";
 import { useEffect, useMemo, useRef } from "react";
 import { useHydratedReducedMotion } from "@/components/offer-animations/use-hydrated-reduced-motion";

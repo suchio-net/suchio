@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useId, useRef } from "react";
 import type { WebExperienceAnimationCopy } from "@/i18n/services";
 

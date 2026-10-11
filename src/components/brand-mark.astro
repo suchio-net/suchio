@@ -1,0 +1,18 @@
+---
+interface Props {
+  inverse?: boolean;
+  loading?: "eager" | "lazy";
+}
+const { inverse = false, loading } = Astro.props;
+---
+
+<!-- Explicit dimensions preserve the logo's aspect ratio before it loads. -->
+<img
+  src={inverse ? "/suchio-logo-dark.svg" : "/suchio-logo-light.svg"}
+  alt="Suchio"
+  width="729"
+  height="223"
+  loading={loading}
+  class="block h-7 w-auto max-w-full object-contain"
+  draggable="false"
+/>

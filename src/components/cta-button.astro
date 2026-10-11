@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "@lucide/astro";
 interface Props {
   href: string;
   light?: boolean;
@@ -27,12 +27,12 @@ const { href, light = false, className = "" } = Astro.props;
     aria-hidden="true"
   >
     <ArrowRight
-      className="pill-button__arrow pill-button__arrow--right absolute inset-[7px] size-[18px]"
-      strokeWidth={1.7}
+      class="pill-button__arrow pill-button__arrow--right absolute inset-[7px] size-[18px]"
+      stroke-width={1.7}
     />
     <ArrowUpRight
-      className="pill-button__arrow pill-button__arrow--up-right absolute inset-[7px] size-[18px] opacity-0 [transform:translate(-6px,6px)_scale(.8)]"
-      strokeWidth={1.7}
+      class="pill-button__arrow pill-button__arrow--up-right absolute inset-[7px] size-[18px] opacity-0 [transform:translate(-6px,6px)_scale(.8)]"
+      stroke-width={1.7}
     />
   </span>
 </a>

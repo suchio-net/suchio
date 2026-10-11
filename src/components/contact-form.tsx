@@ -1,9 +1,17 @@
-"use client";
-
-import { serviceIcons as sharedServiceIcons } from "@/components/service-icons";
 import { serviceStyles } from "@/components/service-styles";
 
-import { ArrowRight, ArrowUpRight, Check, ChevronDown, CircleHelp, LoaderCircle } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Check,
+  ChevronDown,
+  CircleHelp,
+  LoaderCircle,
+  MonitorSmartphone,
+  RadioTower,
+  Search,
+  Workflow,
+} from "lucide-react";
 import {
   type FormEvent,
   type ReactNode,
@@ -70,7 +78,14 @@ const serviceOptionStyles: Record<ServiceChoiceId, { selected: string; icon: str
   },
 };
 
-const serviceIcons = { ...sharedServiceIcons, "not-sure": CircleHelp };
+// Matches the Astro icon map in service-icons.ts.
+const serviceIcons = {
+  "websites-apps": MonitorSmartphone,
+  "seo-ai-visibility": Search,
+  "paid-campaigns": RadioTower,
+  "ai-automation": Workflow,
+  "not-sure": CircleHelp,
+};
 
 export function ContactForm({
   contactEmail,

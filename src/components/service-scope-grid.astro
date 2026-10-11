@@ -1,0 +1,89 @@
+---
+import {
+  AppWindow,
+  Bot,
+  CalendarCheck,
+  ChartNoAxesCombined,
+  Check,
+  Contact,
+  FileText,
+  Files,
+  Layers,
+  LayoutTemplate,
+  MapPin,
+  Megaphone,
+  MousePointerClick,
+  Palette,
+  PlugZap,
+  Route,
+  Search,
+  Settings2,
+  ShoppingCart,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Workflow,
+  type AstroComponent,
+} from "@lucide/astro";
+import type { ScopeGroup, ServiceId } from "@/i18n/services";
+interface Props {
+  groups: readonly ScopeGroup[];
+  serviceId: ServiceId;
+}
+const { groups, serviceId } = Astro.props;
+
+const scopeIcons: Record<ServiceId, readonly AstroComponent[]> = {
+  "websites-apps": [LayoutTemplate, MousePointerClick, ShoppingCart, AppWindow, FileText, CalendarCheck],
+  "seo-ai-visibility": [Settings2, Search, FileText, MapPin, Sparkles, ChartNoAxesCombined],
+  "paid-campaigns": [Target, Search, Megaphone, Palette, TrendingUp, Route],
+  "ai-automation": [Workflow, Contact, Files, Bot, Sparkles, PlugZap],
+};
+
+const scopeIconStyles = [
+  "bg-[#eaf2ff] text-[#245bb8]",
+  "bg-[#e9f7ef] text-[#26734d]",
+  "bg-[#fff3dd] text-[#91600a]",
+  "bg-[#f2edff] text-[#6650a6]",
+  "bg-[#fff0f3] text-[#a2435a]",
+  "bg-[#e6f6f7] text-[#24717a]",
+] as const;
+
+// Items slide in from alternating sides.
+const scopeMotionStyles = ["[--scope-x:-24px]", "[--scope-x:24px]"] as const;
+---
+
+<div
+  class="grid grid-cols-12 gap-px overflow-hidden rounded-card border border-line-strong bg-line-strong"
+  data-scope-grid
+>
+  {groups.map((group, index) => {
+    const Icon = scopeIcons[serviceId][index] ?? Layers;
+    return (
+      <article
+        class={`col-span-6 flex min-w-0 flex-col bg-white p-card-fluid max-compact:col-span-12 ${scopeMotionStyles[index % 2]}`}
+        data-reveal
+        data-reveal-threshold="half"
+        data-scope-item
+      >
+        <div class="flex min-w-0 items-center gap-3.5">
+          <span
+            class={`grid size-10 shrink-0 place-items-center rounded-control ${scopeIconStyles[index] ?? "bg-brand-50 text-brand-600"}`}
+            data-scope-icon
+          >
+            <Icon class="size-5" stroke-width={1.7} aria-hidden="true" />
+          </span>
+          <h3 class="m-0 min-w-0 text-heading-sm">{group.title}</h3>
+        </div>
+        <p class="mt-4 max-w-[46ch] text-base/6 text-muted">{group.copy}</p>
+        <ul class="mt-6 grid list-none gap-3 p-0">
+          {group.items.map((item) => (
+            <li class="flex gap-2.5 text-ui text-muted">
+              <Check class="mt-0.5 size-4.5 shrink-0 text-brand-500" stroke-width={2} aria-hidden="true" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </article>
+    );
+  })}
+</div>

@@ -1,5 +1,3 @@
-"use client";
-
 import { useSyncExternalStore, type SetStateAction } from "react";
 import type { ServiceId } from "@/i18n/services";
 

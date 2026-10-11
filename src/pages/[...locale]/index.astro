@@ -1,15 +1,15 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { ChartNoAxesCombined, Handshake, ListOrdered, PackageCheck, SlidersHorizontal, Target } from "lucide-react";
+import { ChartNoAxesCombined, Handshake, ListOrdered, PackageCheck, SlidersHorizontal, Target } from "@lucide/astro";
 import CtaButton from "@/components/cta-button.astro";
 import Faq from "@/components/faq.astro";
-import { FaqStructuredData } from "@/components/faq-structured-data";
+import FaqStructuredData from "@/components/faq-structured-data.astro";
 import FinalCta from "@/components/final-cta.astro";
 import OfferOverview from "@/components/offer-overview.astro";
 import Reveal from "@/components/reveal.astro";
 import SectionHeading from "@/components/section-heading.astro";
 import SiteLayout from "@/layouts/site-layout.astro";
-import { SiteStructuredData } from "@/components/site-structured-data";
+import SiteStructuredData from "@/components/site-structured-data.astro";
 import { getFaqs } from "@/lib/faqs";
 import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
 
@@ -61,7 +61,7 @@ const steps = [
         {benefits.map(([Icon, headingKey, copyKey], index) => (
           <Reveal className="col-span-2 min-w-0 max-nav:col-span-1 px-8 py-10 text-center" delay={index * 50}>
             <div class="grid min-h-22 place-items-center text-ink">
-              <Icon className="size-[42px]" strokeWidth={1.7} aria-hidden="true" />
+              <Icon class="size-[42px]" stroke-width={1.7} aria-hidden="true" />
             </div>
             <h3 class="mt-6 mb-2 text-heading-sm">{t(locale, headingKey)}</h3>
             <p class="m-0 text-base/6 text-muted">{t(locale, copyKey)}</p>
@@ -85,7 +85,7 @@ const steps = [
             >
               {index + 1}
             </span>
-            <Icon className="block size-8" strokeWidth={1.7} aria-hidden="true" />
+            <Icon class="block size-8" stroke-width={1.7} aria-hidden="true" />
             <div class="pt-4">
               <h3 class="mt-0 mb-2 text-heading-sm">{t(locale, headingKey)}</h3>
               <p class="text-base/6 text-muted">{t(locale, copyKey)}</p>

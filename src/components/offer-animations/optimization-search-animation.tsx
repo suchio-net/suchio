@@ -1,5 +1,3 @@
-"use client";
-
 import { Crown, Search } from "lucide-react";
 import { motion, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
