@@ -3,15 +3,14 @@ import type { GetStaticPaths } from "astro";
 import { ChartNoAxesCombined, Handshake, ListOrdered, PackageCheck, SlidersHorizontal, Target } from "@lucide/astro";
 import CtaButton from "@/components/cta-button.astro";
 import Faq from "@/components/faq.astro";
-import FaqStructuredData from "@/components/faq-structured-data.astro";
 import FinalCta from "@/components/final-cta.astro";
 import OfferOverview from "@/components/offer-overview.astro";
 import Reveal from "@/components/reveal.astro";
 import SectionHeading from "@/components/section-heading.astro";
 import SiteLayout from "@/layouts/site-layout.astro";
-import SiteStructuredData from "@/components/site-structured-data.astro";
 import { getFaqs } from "@/lib/faqs";
 import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
+import { faqEntities, organizationReference, pageNode } from "@/lib/structured-data";
 
 export const getStaticPaths = (() => localeStaticPaths()) satisfies GetStaticPaths;
 
@@ -32,7 +31,16 @@ const steps = [
 ] as const;
 ---
 
-<SiteLayout locale={locale} description={t(locale, "home.heroDescription")}>
+<SiteLayout
+  locale={locale}
+  description={t(locale, "meta.homeDescription")}
+  schema={[
+    pageNode(locale, localizePath("/", locale), t(locale, "meta.siteTitle"), "FAQPage", {
+      about: organizationReference,
+      mainEntity: faqEntities(faqs),
+    }),
+  ]}
+>
   <main id="main-content">
     <section
       id="intro"
@@ -100,8 +108,6 @@ const steps = [
         <Faq items={faqs} id={`home-faq-${locale}`} />
       </div>
     </section>
-    <FaqStructuredData items={faqs} />
-    <SiteStructuredData />
     <FinalCta locale={locale} singleLine />
   </main>
 </SiteLayout>

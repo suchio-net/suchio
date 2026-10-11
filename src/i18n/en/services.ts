@@ -20,6 +20,7 @@ const services: ServicesCopy = {
       ],
       cta: "Explore Websites & Apps",
       page: {
+        metaTitle: "Websites & Apps: Design and Development",
         metaDescription:
           "Websites, web apps, and digital products by Suchio: strategy, UX/UI design, development, integrations, analytics, and launch support.",
         title: "Websites and apps that are clear, fast, and easy to run.",
@@ -188,6 +189,7 @@ const services: ServicesCopy = {
       ],
       cta: "Explore SEO & AI Visibility",
       page: {
+        metaTitle: "SEO & AI Visibility in Search and AI Answers",
         metaDescription:
           "SEO and AI visibility by Suchio: technical optimization, content, local search, and stronger discoverability in search engines and AI answers.",
         title: "Be found where customers look for answers.",
@@ -356,6 +358,7 @@ const services: ServicesCopy = {
       ],
       cta: "Explore Paid Campaigns",
       page: {
+        metaTitle: "Paid Campaigns with Google Ads & Paid Social",
         metaDescription:
           "Paid campaigns by Suchio: Google Ads, paid social, creative, conversion optimization, tracking, and ongoing improvement for qualified demand.",
         title: "Run paid campaigns from click to qualified enquiry.",
@@ -526,6 +529,7 @@ const services: ServicesCopy = {
       ],
       cta: "Explore AI & Automation",
       page: {
+        metaTitle: "AI & Automation for Workflows and CRM",
         metaDescription:
           "Practical AI solutions and workflow automation by Suchio: process analysis, prototypes, integrations, CRM automation, and useful AI features.",
         title: "Automate repetitive work without losing control.",

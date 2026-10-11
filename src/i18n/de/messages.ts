@@ -9,6 +9,10 @@ const messages = {
   "nav.closeMenu": "Navigation schließen",
   "nav.selectLocale": "Sprache auswählen",
   "meta.siteTitle": "Suchio | Websites, Wachstum & Automatisierung",
+  "meta.homeDescription":
+    "Websites und Apps, SEO und KI-Sichtbarkeit, Werbekampagnen sowie KI und Automatisierung von Suchio, einem unabhängigen Studio in Hattersheim am Main.",
+  "meta.aboutTitle": "Über uns – unabhängiges Studio für Web & Wachstum",
+  "meta.contactTitle": "Kontakt – Projekt anfragen",
   "meta.aboutDescription":
     "Suchio ist ein unabhängiges Studio für Websites, Apps, Sichtbarkeit, Werbekampagnen, KI und Automatisierung.",
   "a11y.skip": "Zum Inhalt springen",

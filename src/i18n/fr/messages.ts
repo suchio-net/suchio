@@ -11,6 +11,10 @@ const messages: Readonly<Record<MessageKey, string>> = {
   "nav.closeMenu": "Fermer la navigation",
   "nav.selectLocale": "Choisir la langue",
   "meta.siteTitle": "Suchio | Sites web, croissance & automatisation",
+  "meta.homeDescription":
+    "Sites web et applications, SEO et visibilité IA, campagnes payantes, IA et automatisation par Suchio, studio indépendant à Hattersheim am Main.",
+  "meta.aboutTitle": "À propos – studio indépendant web & croissance",
+  "meta.contactTitle": "Contact – démarrer un projet",
   "meta.aboutDescription":
     "Suchio est un studio indépendant spécialisé dans les sites web, les applications, la visibilité, les campagnes payantes, l’IA et l’automatisation.",
   "a11y.skip": "Aller au contenu",

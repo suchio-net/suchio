@@ -23,6 +23,7 @@ const services: ServicesCopy = {
       ],
       cta: "Websites & Apps entdecken",
       page: {
+        metaTitle: "Websites & Apps: Webdesign und Entwicklung",
         metaDescription:
           "Websites, Web-Apps und digitale Produkte von Suchio: Strategie, UX/UI Design, Entwicklung, Integrationen, Analytics und Launch.",
         title: "Websites und Apps, die klar, schnell und einfach zu betreiben sind.",
@@ -192,6 +193,7 @@ const services: ServicesCopy = {
       ],
       cta: "SEO & KI-Sichtbarkeit entdecken",
       page: {
+        metaTitle: "SEO & KI-Sichtbarkeit in Suche und KI-Antworten",
         metaDescription:
           "SEO und KI-Sichtbarkeit von Suchio: technische Optimierung, Content, lokale Suche und bessere Auffindbarkeit in Suchmaschinen und KI-Antworten.",
         title: "Gefunden werden, wo Kunden nach Antworten suchen.",
@@ -361,6 +363,7 @@ const services: ServicesCopy = {
       ],
       cta: "Werbekampagnen entdecken",
       page: {
+        metaTitle: "Werbekampagnen mit Google Ads & Paid Social",
         metaDescription:
           "Werbekampagnen von Suchio: Google Ads, Paid Social, Creative, Conversion-Optimierung, Tracking und laufende Verbesserung für qualifizierte Nachfrage.",
         title: "Werbekampagnen vom Klick bis zur qualifizierten Anfrage.",
@@ -531,6 +534,7 @@ const services: ServicesCopy = {
       ],
       cta: "KI & Automatisierung entdecken",
       page: {
+        metaTitle: "KI & Automatisierung für Workflows und CRM",
         metaDescription:
           "Praktische KI-Lösungen und Workflow-Automatisierung von Suchio: Prozessanalyse, Prototypen, Integrationen, CRM-Automation und produktive KI-Funktionen.",
         title: "Wiederkehrende Arbeit automatisieren, ohne die Kontrolle abzugeben.",

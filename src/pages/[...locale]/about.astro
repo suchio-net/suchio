@@ -5,7 +5,8 @@ import EditorialHero from "@/components/editorial-hero.astro";
 import FinalCta from "@/components/final-cta.astro";
 import Reveal from "@/components/reveal.astro";
 import SectionHeading from "@/components/section-heading.astro";
-import { localeStaticPaths, t, type Locale } from "@/lib/i18n";
+import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
+import { breadcrumbNode, organizationReference, pageNode } from "@/lib/structured-data";
 export const getStaticPaths = (() => localeStaticPaths()) satisfies GetStaticPaths;
 
 interface Props {
@@ -20,7 +21,18 @@ const principles = [
 ] as const;
 ---
 
-<SiteLayout locale={locale} title={t(locale, "nav.about")} description={t(locale, "meta.aboutDescription")}>
+<SiteLayout
+  locale={locale}
+  title={t(locale, "meta.aboutTitle")}
+  description={t(locale, "meta.aboutDescription")}
+  schema={[
+    pageNode(locale, localizePath("/about", locale), t(locale, "meta.aboutTitle"), "AboutPage", {
+      about: organizationReference,
+      mainEntity: organizationReference,
+    }),
+    breadcrumbNode(locale, [{ name: t(locale, "nav.about"), path: localizePath("/about", locale) }]),
+  ]}
+>
   <main id="main-content">
     <EditorialHero title={t(locale, "about.title")} copy={t(locale, "about.copy")} />
 

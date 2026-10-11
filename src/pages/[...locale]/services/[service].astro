@@ -25,7 +25,6 @@ import {
 } from "@lucide/astro";
 import CtaButton from "@/components/cta-button.astro";
 import Faq from "@/components/faq.astro";
-import FaqStructuredData from "@/components/faq-structured-data.astro";
 import { OfferAnimation } from "@/components/offer-animations/offer-animation";
 import ServiceScopeGrid from "@/components/service-scope-grid.astro";
 import Reveal from "@/components/reveal.astro";
@@ -34,6 +33,7 @@ import type { ServiceId } from "@/i18n/services";
 import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
 import { getServiceCatalog } from "@/lib/service-catalog";
 import { serviceOrder, serviceRouteSlugs } from "@/lib/service-routes";
+import { breadcrumbNode, faqEntities, pageNode, serviceNode } from "@/lib/structured-data";
 
 export const getStaticPaths = (() =>
   localeStaticPaths().flatMap(({ params, props }) =>
@@ -63,7 +63,19 @@ const contact = `${localizePath("/contact", locale)}?service=${serviceId}`;
 const related = services.filter((entry) => entry.id !== serviceId);
 ---
 
-<SiteLayout locale={locale} title={copy.name} description={copy.page.metaDescription}>
+<SiteLayout
+  locale={locale}
+  title={copy.page.metaTitle}
+  description={copy.page.metaDescription}
+  schema={[
+    pageNode(locale, service.href, copy.page.metaTitle, "FAQPage", {
+      about: { "@id": serviceNode(locale, copy, service.href)["@id"] },
+      mainEntity: faqEntities(copy.page.faqs),
+    }),
+    serviceNode(locale, copy, service.href),
+    breadcrumbNode(locale, [{ name: copy.name, path: service.href }]),
+  ]}
+>
   <main id="main-content">
     <section class="px-page pt-page-title pb-section">
       <div class="mx-auto grid max-w-[75rem] grid-cols-[minmax(0,1fr)_34rem] items-center gap-x-8 max-wide:grid-cols-1 max-wide:gap-10">
@@ -167,7 +179,6 @@ const related = services.filter((entry) => entry.id !== serviceId);
         <Faq items={copy.page.faqs} id={`service-${serviceId}-${locale}`} />
       </div>
     </section>
-    <FaqStructuredData items={copy.page.faqs} />
 
     <section class="bg-canvas px-page py-section-compact">
       <div class="mx-auto max-w-[70rem]">

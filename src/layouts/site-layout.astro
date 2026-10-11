@@ -2,9 +2,12 @@
 import ScrollReveal from "@/components/scroll-reveal.astro";
 import SiteHeader from "@/components/header/site-header.astro";
 import SiteFooter from "@/components/site-footer.astro";
+import StructuredData from "@/components/structured-data.astro";
 import dmSansLatin from "@/assets/fonts/dm-sans-latin-standard-normal.woff2?url";
 import { t, type Locale } from "@/lib/i18n";
+import { getServiceCatalog } from "@/lib/service-catalog";
 import { pageMetadata } from "@/lib/site";
+import { siteNodes, type SchemaNode } from "@/lib/structured-data";
 import "@/styles/site.css";
 
 interface Props {
@@ -15,6 +18,8 @@ interface Props {
   description: string;
   noindex?: boolean;
   referrer?: "no-referrer";
+  /** Page-specific schema.org nodes, added to the site graph on indexable pages. */
+  schema?: SchemaNode[];
 }
 // Prerendered files are emitted as "/about.html" and "/index.html"; public URLs drop the file name and trailing slash.
 const pathname =
@@ -30,9 +35,14 @@ const {
   description,
   noindex = false,
   referrer,
+  schema = [],
 } = Astro.props;
 const metadata = pageMetadata({ locale, pathname: canonicalPathname, title, description });
 const robots = noindex ? "noindex, follow" : "index, follow";
+const serviceNames = getServiceCatalog(locale).map((service) => service.copy.name);
+const graph = noindex
+  ? undefined
+  : { "@context": "https://schema.org", "@graph": [...siteNodes(locale, serviceNames), ...schema] };
 ---
 
 <!doctype html>
@@ -87,6 +97,7 @@ const robots = noindex ? "noindex, follow" : "index, follow";
     <link rel="icon" href="/suchio-favicon-32x32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preload" href={dmSansLatin} as="font" type="font/woff2" crossorigin="anonymous" />
+    {graph && <StructuredData value={graph} />}
   </head>
   <body class="flex min-h-screen min-w-0 flex-col bg-canvas font-sans text-ink antialiased">
     <div

@@ -24,6 +24,7 @@ const services: ServicesCopy = {
       ],
       cta: "Découvrir Sites web & applications",
       page: {
+        metaTitle: "Sites web & applications : design et développement",
         metaDescription:
           "Sites web, applications web et produits numériques par Suchio : stratégie, design UX/UI, développement, intégrations, analytics et accompagnement au lancement.",
         title: "Des sites web et des applications clairs, rapides et faciles à gérer.",
@@ -193,6 +194,7 @@ const services: ServicesCopy = {
       ],
       cta: "Découvrir SEO & visibilité IA",
       page: {
+        metaTitle: "SEO & visibilité IA dans la recherche",
         metaDescription:
           "SEO et visibilité IA par Suchio : optimisation technique, contenu, recherche locale et présence renforcée dans les moteurs de recherche et les réponses IA.",
         title: "Soyez présent là où vos clients cherchent des réponses.",
@@ -363,6 +365,7 @@ const services: ServicesCopy = {
       ],
       cta: "Découvrir les Campagnes payantes",
       page: {
+        metaTitle: "Campagnes payantes Google Ads & réseaux sociaux",
         metaDescription:
           "Campagnes payantes par Suchio : Google Ads, réseaux sociaux payants, création, optimisation des conversions, suivi et amélioration continue de la demande qualifiée.",
         title: "Des campagnes payantes, du clic à la demande qualifiée.",
@@ -534,6 +537,7 @@ const services: ServicesCopy = {
       ],
       cta: "Découvrir IA & automatisation",
       page: {
+        metaTitle: "IA & automatisation des processus et du CRM",
         metaDescription:
           "Solutions IA concrètes et automatisation des processus par Suchio : analyse, prototypes, intégrations, automatisation CRM et fonctionnalités IA utiles.",
         title: "Automatisez les tâches répétitives sans perdre le contrôle.",

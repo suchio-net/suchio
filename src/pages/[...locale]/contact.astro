@@ -7,6 +7,7 @@ import { getServiceCopy } from "@/i18n/services";
 import { publicContactEmail } from "@/lib/contact";
 import { budgetOptions } from "@/lib/contact-options";
 import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
+import { breadcrumbNode, organizationReference, pageNode } from "@/lib/structured-data";
 import { serviceOrder } from "@/lib/service-routes";
 export const getStaticPaths = (() => localeStaticPaths()) satisfies GetStaticPaths;
 
@@ -48,7 +49,17 @@ const formCopy = {
 } satisfies ContactFormCopy;
 ---
 
-<SiteLayout locale={locale} title={t(locale, "nav.contact")} description={t(locale, "contact.copy")}>
+<SiteLayout
+  locale={locale}
+  title={t(locale, "meta.contactTitle")}
+  description={t(locale, "contact.copy")}
+  schema={[
+    pageNode(locale, localizePath("/contact", locale), t(locale, "meta.contactTitle"), "ContactPage", {
+      mainEntity: organizationReference,
+    }),
+    breadcrumbNode(locale, [{ name: t(locale, "nav.contact"), path: localizePath("/contact", locale) }]),
+  ]}
+>
   <main id="main-content">
     <EditorialHero title={t(locale, "contact.title")} copy={t(locale, "contact.copy")} />
     <section class="px-page pb-section">

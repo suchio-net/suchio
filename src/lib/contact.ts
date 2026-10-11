@@ -7,3 +7,4 @@ export const publicBusinessAddress = {
   addressLocality: "Hattersheim am Main",
   addressCountry: "DE",
 } as const;
+export const publicXProfile = "https://x.com/suchionet";

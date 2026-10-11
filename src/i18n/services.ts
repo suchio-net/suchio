@@ -51,6 +51,8 @@ export type ServiceCopy = {
   rows: readonly CopyRow[];
   cta: string;
   page: {
+    /** Search result title; the page heading stays in `title`. */
+    metaTitle: string;
     metaDescription: string;
     title: string;
     intro: string;
