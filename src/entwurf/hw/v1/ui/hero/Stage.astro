@@ -318,6 +318,7 @@ const total = pad(steps.length);
     };
     const measure = () => { measureStates(); scene?.setRegion(region()); sync(); };
     let scrollToState = (to: number) => scrollToY(stateY[to]);
+    let releaseStage = () => {};
 
     // ScrollTrigger reads the scroll (from Lenis where it runs) and re-measures
     // on every refresh: resize, orientation change, fonts.
@@ -399,9 +400,9 @@ const total = pad(steps.length);
       scrollToState = to => { observer.enable(); go(to); };
       // Hold the steps whenever the page has come to rest inside the stage. A
       // native swipe back into it is left to finish, finger and fling, first.
-      let touching = false;
+      let touching = false, sectionJump = false;
       const engage = () => {
-        if (touching || tween || observer.isEnabled || scrollY >= stateY[last] - 2) return;
+        if (touching || sectionJump || tween || observer.isEnabled || scrollY >= stateY[last] - 2) return;
         observer.enable();
         const to = Math.max(0, Math.min(last, Math.round(stateAt(scrollY))));
         if (Math.abs(stateY[to] - scrollY) > 1) go(to); else target = to;
@@ -411,10 +412,30 @@ const total = pad(steps.length);
       engage();
       // Engage once the page has been still for a moment after the finger lifts.
       let lastScroll = 0, timer = 0;
+      releaseStage = () => {
+        clearTimeout(timer);
+        tween?.kill();
+        tween = undefined;
+        target = last + 1;
+        // A smooth anchor jump crosses the hero; do not re-engage mid-jump.
+        // A new touch lets native scrolling back into the hero engage as usual.
+        sectionJump = true;
+        observer.disable();
+      };
       const idle = () => { clearTimeout(timer); timer = window.setTimeout(() => { if (performance.now() - lastScroll >= 150) engage(); else idle(); }, 160); };
-      addEventListener("scroll", () => { lastScroll = performance.now(); if (!observer.isEnabled && !touching) idle(); }, { passive: true });
-      addEventListener("touchstart", () => { touching = true; }, { passive: true });
+      addEventListener("scroll", () => {
+        lastScroll = performance.now();
+        // Native anchor jumps and history restoration can bypass the swipes.
+        if (observer.isEnabled && !tween && scrollY > stateY[last] + 2) releaseStage();
+        if (!observer.isEnabled && !touching) idle();
+      }, { passive: true });
+      addEventListener("touchstart", () => { touching = true; sectionJump = false; }, { passive: true });
       for (const type of ["touchend", "touchcancel"]) addEventListener(type, () => { touching = false; if (!observer.isEnabled) idle(); }, { passive: true });
+      ScrollTrigger.addEventListener("refreshInit", () => {
+        // Android's browser bar can resize the viewport after a section jump.
+        // Check before re-measuring so a held trade still follows its new position.
+        if (scrollY > stateY[last] + 2) releaseStage();
+      });
       ScrollTrigger.addEventListener("refresh", () => {
         if (observer.isEnabled && !tween && target <= last) scrollTo({ top: stateY[target], behavior: "instant" });
       });
@@ -425,7 +446,12 @@ const total = pad(steps.length);
     const navigateToTrade = (hash: string) => {
       const id = hash.slice(1);
       const index = steps.findIndex(step => step.id === id);
-      if (index < 0 && id !== "leistungen") return false;
+      if (index < 0 && id !== "leistungen") {
+        // Other sections scroll natively. Stop any hero tween before the jump
+        // and release its touch handler so the next swipe stays at that section.
+        if (id && document.getElementById(id)) releaseStage();
+        return false;
+      }
       scrollToState(index < 0 ? 1 : index + 1);
       return true;
     };

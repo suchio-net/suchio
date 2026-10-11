@@ -1,5 +1,5 @@
 // Bathroom corner for the v1 home page, built the way a bathroom is built. Six
-// layers, one per trade, sit in the same white "architectural model": shell,
+// layers, one per trade, make up one model in real material colours: shell,
 // wiring, plumbing, underfloor heating, tiles and the finished fixtures.
 //
 // On load the layers drop in one after another until the room is finished.
@@ -65,7 +65,8 @@ class Layer {
   mats: { mat: Mat; base: number }[] = [];
   meshes: Mesh[] = [];
   shown = -1;
-  constructor(public index: number, public anchor: Vector3) {}
+  /** anchor: the point the label marks; side: where its text goes, 1 right of it, -1 left. */
+  constructor(public index: number, public anchor: Vector3, public side: 1 | -1 = 1) {}
 
   // Every material can fade, so all of them are transparent. They still write
   // depth (only the glass does not), and each layer draws in a fixed order
@@ -168,14 +169,13 @@ const easeInOut = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t +
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 function buildLayers() {
-  const clay = (color = "#f6f6f6") => new MeshStandardMaterial({ color, roughness: 0.82, metalness: 0 });
-
   // 01 Innenausbau: slab and the two walls, cut like an architectural section.
   const shell = new Layer(0, new Vector3(S, 1.9, BACK - T / 2));
   {
-    const wall = shell.mat(clay());
-    const cut = shell.mat(new MeshStandardMaterial({ color: "#1b1b1d", roughness: 0.6 }));
-    shell.box([LEFT - T, -SLAB, BACK - T], [S, 0, S], wall);
+    const wall = shell.mat(new MeshStandardMaterial({ color: "#efe9df", roughness: 0.85 }));
+    const screed = shell.mat(new MeshStandardMaterial({ color: "#cdc7bd", roughness: 0.9 }));
+    const cut = shell.mat(new MeshStandardMaterial({ color: "#2b2724", roughness: 0.6 }));
+    shell.box([LEFT - T, -SLAB, BACK - T], [S, 0, S], screed);
     shell.box([LEFT - T, -SLAB, BACK - T], [S, H, BACK], wall);
     shell.box([LEFT - T, -SLAB, BACK], [LEFT, H, S], wall);
     // Section cuts: wall tops and the two open ends read as solid black.
@@ -190,13 +190,13 @@ function buildLayers() {
   // 02 Elektro: cables in the wall, flush boxes, the junction above the mirror.
   const elektro = new Layer(1, new Vector3(1.45, 1.7, BACK + 0.02));
   {
-    const cable = elektro.mat(new MeshStandardMaterial({ color: "#151517", roughness: 0.45 }));
-    const box = elektro.mat(new MeshStandardMaterial({ color: "#2a2a2d", roughness: 0.5 }));
+    const cable = elektro.mat(new MeshStandardMaterial({ color: "#e39a2d", roughness: 0.45 }));
+    const box = elektro.mat(new MeshStandardMaterial({ color: "#3a3a3d", roughness: 0.5 }));
     const zb = BACK + 0.02, xl = LEFT + 0.02, top = 2.28;
     elektro.tube([[1.45, 0.02, zb], [1.45, top, zb], [xl, top, zb], [xl, top, 0.35], [xl, 1.1, 0.35]], 0.011, cable);
     elektro.tube([[0.95, top, zb], [0.95, 2.05, zb]], 0.011, cable);
     elektro.tube([[-1.08, top, zb], [-1.08, 2.12, zb]], 0.011, cable);
-    elektro.tube([[1.45, 0.3, zb], [1.7, 0.3, zb]], 0.011, cable, 0.02);
+    elektro.tube([[1.45, 0.3, zb], [S, 0.3, zb]], 0.011, cable, 0.02);
     const flush = new CylinderGeometry(0.034, 0.034, 0.04, 24);
     for (const [x, y] of [[1.45, 1.05], [0.95, 2.05], [-1.08, 2.12]] as const) elektro.add(flush, box, [x, y, BACK + 0.02], { rotate: [Math.PI / 2, 0, 0] });
     elektro.add(flush, box, [LEFT + 0.02, 1.1, 0.35], { rotate: [0, 0, Math.PI / 2] });
@@ -205,16 +205,18 @@ function buildLayers() {
   // 03 Sanitär: supply lines, drain, the WC frame and the shower channel.
   const sanitaer = new Layer(2, new Vector3(-0.15, 1.05, BACK + 0.04));
   {
-    const pipe = sanitaer.mat(new MeshStandardMaterial({ color: "#8f9296", roughness: 0.32, metalness: 0.75 }));
-    const drain = sanitaer.mat(new MeshStandardMaterial({ color: "#58595d", roughness: 0.55 }));
-    const frame = sanitaer.mat(new MeshStandardMaterial({ color: "#3a3b3e", roughness: 0.5, metalness: 0.4 }));
-    const cistern = sanitaer.mat(new MeshStandardMaterial({ color: "#d9d9db", roughness: 0.7 }));
+    // Hot line in copper, cold line in blue, drain in grey HT pipe.
+    const hot = sanitaer.mat(new MeshStandardMaterial({ color: "#c47a4b", roughness: 0.3, metalness: 0.8 }));
+    const cold = sanitaer.mat(new MeshStandardMaterial({ color: "#3d7cc0", roughness: 0.4, metalness: 0.2 }));
+    const drain = sanitaer.mat(new MeshStandardMaterial({ color: "#8e949b", roughness: 0.55 }));
+    const frame = sanitaer.mat(new MeshStandardMaterial({ color: "#aeb4ba", roughness: 0.4, metalness: 0.6 }));
+    const cistern = sanitaer.mat(new MeshStandardMaterial({ color: "#5d87b3", roughness: 0.6 }));
     const zc = BACK + 0.03, zh = BACK + 0.052;
-    sanitaer.tube([[1.25, 0, zc], [1.25, 0.3, zc], [-1.18, 0.3, zc], [-1.18, 1.02, zc]], 0.015, pipe);
-    sanitaer.tube([[1.36, 0, zh], [1.36, 0.4, zh], [-1.0, 0.4, zh], [-1.0, 1.02, zh]], 0.015, pipe);
-    sanitaer.tube([[0.82, 0.3, zc], [0.82, 0.66, zc]], 0.015, pipe, 0.02);
-    sanitaer.tube([[1.08, 0.4, zh], [1.08, 0.66, zh]], 0.015, pipe, 0.02);
-    sanitaer.tube([[-0.05, 0.3, zc], [-0.05, 0.86, zc]], 0.015, pipe, 0.02);
+    sanitaer.tube([[1.25, 0, zc], [1.25, 0.3, zc], [-1.18, 0.3, zc], [-1.18, 1.02, zc]], 0.015, cold);
+    sanitaer.tube([[1.36, 0, zh], [1.36, 0.4, zh], [-1.0, 0.4, zh], [-1.0, 1.02, zh]], 0.015, hot);
+    sanitaer.tube([[0.82, 0.3, zc], [0.82, 0.66, zc]], 0.015, cold, 0.02);
+    sanitaer.tube([[1.08, 0.4, zh], [1.08, 0.66, zh]], 0.015, hot, 0.02);
+    sanitaer.tube([[-0.05, 0.3, zc], [-0.05, 0.86, zc]], 0.015, cold, 0.02);
     sanitaer.tube([[0.95, 0.5, BACK + 0.038], [0.95, 0.08, BACK + 0.038], [-0.15, 0.08, BACK + 0.038], [-0.15, 0.24, BACK + 0.038]], 0.03, drain, 0.1);
     // Pre-wall frame for the wall-hung WC.
     sanitaer.box([-0.42, 0, BACK + 0.01], [-0.38, 1.14, BACK + 0.062], frame);
@@ -226,11 +228,12 @@ function buildLayers() {
     sanitaer.box([-1.48, 0.012, BACK + 0.13], [-0.68, 0.05, BACK + 0.21], drain);
   }
 
-  // 04 Heizung: underfloor heating loop and its manifold on the left wall.
-  const heizung = new Layer(3, new Vector3(1.45, 0.03, 0.9));
+  // 04 Heizung: underfloor heating loop and its manifold on the left wall,
+  // which the label marks from the free space left of the model.
+  const heizung = new Layer(3, new Vector3(LEFT + 0.06, 0.4, 1.3), -1);
   {
-    const loop = heizung.mat(new MeshStandardMaterial({ color: "#a9abae", roughness: 0.45 }));
-    const metal = heizung.mat(new MeshStandardMaterial({ color: "#2e2f32", roughness: 0.4, metalness: 0.5 }));
+    const loop = heizung.mat(new MeshStandardMaterial({ color: "#d4473a", roughness: 0.45 }));
+    const metal = heizung.mat(new MeshStandardMaterial({ color: "#b8954a", roughness: 0.35, metalness: 0.8 }));
     const y = 0.026, x0 = -1.42, x1 = 1.44, z0 = -0.5, z1 = 1.42, runs = 14;
     const points: [number, number, number][] = [[LEFT + 0.06, y, 1.28], [LEFT + 0.06, y, z0], [x0, y, z0]];
     for (let i = 0; i < runs; i++) {
@@ -245,12 +248,13 @@ function buildLayers() {
     heizung.box([LEFT + 0.004, 0.08, 1.12], [LEFT + 0.06, 0.48, 1.48], metal);
   }
 
-  // 05 Fliesen: large-format tiles, dark in the shower, white elsewhere.
-  const fliesen = new Layer(4, new Vector3(0.3, 1.75, BACK + FACE));
+  // 05 Fliesen: large-format tiles, sage green in the shower, warm white
+  // elsewhere and a stone-grey floor. The label marks the shower tiles.
+  const fliesen = new Layer(4, new Vector3(-0.95, 1.7, BACK + FACE));
   {
-    const white = tileTexture("#f3f3f4", "#d6d6d9", 2);
-    const dark = tileTexture("#2c2c2f", "#1a1a1c", 2);
-    const floor = tileTexture("#e4e4e6", "#c9c9cc", 1);
+    const white = tileTexture("#f4efe7", "#d9d1c5", 2);
+    const dark = tileTexture("#5f7d6c", "#4a6556", 2);
+    const floor = tileTexture("#c8beb1", "#aea496", 1);
     const shower = -0.55, showerZ = -0.7;
     const panel = (texture: CanvasTexture, w: number, h: number, tw: number, th: number) =>
       fliesen.mat(new MeshStandardMaterial({ map: tiled(texture, w, h, tw, th), roughness: 0.38, metalness: 0 }));
@@ -268,11 +272,16 @@ function buildLayers() {
     fliesen.box([LEFT + FACE, 0.05, BACK + FACE], [S, FLOOR, S], panel(floor, S - LEFT - FACE, S - BACK - FACE, 0.6, 0.6));
   }
 
-  // 06 Komplettbad: the finished room.
-  const fertig = new Layer(5, new Vector3(0.95, 0.68, BACK + FACE + 0.46));
+  // 06 Komplettbad: the finished room. The label marks the mirror and points
+  // left, onto the open wall above the WC; right of it the wall ends.
+  const fertig = new Layer(5, new Vector3(1.1, 1.75, BACK + FACE + 0.035), -1);
   {
-    const graphite = fertig.mat(new MeshStandardMaterial({ color: "#1d1d20", roughness: 0.42 }));
-    const matte = fertig.mat(new MeshStandardMaterial({ color: "#121214", roughness: 0.35, metalness: 0.55 }));
+    const oak = fertig.mat(new MeshStandardMaterial({ color: "#b4855a", roughness: 0.6 }));
+    const brass = fertig.mat(new MeshStandardMaterial({ color: "#c09a5b", roughness: 0.3, metalness: 1 }));
+    const matte = fertig.mat(new MeshStandardMaterial({ color: "#2a2a2c", roughness: 0.35, metalness: 0.55 }));
+    const terracotta = fertig.mat(new MeshStandardMaterial({ color: "#b8664a", roughness: 0.7 }));
+    const leaf = fertig.mat(new MeshStandardMaterial({ color: "#5d7f4c", roughness: 0.6 }));
+    const linen = fertig.mat(new MeshStandardMaterial({ color: "#d9c3a5", roughness: 0.9 }));
     const ceramic = fertig.mat(new MeshPhysicalMaterial({ color: "#fbfbfb", roughness: 0.16, clearcoat: 1, clearcoatRoughness: 0.08 }));
     const stone = fertig.mat(new MeshStandardMaterial({ color: "#f1f1f2", roughness: 0.5 }));
     const mirror = fertig.mat(new MeshStandardMaterial({ color: "#e9ecef", roughness: 0.04, metalness: 1 }));
@@ -281,12 +290,12 @@ function buildLayers() {
     const wall = BACK + FACE, side = LEFT + FACE;
 
     // Vanity, top, bowl and spout.
-    fertig.add(new RoundedBoxGeometry(0.9, 0.3, 0.46, 4, 0.014), graphite, [0.95, 0.68, wall + 0.23], { edges: true });
+    fertig.add(new RoundedBoxGeometry(0.9, 0.3, 0.46, 4, 0.014), oak, [0.95, 0.68, wall + 0.23], { edges: true });
     fertig.box([0.49, 0.83, wall], [1.41, 0.855, wall + 0.48], stone);
     fertig.box([0.54, 0.525, wall + 0.02], [1.36, 0.53, wall + 0.42], light, false);
     const bowl = [new Vector2(0, 0), new Vector2(0.15, 0), new Vector2(0.19, 0.04), new Vector2(0.2, 0.12), new Vector2(0.185, 0.12), new Vector2(0.17, 0.05), new Vector2(0.12, 0.02), new Vector2(0, 0.02)];
     fertig.add(new LatheGeometry(bowl, 48), ceramic, [0.95, 0.855, wall + 0.25]);
-    fertig.add(new CylinderGeometry(0.011, 0.011, 0.18, 16), matte, [0.95, 1.06, wall + 0.09], { rotate: [Math.PI / 2, 0, 0] });
+    fertig.add(new CylinderGeometry(0.011, 0.011, 0.18, 16), brass, [0.95, 1.06, wall + 0.09], { rotate: [Math.PI / 2, 0, 0] });
     fertig.add(new RoundedBoxGeometry(0.76, 0.82, 0.03, 4, 0.012), mirror, [0.95, 1.6, wall + 0.016], { edges: true });
     fertig.box([0.7, 2.06, wall], [1.2, 2.085, wall + 0.05], matte, false);
     fertig.box([0.72, 2.058, wall + 0.008], [1.18, 2.06, wall + 0.042], light, false);
@@ -295,15 +304,15 @@ function buildLayers() {
 
     // Wall-hung WC and its flush plate.
     fertig.add(new RoundedBoxGeometry(0.37, 0.3, 0.55, 6, 0.08), ceramic, [-0.15, 0.43, wall + 0.275], { edges: true });
-    fertig.add(new RoundedBoxGeometry(0.22, 0.15, 0.012, 2, 0.006), matte, [-0.15, 1.0, wall + 0.006]);
+    fertig.add(new RoundedBoxGeometry(0.22, 0.15, 0.012, 2, 0.006), brass, [-0.15, 1.0, wall + 0.006]);
 
     // Walk-in shower: glass panel, rain head, mixer and channel cover.
     const glassZ0 = wall, glassZ1 = -0.72;
     fertig.box([-0.555, FLOOR, glassZ0], [-0.545, 2.05, glassZ1], glass);
     fertig.box([-0.565, 2.05, glassZ0], [-0.535, 2.07, glassZ1], matte, false);
-    fertig.add(new CylinderGeometry(0.01, 0.01, 0.36, 12), matte, [-1.08, 2.14, wall + 0.18], { rotate: [Math.PI / 2, 0, 0] });
-    fertig.add(new CylinderGeometry(0.15, 0.15, 0.012, 48), matte, [-1.08, 2.12, wall + 0.36]);
-    fertig.add(new RoundedBoxGeometry(0.06, 0.18, 0.05, 2, 0.01), matte, [-1.09, 1.05, wall + 0.025]);
+    fertig.add(new CylinderGeometry(0.01, 0.01, 0.36, 12), brass, [-1.08, 2.14, wall + 0.18], { rotate: [Math.PI / 2, 0, 0] });
+    fertig.add(new CylinderGeometry(0.15, 0.15, 0.012, 48), brass, [-1.08, 2.12, wall + 0.36]);
+    fertig.add(new RoundedBoxGeometry(0.06, 0.18, 0.05, 2, 0.01), brass, [-1.09, 1.05, wall + 0.025]);
     fertig.box([-1.45, FLOOR, wall + 0.06], [-0.71, FLOOR + 0.004, wall + 0.12], matte, false);
 
     // Towel radiator on the left wall.
@@ -311,11 +320,11 @@ function buildLayers() {
     for (let i = 0; i < 9; i++) fertig.add(new CylinderGeometry(0.009, 0.009, 0.5, 10), matte, [side + 0.06, 0.42 + i * 0.12, -0.05], { rotate: [Math.PI / 2, 0, 0] });
 
     // A folded towel and a vase, so the room reads as lived in.
-    fertig.add(new RoundedBoxGeometry(0.26, 0.06, 0.18, 3, 0.02), stone, [1.24, 0.886, wall + 0.24], { edges: true });
+    fertig.add(new RoundedBoxGeometry(0.26, 0.06, 0.18, 3, 0.02), linen, [1.24, 0.886, wall + 0.24], { edges: true });
     const vase = [new Vector2(0, 0), new Vector2(0.05, 0), new Vector2(0.06, 0.06), new Vector2(0.035, 0.17), new Vector2(0.03, 0.2), new Vector2(0, 0.2)];
-    fertig.add(new LatheGeometry(vase, 32), graphite, [0.62, 0.855, wall + 0.18]);
-    fertig.tube([[0.62, 1.05, wall + 0.18], [0.6, 1.25, wall + 0.2], [0.52, 1.42, wall + 0.24]], 0.004, graphite, 0.15);
-    fertig.tube([[0.62, 1.05, wall + 0.18], [0.66, 1.22, wall + 0.16], [0.72, 1.36, wall + 0.12]], 0.004, graphite, 0.15);
+    fertig.add(new LatheGeometry(vase, 32), terracotta, [0.62, 0.855, wall + 0.18]);
+    fertig.tube([[0.62, 1.05, wall + 0.18], [0.6, 1.25, wall + 0.2], [0.52, 1.42, wall + 0.24]], 0.004, leaf, 0.15);
+    fertig.tube([[0.62, 1.05, wall + 0.18], [0.66, 1.22, wall + 0.16], [0.72, 1.36, wall + 0.12]], 0.004, leaf, 0.15);
   }
 
   return [shell, elektro, sanitaer, heizung, fliesen, fertig];
@@ -462,13 +471,12 @@ export function createHero(options: HeroOptions): HeroScene & { ready: Promise<v
     camera.lookAt(target);
   };
 
-  // One label at a time: the trade of the current step, pointing away from the
-  // model into free space, and turned around where it would leave the region.
+  // One label at a time: the trade of the current step, on its layer's side,
+  // and turned around where it would leave the region.
   const projected = new Vector3();
   const textWidths: number[] = [];
   const positionLabels = (shown: number[]) => {
     const r = frameRegion();
-    const mid = (r.left + r.right) / 2;
     const length = width < 600 ? 18 : 32;
     labels.forEach((label, i) => {
       const opacity = progress < -0.5 ? 0 : (1 - smooth(0.2, 0.45, Math.abs(progress - i))) * smooth(0.85, 1, shown[i]);
@@ -479,7 +487,7 @@ export function createHero(options: HeroOptions): HeroScene & { ready: Promise<v
       const x = (projected.x + 1) / 2 * width, y = (1 - projected.y) / 2 * height;
       textWidths[i] ||= (label.lastElementChild as HTMLElement).offsetWidth;
       const reach = length + 10 + textWidths[i];
-      let flip = x < mid;
+      let flip = layers[i].side < 0;
       if (flip && x - reach < r.left) flip = false;
       else if (!flip && x + reach > r.right) flip = true;
       label.classList.toggle("flip", flip);
