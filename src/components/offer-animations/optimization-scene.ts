@@ -4,7 +4,13 @@ export const OPTIMIZATION_TYPING_DELAY_MS = 18;
 export const OPTIMIZATION_RESULTS_DELAY_MS = 280;
 export const OPTIMIZATION_FLIGHT_DELAY_MS = 440;
 
-export type OptimizationScene = { typedLength: number; resultsVisible: boolean; flightStarted: boolean; rank: number; complete: boolean };
+export type OptimizationScene = {
+  typedLength: number;
+  resultsVisible: boolean;
+  flightStarted: boolean;
+  rank: number;
+  complete: boolean;
+};
 
 export function getOptimizationScene(elapsedMs: number, queryLength: number): OptimizationScene {
   const resultsStart = queryLength * OPTIMIZATION_TYPING_DELAY_MS + OPTIMIZATION_RESULTS_DELAY_MS;

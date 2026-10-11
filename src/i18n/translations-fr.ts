@@ -11,7 +11,8 @@ export const frMessages: Readonly<Record<MessageKey, string>> = {
   "nav.closeMenu": "Fermer la navigation",
   "nav.selectLocale": "Choisir la langue",
   "meta.siteTitle": "Suchio | Sites web, croissance & automatisation",
-  "meta.aboutDescription": "Suchio est un studio indépendant spécialisé dans les sites web, les applications, la visibilité, les campagnes payantes, l’IA et l’automatisation.",
+  "meta.aboutDescription":
+    "Suchio est un studio indépendant spécialisé dans les sites web, les applications, la visibilité, les campagnes payantes, l’IA et l’automatisation.",
   "a11y.skip": "Aller au contenu",
   "footer.studio": "Studio",
   "footer.legal": "Juridique",
@@ -19,11 +20,13 @@ export const frMessages: Readonly<Record<MessageKey, string>> = {
   "footer.privacy": "Politique de confidentialité",
   "service.otherServices": "Autres services",
   "meta.imprintDescription": "Mentions légales et identification de Suchio, Aleks Tsenov.",
-  "meta.privacyDescription": "Politique de confidentialité de Suchio pour l’hébergement, les demandes de contact, l’e-mail et la préférence linguistique.",
+  "meta.privacyDescription":
+    "Politique de confidentialité de Suchio pour l’hébergement, les demandes de contact, l’e-mail et la préférence linguistique.",
   "home.heroLine1": "Conçu pour",
   "home.heroAccent": "une croissance",
   "home.heroLine2": "rentable.",
-  "home.heroDescription": "Nous concevons et développons des sites web et des applications, améliorons leur visibilité dans les moteurs de recherche, pilotons des campagnes payantes et automatisons les tâches répétitives.",
+  "home.heroDescription":
+    "Nous concevons et développons des sites web et des applications, améliorons leur visibilité dans les moteurs de recherche, pilotons des campagnes payantes et automatisons les tâches répétitives.",
   "home.ctaContact": "Parler de votre projet",
   "home.section1Title": "Nos services",
   "home.whyTitle": "Pourquoi Suchio",
@@ -31,9 +34,11 @@ export const frMessages: Readonly<Record<MessageKey, string>> = {
   "home.processCopy": "Trois étapes permettent de garder des priorités et des décisions claires dès le départ.",
   "home.faqHeading": "Questions fréquentes",
   "home.benefit1Title": "Une responsabilité directe",
-  "home.benefit1Copy": "Les spécialistes avec lesquels vous échangez planifient et réalisent le travail. Le projet n’est pas confié à une autre équipe.",
+  "home.benefit1Copy":
+    "Les spécialistes avec lesquels vous échangez planifient et réalisent le travail. Le projet n’est pas confié à une autre équipe.",
   "home.benefit2Title": "Un cadre clair avant de commencer",
-  "home.benefit2Copy": "Avant le démarrage, la proposition précise le périmètre, le calendrier, les honoraires et les frais de tiers.",
+  "home.benefit2Copy":
+    "Avant le démarrage, la proposition précise le périmètre, le calendrier, les honoraires et les frais de tiers.",
   "home.benefit3Title": "Un avancement facile à suivre",
   "home.benefit3Copy": "Nous partageons les décisions, l’avancement et les résultats pendant tout le projet.",
   "home.step1Title": "Définir",
@@ -43,9 +48,11 @@ export const frMessages: Readonly<Record<MessageKey, string>> = {
   "home.step3Title": "Réaliser",
   "home.step3Copy": "Nous livrons par cycles ciblés, évaluons ce qui a changé et décidons de la suite.",
   "finalCta.title": "Dites-nous ce qui doit changer.",
-  "finalCta.copy": "Décrivez l’objectif, le problème et vos éventuelles échéances. Nous vous dirons si nous pouvons vous aider et par quoi commencer.",
+  "finalCta.copy":
+    "Décrivez l’objectif, le problème et vos éventuelles échéances. Nous vous dirons si nous pouvons vous aider et par quoi commencer.",
   "contact.title": "Parlez-nous de votre projet.",
-  "contact.copy": "Expliquez-nous ce que vous construisez, ce qui freine actuellement le projet et à quoi ressemblerait un bon résultat.",
+  "contact.copy":
+    "Expliquez-nous ce que vous construisez, ce qui freine actuellement le projet et à quoi ressemblerait un bon résultat.",
   "contact.selectedService": "Service sélectionné",
   "contact.formName": "Votre nom",
   "contact.formNamePlaceholder": "Camille Martin…",
@@ -74,7 +81,8 @@ export const frMessages: Readonly<Record<MessageKey, string>> = {
   "contact.formEmailError": "Veuillez saisir une adresse e-mail valide.",
   "contact.formCompanyUrlError": "Veuillez saisir une adresse web valide commençant par http:// ou https://.",
   "contact.formMessageError": "Veuillez nous donner au moins 20 caractères de contexte.",
-  "contact.formNote": "Vos informations sont envoyées à Suchio par e-mail et ne sont pas ajoutées à une base de données du site.",
+  "contact.formNote":
+    "Vos informations sont envoyées à Suchio par e-mail et ne sont pas ajoutées à une base de données du site.",
   "contact.formError": "Nous n’avons pas pu envoyer votre demande. Réessayez ou écrivez-nous directement :",
   "contact.formSuccessTitle": "Merci, votre demande est bien arrivée.",
   "contact.formSuccessCopy": "Nous examinerons les informations et répondrons à {email}.",
@@ -85,20 +93,27 @@ export const frMessages: Readonly<Record<MessageKey, string>> = {
   "contact.formBodyEmail": "E-mail",
   "contact.formBodyMessage": "Projet et objectif",
   "about.title": "Plusieurs disciplines. Une direction claire.",
-  "about.copy": "Suchio réunit conception et développement web, référencement, campagnes payantes et automatisation lorsqu’un projet demande plusieurs disciplines.",
+  "about.copy":
+    "Suchio réunit conception et développement web, référencement, campagnes payantes et automatisation lorsqu’un projet demande plusieurs disciplines.",
   "about.pov": "Pourquoi nous relions les disciplines",
-  "about.pov1": "La plupart des problèmes numériques ne relèvent pas d’une seule discipline. Un site lent pénalise le référencement. Une page de destination peu convaincante gaspille le budget publicitaire. Une mauvaise transmission entre systèmes crée du travail manuel.",
-  "about.pov2": "Nous pensons ces liens ensemble, puis limitons le périmètre au travail dont le projet a réellement besoin.",
+  "about.pov1":
+    "La plupart des problèmes numériques ne relèvent pas d’une seule discipline. Un site lent pénalise le référencement. Une page de destination peu convaincante gaspille le budget publicitaire. Une mauvaise transmission entre systèmes crée du travail manuel.",
+  "about.pov2":
+    "Nous pensons ces liens ensemble, puis limitons le périmètre au travail dont le projet a réellement besoin.",
   "about.howTitle": "Notre façon de travailler",
   "about.howCopy": "Une responsabilité claire, du premier échange à la réalisation.",
   "about.principle1Title": "Une responsabilité directe",
-  "about.principle1Copy": "La stratégie et la réalisation restent confiées aux mêmes spécialistes responsables pendant tout le projet.",
+  "about.principle1Copy":
+    "La stratégie et la réalisation restent confiées aux mêmes spécialistes responsables pendant tout le projet.",
   "about.principle2Title": "Les faits avant les opinions",
-  "about.principle2Copy": "Les besoins des clients et les données de performance guident nos décisions. Le goût compte aussi, mais il doit pouvoir s’expliquer.",
+  "about.principle2Copy":
+    "Les besoins des clients et les données de performance guident nos décisions. Le goût compte aussi, mais il doit pouvoir s’expliquer.",
   "about.principle3Title": "Seulement le travail nécessaire",
-  "about.principle3Copy": "Chaque proposition commence par un périmètre clair. Nous ajoutons une autre discipline uniquement si l’objectif l’exige.",
+  "about.principle3Copy":
+    "Chaque proposition commence par un périmètre clair. Nous ajoutons une autre discipline uniquement si l’objectif l’exige.",
   "about.principle4Title": "Les nouvelles technologies doivent faire leurs preuves",
-  "about.principle4Copy": "Nous utilisons un nouvel outil lorsqu’il résout un problème défini. Une démonstration convaincante ne suffit pas.",
+  "about.principle4Copy":
+    "Nous utilisons un nouvel outil lorsqu’il résout un problème défini. Une démonstration convaincante ne suffit pas.",
   "imprint.title": "Mentions légales",
   "privacy.title": "Politique de confidentialité",
 };

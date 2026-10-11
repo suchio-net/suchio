@@ -1,0 +1,6 @@
+{
+  "printWidth": 120,
+  "plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
+  "tailwindStylesheet": "./src/styles/app.css",
+  "overrides": [{ "files": "*.astro", "options": { "parser": "astro" } }]
+}

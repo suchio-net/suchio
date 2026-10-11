@@ -148,9 +148,12 @@ export function WebExperienceAnimation({ copy }: { copy: WebExperienceAnimationC
     if (reducedMotion.matches || !("IntersectionObserver" in window)) {
       start();
     } else {
-      observer = new IntersectionObserver((entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) start();
-      }, { rootMargin: "120px 0px", threshold: 0.15 });
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((entry) => entry.isIntersecting)) start();
+        },
+        { rootMargin: "120px 0px", threshold: 0.15 },
+      );
       observer.observe(container);
     }
 
@@ -163,10 +166,7 @@ export function WebExperienceAnimation({ copy }: { copy: WebExperienceAnimationC
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="isolate relative h-full min-h-0 w-full overflow-hidden"
-    >
+    <div ref={containerRef} className="relative isolate h-full min-h-0 w-full overflow-hidden">
       <Scene clipId={clipId} copy={copy} />
     </div>
   );
@@ -175,15 +175,14 @@ export function WebExperienceAnimation({ copy }: { copy: WebExperienceAnimationC
 function renderFrame(container: HTMLDivElement, progress: number) {
   const desktop = SCENES.desktop;
   const phone = SCENES.phone;
-  const morphProgress = progress <= MORPH_START
-    ? 0
-    : easeInOut((progress - MORPH_START) / (1 - MORPH_START));
+  const morphProgress = progress <= MORPH_START ? 0 : easeInOut((progress - MORPH_START) / (1 - MORPH_START));
   const scene = interpolateScene(desktop, phone, morphProgress);
-  const device = progress < FRAME_BUILT
-    ? interpolateDevice(INITIAL_DEVICE, desktop.device, easeOut(progress / FRAME_BUILT))
-    : progress <= MORPH_START
-      ? desktop.device
-      : scene.device;
+  const device =
+    progress < FRAME_BUILT
+      ? interpolateDevice(INITIAL_DEVICE, desktop.device, easeOut(progress / FRAME_BUILT))
+      : progress <= MORPH_START
+        ? desktop.device
+        : scene.device;
 
   setRect(find(container, "[data-web-experience-device]"), device);
   setRect(find(container, "[data-web-experience-clip]"), device);
@@ -198,13 +197,15 @@ function renderFrame(container: HTMLDivElement, progress: number) {
   const headline = find(container, "[data-web-experience-headline]");
   setAttribute(headline, "x", scene.headline.x);
   setAttribute(headline, "y", scene.headline.y);
-  container.querySelectorAll<SVGTSpanElement>("[data-web-experience-headline] tspan")
+  container
+    .querySelectorAll<SVGTSpanElement>("[data-web-experience-headline] tspan")
     .forEach((line) => setAttribute(line, "x", scene.headline.x));
 
   const urlBoxY = scene.urlCenterY - 5;
   const urlBaselineY = scene.urlCenterY + 2.45;
   setAttribute(find(container, "[data-web-experience-url-box]"), "y", urlBoxY);
-  container.querySelectorAll<SVGTextElement>("[data-web-experience-url] text")
+  container
+    .querySelectorAll<SVGTextElement>("[data-web-experience-url] text")
     .forEach((text) => setAttribute(text, "y", urlBaselineY));
 
   setAttribute(find(container, "[data-web-experience-cta-bg]"), "x", scene.cta.x);
@@ -384,16 +385,45 @@ function BrowserChrome({ scene }: { scene: SceneGeometry }) {
       <rect data-web-experience-divider fill="var(--color-line)" {...scene.divider} />
 
       <g data-web-experience-desktop-controls>
-        {[40, 48, 56].map((cx) => <circle cx={cx} cy="71.1" fill="var(--color-neutral-200)" key={cx} r="3" />)}
+        {[40, 48, 56].map((cx) => (
+          <circle cx={cx} cy="71.1" fill="var(--color-neutral-200)" key={cx} r="3" />
+        ))}
       </g>
 
       <g data-web-experience-url>
         <rect data-web-experience-url-box fill="transparent" height="10" width="76" x="212" y={urlBoxY} />
-        <text fill="var(--color-neutral-400)" fontFamily="inherit" fontSize="10" textAnchor="middle" x="250" y={urlBaselineY}>suchio.net</text>
+        <text
+          fill="var(--color-neutral-400)"
+          fontFamily="inherit"
+          fontSize="10"
+          textAnchor="middle"
+          x="250"
+          y={urlBaselineY}
+        >
+          suchio.net
+        </text>
       </g>
 
-      <rect data-web-experience-notch fill="var(--color-neutral-900)" height="4" rx="2" style={{ opacity: 0 }} width="22.5" x="238.75" y="28.6" />
-      <rect data-web-experience-home-indicator fill="var(--color-neutral-900)" height="2" rx="1" style={{ opacity: 0 }} width="32.5" x="233.75" y="420.5" />
+      <rect
+        data-web-experience-notch
+        fill="var(--color-neutral-900)"
+        height="4"
+        rx="2"
+        style={{ opacity: 0 }}
+        width="22.5"
+        x="238.75"
+        y="28.6"
+      />
+      <rect
+        data-web-experience-home-indicator
+        fill="var(--color-neutral-900)"
+        height="2"
+        rx="1"
+        style={{ opacity: 0 }}
+        width="32.5"
+        x="233.75"
+        y="420.5"
+      />
     </g>
   );
 }
@@ -410,9 +440,19 @@ function HeroScene({ copy, scene }: { copy: WebExperienceAnimationCopy; scene: S
       </g>
 
       <g data-web-experience-part="headline" style={{ opacity: 0 }}>
-        <text data-web-experience-headline fill="var(--color-neutral-900)" fontFamily="inherit" fontSize="18.4" fontWeight="600" x={scene.headline.x} y={scene.headline.y}>
+        <text
+          data-web-experience-headline
+          fill="var(--color-neutral-900)"
+          fontFamily="inherit"
+          fontSize="18.4"
+          fontWeight="600"
+          x={scene.headline.x}
+          y={scene.headline.y}
+        >
           <tspan x={scene.headline.x}>{firstLine}</tspan>
-          <tspan dy="1.03em" x={scene.headline.x}>{secondLine}</tspan>
+          <tspan dy="1.03em" x={scene.headline.x}>
+            {secondLine}
+          </tspan>
         </text>
       </g>
 
@@ -438,7 +478,15 @@ function InquiryCta({ copy, geometry }: { copy: WebExperienceAnimationCopy; geom
 
   return (
     <g data-web-experience-part="cta" style={{ opacity: 0 }}>
-      <rect data-web-experience-cta-bg fill="var(--color-neutral-900)" height={height} rx="12" width={width} x={geometry.x} y={geometry.y} />
+      <rect
+        data-web-experience-cta-bg
+        fill="var(--color-neutral-900)"
+        height={height}
+        rx="12"
+        width={width}
+        x={geometry.x}
+        y={geometry.y}
+      />
       <text
         data-web-experience-cta-label
         dominantBaseline="middle"
@@ -458,7 +506,6 @@ function InquiryCta({ copy, geometry }: { copy: WebExperienceAnimationCopy; geom
 }
 
 function CardStack({ scene }: { scene: SceneGeometry }) {
-
   return (
     <g data-web-experience-part="image">
       <rect data-web-experience-image-bounds fill="transparent" {...scene.imageBounds} />
@@ -483,9 +530,30 @@ function FrontCard({ geometry, values }: { geometry: RectGeometry; values: Scene
   return (
     <>
       <rect fill="white" rx="8" stroke="var(--color-brand-400)" vectorEffect="non-scaling-stroke" {...geometry} />
-      <rect fill="var(--color-brand-400)" height={values.blueHeight} rx="6" width={values.innerWidth} x={values.innerX} y={values.innerY} />
-      <rect fill="var(--color-neutral-200)" height="5" rx="2.5" width={values.firstLineWidth} x={values.innerX} y={values.firstLineY} />
-      <rect fill="var(--color-neutral-200)" height="5" rx="2.5" width={values.secondLineWidth} x={values.innerX} y={values.secondLineY} />
+      <rect
+        fill="var(--color-brand-400)"
+        height={values.blueHeight}
+        rx="6"
+        width={values.innerWidth}
+        x={values.innerX}
+        y={values.innerY}
+      />
+      <rect
+        fill="var(--color-neutral-200)"
+        height="5"
+        rx="2.5"
+        width={values.firstLineWidth}
+        x={values.innerX}
+        y={values.firstLineY}
+      />
+      <rect
+        fill="var(--color-neutral-200)"
+        height="5"
+        rx="2.5"
+        width={values.secondLineWidth}
+        x={values.innerX}
+        y={values.secondLineY}
+      />
     </>
   );
 }

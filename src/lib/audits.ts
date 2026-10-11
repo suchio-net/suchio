@@ -30,5 +30,5 @@ export interface Audit {
 
 export const audits: Audit[] = data;
 export function getAudit(code: string): Audit | undefined {
-  return audits.find(audit => audit.code === code);
+  return audits.find((audit) => audit.code === code);
 }

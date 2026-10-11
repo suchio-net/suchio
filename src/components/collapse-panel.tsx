@@ -7,12 +7,7 @@ type CollapsePanelProps = {
   labelledBy: string;
 };
 
-export function CollapsePanel({
-  children,
-  expanded,
-  id,
-  labelledBy,
-}: CollapsePanelProps) {
+export function CollapsePanel({ children, expanded, id, labelledBy }: CollapsePanelProps) {
   return (
     <div
       aria-labelledby={labelledBy}

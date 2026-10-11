@@ -8,11 +8,11 @@
   "routes": [
     {
       "pattern": "http://suchio.net/*",
-      "zone_name": "suchio.net"
+      "zone_name": "suchio.net",
     },
     {
       "pattern": "www.suchio.net/*",
-      "zone_name": "suchio.net"
-    }
-  ]
+      "zone_name": "suchio.net",
+    },
+  ],
 }

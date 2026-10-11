@@ -29,7 +29,8 @@ interface ContentRepository {
 }
 
 function record(value: unknown, source: string): Record<string, unknown> {
-  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error(`Invalid content object in ${source}.`);
+  if (!value || typeof value !== "object" || Array.isArray(value))
+    throw new Error(`Invalid content object in ${source}.`);
   return value as Record<string, unknown>;
 }
 
@@ -45,7 +46,8 @@ function slugValue(value: unknown, source: string): string {
 }
 
 function orderValue(value: unknown, source: string): number {
-  if (typeof value !== "number" || !Number.isInteger(value) || value < 1) throw new Error(`Invalid order in ${source}.`);
+  if (typeof value !== "number" || !Number.isInteger(value) || value < 1)
+    throw new Error(`Invalid order in ${source}.`);
   return value;
 }
 
@@ -68,9 +70,27 @@ function parseFaq(value: unknown, source: string): Faq {
 }
 
 const faqFiles: Record<Locale, readonly (readonly [id: string, value: unknown])[]> = {
-  de: [["01", de01], ["02", de02], ["03", de03], ["04", de04], ["05", de05]],
-  en: [["01", en01], ["02", en02], ["03", en03], ["04", en04], ["05", en05]],
-  fr: [["01", fr01], ["02", fr02], ["03", fr03], ["04", fr04], ["05", fr05]],
+  de: [
+    ["01", de01],
+    ["02", de02],
+    ["03", de03],
+    ["04", de04],
+    ["05", de05],
+  ],
+  en: [
+    ["01", en01],
+    ["02", en02],
+    ["03", en03],
+    ["04", en04],
+    ["05", en05],
+  ],
+  fr: [
+    ["01", fr01],
+    ["02", fr02],
+    ["03", fr03],
+    ["04", fr04],
+    ["05", fr05],
+  ],
 };
 
 function readFaqs(locale: Locale): Faq[] {
@@ -95,7 +115,10 @@ function signature(entries: Faq[]): string[] {
 }
 
 export async function loadContentRepository(): Promise<ContentRepository> {
-  const faqs = Object.fromEntries(locales.map((locale) => [locale, readFaqs(locale)] as const)) as Record<Locale, Faq[]>;
+  const faqs = Object.fromEntries(locales.map((locale) => [locale, readFaqs(locale)] as const)) as Record<
+    Locale,
+    Faq[]
+  >;
   const referenceSignature = JSON.stringify(signature(faqs[defaultLocale]));
 
   for (const locale of locales) {

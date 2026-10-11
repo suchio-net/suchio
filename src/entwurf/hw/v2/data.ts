@@ -24,15 +24,27 @@ export const company = {
   email: "info@handwerker.work",
   // Footer version of the current site; its structured data claims 7 days 09–17.
   hours: [
-    { days: "Montag bis Freitag", short: "Mo–Fr", schemaDays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "08:00", closes: "18:30" },
+    {
+      days: "Montag bis Freitag",
+      short: "Mo–Fr",
+      schemaDays: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "08:00",
+      closes: "18:30",
+    },
     { days: "Samstag", short: "Sa", schemaDays: ["Saturday"], opens: "09:00", closes: "15:00" },
   ],
   rating: googleRating,
   credentials: "Elektrotechnik, Sanitär-Heizung und Fliesen",
 } as const;
 
-export interface Faq { q: string; a: string[] }
-export interface Group { title: string; items: string[] }
+export interface Faq {
+  q: string;
+  a: string[];
+}
+export interface Group {
+  title: string;
+  items: string[];
+}
 
 export interface Service {
   slug: string;
@@ -53,9 +65,12 @@ export interface Service {
   formValue: string;
 }
 
-const pflege = "Bei anerkanntem Pflegegrad kann die Pflegekasse einen barrierefreien Badumbau mit bis zu 4.180 € je Maßnahme bezuschussen (§ 40 Abs. 4 SGB XI). Den Antrag stellen Sie vor Beginn der Arbeiten.";
-const kfw = "Der KfW-Zuschuss 455-B nimmt seit dem 31.07.2026 keine Anträge mehr an. Der zinsgünstige KfW-Kredit 159 „Altersgerecht Umbauen“ bleibt möglich. Stand: Oktober 2026.";
-const steuer = "Ja. Nach § 35a EStG mindern 20 % der Arbeitskosten Ihre Einkommensteuer, höchstens 1.200 € im Jahr. Voraussetzung sind eine Rechnung und die Zahlung per Überweisung. Für Maßnahmen, die mit einem zinsverbilligten Darlehen oder steuerfreien Zuschuss gefördert werden, entfällt der Bonus.";
+const pflege =
+  "Bei anerkanntem Pflegegrad kann die Pflegekasse einen barrierefreien Badumbau mit bis zu 4.180 € je Maßnahme bezuschussen (§ 40 Abs. 4 SGB XI). Den Antrag stellen Sie vor Beginn der Arbeiten.";
+const kfw =
+  "Der KfW-Zuschuss 455-B nimmt seit dem 31.07.2026 keine Anträge mehr an. Der zinsgünstige KfW-Kredit 159 „Altersgerecht Umbauen“ bleibt möglich. Stand: Oktober 2026.";
+const steuer =
+  "Ja. Nach § 35a EStG mindern 20 % der Arbeitskosten Ihre Einkommensteuer, höchstens 1.200 € im Jahr. Voraussetzung sind eine Rechnung und die Zahlung per Überweisung. Für Maßnahmen, die mit einem zinsverbilligten Darlehen oder steuerfreien Zuschuss gefördert werden, entfällt der Bonus.";
 
 export const services: Service[] = [
   {
@@ -63,7 +78,8 @@ export const services: Service[] = [
     name: "Badsanierung",
     nav: "Badsanierung",
     title: "Badsanierung Bad Nauheim & Wetterau – Komplettbad aus einer Hand | Handwerker.work",
-    description: "Badsanierung vom Meisterbetrieb in Bad Nauheim, Friedberg und der Wetterau: Sanitär, Elektro, Fliesen und Boden aus einer Hand. Kostenrechner, 3D-Planung, kostenlose Besichtigung.",
+    description:
+      "Badsanierung vom Meisterbetrieb in Bad Nauheim, Friedberg und der Wetterau: Sanitär, Elektro, Fliesen und Boden aus einer Hand. Kostenrechner, 3D-Planung, kostenlose Besichtigung.",
     h1: "Badsanierung in Bad Nauheim und der Wetterau",
     intro: [
       "Als Meisterbetrieb und Generalunternehmen übernehmen wir einzelne Arbeiten genauso wie die komplette Badsanierung. Sanitär, Elektro, Fliesen, Boden und Innenausbau werden zentral koordiniert.",
@@ -73,19 +89,73 @@ export const services: Service[] = [
     image: "bad-eckwanne",
     imageAlt: "Saniertes Bad mit Eckwanne, wandhängendem WC, Bidet und Aufsatzwaschbecken",
     gallery: [
-      { name: "bad-doppelwaschtisch", alt: "Bad mit Doppelwaschtisch, wandhängendem WC und Holzoptik-Boden im Fischgrätmuster" },
+      {
+        name: "bad-doppelwaschtisch",
+        alt: "Bad mit Doppelwaschtisch, wandhängendem WC und Holzoptik-Boden im Fischgrätmuster",
+      },
       { name: "bad-mosaik", alt: "Bad mit Mosaikfliesen, weißem Handtuchheizkörper und Einbauwanne" },
       { name: "dusche-nische", alt: "Begehbare Glasdusche mit Mosaikband und Wandnische" },
     ],
     groups: [
-      { title: "Komplettbad", items: ["Planung und 3D-Visualisierung", "Komplette Badsanierung inklusive Entkernung", "Barrierefreie Badgestaltung", "Bodengleiche Duschen", "Regendusche und Wellness-Elemente", "Badmöbel und Spiegelschränke", "Beleuchtungskonzepte", "Lüftung und Entfeuchtung"] },
-      { title: "Modernisierung", items: ["Umbau von Wanne zu Dusche", "Austausch von Sanitärobjekten und Armaturen", "Fugensanierung und Silikon", "Reparatur von Wasserschäden"] },
-      { title: "Alle Gewerke im Bad", items: ["Sanitär-, Heizungs- und Wasserinstallation", "Fliesen, Großformat und Naturstein", "Estrich, Boden und elektrische Fußbodenheizung", "Steckdosen, Beleuchtung und Lichtkonzepte", "Trockenbau, Spachtel- und Malerarbeiten", "Rückbau, Entsorgung und Entrümpelung"] },
+      {
+        title: "Komplettbad",
+        items: [
+          "Planung und 3D-Visualisierung",
+          "Komplette Badsanierung inklusive Entkernung",
+          "Barrierefreie Badgestaltung",
+          "Bodengleiche Duschen",
+          "Regendusche und Wellness-Elemente",
+          "Badmöbel und Spiegelschränke",
+          "Beleuchtungskonzepte",
+          "Lüftung und Entfeuchtung",
+        ],
+      },
+      {
+        title: "Modernisierung",
+        items: [
+          "Umbau von Wanne zu Dusche",
+          "Austausch von Sanitärobjekten und Armaturen",
+          "Fugensanierung und Silikon",
+          "Reparatur von Wasserschäden",
+        ],
+      },
+      {
+        title: "Alle Gewerke im Bad",
+        items: [
+          "Sanitär-, Heizungs- und Wasserinstallation",
+          "Fliesen, Großformat und Naturstein",
+          "Estrich, Boden und elektrische Fußbodenheizung",
+          "Steckdosen, Beleuchtung und Lichtkonzepte",
+          "Trockenbau, Spachtel- und Malerarbeiten",
+          "Rückbau, Entsorgung und Entrümpelung",
+        ],
+      },
     ],
-    points: { title: "So läuft eine Badsanierung ab", sequence: true, items: ["Beratung und Konzeptentwicklung", "Planung und Budgetfestlegung", "Abbruch und Vorbereitung", "Installationen und Fliesenarbeiten", "Einbau von Sanitäreinrichtungen und Armaturen", "Abschlussarbeiten und Qualitätskontrolle"] },
+    points: {
+      title: "So läuft eine Badsanierung ab",
+      sequence: true,
+      items: [
+        "Beratung und Konzeptentwicklung",
+        "Planung und Budgetfestlegung",
+        "Abbruch und Vorbereitung",
+        "Installationen und Fliesenarbeiten",
+        "Einbau von Sanitäreinrichtungen und Armaturen",
+        "Abschlussarbeiten und Qualitätskontrolle",
+      ],
+    },
     faqs: [
-      { q: "Was kostet eine Badsanierung?", a: ["Das hängt von Größe, Zustand der Leitungen, Ausstattung, Fliesen und Sanitärobjekten ab. Eine Marktübersicht (Aroundhome, Stand 02/2026) nennt rund 1.200 € pro Quadratmeter für eine Standardausstattung und rund 2.000 € für gehobene Bäder. Ein verbindliches Angebot erhalten Sie nach der kostenlosen Besichtigung."] },
-      { q: "Muss ich Fliesenleger, Installateur und Elektriker selbst beauftragen?", a: ["Nein. Wir koordinieren die beteiligten Gewerke als Generalunternehmen. Sie haben einen festen Ansprechpartner für das gesamte Bad."] },
+      {
+        q: "Was kostet eine Badsanierung?",
+        a: [
+          "Das hängt von Größe, Zustand der Leitungen, Ausstattung, Fliesen und Sanitärobjekten ab. Eine Marktübersicht (Aroundhome, Stand 02/2026) nennt rund 1.200 € pro Quadratmeter für eine Standardausstattung und rund 2.000 € für gehobene Bäder. Ein verbindliches Angebot erhalten Sie nach der kostenlosen Besichtigung.",
+        ],
+      },
+      {
+        q: "Muss ich Fliesenleger, Installateur und Elektriker selbst beauftragen?",
+        a: [
+          "Nein. Wir koordinieren die beteiligten Gewerke als Generalunternehmen. Sie haben einen festen Ansprechpartner für das gesamte Bad.",
+        ],
+      },
       { q: "Welche Zuschüsse gibt es für ein barrierefreies Bad?", a: [pflege, kfw] },
       { q: "Kann ich die Handwerkerkosten von der Steuer absetzen?", a: [steuer] },
     ],
@@ -97,7 +167,8 @@ export const services: Service[] = [
     name: "Sanitär & Heizung",
     nav: "Sanitär & Heizung",
     title: "Sanitär, Heizung & Klima vom SHK-Meisterbetrieb | Handwerker.work",
-    description: "Heizungs- und Sanitäranlagen aus einer Hand: Trinkwasser, Abwasser, Fußbodenheizung, Wärmepumpen und Heizungsregelung. Kostenlose Bestandsaufnahme vor Ort.",
+    description:
+      "Heizungs- und Sanitäranlagen aus einer Hand: Trinkwasser, Abwasser, Fußbodenheizung, Wärmepumpen und Heizungsregelung. Kostenlose Bestandsaufnahme vor Ort.",
     h1: "Sanitär, Heizung und Klima",
     intro: [
       "Moderne Heizungs- und Sanitäranlagen aus einer Hand, vom ersten Konzept bis zur Ausführung. Seit über acht Jahren als SHK-Meisterbetrieb in Frankfurt und im Main-Taunus-Kreis tätig.",
@@ -111,15 +182,66 @@ export const services: Service[] = [
       { name: "bad-wc-fertig", alt: "Fertiges Bad mit wandhängendem WC und grauen Großformatfliesen" },
     ],
     groups: [
-      { title: "Sanitär", items: ["Trinkwasser- und Abwasserinstallation", "Sanitärobjekte und Armaturen", "Legionellenprüfung", "Hebeanlagen", "Rohr- und Kanalreinigung", "Dichtheitsprüfung nach DIN EN 1610"] },
-      { title: "Heizung und Warmwasser", items: ["Fußboden-, Wand- und Deckenheizung", "Wärmepumpen mit Eignungsprüfung und Dimensionierung", "Heizungsregelung mit Smart-Home-Integration und Fernwartung", "Speicher, Durchlauferhitzer, Solarthermie und Frischwasserstation", "Hydraulischer Abgleich"] },
-      { title: "Service und Wartung", items: ["Störungsbehebung", "Rohrbruch- und Leckageortung", "Heizungswartung und Wartungsverträge", "Wartungsberichte"] },
+      {
+        title: "Sanitär",
+        items: [
+          "Trinkwasser- und Abwasserinstallation",
+          "Sanitärobjekte und Armaturen",
+          "Legionellenprüfung",
+          "Hebeanlagen",
+          "Rohr- und Kanalreinigung",
+          "Dichtheitsprüfung nach DIN EN 1610",
+        ],
+      },
+      {
+        title: "Heizung und Warmwasser",
+        items: [
+          "Fußboden-, Wand- und Deckenheizung",
+          "Wärmepumpen mit Eignungsprüfung und Dimensionierung",
+          "Heizungsregelung mit Smart-Home-Integration und Fernwartung",
+          "Speicher, Durchlauferhitzer, Solarthermie und Frischwasserstation",
+          "Hydraulischer Abgleich",
+        ],
+      },
+      {
+        title: "Service und Wartung",
+        items: [
+          "Störungsbehebung",
+          "Rohrbruch- und Leckageortung",
+          "Heizungswartung und Wartungsverträge",
+          "Wartungsberichte",
+        ],
+      },
     ],
-    points: { title: "Worauf Sie sich verlassen können", items: ["Normgerechte Umsetzung nach geltenden DIN-Vorgaben", "Schalloptimierte Installation", "Wartungsfreundliche Leitungsführung", "Langlebige Markenprodukte aus dem Fachhandel", "Qualitätssicherung mit vollständiger Dokumentation"] },
+    points: {
+      title: "Worauf Sie sich verlassen können",
+      items: [
+        "Normgerechte Umsetzung nach geltenden DIN-Vorgaben",
+        "Schalloptimierte Installation",
+        "Wartungsfreundliche Leitungsführung",
+        "Langlebige Markenprodukte aus dem Fachhandel",
+        "Qualitätssicherung mit vollständiger Dokumentation",
+      ],
+    },
     faqs: [
-      { q: "Muss ich meine funktionierende Öl- oder Gasheizung austauschen?", a: ["Nicht pauschal. Oft ist ein Teilaustausch oder eine Reparatur wirtschaftlicher als eine neue Anlage. Seit dem 29.07.2026 gilt das Gebäudemodernisierungsgesetz, das das GEG ersetzt. Welche Regeln für Ihr Gebäude gelten, klären wir technologieoffen bei der Beratung."] },
-      { q: "Lohnt sich eine Wärmepumpe?", a: ["Das hängt vom Gebäude und vom Wärmebedarf ab. Wir prüfen die Eignung und dimensionieren die Anlage passend. Bei Fernwärme kommt es zusätzlich auf den Netzbetreiber an."] },
-      { q: "Brauchen Klimaanlage oder Wärmepumpe eine Genehmigung?", a: ["Je nach Abmessung, Schall und Sichtbarkeit kann nach der Hessischen Bauordnung eine Genehmigung nötig sein. Das klären wir vor der Installation."] },
+      {
+        q: "Muss ich meine funktionierende Öl- oder Gasheizung austauschen?",
+        a: [
+          "Nicht pauschal. Oft ist ein Teilaustausch oder eine Reparatur wirtschaftlicher als eine neue Anlage. Seit dem 29.07.2026 gilt das Gebäudemodernisierungsgesetz, das das GEG ersetzt. Welche Regeln für Ihr Gebäude gelten, klären wir technologieoffen bei der Beratung.",
+        ],
+      },
+      {
+        q: "Lohnt sich eine Wärmepumpe?",
+        a: [
+          "Das hängt vom Gebäude und vom Wärmebedarf ab. Wir prüfen die Eignung und dimensionieren die Anlage passend. Bei Fernwärme kommt es zusätzlich auf den Netzbetreiber an.",
+        ],
+      },
+      {
+        q: "Brauchen Klimaanlage oder Wärmepumpe eine Genehmigung?",
+        a: [
+          "Je nach Abmessung, Schall und Sichtbarkeit kann nach der Hessischen Bauordnung eine Genehmigung nötig sein. Das klären wir vor der Installation.",
+        ],
+      },
     ],
     livePath: "/sanitar/",
     formValue: "sanitaer",
@@ -129,7 +251,8 @@ export const services: Service[] = [
     name: "Elektroinstallation",
     nav: "Elektro",
     title: "Elektroinstallation vom Meisterbetrieb in Wetterau & Frankfurt | Handwerker.work",
-    description: "Elektroinstallation für Alt- und Neubau: Grundinstallation nach DIN VDE 0100, Beleuchtung, Smart Home, Netzwerk, Wallbox und Photovoltaik. Kostenvoranschlag vor Ort.",
+    description:
+      "Elektroinstallation für Alt- und Neubau: Grundinstallation nach DIN VDE 0100, Beleuchtung, Smart Home, Netzwerk, Wallbox und Photovoltaik. Kostenvoranschlag vor Ort.",
     h1: "Elektroinstallation für Altbau und Neubau",
     intro: [
       "Vom zusätzlichen Steckdosenkreis bis zur kompletten Elektrik eines Hauses: Wir verkabeln, installieren und prüfen nach DIN VDE 0100.",
@@ -140,15 +263,65 @@ export const services: Service[] = [
     imageAlt: "Ausgebauter Raum mit neuer Elektroinstallation, Wandleuchte und Einbauschränken",
     gallery: [],
     groups: [
-      { title: "Grundinstallation", items: ["Verkabelung im Alt- und Neubau nach DIN VDE 0100", "FI/LS-Schutz und Potentialausgleich", "Überspannungsschutz", "E-Check", "Steckdosen und Schalter, auch für Feuchträume", "Fehlersuche und Reparatur"] },
-      { title: "Licht und Smart Home", items: ["LED-Beleuchtung, Lichtspots und Strips", "Außen- und Notbeleuchtung", "Smart Home mit KNX, WLAN, Zigbee oder Z-Wave", "Sprachsteuerung und Zeitschaltuhren", "Bewegungsmelder"] },
-      { title: "Netzwerk und Sicherheit", items: ["Netzwerk mit Cat 6/7 und WLAN-Accesspoints", "SAT, Kabel und Multiroom", "Telefon- und Türsprechanlagen", "Alarmanlagen und IP-Kameras", "Rauch- und CO-Melder"] },
-      { title: "Energie", items: ["Wallbox mit Lastmanagement", "Photovoltaik und Wechselrichter", "Batteriespeicher und Energiemanagement"] },
+      {
+        title: "Grundinstallation",
+        items: [
+          "Verkabelung im Alt- und Neubau nach DIN VDE 0100",
+          "FI/LS-Schutz und Potentialausgleich",
+          "Überspannungsschutz",
+          "E-Check",
+          "Steckdosen und Schalter, auch für Feuchträume",
+          "Fehlersuche und Reparatur",
+        ],
+      },
+      {
+        title: "Licht und Smart Home",
+        items: [
+          "LED-Beleuchtung, Lichtspots und Strips",
+          "Außen- und Notbeleuchtung",
+          "Smart Home mit KNX, WLAN, Zigbee oder Z-Wave",
+          "Sprachsteuerung und Zeitschaltuhren",
+          "Bewegungsmelder",
+        ],
+      },
+      {
+        title: "Netzwerk und Sicherheit",
+        items: [
+          "Netzwerk mit Cat 6/7 und WLAN-Accesspoints",
+          "SAT, Kabel und Multiroom",
+          "Telefon- und Türsprechanlagen",
+          "Alarmanlagen und IP-Kameras",
+          "Rauch- und CO-Melder",
+        ],
+      },
+      {
+        title: "Energie",
+        items: [
+          "Wallbox mit Lastmanagement",
+          "Photovoltaik und Wechselrichter",
+          "Batteriespeicher und Energiemanagement",
+        ],
+      },
     ],
     faqs: [
-      { q: "Was kostet die Elektrik für ein Haus?", a: ["Das hängt von Größe, Umfang und Technik ab. Nach einer Begehung erhalten Sie einen genauen Kostenvoranschlag."] },
-      { q: "Warum sollte die Elektroanlage regelmäßig geprüft werden?", a: ["Eine regelmäßige Prüfung wie der E-Check senkt das Ausfallrisiko, verlängert die Lebensdauer der Anlage und erhöht die Sicherheit."] },
-      { q: "Lässt sich Smart Home in einen Altbau nachrüsten?", a: ["Ja. Funklösungen wie Zigbee oder Z-Wave kommen oft ohne neue Leitungen aus. Für eine Neuinstallation eignet sich KNX. Wir beraten Sie, was zu Ihrem Haus passt."] },
+      {
+        q: "Was kostet die Elektrik für ein Haus?",
+        a: [
+          "Das hängt von Größe, Umfang und Technik ab. Nach einer Begehung erhalten Sie einen genauen Kostenvoranschlag.",
+        ],
+      },
+      {
+        q: "Warum sollte die Elektroanlage regelmäßig geprüft werden?",
+        a: [
+          "Eine regelmäßige Prüfung wie der E-Check senkt das Ausfallrisiko, verlängert die Lebensdauer der Anlage und erhöht die Sicherheit.",
+        ],
+      },
+      {
+        q: "Lässt sich Smart Home in einen Altbau nachrüsten?",
+        a: [
+          "Ja. Funklösungen wie Zigbee oder Z-Wave kommen oft ohne neue Leitungen aus. Für eine Neuinstallation eignet sich KNX. Wir beraten Sie, was zu Ihrem Haus passt.",
+        ],
+      },
     ],
     livePath: "/elektriker-gesucht/",
     formValue: "elektro",
@@ -158,7 +331,8 @@ export const services: Service[] = [
     name: "Fliesenarbeiten",
     nav: "Fliesen",
     title: "Fliesenleger vom Meisterbetrieb in Wetterau & Frankfurt | Handwerker.work",
-    description: "Fliesenarbeiten vom Meisterbetrieb: Wand- und Bodenfliesen, Großformat, Feinsteinzeug, Mosaik und Naturstein, Abdichtung nach DIN 18534. Bad Nauheim, Friedberg, Bad Homburg, Frankfurt.",
+    description:
+      "Fliesenarbeiten vom Meisterbetrieb: Wand- und Bodenfliesen, Großformat, Feinsteinzeug, Mosaik und Naturstein, Abdichtung nach DIN 18534. Bad Nauheim, Friedberg, Bad Homburg, Frankfurt.",
     h1: "Fliesenarbeiten vom Meisterbetrieb",
     intro: [
       "Wir planen, schneiden und verlegen Fliesen nach Ihren Wünschen, von der Wand im Bad bis zum großformatigen Boden.",
@@ -173,14 +347,42 @@ export const services: Service[] = [
       { name: "fliesen-nische-rohbau", alt: "Wandfliesen mit Fliesenkreuzen und vorbereiteter Nische" },
     ],
     groups: [
-      { title: "Verlegung", items: ["Wand- und Bodenfliesen", "Großformat und Feinsteinzeug", "Mosaik und Bordüren", "Naturstein", "Fliesenspiegel in der Küche", "Spezialverlegungen"] },
-      { title: "Nassbereiche", items: ["Bad, Dusche und Küche", "Abdichtung nach DIN 18534", "Verfugung mit Zement, Epoxid und Silikon"] },
+      {
+        title: "Verlegung",
+        items: [
+          "Wand- und Bodenfliesen",
+          "Großformat und Feinsteinzeug",
+          "Mosaik und Bordüren",
+          "Naturstein",
+          "Fliesenspiegel in der Küche",
+          "Spezialverlegungen",
+        ],
+      },
+      {
+        title: "Nassbereiche",
+        items: ["Bad, Dusche und Küche", "Abdichtung nach DIN 18534", "Verfugung mit Zement, Epoxid und Silikon"],
+      },
       { title: "Reparatur", items: ["Ersatz beschädigter Fliesen", "Fugen erneuern", "Pflege von Naturstein"] },
     ],
     faqs: [
-      { q: "Was kostet ein Fliesenleger?", a: ["Das hängt vom Material, vom Format und vom Aufwand der Verlegung ab. Wir sehen uns die Fläche an und nennen Ihnen danach einen Preis."] },
-      { q: "Kann man neue Fliesen auf alte Fliesen legen?", a: ["Das ist möglich, wenn der alte Belag fest haftet und tragfähig ist. Wir prüfen das vorher und grundieren bei Bedarf."] },
-      { q: "Matte oder glänzende Fliesen?", a: ["Glänzende Fliesen zeigen Flecken und Kalk stärker. Matte Fliesen verzeihen mehr, können in porösen Oberflächen aber Schmutz halten."] },
+      {
+        q: "Was kostet ein Fliesenleger?",
+        a: [
+          "Das hängt vom Material, vom Format und vom Aufwand der Verlegung ab. Wir sehen uns die Fläche an und nennen Ihnen danach einen Preis.",
+        ],
+      },
+      {
+        q: "Kann man neue Fliesen auf alte Fliesen legen?",
+        a: [
+          "Das ist möglich, wenn der alte Belag fest haftet und tragfähig ist. Wir prüfen das vorher und grundieren bei Bedarf.",
+        ],
+      },
+      {
+        q: "Matte oder glänzende Fliesen?",
+        a: [
+          "Glänzende Fliesen zeigen Flecken und Kalk stärker. Matte Fliesen verzeihen mehr, können in porösen Oberflächen aber Schmutz halten.",
+        ],
+      },
     ],
     livePath: "/fliesenleger-frankfurt-rhein-main/",
     formValue: "fliesen",
@@ -190,7 +392,8 @@ export const services: Service[] = [
     name: "Renovierung & Innenausbau",
     nav: "Renovierung",
     title: "Renovierung, Sanierung & Innenausbau aus einer Hand | Handwerker.work",
-    description: "Renovierung und Komplettsanierung in Bad Nauheim, der Wetterau und Frankfurt: Kernsanierung, Trockenbau, Estrich, Böden, Parkett und Malerarbeiten aus einer Hand.",
+    description:
+      "Renovierung und Komplettsanierung in Bad Nauheim, der Wetterau und Frankfurt: Kernsanierung, Trockenbau, Estrich, Böden, Parkett und Malerarbeiten aus einer Hand.",
     h1: "Renovierung, Sanierung und Innenausbau",
     intro: [
       "Wir renovieren und sanieren Wohnungen, Häuser und Gewerbeflächen, vom einzelnen Raum bis zur Kernsanierung. Sie haben einen festen Ansprechpartner, der alle Arbeiten koordiniert.",
@@ -205,13 +408,37 @@ export const services: Service[] = [
     ],
     groups: [
       { title: "Sanierung", items: ["Kernsanierung und Entkernung", "Rückbau und Entsorgung", "Wanddurchbrüche"] },
-      { title: "Innenausbau", items: ["Trockenbau: Trennwände, abgehängte Decken, Schallschutz", "Estrich: Zement-, Fließ- und Trockenestrich, auch mit Fußbodenheizung", "Bodenverlegung und Parkett", "Türen einbauen"] },
-      { title: "Oberflächen", items: ["Spachteln, Tapezieren und Streichen", "Feuchtraumfarben", "Schönheitsreparaturen"] },
+      {
+        title: "Innenausbau",
+        items: [
+          "Trockenbau: Trennwände, abgehängte Decken, Schallschutz",
+          "Estrich: Zement-, Fließ- und Trockenestrich, auch mit Fußbodenheizung",
+          "Bodenverlegung und Parkett",
+          "Türen einbauen",
+        ],
+      },
+      {
+        title: "Oberflächen",
+        items: ["Spachteln, Tapezieren und Streichen", "Feuchtraumfarben", "Schönheitsreparaturen"],
+      },
     ],
     faqs: [
-      { q: "Was ist der Unterschied zwischen Sanierung und Renovierung?", a: ["Eine Sanierung behebt Schäden oder bringt die Substanz auf den aktuellen Stand, etwa Leitungen oder Estrich. Eine Renovierung verbessert die Oberflächen. Oft gehört beides zu einem Projekt."] },
-      { q: "Wer ist in einer Mietwohnung für die Renovierung zuständig?", a: ["Schönheitsreparaturen übernimmt in der Regel der Mieter, größere Arbeiten der Vermieter. Bei Projekten in Mietobjekten stimmen wir uns mit beiden Seiten ab."] },
-      { q: "Was kostet eine komplette Renovierung?", a: ["Das hängt von den Maßnahmen ab. Nach der Besichtigung erhalten Sie eine detaillierte Kalkulation."] },
+      {
+        q: "Was ist der Unterschied zwischen Sanierung und Renovierung?",
+        a: [
+          "Eine Sanierung behebt Schäden oder bringt die Substanz auf den aktuellen Stand, etwa Leitungen oder Estrich. Eine Renovierung verbessert die Oberflächen. Oft gehört beides zu einem Projekt.",
+        ],
+      },
+      {
+        q: "Wer ist in einer Mietwohnung für die Renovierung zuständig?",
+        a: [
+          "Schönheitsreparaturen übernimmt in der Regel der Mieter, größere Arbeiten der Vermieter. Bei Projekten in Mietobjekten stimmen wir uns mit beiden Seiten ab.",
+        ],
+      },
+      {
+        q: "Was kostet eine komplette Renovierung?",
+        a: ["Das hängt von den Maßnahmen ab. Nach der Besichtigung erhalten Sie eine detaillierte Kalkulation."],
+      },
     ],
     livePath: "/renovierung/",
     formValue: "renovierung",
@@ -256,16 +483,42 @@ export const places = [
 
 // From the current homepage FAQ, condensed.
 export const faqsHome: Faq[] = [
-  { q: "Kann Handwerker.work meine komplette Badsanierung übernehmen?", a: ["Ja. Von der Demontage über Sanitär- und Elektroinstallation bis zu den Fliesen übernehmen wir das ganze Bad und koordinieren alle Gewerke."] },
-  { q: "Übernehmen Sie auch Komplettsanierungen in der Wetterau?", a: ["Ja. Wir renovieren und sanieren in Bad Nauheim und der Wetterau aus einer Hand, mit einem festen Ansprechpartner."] },
-  { q: "In welchen Orten sind Sie im Einsatz?", a: ["Unser Schwerpunkt liegt in Bad Nauheim und der Wetterau, etwa in Friedberg, Butzbach, Wölfersheim und Rosbach vor der Höhe, sowie in Frankfurt am Main, Bad Homburg und dem Rhein-Main-Gebiet."] },
-  { q: "Ist die Besichtigung kostenlos?", a: ["Ja. Besichtigung und Angebot sind für Sie kostenlos und unverbindlich."] },
-  { q: "Wie frage ich ein Projekt an?", a: ["Über das Anfrageformular, per Telefon, WhatsApp oder E-Mail. Mit ein paar Fotos können wir den Aufwand schneller einschätzen."] },
+  {
+    q: "Kann Handwerker.work meine komplette Badsanierung übernehmen?",
+    a: [
+      "Ja. Von der Demontage über Sanitär- und Elektroinstallation bis zu den Fliesen übernehmen wir das ganze Bad und koordinieren alle Gewerke.",
+    ],
+  },
+  {
+    q: "Übernehmen Sie auch Komplettsanierungen in der Wetterau?",
+    a: [
+      "Ja. Wir renovieren und sanieren in Bad Nauheim und der Wetterau aus einer Hand, mit einem festen Ansprechpartner.",
+    ],
+  },
+  {
+    q: "In welchen Orten sind Sie im Einsatz?",
+    a: [
+      "Unser Schwerpunkt liegt in Bad Nauheim und der Wetterau, etwa in Friedberg, Butzbach, Wölfersheim und Rosbach vor der Höhe, sowie in Frankfurt am Main, Bad Homburg und dem Rhein-Main-Gebiet.",
+    ],
+  },
+  {
+    q: "Ist die Besichtigung kostenlos?",
+    a: ["Ja. Besichtigung und Angebot sind für Sie kostenlos und unverbindlich."],
+  },
+  {
+    q: "Wie frage ich ein Projekt an?",
+    a: [
+      "Über das Anfrageformular, per Telefon, WhatsApp oder E-Mail. Mit ein paar Fotos können wir den Aufwand schneller einschätzen.",
+    ],
+  },
 ];
 
 export const sources = [
   { label: "§ 40 SGB XI", href: "https://www.gesetze-im-internet.de/sgb_11/__40.html" },
-  { label: "KfW-Meldung vom 31.07.2026", href: "https://www.kfw.de/%C3%9Cber-die-KfW/Newsroom/Aktuelles/News-Details_903232.html" },
+  {
+    label: "KfW-Meldung vom 31.07.2026",
+    href: "https://www.kfw.de/%C3%9Cber-die-KfW/Newsroom/Aktuelles/News-Details_903232.html",
+  },
   { label: "§ 35a EStG", href: "https://www.gesetze-im-internet.de/estg/__35a.html" },
   { label: "Aroundhome, Stand 18.02.2026", href: "https://www.aroundhome.de/badezimmer/preise-kosten/" },
 ];
@@ -281,9 +534,17 @@ export const referenceTopics = [
 export type ReferenceTopic = (typeof referenceTopics)[number]["key"];
 
 export const references: { name: string; alt: string; topic: ReferenceTopic }[] = [
-  { name: "bad-wanne-holz", alt: "Bad mit eingebauter Wanne, Natursteinwand und schwebendem Holzwaschtisch", topic: "bad" },
+  {
+    name: "bad-wanne-holz",
+    alt: "Bad mit eingebauter Wanne, Natursteinwand und schwebendem Holzwaschtisch",
+    topic: "bad",
+  },
   { name: "bad-eckwanne", alt: "Bad mit Eckwanne, wandhängendem WC, Bidet und Aufsatzwaschbecken", topic: "bad" },
-  { name: "bad-doppelwaschtisch", alt: "Bad mit Doppelwaschtisch und Holzoptik-Boden im Fischgrätmuster", topic: "bad" },
+  {
+    name: "bad-doppelwaschtisch",
+    alt: "Bad mit Doppelwaschtisch und Holzoptik-Boden im Fischgrätmuster",
+    topic: "bad",
+  },
   { name: "bad-mosaik", alt: "Bad mit Mosaikfliesen, Handtuchheizkörper und Einbauwanne", topic: "bad" },
   { name: "bad-wc-fertig", alt: "Bad mit wandhängendem WC, grauen Großformatfliesen und LED-Ablage", topic: "bad" },
   { name: "dusche-nische", alt: "Begehbare Glasdusche mit Mosaikband und Wandnische", topic: "bad" },

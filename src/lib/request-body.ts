@@ -1,4 +1,7 @@
-export async function readLimitedBytes(body: ReadableStream<Uint8Array>, maximumBytes: number): Promise<Uint8Array | null> {
+export async function readLimitedBytes(
+  body: ReadableStream<Uint8Array>,
+  maximumBytes: number,
+): Promise<Uint8Array | null> {
   const reader = body.getReader();
   const chunks: Uint8Array[] = [];
   let size = 0;
@@ -15,16 +18,20 @@ export async function readLimitedBytes(body: ReadableStream<Uint8Array>, maximum
     }
     const bytes = new Uint8Array(size);
     let offset = 0;
-    for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+    for (const chunk of chunks) {
+      bytes.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
     return bytes;
   } finally {
     reader.releaseLock();
   }
 }
 
-export async function readLimitedJson(request: Request, maximumBytes = 20_000): Promise<
-  { ok: true; value: unknown } | { ok: false; status: 400 | 413 }
-> {
+export async function readLimitedJson(
+  request: Request,
+  maximumBytes = 20_000,
+): Promise<{ ok: true; value: unknown } | { ok: false; status: 400 | 413 }> {
   if (Number(request.headers.get("content-length") ?? 0) > maximumBytes) return { ok: false, status: 413 };
   if (!request.body) return { ok: false, status: 400 };
   try {

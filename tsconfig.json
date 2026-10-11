@@ -5,20 +5,9 @@
     "jsxImportSource": "react",
     "allowJs": false,
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
-  "include": [
-    ".astro/types.d.ts",
-    "**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    ".wrangler",
-    "output",
-    "tmp"
-  ]
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["node_modules", "dist", ".wrangler", "output", "tmp"]
 }

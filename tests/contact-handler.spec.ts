@@ -3,27 +3,58 @@ import { buildContactEmail, handleContactRequest } from "../src/lib/contact-hand
 import { retryAfterSeconds } from "../src/lib/contact-response";
 
 const validEnquiry = {
-  name: "Audit example", email: "audit@example.com", company: "", companyUrl: "",
-  service: "not-sure", budget: "budget-5", message: "A synthetic enquiry for automated verification.",
-  locale: "en", website: "", submissionId: "d0d5bcd1-e816-42af-894c-3eac734a502d",
+  name: "Audit example",
+  email: "audit@example.com",
+  company: "",
+  companyUrl: "",
+  service: "not-sure",
+  budget: "budget-5",
+  message: "A synthetic enquiry for automated verification.",
+  locale: "en",
+  website: "",
+  submissionId: "d0d5bcd1-e816-42af-894c-3eac734a502d",
 };
 function enquiryRequest(body: unknown, headers: Record<string, string> = {}) {
-  return new Request("https://suchio.net/api/contact", { method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify(body) });
+  return new Request("https://suchio.net/api/contact", {
+    method: "POST",
+    headers: { "content-type": "application/json", ...headers },
+    body: JSON.stringify(body),
+  });
 }
 
 test("rejects oversized actual bodies regardless of the declared length", async () => {
   const variants: Record<string, string>[] = [{}, { "content-length": "1" }];
   for (const headers of variants) {
-    const response = await handleContactRequest(enquiryRequest({ ...validEnquiry, padding: "é".repeat(12_000) }, headers), {});
+    const response = await handleContactRequest(
+      enquiryRequest({ ...validEnquiry, padding: "é".repeat(12_000) }, headers),
+      {},
+    );
     expect(response.status).toBe(413);
   }
 });
 
 test("rejects malformed JSON, spoofed forwarded hosts, and invalid fields before delivery", async () => {
-  const malformed = new Request("https://suchio.net/api/contact", { method: "POST", headers: { "content-type": "application/json" }, body: "{" });
+  const malformed = new Request("https://suchio.net/api/contact", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: "{",
+  });
   expect((await handleContactRequest(malformed, {})).status).toBe(400);
-  expect((await handleContactRequest(enquiryRequest(validEnquiry, { origin: "https://attacker.example", "x-forwarded-host": "attacker.example" }), {})).status).toBe(403);
-  for (const changes of [{ service: "" }, { budget: "invalid" }, { locale: "xx" }, { submissionId: "invalid" }, { companyUrl: "javascript:alert(1)" }]) {
+  expect(
+    (
+      await handleContactRequest(
+        enquiryRequest(validEnquiry, { origin: "https://attacker.example", "x-forwarded-host": "attacker.example" }),
+        {},
+      )
+    ).status,
+  ).toBe(403);
+  for (const changes of [
+    { service: "" },
+    { budget: "invalid" },
+    { locale: "xx" },
+    { submissionId: "invalid" },
+    { companyUrl: "javascript:alert(1)" },
+  ]) {
     expect((await handleContactRequest(enquiryRequest({ ...validEnquiry, ...changes }), {})).status).toBe(400);
   }
 });
@@ -39,7 +70,11 @@ test("sends the same provider idempotency key on retries", async () => {
     return Response.json({ id: "test-email" });
   };
   for (let attempt = 0; attempt < 2; attempt++) {
-    const response = await handleContactRequest(enquiryRequest(validEnquiry), { apiKey: "test", from: "test@example.com", to: "test@example.com" }, transport);
+    const response = await handleContactRequest(
+      enquiryRequest(validEnquiry),
+      { apiKey: "test", from: "test@example.com", to: "test@example.com" },
+      transport,
+    );
     expect(response.status).toBe(200);
   }
   expect(keys).toEqual([`contact/${validEnquiry.submissionId}`, `contact/${validEnquiry.submissionId}`]);
@@ -50,14 +85,27 @@ test("logs operational events without enquiry contents or credentials", async ()
   const error = spyOn(console, "error").mockImplementation(() => {});
   try {
     const config = { apiKey: "private-test-key", from: "sender@example.com", to: "recipient@example.com" };
-    for (const transport of [async () => Response.json({ id: "provider-id" }), async () => new Response(null, { status: 403 }), async () => { throw new Error(validEnquiry.email); }]) {
+    for (const transport of [
+      async () => Response.json({ id: "provider-id" }),
+      async () => new Response(null, { status: 403 }),
+      async () => {
+        throw new Error(validEnquiry.email);
+      },
+    ]) {
       await handleContactRequest(enquiryRequest(validEnquiry), config, transport);
     }
     await handleContactRequest(enquiryRequest(validEnquiry), {});
-    const logs = [...info.mock.calls, ...error.mock.calls].map(call => JSON.parse(String(call[0])));
-    expect(logs.map(log => log.event).sort()).toEqual(["contact.accepted", "contact.failed", "contact.rejected", "contact.unconfigured"]);
-    for (const value of [validEnquiry.name, validEnquiry.email, validEnquiry.message, ...Object.values(config)]) expect(JSON.stringify(logs)).not.toContain(value);
-    for (const log of logs) expect(Object.keys(log).every(key => ["event", "submissionId", "emailId", "status"].includes(key))).toBeTrue();
+    const logs = [...info.mock.calls, ...error.mock.calls].map((call) => JSON.parse(String(call[0])));
+    expect(logs.map((log) => log.event).sort()).toEqual([
+      "contact.accepted",
+      "contact.failed",
+      "contact.rejected",
+      "contact.unconfigured",
+    ]);
+    for (const value of [validEnquiry.name, validEnquiry.email, validEnquiry.message, ...Object.values(config)])
+      expect(JSON.stringify(logs)).not.toContain(value);
+    for (const log of logs)
+      expect(Object.keys(log).every((key) => ["event", "submissionId", "emailId", "status"].includes(key))).toBeTrue();
   } finally {
     info.mockRestore();
     error.mockRestore();
@@ -78,7 +126,13 @@ test("returns stable error codes and interprets retry delays safely", async () =
 
 test("returns a controlled failure for provider rejection, malformed success, and network failure", async () => {
   const config = { apiKey: "test", from: "test@example.com", to: "test@example.com" };
-  for (const transport of [async () => new Response(null, { status: 429 }), async () => Response.json({}), async () => { throw new Error("offline"); }]) {
+  for (const transport of [
+    async () => new Response(null, { status: 429 }),
+    async () => Response.json({}),
+    async () => {
+      throw new Error("offline");
+    },
+  ]) {
     expect((await handleContactRequest(enquiryRequest(validEnquiry), config, transport)).status).toBe(502);
   }
 });

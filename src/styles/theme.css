@@ -55,7 +55,9 @@
 
   --shadow-surface: 0 0 0 1px rgb(0 0 0 / 8%);
   --shadow-surface-hover: 0 0 0 1px rgb(0 0 0 / 8%), 0 2px 2px rgb(0 0 0 / 4%), 0 8px 8px -8px rgb(0 0 0 / 4%);
-  --shadow-floating: 0 0 0 1px rgb(0 0 0 / 8%), 0 1px 1px rgb(0 0 0 / 2%), 0 4px 8px -4px rgb(0 0 0 / 4%), 0 16px 24px -8px rgb(0 0 0 / 6%);
+  --shadow-floating:
+    0 0 0 1px rgb(0 0 0 / 8%), 0 1px 1px rgb(0 0 0 / 2%), 0 4px 8px -4px rgb(0 0 0 / 4%),
+    0 16px 24px -8px rgb(0 0 0 / 6%);
   --shadow-accent-surface: inset 0 0 0 1px var(--color-brand-200);
   --shadow-dark-surface: 0 0 0 1px rgb(255 255 255 / 15%);
   --shadow-dark-surface-hover: 0 0 0 1px rgb(255 255 255 / 24%);
@@ -67,33 +69,33 @@
   --text-ui: 0.9375rem;
   --text-ui--line-height: 1.5;
   --text-ui--letter-spacing: 0;
-  --text-lead: clamp(1.0625rem, calc(1.02rem + .25vw), 1.25rem);
+  --text-lead: clamp(1.0625rem, calc(1.02rem + 0.25vw), 1.25rem);
   --text-lead--line-height: 1.5;
-  --text-lead--letter-spacing: -.01em;
+  --text-lead--letter-spacing: -0.01em;
   --text-lead--font-weight: 400;
   --text-heading-sm: 1.25rem;
   --text-heading-sm--line-height: 1.25;
-  --text-heading-sm--letter-spacing: -.015em;
+  --text-heading-sm--letter-spacing: -0.015em;
   --text-heading-sm--font-weight: 500;
   --text-heading-md: 1.5rem;
   --text-heading-md--line-height: 1.2;
-  --text-heading-md--letter-spacing: -.025em;
+  --text-heading-md--letter-spacing: -0.025em;
   --text-heading-md--font-weight: 500;
-  --text-heading-lg: clamp(2rem, calc(1.8rem + .85vw), 2.5rem);
+  --text-heading-lg: clamp(2rem, calc(1.8rem + 0.85vw), 2.5rem);
   --text-heading-lg--line-height: 1.08;
-  --text-heading-lg--letter-spacing: -.035em;
+  --text-heading-lg--letter-spacing: -0.035em;
   --text-heading-lg--font-weight: 500;
   --text-display-service: clamp(2.5rem, calc(1.0625rem + 2.5vw), 3.25rem);
   --text-display-service--line-height: 1.06;
-  --text-display-service--letter-spacing: -.035em;
+  --text-display-service--letter-spacing: -0.035em;
   --text-display-service--font-weight: 500;
   --text-display-sm: clamp(2.5rem, calc(2.02rem + 2.05vw), 3.75rem);
   --text-display-sm--line-height: 1.04;
-  --text-display-sm--letter-spacing: -.04em;
+  --text-display-sm--letter-spacing: -0.04em;
   --text-display-sm--font-weight: 500;
   --text-display-lg: clamp(2.75rem, calc(2.08rem + 2.85vw), 4.5rem);
   --text-display-lg--line-height: 1.02;
-  --text-display-lg--letter-spacing: -.045em;
+  --text-display-lg--letter-spacing: -0.045em;
   --text-display-lg--font-weight: 500;
 
   --spacing-page: max(min(1.5rem, 7.5vw), calc((100vw - 75rem) / 2));
@@ -107,8 +109,8 @@
   --spacing-menu: clamp(1.5rem, 5vw, 5rem);
   --spacing-card-padding: min(1.5rem, 7.5vw);
   --spacing-card-fluid: clamp(1.5rem, 4vw, 2.5rem);
-  --spacing-control-x: .875rem;
-  --spacing-control-y: .5rem;
+  --spacing-control-x: 0.875rem;
+  --spacing-control-y: 0.5rem;
 
   --container-layout: 75rem;
   --container-reading: 68ch;
@@ -121,7 +123,7 @@
   --breakpoint-wide: 72.5rem;
 
   /* Existing motion contract. Values are intentionally unchanged. */
-  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (width < 37.5rem) {

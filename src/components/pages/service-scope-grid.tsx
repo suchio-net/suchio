@@ -68,14 +68,22 @@ export function ServiceScopeGrid({ groups, serviceId }: { groups: readonly Scope
             key={group.id}
           >
             <div className="flex min-w-0 items-center gap-3.5">
-              <span className={`grid size-10 shrink-0 place-items-center rounded-control ${scopeIconStyles[index] ?? "bg-brand-50 text-brand-600"}`} data-scope-icon>
+              <span
+                className={`grid size-10 shrink-0 place-items-center rounded-control ${scopeIconStyles[index] ?? "bg-brand-50 text-brand-600"}`}
+                data-scope-icon
+              >
                 <Icon className="size-5" strokeWidth={1.7} aria-hidden="true" />
               </span>
               <h3 className="m-0 min-w-0 text-heading-sm">{group.title}</h3>
             </div>
             <p className="mt-4 max-w-[46ch] text-base/6 text-muted">{group.copy}</p>
             <ul className="mt-6 grid list-none gap-3 p-0">
-              {group.items.map((item) => <li className="flex gap-2.5 text-ui text-muted" key={item}><Check className="mt-0.5 size-4.5 shrink-0 text-brand-500" strokeWidth={2} aria-hidden="true" /><span>{item}</span></li>)}
+              {group.items.map((item) => (
+                <li className="flex gap-2.5 text-ui text-muted" key={item}>
+                  <Check className="mt-0.5 size-4.5 shrink-0 text-brand-500" strokeWidth={2} aria-hidden="true" />
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
           </article>
         );

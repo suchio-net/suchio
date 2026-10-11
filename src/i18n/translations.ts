@@ -12,7 +12,8 @@ const deMessages = {
   "nav.closeMenu": "Navigation schließen",
   "nav.selectLocale": "Sprache auswählen",
   "meta.siteTitle": "Suchio | Websites, Wachstum & Automatisierung",
-  "meta.aboutDescription": "Suchio ist ein unabhängiges Studio für Websites, Apps, Sichtbarkeit, Werbekampagnen, KI und Automatisierung.",
+  "meta.aboutDescription":
+    "Suchio ist ein unabhängiges Studio für Websites, Apps, Sichtbarkeit, Werbekampagnen, KI und Automatisierung.",
   "a11y.skip": "Zum Inhalt springen",
   "footer.studio": "Studio",
   "footer.legal": "Rechtliches",
@@ -20,11 +21,13 @@ const deMessages = {
   "footer.privacy": "Datenschutz",
   "service.otherServices": "Weitere Leistungen",
   "meta.imprintDescription": "Impressum und Anbieterangaben von Suchio, Aleks Tsenov.",
-  "meta.privacyDescription": "Datenschutzerklärung von Suchio für Hosting, Kontaktformular, E-Mail und Spracheinstellung.",
+  "meta.privacyDescription":
+    "Datenschutzerklärung von Suchio für Hosting, Kontaktformular, E-Mail und Spracheinstellung.",
   "home.heroLine1": "Entwickelt für",
   "home.heroAccent": "profitables",
   "home.heroLine2": "Wachstum.",
-  "home.heroDescription": "Wir konzipieren und entwickeln Websites und Apps, verbessern die Sichtbarkeit in Suchmaschinen, führen Werbekampagnen und automatisieren wiederkehrende Arbeit.",
+  "home.heroDescription":
+    "Wir konzipieren und entwickeln Websites und Apps, verbessern die Sichtbarkeit in Suchmaschinen, führen Werbekampagnen und automatisieren wiederkehrende Arbeit.",
   "home.ctaContact": "Projekt besprechen",
   "home.section1Title": "Unsere Leistungen",
   "home.whyTitle": "Warum Suchio",
@@ -32,9 +35,11 @@ const deMessages = {
   "home.processCopy": "Drei Schritte halten Prioritäten und Entscheidungen von Anfang an klar.",
   "home.faqHeading": "Häufige Fragen",
   "home.benefit1Title": "Direkte Verantwortung",
-  "home.benefit1Copy": "Die Ansprechpartner, mit denen du sprichst, planen und liefern die Arbeit. Es gibt keine Übergabe an ein separates Projektteam.",
+  "home.benefit1Copy":
+    "Die Ansprechpartner, mit denen du sprichst, planen und liefern die Arbeit. Es gibt keine Übergabe an ein separates Projektteam.",
   "home.benefit2Title": "Klarheit vor dem Start",
-  "home.benefit2Copy": "Vor dem Start hält der Vorschlag Leistungsumfang, Zeitplan, Honorar und relevante Drittanbieterkosten fest.",
+  "home.benefit2Copy":
+    "Vor dem Start hält der Vorschlag Leistungsumfang, Zeitplan, Honorar und relevante Drittanbieterkosten fest.",
   "home.benefit3Title": "Fortschritt, den du verfolgen kannst",
   "home.benefit3Copy": "Wir teilen Entscheidungen, Fortschritte und Ergebnisse während des gesamten Projekts.",
   "home.step1Title": "Definieren",
@@ -44,7 +49,8 @@ const deMessages = {
   "home.step3Title": "Liefern",
   "home.step3Copy": "Wir setzen in fokussierten Zyklen um, prüfen die Wirkung und entscheiden, was als Nächstes kommt.",
   "finalCta.title": "Sag uns, was sich ändern soll.",
-  "finalCta.copy": "Beschreib das Ziel, das Problem und einen möglichen Termin. Wir sagen dir, ob wir helfen können und womit wir anfangen würden.",
+  "finalCta.copy":
+    "Beschreib das Ziel, das Problem und einen möglichen Termin. Wir sagen dir, ob wir helfen können und womit wir anfangen würden.",
   "contact.title": "Erzähl uns von deinem Vorhaben.",
   "contact.copy": "Erzähl uns, woran du arbeitest, wo es gerade stockt und wie ein gutes Ergebnis aussehen würde.",
   "contact.selectedService": "Ausgewählte Leistung",
@@ -75,7 +81,8 @@ const deMessages = {
   "contact.formEmailError": "Bitte gib eine gültige E-Mail-Adresse ein.",
   "contact.formCompanyUrlError": "Bitte gib eine gültige Webadresse mit http:// oder https:// ein.",
   "contact.formMessageError": "Bitte gib uns mindestens 20 Zeichen Kontext.",
-  "contact.formNote": "Deine Angaben werden per E-Mail an Suchio gesendet und nicht in einer Website-Datenbank gespeichert.",
+  "contact.formNote":
+    "Deine Angaben werden per E-Mail an Suchio gesendet und nicht in einer Website-Datenbank gespeichert.",
   "contact.formError": "Die Anfrage konnte nicht gesendet werden. Versuche es erneut oder schreibe uns direkt:",
   "contact.formSuccessTitle": "Danke, deine Anfrage ist angekommen.",
   "contact.formSuccessCopy": "Wir prüfen deine Angaben und antworten an {email}.",
@@ -86,20 +93,27 @@ const deMessages = {
   "contact.formBodyEmail": "E-Mail",
   "contact.formBodyMessage": "Projekt und Ziel",
   "about.title": "Verschiedene Disziplinen. Eine klare Richtung.",
-  "about.copy": "Suchio verbindet Webdesign und Entwicklung, Suchmaschinenoptimierung, Werbekampagnen und Automatisierung, wenn ein Projekt mehr als eine Disziplin braucht.",
+  "about.copy":
+    "Suchio verbindet Webdesign und Entwicklung, Suchmaschinenoptimierung, Werbekampagnen und Automatisierung, wenn ein Projekt mehr als eine Disziplin braucht.",
   "about.pov": "Warum wir Disziplinen verbinden",
-  "about.pov1": "Die meisten digitalen Probleme bleiben nicht in einer Disziplin. Eine langsame Website schadet der Sichtbarkeit. Eine schwache Landingpage verschwendet Werbebudget. Eine fehlerhafte Systemübergabe schafft Handarbeit.",
-  "about.pov2": "Wir planen diese Zusammenhänge gemeinsam und nehmen nur die Arbeit in den Umfang auf, die das Projekt wirklich braucht.",
+  "about.pov1":
+    "Die meisten digitalen Probleme bleiben nicht in einer Disziplin. Eine langsame Website schadet der Sichtbarkeit. Eine schwache Landingpage verschwendet Werbebudget. Eine fehlerhafte Systemübergabe schafft Handarbeit.",
+  "about.pov2":
+    "Wir planen diese Zusammenhänge gemeinsam und nehmen nur die Arbeit in den Umfang auf, die das Projekt wirklich braucht.",
   "about.howTitle": "Wie wir arbeiten",
   "about.howCopy": "Klare Verantwortung vom ersten Gespräch bis zur Umsetzung.",
   "about.principle1Title": "Direkte Verantwortung",
-  "about.principle1Copy": "Strategie und Umsetzung bleiben während des gesamten Projekts bei denselben verantwortlichen Spezialisten.",
+  "about.principle1Copy":
+    "Strategie und Umsetzung bleiben während des gesamten Projekts bei denselben verantwortlichen Spezialisten.",
   "about.principle2Title": "Belege vor Meinung",
-  "about.principle2Copy": "Kundenbedürfnisse und Performance-Daten leiten Entscheidungen. Geschmack zählt weiterhin, braucht aber ein Argument.",
+  "about.principle2Copy":
+    "Kundenbedürfnisse und Performance-Daten leiten Entscheidungen. Geschmack zählt weiterhin, braucht aber ein Argument.",
   "about.principle3Title": "Nur die Arbeit, die das Projekt braucht",
-  "about.principle3Copy": "Jeder Vorschlag beginnt mit einem klaren Umfang. Eine weitere Disziplin kommt nur hinzu, wenn das Ziel sie erfordert.",
+  "about.principle3Copy":
+    "Jeder Vorschlag beginnt mit einem klaren Umfang. Eine weitere Disziplin kommt nur hinzu, wenn das Ziel sie erfordert.",
   "about.principle4Title": "Neue Technik muss sich beweisen",
-  "about.principle4Copy": "Wir setzen ein neues Werkzeug ein, wenn es ein klar definiertes Problem löst. Eine überzeugende Demo reicht nicht.",
+  "about.principle4Copy":
+    "Wir setzen ein neues Werkzeug ein, wenn es ein klar definiertes Problem löst. Eine überzeugende Demo reicht nicht.",
   "imprint.title": "Impressum",
   "privacy.title": "Datenschutz",
 } as const;
@@ -117,7 +131,8 @@ const enMessages: Readonly<Record<MessageKey, string>> = {
   "nav.closeMenu": "Close navigation",
   "nav.selectLocale": "Select language",
   "meta.siteTitle": "Suchio | Websites, Growth & Automation",
-  "meta.aboutDescription": "Suchio is an independent studio for websites, apps, visibility, paid campaigns, AI, and automation.",
+  "meta.aboutDescription":
+    "Suchio is an independent studio for websites, apps, visibility, paid campaigns, AI, and automation.",
   "a11y.skip": "Skip to content",
   "footer.studio": "Studio",
   "footer.legal": "Legal",
@@ -129,7 +144,8 @@ const enMessages: Readonly<Record<MessageKey, string>> = {
   "home.heroLine1": "Engineered for",
   "home.heroAccent": "profitable",
   "home.heroLine2": "growth.",
-  "home.heroDescription": "We design and build websites and apps, improve search visibility, run paid campaigns, and automate repetitive work.",
+  "home.heroDescription":
+    "We design and build websites and apps, improve search visibility, run paid campaigns, and automate repetitive work.",
   "home.ctaContact": "Discuss your project",
   "home.section1Title": "Our services",
   "home.whyTitle": "Why Suchio",
@@ -137,9 +153,11 @@ const enMessages: Readonly<Record<MessageKey, string>> = {
   "home.processCopy": "Three steps keep priorities and decisions clear from the start.",
   "home.faqHeading": "FAQs",
   "home.benefit1Title": "Direct responsibility",
-  "home.benefit1Copy": "The specialists you speak with plan and deliver the work. There is no handoff to a separate delivery team.",
+  "home.benefit1Copy":
+    "The specialists you speak with plan and deliver the work. There is no handoff to a separate delivery team.",
   "home.benefit2Title": "Clarity before work starts",
-  "home.benefit2Copy": "Before work starts, the proposal sets out the scope, schedule, fee, and relevant third-party costs.",
+  "home.benefit2Copy":
+    "Before work starts, the proposal sets out the scope, schedule, fee, and relevant third-party costs.",
   "home.benefit3Title": "Progress you can follow",
   "home.benefit3Copy": "We share decisions, progress, and results throughout the project.",
   "home.step1Title": "Define",
@@ -149,9 +167,11 @@ const enMessages: Readonly<Record<MessageKey, string>> = {
   "home.step3Title": "Deliver",
   "home.step3Copy": "We deliver in focused cycles, review what changed, and decide what comes next.",
   "finalCta.title": "Tell us what needs to change.",
-  "finalCta.copy": "Share the goal, the problem, and any deadline. We will tell you whether we can help and what a sensible first step looks like.",
+  "finalCta.copy":
+    "Share the goal, the problem, and any deadline. We will tell you whether we can help and what a sensible first step looks like.",
   "contact.title": "Tell us what you’re working on.",
-  "contact.copy": "Tell us what you are building, where progress is getting stuck, and what a strong outcome would look like.",
+  "contact.copy":
+    "Tell us what you are building, where progress is getting stuck, and what a strong outcome would look like.",
   "contact.selectedService": "Selected service",
   "contact.formName": "Your name",
   "contact.formNamePlaceholder": "Alex Morgan…",
@@ -191,22 +211,29 @@ const enMessages: Readonly<Record<MessageKey, string>> = {
   "contact.formBodyEmail": "Email",
   "contact.formBodyMessage": "Project and goal",
   "about.title": "Different disciplines. One clear direction.",
-  "about.copy": "Suchio brings together web design and development, search, paid campaigns, and automation when a project needs more than one discipline.",
+  "about.copy":
+    "Suchio brings together web design and development, search, paid campaigns, and automation when a project needs more than one discipline.",
   "about.pov": "Why we connect disciplines",
-  "about.pov1": "Most digital problems do not stay inside one discipline. A slow site hurts search. A weak landing page wastes ad spend. A broken system handoff creates manual work.",
+  "about.pov1":
+    "Most digital problems do not stay inside one discipline. A slow site hurts search. A weak landing page wastes ad spend. A broken system handoff creates manual work.",
   "about.pov2": "We plan those connections together, then scope only the work the project needs.",
   "about.howTitle": "How we work",
   "about.howCopy": "Clear responsibility from the first conversation through delivery.",
   "about.principle1Title": "Direct responsibility",
   "about.principle1Copy": "Strategy and delivery stay with the same accountable specialists throughout the project.",
   "about.principle2Title": "Evidence before opinion",
-  "about.principle2Copy": "Customer needs and performance data guide decisions. Taste still matters, but it needs an argument.",
+  "about.principle2Copy":
+    "Customer needs and performance data guide decisions. Taste still matters, but it needs an argument.",
   "about.principle3Title": "Only the work the project needs",
-  "about.principle3Copy": "Each proposal starts with one clear scope. We add another discipline only when the goal requires it.",
+  "about.principle3Copy":
+    "Each proposal starts with one clear scope. We add another discipline only when the goal requires it.",
   "about.principle4Title": "New technology has to earn its place",
   "about.principle4Copy": "We use a new tool when it solves a defined problem. A convincing demo is not enough.",
   "imprint.title": "Legal notice",
   "privacy.title": "Privacy policy",
 };
 
-export const dictionaries = { de: deMessages, en: enMessages, fr: frMessages } as const satisfies Record<Locale, Readonly<Record<MessageKey, string>>>;
+export const dictionaries = { de: deMessages, en: enMessages, fr: frMessages } as const satisfies Record<
+  Locale,
+  Readonly<Record<MessageKey, string>>
+>;

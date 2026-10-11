@@ -12,9 +12,11 @@ function languageAlternates(basePath: string): Record<string, string> {
 
 export default function sitemap() {
   return indexableBasePaths
-    .flatMap((basePath) => locales.map((locale) => ({
-      url: absoluteUrl(localizePath(basePath, locale)),
-      alternates: { languages: languageAlternates(basePath) },
-    })))
+    .flatMap((basePath) =>
+      locales.map((locale) => ({
+        url: absoluteUrl(localizePath(basePath, locale)),
+        alternates: { languages: languageAlternates(basePath) },
+      })),
+    )
     .sort((left, right) => left.url.localeCompare(right.url));
 }

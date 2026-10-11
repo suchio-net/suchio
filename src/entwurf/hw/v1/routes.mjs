@@ -8,7 +8,7 @@ export const sections = {
   kontakt: `${base}#kontakt`,
 };
 
-export const serviceHref = slug => `${base}#${slug}`;
+export const serviceHref = (slug) => `${base}#${slug}`;
 
 const destinations = {
   "/leistungen": sections.leistungen,
@@ -23,9 +23,11 @@ const destinations = {
   "/konzept": "/entwurf/hw/v2/konzept",
 };
 
-export const v1Destination = suffix => destinations[suffix] ?? base;
+export const v1Destination = (suffix) => destinations[suffix] ?? base;
 
 // Temporary redirects allow V1 subpages to return later without cached 301s.
-export const redirects = Object.fromEntries(Object.entries(destinations).flatMap(([suffix, destination]) =>
-  [suffix, `${suffix}.html`].map(path => [`${base}${path}`, { status: 302, destination }]),
-));
+export const redirects = Object.fromEntries(
+  Object.entries(destinations).flatMap(([suffix, destination]) =>
+    [suffix, `${suffix}.html`].map((path) => [`${base}${path}`, { status: 302, destination }]),
+  ),
+);

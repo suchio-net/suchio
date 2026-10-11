@@ -8,7 +8,8 @@ import type { Locale } from "@/lib/i18n";
 import { OFFER_EASE_OUT, OFFER_VIEWPORT } from "@/components/offer-animations/motion-tokens";
 
 const FINAL_INQUIRIES = 286;
-const GRAPH_LINE = "M 12 207 C 31 194 44 181 64 188 C 82 194 97 164 116 153 C 135 142 149 161 169 140 C 189 118 202 126 221 111 C 241 95 252 107 272 83 C 292 59 306 76 326 52 C 346 29 361 44 380 27 C 393 16 402 19 408 12";
+const GRAPH_LINE =
+  "M 12 207 C 31 194 44 181 64 188 C 82 194 97 164 116 153 C 135 142 149 161 169 140 C 189 118 202 126 221 111 C 241 95 252 107 272 83 C 292 59 306 76 326 52 C 346 29 361 44 380 27 C 393 16 402 19 408 12";
 const GRAPH_AREA = `${GRAPH_LINE} L 408 224 L 12 224 Z`;
 
 export function CampaignGrowthAnimation({ locale, copy }: { locale: Locale; copy: CampaignAnimationCopy }) {
@@ -17,10 +18,7 @@ export function CampaignGrowthAnimation({ locale, copy }: { locale: Locale; copy
   const noMotion = useHydratedReducedMotion();
   const active = noMotion || isInView;
   const count = useMotionValue(FINAL_INQUIRIES);
-  const formatter = useMemo(
-    () => new Intl.NumberFormat(locale),
-    [locale],
-  );
+  const formatter = useMemo(() => new Intl.NumberFormat(locale), [locale]);
   const displayCount = useTransform(count, (latest) => formatter.format(Math.round(latest)));
 
   useEffect(() => {
@@ -46,10 +44,13 @@ export function CampaignGrowthAnimation({ locale, copy }: { locale: Locale; copy
     <div ref={containerRef} className="grid h-full min-h-0 w-full grid-rows-[auto_1fr] gap-3">
       <div className="flex min-w-0 items-start justify-between gap-4">
         <div className="min-w-0">
-          <div data-campaign-metric className="inline-flex items-end font-mono font-medium leading-none tracking-[-.06em] tabular-nums text-neutral-900">
+          <div
+            data-campaign-metric
+            className="inline-flex items-end font-mono leading-none font-medium tracking-[-.06em] text-neutral-900 tabular-nums"
+          >
             <motion.span className="block text-[clamp(1.8rem,4vw,2.7rem)] leading-none">{displayCount}</motion.span>
             <motion.span
-              className="relative ml-2 block -top-[.16em] text-[clamp(.95rem,1.9vw,1.3rem)] leading-none tracking-[-.01em] text-[#19a55d]"
+              className="relative -top-[.16em] ml-2 block text-[clamp(.95rem,1.9vw,1.3rem)] leading-none tracking-[-.01em] text-[#19a55d]"
               initial={false}
               animate={{ opacity: active ? 1 : 0, y: active ? 0 : 4 }}
               transition={{ delay: noMotion ? 0 : 1.1, duration: noMotion ? 0 : 0.3, ease: OFFER_EASE_OUT }}

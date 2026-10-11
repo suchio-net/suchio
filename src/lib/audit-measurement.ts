@@ -15,13 +15,15 @@ export function measurementResponse(value: unknown, status = 200) {
 }
 
 export function sameOrigin(request: Request) {
-  return request.headers.get("origin") === new URL(request.url).origin
-    && request.headers.get("sec-fetch-site") !== "cross-site";
+  return (
+    request.headers.get("origin") === new URL(request.url).origin &&
+    request.headers.get("sec-fetch-site") !== "cross-site"
+  );
 }
 
 export async function receiptHash(receipt: string) {
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(receipt));
-  return Array.from(new Uint8Array(digest), n => n.toString(16).padStart(2, "0")).join("");
+  return Array.from(new Uint8Array(digest), (n) => n.toString(16).padStart(2, "0")).join("");
 }
 
 export async function boundedText(body: ReadableStream<Uint8Array> | null, limit: number): Promise<string | null> {
@@ -36,12 +38,17 @@ async function boundedJson(request: Request): Promise<Record<string, unknown> | 
   if (text === null) return null;
   try {
     const body: unknown = JSON.parse(text);
-    return body !== null && typeof body === "object" && !Array.isArray(body) ? body as Record<string, unknown> : null;
-  } catch { return null; }
+    return body !== null && typeof body === "object" && !Array.isArray(body) ? (body as Record<string, unknown>) : null;
+  } catch {
+    return null;
+  }
 }
 
 export async function purgeAuditVisits(db: D1Database, now = Date.now()) {
-  await db.prepare("DELETE FROM audit_visits WHERE expires_at <= ?").bind(Math.floor(now / 1000)).run();
+  await db
+    .prepare("DELETE FROM audit_visits WHERE expires_at <= ?")
+    .bind(Math.floor(now / 1000))
+    .run();
 }
 
 export async function handleAuditVisit(request: Request, db: D1Database | undefined, now = Date.now()) {
@@ -49,22 +56,35 @@ export async function handleAuditVisit(request: Request, db: D1Database | undefi
   if (!sameOrigin(request)) return measurementResponse({ error: "origin" }, 403);
   if (!db) return measurementResponse({ error: "unavailable" }, 503);
   const body = await boundedJson(request);
-  if (!body || typeof body.code !== "string" || !auditReports.some(report => report.code === body.code)
-    || typeof body.receipt !== "string" || !/^[a-f0-9]{64}$/.test(body.receipt)) return measurementResponse({ error: "invalid" }, 400);
+  if (
+    !body ||
+    typeof body.code !== "string" ||
+    !auditReports.some((report) => report.code === body.code) ||
+    typeof body.receipt !== "string" ||
+    !/^[a-f0-9]{64}$/.test(body.receipt)
+  )
+    return measurementResponse({ error: "invalid" }, 400);
   const hash = await receiptHash(body.receipt);
   if (request.method === "DELETE") {
     await db.prepare("DELETE FROM audit_visits WHERE receipt_hash = ? AND report_code = ?").bind(hash, body.code).run();
     return measurementResponse({ ok: true });
   }
-  if (body.consent !== true || body.version !== consentVersion) return measurementResponse({ error: "consent_required" }, 400);
+  if (body.consent !== true || body.version !== consentVersion)
+    return measurementResponse({ error: "consent_required" }, 400);
   // This endpoint is called only after a voluntary click. No passive page-view counting.
-  if (/bot|crawler|spider|headless|preview/i.test(request.headers.get("user-agent") ?? "")
-    || /prefetch|prerender/i.test(`${request.headers.get("purpose")} ${request.headers.get("sec-purpose")}`)) {
+  if (
+    /bot|crawler|spider|headless|preview/i.test(request.headers.get("user-agent") ?? "") ||
+    /prefetch|prerender/i.test(`${request.headers.get("purpose")} ${request.headers.get("sec-purpose")}`)
+  ) {
     return measurementResponse({ error: "not_counted" }, 400);
   }
   const seconds = Math.floor(now / 1000);
   const day = new Date(now).toISOString().slice(0, 10);
-  await db.prepare("INSERT OR IGNORE INTO audit_visits (receipt_hash, report_code, day, consent_version, expires_at) VALUES (?, ?, ?, ?, ?)")
-    .bind(hash, body.code, day, consentVersion, seconds + retentionSeconds).run();
+  await db
+    .prepare(
+      "INSERT OR IGNORE INTO audit_visits (receipt_hash, report_code, day, consent_version, expires_at) VALUES (?, ?, ?, ?, ?)",
+    )
+    .bind(hash, body.code, day, consentVersion, seconds + retentionSeconds)
+    .run();
   return measurementResponse({ ok: true });
 }

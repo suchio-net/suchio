@@ -17,9 +17,7 @@ export const serviceRouteSlugs = {
 } as const satisfies Record<ServiceId, string>;
 
 type ServiceRouteResolution =
-  | { kind: "current"; serviceId: ServiceId }
-  | { kind: "legacy"; serviceId: ServiceId }
-  | { kind: "missing" };
+  { kind: "current"; serviceId: ServiceId } | { kind: "legacy"; serviceId: ServiceId } | { kind: "missing" };
 
 export function isServiceId(value: string | undefined): value is ServiceId {
   return serviceOrder.some((serviceId) => serviceId === value);

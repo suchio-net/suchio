@@ -1,10 +1,31 @@
 // Interactive bathroom diorama for the "3D-Badplanung" section. Loaded lazily
 // when the planner approaches the viewport; renders on demand only.
 import {
-  ACESFilmicToneMapping, BoxGeometry, CanvasTexture, Color, CylinderGeometry, DirectionalLight, Group, HemisphereLight,
-  Mesh, MeshPhysicalMaterial, MeshStandardMaterial, PCFShadowMap, PerspectiveCamera, PlaneGeometry, PMREMGenerator,
-  PointLight, RepeatWrapping, Scene, ShadowMaterial, SphereGeometry, SRGBColorSpace, Vector3, WebGLRenderer,
-  type Material, type Object3D,
+  ACESFilmicToneMapping,
+  BoxGeometry,
+  CanvasTexture,
+  Color,
+  CylinderGeometry,
+  DirectionalLight,
+  Group,
+  HemisphereLight,
+  Mesh,
+  MeshPhysicalMaterial,
+  MeshStandardMaterial,
+  PCFShadowMap,
+  PerspectiveCamera,
+  PlaneGeometry,
+  PMREMGenerator,
+  PointLight,
+  RepeatWrapping,
+  Scene,
+  ShadowMaterial,
+  SphereGeometry,
+  SRGBColorSpace,
+  Vector3,
+  WebGLRenderer,
+  type Material,
+  type Object3D,
 } from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
@@ -13,49 +34,103 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 export type StyleId = "hell" | "anthrazit" | "salbei";
 export type Layout = "wanne" | "dusche";
 export type Mood = "tag" | "abend";
-export interface PlannerState { style: StyleId; layout: Layout; mood: Mood }
+export interface PlannerState {
+  style: StyleId;
+  layout: Layout;
+  mood: Mood;
+}
 
 interface StyleSpec {
-  floor: string; floorTile: [number, number]; floorVeins: boolean;
-  wall: string; wallTile: [number, number];
-  accent: string; accentTile: [number, number]; accentVeins: boolean;
-  wood: string; woodRough: number; metal: string; metalRough: number;
-  counter: string; towel: string; mat: string; radiator: string;
+  floor: string;
+  floorTile: [number, number];
+  floorVeins: boolean;
+  wall: string;
+  wallTile: [number, number];
+  accent: string;
+  accentTile: [number, number];
+  accentVeins: boolean;
+  wood: string;
+  woodRough: number;
+  metal: string;
+  metalRough: number;
+  counter: string;
+  towel: string;
+  mat: string;
+  radiator: string;
   __applied?: boolean;
 }
 
 const styles: Record<StyleId, StyleSpec> = {
   hell: {
-    floor: "#b5aa99", floorTile: [0.6, 0.6], floorVeins: true,
-    wall: "#e9e4dc", wallTile: [0.6, 1.2],
-    accent: "#cdb795", accentTile: [0.3, 0.6], accentVeins: true,
-    wood: "#b9895a", woodRough: 0.62, metal: "#e2e5e8", metalRough: 0.16,
-    counter: "#f5f3ef", towel: "#c9875a", mat: "#e6ded2", radiator: "#f3f2ef",
+    floor: "#b5aa99",
+    floorTile: [0.6, 0.6],
+    floorVeins: true,
+    wall: "#e9e4dc",
+    wallTile: [0.6, 1.2],
+    accent: "#cdb795",
+    accentTile: [0.3, 0.6],
+    accentVeins: true,
+    wood: "#b9895a",
+    woodRough: 0.62,
+    metal: "#e2e5e8",
+    metalRough: 0.16,
+    counter: "#f5f3ef",
+    towel: "#c9875a",
+    mat: "#e6ded2",
+    radiator: "#f3f2ef",
   },
   anthrazit: {
-    floor: "#4a4d50", floorTile: [1.2, 0.6], floorVeins: false,
-    wall: "#bdb7ae", wallTile: [0.6, 1.2],
-    accent: "#3b3f42", accentTile: [0.6, 1.2], accentVeins: true,
-    wood: "#5b3a27", woodRough: 0.55, metal: "#c9a35f", metalRough: 0.32,
-    counter: "#2d3033", towel: "#dccdb4", mat: "#6a6e72", radiator: "#2a2c2e",
+    floor: "#4a4d50",
+    floorTile: [1.2, 0.6],
+    floorVeins: false,
+    wall: "#bdb7ae",
+    wallTile: [0.6, 1.2],
+    accent: "#3b3f42",
+    accentTile: [0.6, 1.2],
+    accentVeins: true,
+    wood: "#5b3a27",
+    woodRough: 0.55,
+    metal: "#c9a35f",
+    metalRough: 0.32,
+    counter: "#2d3033",
+    towel: "#dccdb4",
+    mat: "#6a6e72",
+    radiator: "#2a2c2e",
   },
   salbei: {
-    floor: "#e2ddd3", floorTile: [0.3, 0.3], floorVeins: false,
-    wall: "#f2f0eb", wallTile: [0.3, 0.6],
-    accent: "#97ab93", accentTile: [0.075, 0.3], accentVeins: false,
-    wood: "#efede8", woodRough: 0.4, metal: "#1f2123", metalRough: 0.5,
-    counter: "#f7f5f1", towel: "#b4c4ae", mat: "#d6cfc2", radiator: "#1f2123",
+    floor: "#e2ddd3",
+    floorTile: [0.3, 0.3],
+    floorVeins: false,
+    wall: "#f2f0eb",
+    wallTile: [0.3, 0.6],
+    accent: "#97ab93",
+    accentTile: [0.075, 0.3],
+    accentVeins: false,
+    wood: "#efede8",
+    woodRough: 0.4,
+    metal: "#1f2123",
+    metalRough: 0.5,
+    counter: "#f7f5f1",
+    towel: "#b4c4ae",
+    mat: "#d6cfc2",
+    radiator: "#1f2123",
   },
 };
 
 // Grayscale tile sheet (4×4 tiles) that the material colour tints.
 function tileTexture(veins: boolean, seed: number) {
-  const size = 512, n = 4, cell = size / n, grout = 3;
+  const size = 512,
+    n = 4,
+    cell = size / n,
+    grout = 3;
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = size;
   const ctx = canvas.getContext("2d")!;
   let s = seed;
-  const rand = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+  const rand = () => {
+    s = (s * 16807) % 2147483647;
+    return s / 2147483647;
+  };
   ctx.fillStyle = "rgb(168,168,168)";
   ctx.fillRect(0, 0, size, size);
   for (let y = 0; y < n; y++) {
@@ -79,7 +154,14 @@ function tileTexture(veins: boolean, seed: number) {
           ctx.beginPath();
           const y0 = y * cell + rand() * cell;
           ctx.moveTo(x * cell - 10, y0);
-          ctx.bezierCurveTo(x * cell + cell * 0.3, y0 + (rand() - 0.5) * 60, x * cell + cell * 0.7, y0 + (rand() - 0.5) * 60, x * cell + cell + 10, y0 + (rand() - 0.5) * 40);
+          ctx.bezierCurveTo(
+            x * cell + cell * 0.3,
+            y0 + (rand() - 0.5) * 60,
+            x * cell + cell * 0.7,
+            y0 + (rand() - 0.5) * 60,
+            x * cell + cell + 10,
+            y0 + (rand() - 0.5) * 40,
+          );
           ctx.stroke();
         }
       }
@@ -117,7 +199,11 @@ function woodTexture() {
 
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
-export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, options: { interactive: boolean; reduceMotion: boolean; lowPower?: boolean }) {
+export function createPlanner(
+  canvas: HTMLCanvasElement,
+  initial: PlannerState,
+  options: { interactive: boolean; reduceMotion: boolean; lowPower?: boolean },
+) {
   const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, options.lowPower ? 1.5 : 2));
   renderer.outputColorSpace = SRGBColorSpace;
@@ -143,8 +229,13 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
   sun.castShadow = true;
   const shadowSize = options.lowPower ? 1024 : 2048;
   sun.shadow.mapSize.set(shadowSize, shadowSize);
-  sun.shadow.camera.left = -3; sun.shadow.camera.right = 3; sun.shadow.camera.top = 3; sun.shadow.camera.bottom = -3;
-  sun.shadow.radius = 5; sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02;
+  sun.shadow.camera.left = -3;
+  sun.shadow.camera.right = 3;
+  sun.shadow.camera.top = 3;
+  sun.shadow.camera.bottom = -3;
+  sun.shadow.radius = 5;
+  sun.shadow.bias = -0.0004;
+  sun.shadow.normalBias = 0.02;
   scene.add(sun);
   const glow = new PointLight("#ffc98f", 0, 3.2, 1.6);
   glow.position.set(0.95, 1.55, -0.85);
@@ -155,8 +246,12 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
 
   // Materials (colours tween between styles)
   const tex = {
-    floor: tileTexture(true, 11), wall: tileTexture(false, 23), wallLeft: tileTexture(false, 29), accent: tileTexture(true, 37),
-    apron: tileTexture(false, 41), wood: woodTexture(),
+    floor: tileTexture(true, 11),
+    wall: tileTexture(false, 23),
+    wallLeft: tileTexture(false, 29),
+    accent: tileTexture(true, 37),
+    apron: tileTexture(false, 41),
+    wood: woodTexture(),
   };
   const mat = {
     floor: new MeshStandardMaterial({ map: tex.floor, roughness: 0.42 }),
@@ -174,16 +269,36 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
     radiator: new MeshStandardMaterial({ roughness: 0.45, metalness: 0.2 }),
     towel: new MeshStandardMaterial({ roughness: 0.95 }),
     mat: new MeshStandardMaterial({ roughness: 1 }),
-    mirror: new MeshStandardMaterial({ color: "#d3dcdf", metalness: 0.75, roughness: 0.1, envMapIntensity: 2.4, emissive: "#8f9a9f", emissiveIntensity: 0.18 }),
+    mirror: new MeshStandardMaterial({
+      color: "#d3dcdf",
+      metalness: 0.75,
+      roughness: 0.1,
+      envMapIntensity: 2.4,
+      emissive: "#8f9a9f",
+      emissiveIntensity: 0.18,
+    }),
     led: new MeshStandardMaterial({ color: "#2a2620", emissive: "#ffd9a8", emissiveIntensity: 0 }),
-    glass: new MeshPhysicalMaterial({ color: "#d6e7ea", transparent: true, opacity: 0.2, roughness: 0.04, metalness: 0, clearcoat: 1 }),
+    glass: new MeshPhysicalMaterial({
+      color: "#d6e7ea",
+      transparent: true,
+      opacity: 0.2,
+      roughness: 0.04,
+      metalness: 0,
+      clearcoat: 1,
+    }),
     drain: new MeshStandardMaterial({ color: "#2b2d2f", metalness: 0.8, roughness: 0.4 }),
     pot: new MeshStandardMaterial({ color: "#d9cfc0", roughness: 0.85 }),
     leaf: new MeshStandardMaterial({ color: "#6d8a5a", roughness: 0.7 }),
     niche: new MeshStandardMaterial({ color: "#8e8a84", roughness: 0.6, emissive: "#ffd9a8", emissiveIntensity: 0 }),
   };
 
-  const add = (geometry: BoxGeometry | RoundedBoxGeometry | CylinderGeometry | SphereGeometry | PlaneGeometry, material: Material | Material[], position: [number, number, number], parent: Object3D = scene, shadow = true) => {
+  const add = (
+    geometry: BoxGeometry | RoundedBoxGeometry | CylinderGeometry | SphereGeometry | PlaneGeometry,
+    material: Material | Material[],
+    position: [number, number, number],
+    parent: Object3D = scene,
+    shadow = true,
+  ) => {
     const mesh = new Mesh(geometry, material);
     mesh.position.set(...position);
     mesh.castShadow = shadow;
@@ -199,7 +314,11 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
   catcher.position.y = -0.161;
   catcher.receiveShadow = true;
   scene.add(catcher);
-  add(new BoxGeometry(3.12, 0.16, 2.52), [mat.slabSide, mat.slabSide, mat.floor, mat.slabSide, mat.slabSide, mat.slabSide], [-0.06, -0.08, -0.06]);
+  add(
+    new BoxGeometry(3.12, 0.16, 2.52),
+    [mat.slabSide, mat.slabSide, mat.floor, mat.slabSide, mat.slabSide, mat.slabSide],
+    [-0.06, -0.08, -0.06],
+  );
   add(new BoxGeometry(3.12, 2.66, 0.12), [mat.cut, mat.cut, mat.cut, mat.cut, mat.wall, mat.cut], [-0.06, 1.17, -1.26]);
   add(new BoxGeometry(0.12, 2.66, 2.4), [mat.wallLeft, mat.cut, mat.cut, mat.cut, mat.cut, mat.cut], [-1.56, 1.17, 0]);
   const accent = add(new PlaneGeometry(1.7, 2.5), mat.accent, [-0.65, 1.25, -1.198], scene, false);
@@ -234,8 +353,10 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
 
   // Towel radiator and towel.
   const radiator = new Group();
-  for (const z of [-0.29, 0.19]) add(new CylinderGeometry(0.014, 0.014, 1.22, 12), mat.radiator, [-1.44, 0.95, z], radiator);
-  for (let i = 0; i < 11; i++) add(new BoxGeometry(0.022, 0.024, 0.48), mat.radiator, [-1.44, 0.42 + i * 0.105, -0.05], radiator);
+  for (const z of [-0.29, 0.19])
+    add(new CylinderGeometry(0.014, 0.014, 1.22, 12), mat.radiator, [-1.44, 0.95, z], radiator);
+  for (let i = 0; i < 11; i++)
+    add(new BoxGeometry(0.022, 0.024, 0.48), mat.radiator, [-1.44, 0.42 + i * 0.105, -0.05], radiator);
   scene.add(radiator);
   add(rbox(0.07, 0.62, 0.4, 0.03), mat.towel, [-1.4, 1.12, -0.05]);
   add(rbox(0.72, 0.014, 0.46, 0.006), mat.mat, [-0.55, 0.007, -0.15], scene, false);
@@ -262,10 +383,16 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
   scene.add(shower);
 
   // Camera orbit
-  let theta = 0.62, phi = 1.07, radius = 9.4;
+  let theta = 0.62,
+    phi = 1.07,
+    radius = 9.4;
   let interacted = false;
   const placeCamera = () => {
-    camera.position.set(target.x + radius * Math.sin(phi) * Math.sin(theta), target.y + radius * Math.cos(phi), target.z + radius * Math.sin(phi) * Math.cos(theta));
+    camera.position.set(
+      target.x + radius * Math.sin(phi) * Math.sin(theta),
+      target.y + radius * Math.cos(phi),
+      target.z + radius * Math.sin(phi) * Math.cos(theta),
+    );
     camera.lookAt(target);
   };
   placeCamera();
@@ -279,25 +406,49 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
     controls.rotateSpeed = 0.6;
-    controls.minAzimuthAngle = 0.08; controls.maxAzimuthAngle = 1.42;
-    controls.minPolarAngle = 0.82; controls.maxPolarAngle = 1.28;
-    controls.addEventListener("start", () => { interacted = true; wake(); });
-    controls.addEventListener("change", () => { const s = new Vector3().subVectors(camera.position, target); theta = Math.atan2(s.x, s.z); phi = Math.acos(s.y / s.length()); onAngle?.(theta); wake(); });
+    controls.minAzimuthAngle = 0.08;
+    controls.maxAzimuthAngle = 1.42;
+    controls.minPolarAngle = 0.82;
+    controls.maxPolarAngle = 1.28;
+    controls.addEventListener("start", () => {
+      interacted = true;
+      wake();
+    });
+    controls.addEventListener("change", () => {
+      const s = new Vector3().subVectors(camera.position, target);
+      theta = Math.atan2(s.x, s.z);
+      phi = Math.acos(s.y / s.length());
+      onAngle?.(theta);
+      wake();
+    });
   }
 
   // Style / layout / mood transitions
   const colorOf = (hex: string) => new Color(hex);
-  const repeat = (texture: CanvasTexture, width: number, height: number, tile: [number, number]) => texture.repeat.set(width / (tile[0] * 4), height / (tile[1] * 4));
+  const repeat = (texture: CanvasTexture, width: number, height: number, tile: [number, number]) =>
+    texture.repeat.set(width / (tile[0] * 4), height / (tile[1] * 4));
   let state = { ...initial };
-  let tween: { from: Map<MeshStandardMaterial, Color>; to: Map<MeshStandardMaterial, Color>; start: number; spec: StyleSpec } | undefined;
+  let tween:
+    | { from: Map<MeshStandardMaterial, Color>; to: Map<MeshStandardMaterial, Color>; start: number; spec: StyleSpec }
+    | undefined;
   let layoutTween: { start: number; to: Layout } | undefined;
-  let moodValue = initial.mood === "abend" ? 1 : 0, moodTarget = moodValue;
+  let moodValue = initial.mood === "abend" ? 1 : 0,
+    moodTarget = moodValue;
 
-  const targets = (spec: StyleSpec) => new Map<MeshStandardMaterial, Color>([
-    [mat.floor, colorOf(spec.floor)], [mat.wall, colorOf(spec.wall)], [mat.wallLeft, colorOf(spec.wall)], [mat.accent, colorOf(spec.accent)],
-    [mat.apron, colorOf(spec.wall)], [mat.wood, colorOf(spec.wood)], [mat.counter, colorOf(spec.counter)], [mat.metal, colorOf(spec.metal)],
-    [mat.radiator, colorOf(spec.radiator)], [mat.towel, colorOf(spec.towel)], [mat.mat, colorOf(spec.mat)],
-  ]);
+  const targets = (spec: StyleSpec) =>
+    new Map<MeshStandardMaterial, Color>([
+      [mat.floor, colorOf(spec.floor)],
+      [mat.wall, colorOf(spec.wall)],
+      [mat.wallLeft, colorOf(spec.wall)],
+      [mat.accent, colorOf(spec.accent)],
+      [mat.apron, colorOf(spec.wall)],
+      [mat.wood, colorOf(spec.wood)],
+      [mat.counter, colorOf(spec.counter)],
+      [mat.metal, colorOf(spec.metal)],
+      [mat.radiator, colorOf(spec.radiator)],
+      [mat.towel, colorOf(spec.towel)],
+      [mat.mat, colorOf(spec.mat)],
+    ]);
   const applyTextures = (spec: StyleSpec) => {
     repeat(tex.floor, 3.12, 2.52, spec.floorTile);
     repeat(tex.wall, 3.12, 2.66, spec.wallTile);
@@ -308,7 +459,10 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
     mat.wood.roughness = spec.woodRough;
     mat.metal.roughness = spec.metalRough;
   };
-  const setStyleImmediate = (spec: StyleSpec) => { for (const [m, c] of targets(spec)) m.color.copy(c); applyTextures(spec); };
+  const setStyleImmediate = (spec: StyleSpec) => {
+    for (const [m, c] of targets(spec)) m.color.copy(c);
+    applyTextures(spec);
+  };
   setStyleImmediate(styles[initial.style]);
   bath.visible = initial.layout === "wanne";
   shower.visible = initial.layout === "dusche";
@@ -328,24 +482,47 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
   applyMood(moodValue);
 
   // Render loop: runs only while something changes and the canvas is visible.
-  let running = false, visible = true, raf = 0;
+  let running = false,
+    visible = true,
+    raf = 0;
   const startTime = performance.now();
   let onAngle: ((value: number) => void) | undefined;
   const frame = (now: number) => {
     raf = 0;
     let active = false;
     if (tween) {
-      const t = Math.min(1, (now - tween.start) / 650), k = easeOut(t);
+      const t = Math.min(1, (now - tween.start) / 650),
+        k = easeOut(t);
       for (const [m, c] of tween.to) m.color.lerpColors(tween.from.get(m)!, c, k);
-      if (t >= 0.5 && !tween.spec.__applied) { applyTextures(tween.spec); tween.spec.__applied = true; }
-      if (t >= 1) tween = undefined; else active = true;
+      if (t >= 0.5 && !tween.spec.__applied) {
+        applyTextures(tween.spec);
+        tween.spec.__applied = true;
+      }
+      if (t >= 1) tween = undefined;
+      else active = true;
     }
     if (layoutTween) {
       const t = Math.min(1, (now - layoutTween.start) / 500);
-      const outgoing = layoutTween.to === "wanne" ? shower : bath, incoming = layoutTween.to === "wanne" ? bath : shower;
-      if (t < 0.5) { outgoing.visible = true; outgoing.position.y = -easeOut(t * 2) * 0.12; outgoing.scale.setScalar(1 - t * 0.3); }
-      else { outgoing.visible = false; incoming.visible = true; const u = easeOut((t - 0.5) * 2); incoming.position.y = (1 - u) * 0.12; incoming.scale.setScalar(0.85 + u * 0.15); }
-      if (t >= 1) { incoming.position.y = 0; incoming.scale.setScalar(1); outgoing.position.y = 0; outgoing.scale.setScalar(1); layoutTween = undefined; } else active = true;
+      const outgoing = layoutTween.to === "wanne" ? shower : bath,
+        incoming = layoutTween.to === "wanne" ? bath : shower;
+      if (t < 0.5) {
+        outgoing.visible = true;
+        outgoing.position.y = -easeOut(t * 2) * 0.12;
+        outgoing.scale.setScalar(1 - t * 0.3);
+      } else {
+        outgoing.visible = false;
+        incoming.visible = true;
+        const u = easeOut((t - 0.5) * 2);
+        incoming.position.y = (1 - u) * 0.12;
+        incoming.scale.setScalar(0.85 + u * 0.15);
+      }
+      if (t >= 1) {
+        incoming.position.y = 0;
+        incoming.scale.setScalar(1);
+        outgoing.position.y = 0;
+        outgoing.scale.setScalar(1);
+        layoutTween = undefined;
+      } else active = true;
     }
     if (Math.abs(moodValue - moodTarget) > 0.001) {
       moodValue += (moodTarget - moodValue) * 0.12;
@@ -360,12 +537,19 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
       controls?.target.copy(target);
       active = true;
     }
-    if (controls) { if (controls.update()) active = true; }
+    if (controls) {
+      if (controls.update()) active = true;
+    }
     renderer.render(scene, camera);
     if (active && visible) raf = requestAnimationFrame(frame);
     else running = false;
   };
-  const wake = () => { if (!running && visible) { running = true; raf = requestAnimationFrame(frame); } };
+  const wake = () => {
+    if (!running && visible) {
+      running = true;
+      raf = requestAnimationFrame(frame);
+    }
+  };
 
   const resize = () => {
     const { clientWidth: w, clientHeight: h } = canvas;
@@ -379,7 +563,15 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
   };
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(canvas);
-  const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) wake(); else if (raf) { cancelAnimationFrame(raf); raf = 0; running = false; } });
+  const io = new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    if (visible) wake();
+    else if (raf) {
+      cancelAnimationFrame(raf);
+      raf = 0;
+      running = false;
+    }
+  });
   io.observe(canvas);
   resize();
 
@@ -387,8 +579,14 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
     set(next: Partial<PlannerState>) {
       if (options.reduceMotion) {
         if (next.style) setStyleImmediate(styles[next.style]);
-        if (next.layout) { bath.visible = next.layout === "wanne"; shower.visible = next.layout === "dusche"; }
-        if (next.mood) { moodValue = moodTarget = next.mood === "abend" ? 1 : 0; applyMood(moodValue); }
+        if (next.layout) {
+          bath.visible = next.layout === "wanne";
+          shower.visible = next.layout === "dusche";
+        }
+        if (next.mood) {
+          moodValue = moodTarget = next.mood === "abend" ? 1 : 0;
+          applyMood(moodValue);
+        }
         state = { ...state, ...next };
         wake();
         return;
@@ -396,7 +594,7 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
       if (next.style && next.style !== state.style) {
         const spec: StyleSpec = { ...styles[next.style] };
         const to = targets(spec);
-        const from = new Map([...to.keys()].map(m => [m, m.color.clone()] as const));
+        const from = new Map([...to.keys()].map((m) => [m, m.color.clone()] as const));
         tween = { from, to, start: performance.now(), spec };
       }
       if (next.layout && next.layout !== state.layout) layoutTween = { start: performance.now(), to: next.layout };
@@ -404,8 +602,24 @@ export function createPlanner(canvas: HTMLCanvasElement, initial: PlannerState, 
       state = { ...state, ...next };
       wake();
     },
-    setAngle(value: number) { interacted = true; theta = value; placeCamera(); if (controls) { controls.target.copy(target); controls.update(); } wake(); },
-    onAngleChange(callback: (value: number) => void) { onAngle = callback; },
-    dispose() { resizeObserver.disconnect(); io.disconnect(); controls?.dispose(); renderer.dispose(); },
+    setAngle(value: number) {
+      interacted = true;
+      theta = value;
+      placeCamera();
+      if (controls) {
+        controls.target.copy(target);
+        controls.update();
+      }
+      wake();
+    },
+    onAngleChange(callback: (value: number) => void) {
+      onAngle = callback;
+    },
+    dispose() {
+      resizeObserver.disconnect();
+      io.disconnect();
+      controls?.dispose();
+      renderer.dispose();
+    },
   };
 }

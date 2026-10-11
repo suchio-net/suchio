@@ -12,10 +12,35 @@
 // scroll position, so scrubbing back and forth always lands on the same frame.
 // It renders on demand only: nothing runs while both are at rest.
 import {
-  ACESFilmicToneMapping, BoxGeometry, CanvasTexture, CurvePath, CylinderGeometry, DirectionalLight, EdgesGeometry,
-  Group, HemisphereLight, LatheGeometry, LineBasicMaterial, LineCurve3, LineSegments, Mesh, MeshPhysicalMaterial,
-  MeshStandardMaterial, PCFShadowMap, PerspectiveCamera, PlaneGeometry, PMREMGenerator, QuadraticBezierCurve3,
-  RepeatWrapping, Scene, ShadowMaterial, SRGBColorSpace, TubeGeometry, Vector2, Vector3, WebGLRenderer,
+  ACESFilmicToneMapping,
+  BoxGeometry,
+  CanvasTexture,
+  CurvePath,
+  CylinderGeometry,
+  DirectionalLight,
+  EdgesGeometry,
+  Group,
+  HemisphereLight,
+  LatheGeometry,
+  LineBasicMaterial,
+  LineCurve3,
+  LineSegments,
+  Mesh,
+  MeshPhysicalMaterial,
+  MeshStandardMaterial,
+  PCFShadowMap,
+  PerspectiveCamera,
+  PlaneGeometry,
+  PMREMGenerator,
+  QuadraticBezierCurve3,
+  RepeatWrapping,
+  Scene,
+  ShadowMaterial,
+  SRGBColorSpace,
+  TubeGeometry,
+  Vector2,
+  Vector3,
+  WebGLRenderer,
   type BufferGeometry,
 } from "three";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
@@ -32,7 +57,12 @@ export interface HeroOptions {
   onIntroStep?: (index: number) => void;
 }
 
-export interface Region { top: number; bottom: number; left: number; right: number }
+export interface Region {
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+}
 
 export interface HeroScene {
   /** Scroll position through the trade steps: -1 hero, 0..5 the six steps. */
@@ -47,9 +77,15 @@ export interface HeroScene {
 }
 
 // Room: back wall inner face at z = -S, left wall inner face at x = -S.
-const S = 1.6, T = 0.18, H = 2.5, SLAB = 0.16;
-const BACK = -S, LEFT = -S;
-const SKIN = 0.07, TILE = 0.012, FACE = SKIN + TILE; // wall tiles sit on a 7 cm installation layer
+const S = 1.6,
+  T = 0.18,
+  H = 2.5,
+  SLAB = 0.16;
+const BACK = -S,
+  LEFT = -S;
+const SKIN = 0.07,
+  TILE = 0.012,
+  FACE = SKIN + TILE; // wall tiles sit on a 7 cm installation layer
 const FLOOR = 0.062;
 /** How far above its place a layer starts when it is lowered in. */
 const DROP = 1.1;
@@ -66,7 +102,11 @@ class Layer {
   meshes: Mesh[] = [];
   shown = -1;
   /** anchor: the point the label marks; side: where its text goes, 1 right of it, -1 left. */
-  constructor(public index: number, public anchor: Vector3, public side: 1 | -1 = 1) {}
+  constructor(
+    public index: number,
+    public anchor: Vector3,
+    public side: 1 | -1 = 1,
+  ) {}
 
   // Every material can fade, so all of them are transparent. They still write
   // depth (only the glass does not), and each layer draws in a fixed order
@@ -79,7 +119,12 @@ class Layer {
     return mat;
   }
 
-  add(geometry: BufferGeometry, mat: Mat, at: [number, number, number], options: { edges?: boolean; rotate?: [number, number, number]; shadow?: boolean } = {}) {
+  add(
+    geometry: BufferGeometry,
+    mat: Mat,
+    at: [number, number, number],
+    options: { edges?: boolean; rotate?: [number, number, number]; shadow?: boolean } = {},
+  ) {
     const mesh = new Mesh(geometry, mat);
     mesh.position.set(...at);
     if (options.rotate) mesh.rotation.set(...options.rotate);
@@ -87,7 +132,10 @@ class Layer {
     mesh.receiveShadow = true;
     mesh.renderOrder = this.index * 10 + (mat.opacity > 0.5 ? 0 : 5);
     if (options.edges) {
-      const lines = new LineSegments(new EdgesGeometry(geometry, 30), this.mat(new LineBasicMaterial({ color: ink, opacity: 0.2 })));
+      const lines = new LineSegments(
+        new EdgesGeometry(geometry, 30),
+        this.mat(new LineBasicMaterial({ color: ink, opacity: 0.2 })),
+      );
       lines.renderOrder = this.index * 10 + 1;
       mesh.add(lines);
     }
@@ -99,11 +147,20 @@ class Layer {
   /** Box from min/max corners, which reads more like a plan than centre and size. */
   box(min: [number, number, number], max: [number, number, number], mat: Mat, edges = true) {
     const size: [number, number, number] = [max[0] - min[0], max[1] - min[1], max[2] - min[2]];
-    return this.add(new BoxGeometry(...size), mat, [(min[0] + max[0]) / 2, (min[1] + max[1]) / 2, (min[2] + max[2]) / 2], { edges });
+    return this.add(
+      new BoxGeometry(...size),
+      mat,
+      [(min[0] + max[0]) / 2, (min[1] + max[1]) / 2, (min[2] + max[2]) / 2],
+      { edges },
+    );
   }
 
   tube(points: [number, number, number][], radius: number, mat: Mat, corner = 0.06) {
-    return this.add(new TubeGeometry(polyline(points, corner), Math.max(24, points.length * 28), radius, 10, false), mat, [0, 0, 0]);
+    return this.add(
+      new TubeGeometry(polyline(points, corner), Math.max(24, points.length * 28), radius, 10, false),
+      mat,
+      [0, 0, 0],
+    );
   }
 
   /** shown: 0 lifted off and invisible, 1 in place. */
@@ -123,11 +180,12 @@ class Layer {
 
 /** A polyline with rounded corners, so pipes and cables bend instead of kinking. */
 function polyline(points: [number, number, number][], radius: number) {
-  const p = points.map(point => new Vector3(...point));
+  const p = points.map((point) => new Vector3(...point));
   const path = new CurvePath<Vector3>();
   let from = p[0];
   for (let i = 1; i < p.length - 1; i++) {
-    const inDir = p[i].clone().sub(p[i - 1]), outDir = p[i + 1].clone().sub(p[i]);
+    const inDir = p[i].clone().sub(p[i - 1]),
+      outDir = p[i + 1].clone().sub(p[i]);
     const r = Math.min(radius, inDir.length() / 2, outDir.length() / 2);
     const a = p[i].clone().sub(inDir.normalize().multiplyScalar(r));
     const b = p[i].clone().add(outDir.normalize().multiplyScalar(r));
@@ -164,8 +222,11 @@ function tiled(base: CanvasTexture, width: number, height: number, tileW: number
 }
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
-const smooth = (a: number, b: number, v: number) => { const t = clamp01((v - a) / (b - a)); return t * t * (3 - 2 * t); };
-const easeInOut = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const smooth = (a: number, b: number, v: number) => {
+  const t = clamp01((v - a) / (b - a));
+  return t * t * (3 - 2 * t);
+};
+const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 function buildLayers() {
@@ -192,13 +253,52 @@ function buildLayers() {
   {
     const cable = elektro.mat(new MeshStandardMaterial({ color: "#e39a2d", roughness: 0.45 }));
     const box = elektro.mat(new MeshStandardMaterial({ color: "#3a3a3d", roughness: 0.5 }));
-    const zb = BACK + 0.02, xl = LEFT + 0.02, top = 2.28;
-    elektro.tube([[1.45, 0.02, zb], [1.45, top, zb], [xl, top, zb], [xl, top, 0.35], [xl, 1.1, 0.35]], 0.011, cable);
-    elektro.tube([[0.95, top, zb], [0.95, 2.05, zb]], 0.011, cable);
-    elektro.tube([[-1.08, top, zb], [-1.08, 2.12, zb]], 0.011, cable);
-    elektro.tube([[1.45, 0.3, zb], [S, 0.3, zb]], 0.011, cable, 0.02);
+    const zb = BACK + 0.02,
+      xl = LEFT + 0.02,
+      top = 2.28;
+    elektro.tube(
+      [
+        [1.45, 0.02, zb],
+        [1.45, top, zb],
+        [xl, top, zb],
+        [xl, top, 0.35],
+        [xl, 1.1, 0.35],
+      ],
+      0.011,
+      cable,
+    );
+    elektro.tube(
+      [
+        [0.95, top, zb],
+        [0.95, 2.05, zb],
+      ],
+      0.011,
+      cable,
+    );
+    elektro.tube(
+      [
+        [-1.08, top, zb],
+        [-1.08, 2.12, zb],
+      ],
+      0.011,
+      cable,
+    );
+    elektro.tube(
+      [
+        [1.45, 0.3, zb],
+        [S, 0.3, zb],
+      ],
+      0.011,
+      cable,
+      0.02,
+    );
     const flush = new CylinderGeometry(0.034, 0.034, 0.04, 24);
-    for (const [x, y] of [[1.45, 1.05], [0.95, 2.05], [-1.08, 2.12]] as const) elektro.add(flush, box, [x, y, BACK + 0.02], { rotate: [Math.PI / 2, 0, 0] });
+    for (const [x, y] of [
+      [1.45, 1.05],
+      [0.95, 2.05],
+      [-1.08, 2.12],
+    ] as const)
+      elektro.add(flush, box, [x, y, BACK + 0.02], { rotate: [Math.PI / 2, 0, 0] });
     elektro.add(flush, box, [LEFT + 0.02, 1.1, 0.35], { rotate: [0, 0, Math.PI / 2] });
   }
 
@@ -211,13 +311,66 @@ function buildLayers() {
     const drain = sanitaer.mat(new MeshStandardMaterial({ color: "#8e949b", roughness: 0.55 }));
     const frame = sanitaer.mat(new MeshStandardMaterial({ color: "#aeb4ba", roughness: 0.4, metalness: 0.6 }));
     const cistern = sanitaer.mat(new MeshStandardMaterial({ color: "#5d87b3", roughness: 0.6 }));
-    const zc = BACK + 0.03, zh = BACK + 0.052;
-    sanitaer.tube([[1.25, 0, zc], [1.25, 0.3, zc], [-1.18, 0.3, zc], [-1.18, 1.02, zc]], 0.015, cold);
-    sanitaer.tube([[1.36, 0, zh], [1.36, 0.4, zh], [-1.0, 0.4, zh], [-1.0, 1.02, zh]], 0.015, hot);
-    sanitaer.tube([[0.82, 0.3, zc], [0.82, 0.66, zc]], 0.015, cold, 0.02);
-    sanitaer.tube([[1.08, 0.4, zh], [1.08, 0.66, zh]], 0.015, hot, 0.02);
-    sanitaer.tube([[-0.05, 0.3, zc], [-0.05, 0.86, zc]], 0.015, cold, 0.02);
-    sanitaer.tube([[0.95, 0.5, BACK + 0.038], [0.95, 0.08, BACK + 0.038], [-0.15, 0.08, BACK + 0.038], [-0.15, 0.24, BACK + 0.038]], 0.03, drain, 0.1);
+    const zc = BACK + 0.03,
+      zh = BACK + 0.052;
+    sanitaer.tube(
+      [
+        [1.25, 0, zc],
+        [1.25, 0.3, zc],
+        [-1.18, 0.3, zc],
+        [-1.18, 1.02, zc],
+      ],
+      0.015,
+      cold,
+    );
+    sanitaer.tube(
+      [
+        [1.36, 0, zh],
+        [1.36, 0.4, zh],
+        [-1.0, 0.4, zh],
+        [-1.0, 1.02, zh],
+      ],
+      0.015,
+      hot,
+    );
+    sanitaer.tube(
+      [
+        [0.82, 0.3, zc],
+        [0.82, 0.66, zc],
+      ],
+      0.015,
+      cold,
+      0.02,
+    );
+    sanitaer.tube(
+      [
+        [1.08, 0.4, zh],
+        [1.08, 0.66, zh],
+      ],
+      0.015,
+      hot,
+      0.02,
+    );
+    sanitaer.tube(
+      [
+        [-0.05, 0.3, zc],
+        [-0.05, 0.86, zc],
+      ],
+      0.015,
+      cold,
+      0.02,
+    );
+    sanitaer.tube(
+      [
+        [0.95, 0.5, BACK + 0.038],
+        [0.95, 0.08, BACK + 0.038],
+        [-0.15, 0.08, BACK + 0.038],
+        [-0.15, 0.24, BACK + 0.038],
+      ],
+      0.03,
+      drain,
+      0.1,
+    );
     // Pre-wall frame for the wall-hung WC.
     sanitaer.box([-0.42, 0, BACK + 0.01], [-0.38, 1.14, BACK + 0.062], frame);
     sanitaer.box([0.08, 0, BACK + 0.01], [0.12, 1.14, BACK + 0.062], frame);
@@ -234,8 +387,17 @@ function buildLayers() {
   {
     const loop = heizung.mat(new MeshStandardMaterial({ color: "#d4473a", roughness: 0.45 }));
     const metal = heizung.mat(new MeshStandardMaterial({ color: "#b8954a", roughness: 0.35, metalness: 0.8 }));
-    const y = 0.026, x0 = -1.42, x1 = 1.44, z0 = -0.5, z1 = 1.42, runs = 14;
-    const points: [number, number, number][] = [[LEFT + 0.06, y, 1.28], [LEFT + 0.06, y, z0], [x0, y, z0]];
+    const y = 0.026,
+      x0 = -1.42,
+      x1 = 1.44,
+      z0 = -0.5,
+      z1 = 1.42,
+      runs = 14;
+    const points: [number, number, number][] = [
+      [LEFT + 0.06, y, 1.28],
+      [LEFT + 0.06, y, z0],
+      [x0, y, z0],
+    ];
     for (let i = 0; i < runs; i++) {
       const z = z0 + ((z1 - z0) * i) / (runs - 1);
       const zn = z0 + ((z1 - z0) * (i + 1)) / (runs - 1);
@@ -255,21 +417,33 @@ function buildLayers() {
     const white = tileTexture("#f4efe7", "#d9d1c5", 2);
     const dark = tileTexture("#5f7d6c", "#4a6556", 2);
     const floor = tileTexture("#c8beb1", "#aea496", 1);
-    const shower = -0.55, showerZ = -0.7;
+    const shower = -0.55,
+      showerZ = -0.7;
     const panel = (texture: CanvasTexture, w: number, h: number, tw: number, th: number) =>
       fliesen.mat(new MeshStandardMaterial({ map: tiled(texture, w, h, tw, th), roughness: 0.38, metalness: 0 }));
-    const backDarkW = shower - LEFT, backWhiteW = S - shower;
+    const backDarkW = shower - LEFT,
+      backWhiteW = S - shower;
     fliesen.box([LEFT, FLOOR, BACK + SKIN], [shower, H, BACK + FACE], panel(dark, backDarkW, H - FLOOR, 0.3, 0.6));
     fliesen.box([shower, FLOOR, BACK + SKIN], [S, H, BACK + FACE], panel(white, backWhiteW, H - FLOOR, 0.3, 0.6));
-    const leftDarkD = showerZ - (BACK + FACE), leftWhiteD = S - showerZ;
+    const leftDarkD = showerZ - (BACK + FACE),
+      leftWhiteD = S - showerZ;
     // Left-wall panels are rotated so the texture runs along z.
     const left = (z0: number, z1: number, mat: Mat) => {
-      const mesh = fliesen.add(new BoxGeometry(z1 - z0, H - FLOOR, TILE), mat, [LEFT + SKIN + TILE / 2, (FLOOR + H) / 2, (z0 + z1) / 2], { edges: true, rotate: [0, Math.PI / 2, 0] });
+      const mesh = fliesen.add(
+        new BoxGeometry(z1 - z0, H - FLOOR, TILE),
+        mat,
+        [LEFT + SKIN + TILE / 2, (FLOOR + H) / 2, (z0 + z1) / 2],
+        { edges: true, rotate: [0, Math.PI / 2, 0] },
+      );
       return mesh;
     };
     left(BACK + FACE, showerZ, panel(dark, leftDarkD, H - FLOOR, 0.3, 0.6));
     left(showerZ, S, panel(white, leftWhiteD, H - FLOOR, 0.3, 0.6));
-    fliesen.box([LEFT + FACE, 0.05, BACK + FACE], [S, FLOOR, S], panel(floor, S - LEFT - FACE, S - BACK - FACE, 0.6, 0.6));
+    fliesen.box(
+      [LEFT + FACE, 0.05, BACK + FACE],
+      [S, FLOOR, S],
+      panel(floor, S - LEFT - FACE, S - BACK - FACE, 0.6, 0.6),
+    );
   }
 
   // 06 Komplettbad: the finished room. The label marks the mirror and points
@@ -282,49 +456,101 @@ function buildLayers() {
     const terracotta = fertig.mat(new MeshStandardMaterial({ color: "#b8664a", roughness: 0.7 }));
     const leaf = fertig.mat(new MeshStandardMaterial({ color: "#5d7f4c", roughness: 0.6 }));
     const linen = fertig.mat(new MeshStandardMaterial({ color: "#d9c3a5", roughness: 0.9 }));
-    const ceramic = fertig.mat(new MeshPhysicalMaterial({ color: "#fbfbfb", roughness: 0.16, clearcoat: 1, clearcoatRoughness: 0.08 }));
+    const ceramic = fertig.mat(
+      new MeshPhysicalMaterial({ color: "#fbfbfb", roughness: 0.16, clearcoat: 1, clearcoatRoughness: 0.08 }),
+    );
     const stone = fertig.mat(new MeshStandardMaterial({ color: "#f1f1f2", roughness: 0.5 }));
     const mirror = fertig.mat(new MeshStandardMaterial({ color: "#e9ecef", roughness: 0.04, metalness: 1 }));
-    const glass = fertig.mat(new MeshPhysicalMaterial({ color: "#dfe7eb", roughness: 0.04, metalness: 0, opacity: 0.2, envMapIntensity: 1.4 }));
-    const light = fertig.mat(new MeshStandardMaterial({ color: "#ffffff", emissive: "#ffffff", emissiveIntensity: 1.6 }));
-    const wall = BACK + FACE, side = LEFT + FACE;
+    const glass = fertig.mat(
+      new MeshPhysicalMaterial({ color: "#dfe7eb", roughness: 0.04, metalness: 0, opacity: 0.2, envMapIntensity: 1.4 }),
+    );
+    const light = fertig.mat(
+      new MeshStandardMaterial({ color: "#ffffff", emissive: "#ffffff", emissiveIntensity: 1.6 }),
+    );
+    const wall = BACK + FACE,
+      side = LEFT + FACE;
 
     // Vanity, top, bowl and spout.
     fertig.add(new RoundedBoxGeometry(0.9, 0.3, 0.46, 4, 0.014), oak, [0.95, 0.68, wall + 0.23], { edges: true });
     fertig.box([0.49, 0.83, wall], [1.41, 0.855, wall + 0.48], stone);
     fertig.box([0.54, 0.525, wall + 0.02], [1.36, 0.53, wall + 0.42], light, false);
-    const bowl = [new Vector2(0, 0), new Vector2(0.15, 0), new Vector2(0.19, 0.04), new Vector2(0.2, 0.12), new Vector2(0.185, 0.12), new Vector2(0.17, 0.05), new Vector2(0.12, 0.02), new Vector2(0, 0.02)];
+    const bowl = [
+      new Vector2(0, 0),
+      new Vector2(0.15, 0),
+      new Vector2(0.19, 0.04),
+      new Vector2(0.2, 0.12),
+      new Vector2(0.185, 0.12),
+      new Vector2(0.17, 0.05),
+      new Vector2(0.12, 0.02),
+      new Vector2(0, 0.02),
+    ];
     fertig.add(new LatheGeometry(bowl, 48), ceramic, [0.95, 0.855, wall + 0.25]);
-    fertig.add(new CylinderGeometry(0.011, 0.011, 0.18, 16), brass, [0.95, 1.06, wall + 0.09], { rotate: [Math.PI / 2, 0, 0] });
+    fertig.add(new CylinderGeometry(0.011, 0.011, 0.18, 16), brass, [0.95, 1.06, wall + 0.09], {
+      rotate: [Math.PI / 2, 0, 0],
+    });
     fertig.add(new RoundedBoxGeometry(0.76, 0.82, 0.03, 4, 0.012), mirror, [0.95, 1.6, wall + 0.016], { edges: true });
     fertig.box([0.7, 2.06, wall], [1.2, 2.085, wall + 0.05], matte, false);
     fertig.box([0.72, 2.058, wall + 0.008], [1.18, 2.06, wall + 0.042], light, false);
     fertig.add(new RoundedBoxGeometry(0.08, 0.08, 0.012, 2, 0.006), stone, [1.45, 1.05, wall + 0.006], { edges: true });
-    fertig.add(new RoundedBoxGeometry(0.08, 0.08, 0.012, 2, 0.006), stone, [side + 0.006, 1.1, 0.35], { edges: true, rotate: [0, Math.PI / 2, 0] });
+    fertig.add(new RoundedBoxGeometry(0.08, 0.08, 0.012, 2, 0.006), stone, [side + 0.006, 1.1, 0.35], {
+      edges: true,
+      rotate: [0, Math.PI / 2, 0],
+    });
 
     // Wall-hung WC and its flush plate.
     fertig.add(new RoundedBoxGeometry(0.37, 0.3, 0.55, 6, 0.08), ceramic, [-0.15, 0.43, wall + 0.275], { edges: true });
     fertig.add(new RoundedBoxGeometry(0.22, 0.15, 0.012, 2, 0.006), brass, [-0.15, 1.0, wall + 0.006]);
 
     // Walk-in shower: glass panel, rain head, mixer and channel cover.
-    const glassZ0 = wall, glassZ1 = -0.72;
+    const glassZ0 = wall,
+      glassZ1 = -0.72;
     fertig.box([-0.555, FLOOR, glassZ0], [-0.545, 2.05, glassZ1], glass);
     fertig.box([-0.565, 2.05, glassZ0], [-0.535, 2.07, glassZ1], matte, false);
-    fertig.add(new CylinderGeometry(0.01, 0.01, 0.36, 12), brass, [-1.08, 2.14, wall + 0.18], { rotate: [Math.PI / 2, 0, 0] });
+    fertig.add(new CylinderGeometry(0.01, 0.01, 0.36, 12), brass, [-1.08, 2.14, wall + 0.18], {
+      rotate: [Math.PI / 2, 0, 0],
+    });
     fertig.add(new CylinderGeometry(0.15, 0.15, 0.012, 48), brass, [-1.08, 2.12, wall + 0.36]);
     fertig.add(new RoundedBoxGeometry(0.06, 0.18, 0.05, 2, 0.01), brass, [-1.09, 1.05, wall + 0.025]);
     fertig.box([-1.45, FLOOR, wall + 0.06], [-0.71, FLOOR + 0.004, wall + 0.12], matte, false);
 
     // Towel radiator on the left wall.
     for (const z of [-0.3, 0.2]) fertig.add(new CylinderGeometry(0.013, 0.013, 1.1, 12), matte, [side + 0.06, 0.92, z]);
-    for (let i = 0; i < 9; i++) fertig.add(new CylinderGeometry(0.009, 0.009, 0.5, 10), matte, [side + 0.06, 0.42 + i * 0.12, -0.05], { rotate: [Math.PI / 2, 0, 0] });
+    for (let i = 0; i < 9; i++)
+      fertig.add(new CylinderGeometry(0.009, 0.009, 0.5, 10), matte, [side + 0.06, 0.42 + i * 0.12, -0.05], {
+        rotate: [Math.PI / 2, 0, 0],
+      });
 
     // A folded towel and a vase, so the room reads as lived in.
     fertig.add(new RoundedBoxGeometry(0.26, 0.06, 0.18, 3, 0.02), linen, [1.24, 0.886, wall + 0.24], { edges: true });
-    const vase = [new Vector2(0, 0), new Vector2(0.05, 0), new Vector2(0.06, 0.06), new Vector2(0.035, 0.17), new Vector2(0.03, 0.2), new Vector2(0, 0.2)];
+    const vase = [
+      new Vector2(0, 0),
+      new Vector2(0.05, 0),
+      new Vector2(0.06, 0.06),
+      new Vector2(0.035, 0.17),
+      new Vector2(0.03, 0.2),
+      new Vector2(0, 0.2),
+    ];
     fertig.add(new LatheGeometry(vase, 32), terracotta, [0.62, 0.855, wall + 0.18]);
-    fertig.tube([[0.62, 1.05, wall + 0.18], [0.6, 1.25, wall + 0.2], [0.52, 1.42, wall + 0.24]], 0.004, leaf, 0.15);
-    fertig.tube([[0.62, 1.05, wall + 0.18], [0.66, 1.22, wall + 0.16], [0.72, 1.36, wall + 0.12]], 0.004, leaf, 0.15);
+    fertig.tube(
+      [
+        [0.62, 1.05, wall + 0.18],
+        [0.6, 1.25, wall + 0.2],
+        [0.52, 1.42, wall + 0.24],
+      ],
+      0.004,
+      leaf,
+      0.15,
+    );
+    fertig.tube(
+      [
+        [0.62, 1.05, wall + 0.18],
+        [0.66, 1.22, wall + 0.16],
+        [0.72, 1.36, wall + 0.12],
+      ],
+      0.004,
+      leaf,
+      0.15,
+    );
   }
 
   return [shell, elektro, sanitaer, heizung, fliesen, fertig];
@@ -360,7 +586,8 @@ function viewAt(p: number) {
   const s = Math.min(views.length - 1, Math.max(0, p + 1));
   const i = Math.min(views.length - 2, Math.floor(s));
   const t = easeInOut(s - i);
-  const a = views[i], b = views[i + 1];
+  const a = views[i],
+    b = views[i + 1];
   return { az: lerp(a.az, b.az, t), el: lerp(a.el, b.el, t), zoom: lerp(a.zoom, b.zoom, t) };
 }
 
@@ -386,7 +613,10 @@ export function createHero(options: HeroOptions): HeroScene & { ready: Promise<v
   sun.position.set(-3.5, 8, 5.5);
   sun.castShadow = true;
   sun.shadow.mapSize.set(small ? 1024 : 2048, small ? 1024 : 2048);
-  sun.shadow.camera.left = -6; sun.shadow.camera.right = 6; sun.shadow.camera.top = 7; sun.shadow.camera.bottom = -4;
+  sun.shadow.camera.left = -6;
+  sun.shadow.camera.right = 6;
+  sun.shadow.camera.top = 7;
+  sun.shadow.camera.bottom = -4;
   sun.shadow.camera.far = 30;
   sun.shadow.bias = -0.0004;
   sun.shadow.normalBias = 0.02;
@@ -410,15 +640,20 @@ export function createHero(options: HeroOptions): HeroScene & { ready: Promise<v
   const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
   const drop = reduceMotion ? 0 : DROP;
   let progress = -1;
-  let dirty = true, visible = true, live = false;
+  let dirty = true,
+    visible = true,
+    live = false;
 
   // Intro: each layer is lowered into place in site order. Its value is how far
   // the layer is in; the scroll can only hold a layer further out, never in.
   const intro = layers.map(() => ({ v: reduceMotion ? 1 : 0 }));
   let timeline: gsap.core.Timeline | undefined;
-  const invalidate = () => { dirty = true; };
+  const invalidate = () => {
+    dirty = true;
+  };
 
-  let width = 1, height = 1;
+  let width = 1,
+    height = 1;
   let region: Region | undefined;
   const frameRegion = () => region ?? { top: 0, bottom: height, left: width * 0.34, right: width };
   const layout = () => {
@@ -426,30 +661,51 @@ export function createHero(options: HeroOptions): HeroScene & { ready: Promise<v
     // The camera looks at the middle of the free region: right of the copy on
     // wide screens, below it on phones.
     const r = frameRegion();
-    camera.setViewOffset(width, height, width / 2 - (r.left + r.right) / 2, height / 2 - (r.top + r.bottom) / 2, width, height);
+    camera.setViewOffset(
+      width,
+      height,
+      width / 2 - (r.left + r.right) / 2,
+      height / 2 - (r.top + r.bottom) / 2,
+      width,
+      height,
+    );
     camera.updateProjectionMatrix();
   };
 
   // Frame the model: orbit around it at the current view, at the distance where
   // all eight corners of its box fit the free region, then shift the target so
   // the box sits in the middle of it rather than its centre point.
-  const corners = [0, 1, 2, 3, 4, 5, 6, 7].map(n => new Vector3(n & 1 ? BOUNDS.max.x : BOUNDS.min.x, n & 2 ? BOUNDS.max.y : BOUNDS.min.y, n & 4 ? BOUNDS.max.z : BOUNDS.min.z));
+  const corners = [0, 1, 2, 3, 4, 5, 6, 7].map(
+    (n) =>
+      new Vector3(
+        n & 1 ? BOUNDS.max.x : BOUNDS.min.x,
+        n & 2 ? BOUNDS.max.y : BOUNDS.min.y,
+        n & 4 ? BOUNDS.max.z : BOUNDS.min.z,
+      ),
+  );
   const centre = BOUNDS.min.clone().add(BOUNDS.max).multiplyScalar(0.5);
-  const target = new Vector3(), axisX = new Vector3(), axisY = new Vector3(), axisZ = new Vector3(), rel = new Vector3();
+  const target = new Vector3(),
+    axisX = new Vector3(),
+    axisY = new Vector3(),
+    axisZ = new Vector3(),
+    rel = new Vector3();
   const up = new Vector3(0, 1, 0);
   const tan = Math.tan((camera.fov * Math.PI) / 360);
   const fit = (tx: number, ty: number) => {
     let distance = 0;
     for (const corner of corners) {
       rel.subVectors(corner, target);
-      const u = rel.dot(axisX), v = rel.dot(axisY), w = rel.dot(axisZ);
+      const u = rel.dot(axisX),
+        v = rel.dot(axisY),
+        w = rel.dot(axisZ);
       distance = Math.max(distance, w + Math.abs(u) / tx, w + Math.abs(v) / ty);
     }
     return distance;
   };
   const place = () => {
     const view = viewAt(progress);
-    const az = view.az + pointer.x * 0.08, el = view.el + pointer.y * 0.04;
+    const az = view.az + pointer.x * 0.08,
+      el = view.el + pointer.y * 0.04;
     axisZ.set(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el));
     axisX.crossVectors(up, axisZ).normalize();
     axisY.crossVectors(axisZ, axisX);
@@ -458,14 +714,23 @@ export function createHero(options: HeroOptions): HeroScene & { ready: Promise<v
     const tx = tan * camera.aspect * Math.max(0.15, (r.right - r.left) / width) * 0.9;
     target.copy(centre);
     let distance = fit(tx, ty);
-    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+    let minX = Infinity,
+      maxX = -Infinity,
+      minY = Infinity,
+      maxY = -Infinity;
     for (const corner of corners) {
       rel.subVectors(corner, target);
       const depth = distance - rel.dot(axisZ);
-      const x = rel.dot(axisX) / depth, y = rel.dot(axisY) / depth;
-      minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+      const x = rel.dot(axisX) / depth,
+        y = rel.dot(axisY) / depth;
+      minX = Math.min(minX, x);
+      maxX = Math.max(maxX, x);
+      minY = Math.min(minY, y);
+      maxY = Math.max(maxY, y);
     }
-    target.addScaledVector(axisX, ((minX + maxX) / 2) * distance).addScaledVector(axisY, ((minY + maxY) / 2) * distance);
+    target
+      .addScaledVector(axisX, ((minX + maxX) / 2) * distance)
+      .addScaledVector(axisY, ((minY + maxY) / 2) * distance);
     distance = fit(tx, ty) / view.zoom;
     camera.position.copy(target).addScaledVector(axisZ, distance);
     camera.lookAt(target);
@@ -484,7 +749,8 @@ export function createHero(options: HeroOptions): HeroScene & { ready: Promise<v
       label.style.visibility = opacity < 0.01 ? "hidden" : "visible";
       if (opacity < 0.01) return;
       projected.copy(layers[i].anchor).applyMatrix4(layers[i].group.matrixWorld).project(camera);
-      const x = (projected.x + 1) / 2 * width, y = (1 - projected.y) / 2 * height;
+      const x = ((projected.x + 1) / 2) * width,
+        y = ((1 - projected.y) / 2) * height;
       textWidths[i] ||= (label.lastElementChild as HTMLElement).offsetWidth;
       const reach = length + 10 + textWidths[i];
       let flip = layers[i].side < 0;
@@ -509,7 +775,10 @@ export function createHero(options: HeroOptions): HeroScene & { ready: Promise<v
     const settling = Math.abs(pointer.tx - pointer.x) + Math.abs(pointer.ty - pointer.y) > 0.0005;
     if (!dirty && !settling) return;
     dirty = false;
-    if (!settling) { pointer.x = pointer.tx; pointer.y = pointer.ty; } else dirty = true;
+    if (!settling) {
+      pointer.x = pointer.tx;
+      pointer.y = pointer.ty;
+    } else dirty = true;
 
     const shown = layers.map((layer, i) => {
       const value = Math.min(intro[i].v, placed(i, progress));
@@ -523,7 +792,8 @@ export function createHero(options: HeroOptions): HeroScene & { ready: Promise<v
   };
 
   const resize = () => {
-    width = canvas.clientWidth; height = canvas.clientHeight;
+    width = canvas.clientWidth;
+    height = canvas.clientHeight;
     if (!width || !height) return;
     renderer.setSize(width, height, false);
     layout();
@@ -531,7 +801,10 @@ export function createHero(options: HeroOptions): HeroScene & { ready: Promise<v
   };
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(canvas);
-  const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; dirty = true; });
+  const io = new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    dirty = true;
+  });
   io.observe(canvas);
   resize();
 
@@ -539,25 +812,54 @@ export function createHero(options: HeroOptions): HeroScene & { ready: Promise<v
   // not stall on its first frames, then start it.
   for (const layer of layers) layer.set(1, 0);
   place();
-  const ready = renderer.compileAsync(scene, camera).catch(() => undefined).then(() => {
-    live = true;
-    dirty = true;
-    if (reduceMotion) { options.onIntroStep?.(layers.length - 1); return; }
-    timeline = gsap.timeline({ delay: 0.1, onUpdate: invalidate });
-    layers.forEach((_, i) => timeline!.to(intro[i], { v: 1, duration: 1.1, ease: "power3.out", onStart: () => options.onIntroStep?.(i) }, i * 0.3));
-  });
+  const ready = renderer
+    .compileAsync(scene, camera)
+    .catch(() => undefined)
+    .then(() => {
+      live = true;
+      dirty = true;
+      if (reduceMotion) {
+        options.onIntroStep?.(layers.length - 1);
+        return;
+      }
+      timeline = gsap.timeline({ delay: 0.1, onUpdate: invalidate });
+      layers.forEach((_, i) =>
+        timeline!.to(
+          intro[i],
+          { v: 1, duration: 1.1, ease: "power3.out", onStart: () => options.onIntroStep?.(i) },
+          i * 0.3,
+        ),
+      );
+    });
 
   return {
     ready,
     tick: render,
-    setProgress(value) { if (value !== progress) { progress = value; dirty = true; } },
+    setProgress(value) {
+      if (value !== progress) {
+        progress = value;
+        dirty = true;
+      }
+    },
     setRegion(next) {
-      if (next && region && next.top === region.top && next.bottom === region.bottom && next.left === region.left && next.right === region.right) return;
+      if (
+        next &&
+        region &&
+        next.top === region.top &&
+        next.bottom === region.bottom &&
+        next.left === region.left &&
+        next.right === region.right
+      )
+        return;
       region = next;
       layout();
       dirty = true;
     },
-    setPointer(x, y) { if (reduceMotion) return; pointer.tx = x; pointer.ty = y; },
+    setPointer(x, y) {
+      if (reduceMotion) return;
+      pointer.tx = x;
+      pointer.ty = y;
+    },
     dispose() {
       timeline?.kill();
       resizeObserver.disconnect();

@@ -22,6 +22,7 @@ const { title, description, livePath, schema = [], current, actionBar = true, ct
 const ogImage = new URL(`${assetBase}/img/og-handwerker-work.jpg`, Astro.site).href;
 const fonts = `${assetBase}/fonts`;
 ---
+
 <!doctype html>
 <html lang="de">
   <head>
@@ -33,14 +34,50 @@ const fonts = `${assetBase}/fonts`;
     <meta name="referrer" content="no-referrer" />
     <meta name="theme-color" content="#ffffff" />
     <link rel="preload" href={`${fonts}/dm-sans-latin-opsz-normal.woff2`} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={`${fonts}/jetbrains-mono-latin-400-normal.woff2`} as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      href={`${fonts}/jetbrains-mono-latin-400-normal.woff2`}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <style is:inline>
-      @font-face { font-family: "DM Sans"; src: url(/entwurf/hw/v1/fonts/dm-sans-latin-opsz-normal.woff2) format("woff2"); font-weight: 100 1000; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-      @font-face { font-family: "DM Sans"; src: url(/entwurf/hw/v1/fonts/dm-sans-latin-ext-opsz-normal.woff2) format("woff2"); font-weight: 100 1000; font-display: swap; unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+20A0-20AB, U+20AD-20C0, U+2C60-2C7F, U+A720-A7FF; }
-      @font-face { font-family: "DM Sans Fallback"; src: local("Arial"), local("Helvetica Neue"), local("Helvetica"); size-adjust: 101%; ascent-override: 92%; descent-override: 29%; line-gap-override: 0%; }
-      @font-face { font-family: "JetBrains Mono"; src: url(/entwurf/hw/v1/fonts/jetbrains-mono-latin-400-normal.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+      @font-face {
+        font-family: "DM Sans";
+        src: url(/entwurf/hw/v1/fonts/dm-sans-latin-opsz-normal.woff2) format("woff2");
+        font-weight: 100 1000;
+        font-display: swap;
+        unicode-range:
+          U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
+          U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: "DM Sans";
+        src: url(/entwurf/hw/v1/fonts/dm-sans-latin-ext-opsz-normal.woff2) format("woff2");
+        font-weight: 100 1000;
+        font-display: swap;
+        unicode-range:
+          U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+20A0-20AB, U+20AD-20C0,
+          U+2C60-2C7F, U+A720-A7FF;
+      }
+      @font-face {
+        font-family: "DM Sans Fallback";
+        src: local("Arial"), local("Helvetica Neue"), local("Helvetica");
+        size-adjust: 101%;
+        ascent-override: 92%;
+        descent-override: 29%;
+        line-gap-override: 0%;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url(/entwurf/hw/v1/fonts/jetbrains-mono-latin-400-normal.woff2) format("woff2");
+        font-weight: 400;
+        font-display: swap;
+      }
     </style>
-    <script is:inline>document.documentElement.classList.add("js");</script>
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
     <link rel="icon" href={`${assetBase}/favicon.svg`} type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="de_DE" />
@@ -52,10 +89,18 @@ const fonts = `${assetBase}/fonts`;
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    {schema.length > 0 && <script type="application/ld+json" is:inline set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": schema })} />}
+    {schema.length > 0 && (
+      <script
+        type="application/ld+json"
+        is:inline
+        set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": schema })}
+      />
+    )}
   </head>
   <body class:list={{ "has-action-bar": actionBar }}>
-    <a class="skip" href="#main">Zum Inhalt springen</a>
+    <a class="skip" href="#main">
+      Zum Inhalt springen
+    </a>
     <Header current={current} />
     <main id="main" tabindex="-1">
       <slot />
@@ -67,20 +112,37 @@ const fonts = `${assetBase}/fonts`;
       <nav class="action-bar" aria-label="Schnellkontakt">
         <a href={company.phone.href}>Anrufen</a>
         <a href={company.whatsapp.href}>WhatsApp</a>
-        <a class="primary" href={sections.kontakt}>Anfrage</a>
+        <a class="primary" href={sections.kontakt}>
+          Anfrage
+        </a>
       </nav>
     )}
 
     <div class="draft" data-draft>
       <div class="draft-panel" id="draft-panel" hidden data-draft-panel>
-        <a class="draft-brand" href="/entwurf/hw/v2/konzept">Entwurf von <b>Suchio</b><span aria-hidden="true">→</span></a>
-        <button type="button" class="draft-notes" aria-pressed="false" data-notes-toggle>Hinweise<i aria-hidden="true"></i></button>
+        <a class="draft-brand" href="/entwurf/hw/v2/konzept">
+          Entwurf von <b>Suchio</b>
+          <span aria-hidden="true">→</span>
+        </a>
+        <button type="button" class="draft-notes" aria-pressed="false" data-notes-toggle>
+          Hinweise<i aria-hidden="true"></i>
+        </button>
         <nav class="draft-versions" aria-label="Entwurfsversion">
-          <a href={base} aria-current="page">V1</a>
+          <a href={base} aria-current="page">
+            V1
+          </a>
           <a href="/entwurf/hw/v2">V2</a>
         </nav>
       </div>
-      <button type="button" class="draft-toggle mono" aria-expanded="false" aria-controls="draft-panel" data-draft-toggle><i aria-hidden="true"></i>Entwurf</button>
+      <button
+        type="button"
+        class="draft-toggle mono"
+        aria-expanded="false"
+        aria-controls="draft-panel"
+        data-draft-toggle
+      >
+        <i aria-hidden="true"></i>Entwurf
+      </button>
     </div>
 
     <script>
@@ -90,33 +152,184 @@ const fonts = `${assetBase}/fonts`;
 </html>
 
 <style is:global>
-  .action-bar { display: none; }
+  .action-bar {
+    display: none;
+  }
   @media (max-width: 760px) {
-    .action-bar { position: fixed; inset: auto 8px calc(8px + env(safe-area-inset-bottom)); z-index: 45; display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 4px; padding: 4px; border-radius: 999px; background: rgb(11 11 12 / 0.9); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); transition: transform 0.6s var(--ease), opacity 0.4s; }
-    .action-bar a { min-width: 0; display: flex; align-items: center; justify-content: center; min-height: 46px; border-radius: 999px; color: var(--on-night); font-size: 0.88rem; font-weight: 500; text-decoration: none; }
-    .action-bar a.primary { background: var(--white); color: var(--ink); }
-    .action-bar.hidden { transform: translateY(140%); opacity: 0; pointer-events: none; }
+    .action-bar {
+      position: fixed;
+      inset: auto 8px calc(8px + env(safe-area-inset-bottom));
+      z-index: 45;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.3fr;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgb(11 11 12 / 0.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition:
+        transform 0.6s var(--ease),
+        opacity 0.4s;
+    }
+    .action-bar a {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      border-radius: 999px;
+      color: var(--on-night);
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .action-bar a.primary {
+      background: var(--white);
+      color: var(--ink);
+    }
+    .action-bar.hidden {
+      transform: translateY(140%);
+      opacity: 0;
+      pointer-events: none;
+    }
   }
   /* Suchio draft tools in one small menu: concept link, pitch notes, version. */
-  .draft { position: fixed; left: 12px; bottom: 12px; z-index: 60; display: grid; justify-items: start; gap: 8px; font: 500 0.86rem/1.2 var(--sans); }
-  .draft-toggle { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border: 1px solid var(--line-2); border-radius: 999px; background: rgb(255 255 255 / 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--ink); cursor: pointer; }
-  .draft-toggle i { width: 7px; height: 7px; border-radius: 50%; background: #0050c8; }
-  .draft-toggle[aria-expanded="true"] { background: var(--ink); color: var(--white); border-color: var(--ink); }
-  .draft-panel { display: grid; min-width: 220px; padding: 6px; border: 1px solid var(--line); border-radius: 14px; background: var(--white); box-shadow: 0 24px 50px -24px rgb(0 0 0 / 0.35); animation: draft-in 0.4s var(--ease) both; }
-  .draft-panel[hidden] { display: none; }
-  @keyframes draft-in { from { opacity: 0; transform: translateY(8px); } }
-  .draft-panel > a, .draft-notes { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 44px; padding: 0 12px; border: 0; border-radius: 8px; background: none; color: var(--ink); text-align: left; text-decoration: none; cursor: pointer; }
-  .draft-panel > a:hover, .draft-notes:hover { background: var(--mist); }
-  .draft-notes i { position: relative; width: 30px; height: 18px; border-radius: 999px; background: var(--fog); transition: background-color 0.3s; }
-  .draft-notes i::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--white); box-shadow: 0 1px 2px rgb(0 0 0 / 0.2); transition: transform 0.3s var(--ease); }
-  .draft-notes[aria-pressed="true"] i { background: #0050c8; }
-  .draft-notes[aria-pressed="true"] i::after { transform: translateX(12px); }
-  .draft-versions { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 6px 0 0; margin-top: 4px; border-top: 1px solid var(--line); }
-  .draft-versions a { display: grid; place-items: center; min-height: 40px; border-radius: 8px; color: var(--ink); font-weight: 600; text-decoration: none; }
-  .draft-versions a:hover { background: var(--mist); }
-  .draft-versions a[aria-current] { background: var(--ink); color: var(--white); }
+  .draft {
+    position: fixed;
+    left: 12px;
+    bottom: 12px;
+    z-index: 60;
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    font: 500 0.86rem/1.2 var(--sans);
+  }
+  .draft-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 36px;
+    padding: 0 14px;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .draft-toggle i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #0050c8;
+  }
+  .draft-toggle[aria-expanded="true"] {
+    background: var(--ink);
+    color: var(--white);
+    border-color: var(--ink);
+  }
+  .draft-panel {
+    display: grid;
+    min-width: 220px;
+    padding: 6px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--white);
+    box-shadow: 0 24px 50px -24px rgb(0 0 0 / 0.35);
+    animation: draft-in 0.4s var(--ease) both;
+  }
+  .draft-panel[hidden] {
+    display: none;
+  }
+  @keyframes draft-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+  .draft-panel > a,
+  .draft-notes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: var(--ink);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .draft-panel > a:hover,
+  .draft-notes:hover {
+    background: var(--mist);
+  }
+  .draft-notes i {
+    position: relative;
+    width: 30px;
+    height: 18px;
+    border-radius: 999px;
+    background: var(--fog);
+    transition: background-color 0.3s;
+  }
+  .draft-notes i::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+    transition: transform 0.3s var(--ease);
+  }
+  .draft-notes[aria-pressed="true"] i {
+    background: #0050c8;
+  }
+  .draft-notes[aria-pressed="true"] i::after {
+    transform: translateX(12px);
+  }
+  .draft-versions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    padding: 6px 0 0;
+    margin-top: 4px;
+    border-top: 1px solid var(--line);
+  }
+  .draft-versions a {
+    display: grid;
+    place-items: center;
+    min-height: 40px;
+    border-radius: 8px;
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .draft-versions a:hover {
+    background: var(--mist);
+  }
+  .draft-versions a[aria-current] {
+    background: var(--ink);
+    color: var(--white);
+  }
   @media (max-width: 760px) {
-    .has-action-bar .draft { left: auto; right: 8px; bottom: calc(70px + env(safe-area-inset-bottom)); justify-items: end; }
-    .draft-toggle { min-height: 32px; padding: 0 12px; font-size: 0.66rem; }
+    .has-action-bar .draft {
+      left: auto;
+      right: 8px;
+      bottom: calc(70px + env(safe-area-inset-bottom));
+      justify-items: end;
+    }
+    .draft-toggle {
+      min-height: 32px;
+      padding: 0 12px;
+      font-size: 0.66rem;
+    }
   }
 </style>

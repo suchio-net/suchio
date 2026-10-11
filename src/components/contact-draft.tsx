@@ -18,9 +18,18 @@ export type ContactDraft = {
 // updates can only occur in browser events. No cookies or persistent storage.
 let browserDraft: ContactDraft | undefined;
 const listeners = new Set<() => void>();
-function subscribe(listener: () => void) { listeners.add(listener); return () => { listeners.delete(listener); }; }
-function getSnapshot() { return browserDraft; }
-function getServerSnapshot() { return undefined; }
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+function getSnapshot() {
+  return browserDraft;
+}
+function getServerSnapshot() {
+  return undefined;
+}
 function setDraft(action: SetStateAction<ContactDraft | undefined>) {
   if (typeof window === "undefined") throw new Error("Contact drafts are browser-only.");
   browserDraft = typeof action === "function" ? action(browserDraft) : action;

@@ -9,14 +9,22 @@ import { handleAuditVisit, purgeAuditVisits } from "./lib/audit-measurement";
 import { handleAuditAdmin } from "./lib/audit-admin";
 import { purgeAdminSessions } from "./lib/audit-admin-auth";
 
-type CloudflareEnv = Pick<CloudflareBindings, "ASSETS" | "CONTACT_RATE_LIMITER" | "AUDIT_DB" | "AUDIT_ADMIN_EMAIL" | "AUDIT_ADMIN_PASSWORD_HASH"> & Partial<Pick<CloudflareBindings, "RESEND_API_KEY" | "CONTACT_EMAIL_FROM" | "CONTACT_EMAIL_TO">>;
+type CloudflareEnv = Pick<
+  CloudflareBindings,
+  "ASSETS" | "CONTACT_RATE_LIMITER" | "AUDIT_DB" | "AUDIT_ADMIN_EMAIL" | "AUDIT_ADMIN_PASSWORD_HASH"
+> &
+  Partial<Pick<CloudflareBindings, "RESEND_API_KEY" | "CONTACT_EMAIL_FROM" | "CONTACT_EMAIL_TO">>;
 
 function cookieLocale(request: Request) {
   const cookie = request.headers.get("cookie");
   if (!cookie) return undefined;
 
   const prefix = `${localeCookie}=`;
-  const value = cookie.split(";").map((entry) => entry.trim()).find((entry) => entry.startsWith(prefix))?.slice(prefix.length);
+  const value = cookie
+    .split(";")
+    .map((entry) => entry.trim())
+    .find((entry) => entry.startsWith(prefix))
+    ?.slice(prefix.length);
   return value && hasLocale(value) ? value : undefined;
 }
 
@@ -24,8 +32,11 @@ function isInternalNavigation(request: Request, url: URL) {
   if (request.headers.get("sec-fetch-site") === "same-origin") return true;
   const referer = request.headers.get("referer");
   if (!referer) return false;
-  try { return new URL(referer).origin === url.origin; }
-  catch { return false; }
+  try {
+    return new URL(referer).origin === url.origin;
+  } catch {
+    return false;
+  }
 }
 
 function redirect(location: string, locale?: Locale, status = 307) {
@@ -72,11 +83,16 @@ const worker = {
     await purgeAdminSessions(env.AUDIT_DB);
   },
   async fetch(request: Request, env: CloudflareEnv, context: ExecutionContext) {
-
     const url = new URL(request.url);
     if (url.pathname === "/admin/audits" || url.pathname.startsWith("/admin/audits/")) {
-      try { return await handleAuditAdmin(request, env); }
-      catch { return new Response("Auswertung vorübergehend nicht verfügbar.", { status: 503, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex" } }); }
+      try {
+        return await handleAuditAdmin(request, env);
+      } catch {
+        return new Response("Auswertung vorübergehend nicht verfügbar.", {
+          status: 503,
+          headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex" },
+        });
+      }
     }
     if (url.pathname === "/api/audit-visits") {
       try {
@@ -86,7 +102,9 @@ const worker = {
           if (!limit.success) return new Response(null, { status: 429, headers: { "Cache-Control": "no-store" } });
         }
         return withSecurityHeaders(await handleAuditVisit(request, env.AUDIT_DB));
-      } catch { return new Response(null, { status: 503, headers: { "Cache-Control": "no-store" } }); }
+      } catch {
+        return new Response(null, { status: 503, headers: { "Cache-Control": "no-store" } });
+      }
     }
 
     const legacyServiceRedirect = getLegacyServiceRedirectPath(url.pathname);
@@ -96,7 +114,11 @@ const worker = {
     }
 
     // Internal links (such as the language switcher) reach "/" deliberately; only external entries follow the stored locale.
-    if (url.pathname === "/" && (request.method === "GET" || request.method === "HEAD") && !isInternalNavigation(request, url)) {
+    if (
+      url.pathname === "/" &&
+      (request.method === "GET" || request.method === "HEAD") &&
+      !isInternalNavigation(request, url)
+    ) {
       const locale = cookieLocale(request) ?? defaultLocale;
       if (locale !== defaultLocale) return redirect(`/${locale}${url.search}`);
     }
@@ -111,7 +133,10 @@ const worker = {
       try {
         const ip = request.headers.get("cf-connecting-ip") ?? "local";
         const { success } = await env.CONTACT_RATE_LIMITER.limit({ key: `suchio:security-report:${ip}` });
-        if (!success) return withSecurityHeaders(new Response(null, { status: 429, headers: { "Cache-Control": "no-store", "Retry-After": "60" } }));
+        if (!success)
+          return withSecurityHeaders(
+            new Response(null, { status: 429, headers: { "Cache-Control": "no-store", "Retry-After": "60" } }),
+          );
       } catch {
         return withSecurityHeaders(new Response(null, { status: 503, headers: { "Cache-Control": "no-store" } }));
       }

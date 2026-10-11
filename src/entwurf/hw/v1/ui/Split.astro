@@ -2,17 +2,29 @@
 // Heading whose words rise into view one after another (see .split in theme.css).
 // A line break in the text ("\n") becomes a <br>; the words stay real text.
 type Tag = "h1" | "h2" | "h3" | "p" | "span";
-interface Props { text: string; as?: Tag; class?: string; id?: string; start?: number }
+interface Props {
+  text: string;
+  as?: Tag;
+  class?: string;
+  id?: string;
+  start?: number;
+}
 const { text, as: Element = "h2", class: className, id, start = 0 } = Astro.props;
-const lines = text.split("\n").map(line => line.split(" ").filter(Boolean));
+const lines = text.split("\n").map((line) => line.split(" ").filter(Boolean));
 let index = start;
 ---
+
 <Element class:list={["split", className]} id={id} data-split>
   {lines.map((words, lineIndex) => (
     <Fragment>
       {lineIndex > 0 && <br />}
       {words.map((word, wordIndex) => (
-        <Fragment><span class="w"><span style={`--i:${index++}`}>{word}</span></span>{wordIndex < words.length - 1 && " "}</Fragment>
+        <Fragment>
+          <span class="w">
+            <span style={`--i:${index++}`}>{word}</span>
+          </span>
+          {wordIndex < words.length - 1 && " "}
+        </Fragment>
       ))}
     </Fragment>
   ))}

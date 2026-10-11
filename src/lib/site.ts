@@ -14,16 +14,13 @@ export function absoluteUrl(path: string): string {
   return new URL(path, siteOrigin).toString();
 }
 
-export function pageMetadata({
-  locale,
-  pathname,
-  title,
-  description,
-}: PageMetadataInput) {
+export function pageMetadata({ locale, pathname, title, description }: PageMetadataInput) {
   const pageTitle = title ? `${title} | Suchio` : t(locale, "meta.siteTitle");
   const openGraphImage = absoluteUrl("/suchio-social-card.png");
   const twitterImage = absoluteUrl("/suchio-twitter-card.png");
-  const languageAlternates = Object.fromEntries(locales.map((candidate) => [candidate, absoluteUrl(alternatePath(pathname, candidate))]));
+  const languageAlternates = Object.fromEntries(
+    locales.map((candidate) => [candidate, absoluteUrl(alternatePath(pathname, candidate))]),
+  );
   return {
     title: pageTitle,
     description,
@@ -38,12 +35,19 @@ export function pageMetadata({
       type: "website",
       siteName: "Suchio",
       locale: localeConfig[locale].openGraphLocale,
-      alternateLocale: locales.filter((candidate) => candidate !== locale).map((candidate) => localeConfig[candidate].openGraphLocale),
+      alternateLocale: locales
+        .filter((candidate) => candidate !== locale)
+        .map((candidate) => localeConfig[candidate].openGraphLocale),
       title: pageTitle,
       description,
       url: absoluteUrl(pathname),
       images: [{ url: openGraphImage, width: 1200, height: 630, alt: "Suchio" }],
     },
-    twitter: { card: "summary", title: pageTitle, description, images: [{ url: twitterImage, width: 400, height: 400, alt: "Suchio" }] },
+    twitter: {
+      card: "summary",
+      title: pageTitle,
+      description,
+      images: [{ url: twitterImage, width: 400, height: 400, alt: "Suchio" }],
+    },
   };
 }

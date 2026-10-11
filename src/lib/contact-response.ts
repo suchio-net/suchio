@@ -1,4 +1,12 @@
-type ContactErrorCode = "forbidden" | "unsupported_content" | "too_large" | "invalid_request" | "invalid_fields" | "unavailable" | "delivery_failed" | "rate_limited";
+type ContactErrorCode =
+  | "forbidden"
+  | "unsupported_content"
+  | "too_large"
+  | "invalid_request"
+  | "invalid_fields"
+  | "unavailable"
+  | "delivery_failed"
+  | "rate_limited";
 
 const failures: Record<ContactErrorCode, readonly [status: number, message: string]> = {
   forbidden: [403, "Forbidden"],
@@ -13,7 +21,16 @@ const failures: Record<ContactErrorCode, readonly [status: number, message: stri
 
 export function contactError(code: ContactErrorCode, retryAfter?: number) {
   const [status, error] = failures[code];
-  return Response.json({ error, code }, { status, headers: { "Cache-Control": "no-store", ...(retryAfter === undefined ? {} : { "Retry-After": String(retryAfter) }) } });
+  return Response.json(
+    { error, code },
+    {
+      status,
+      headers: {
+        "Cache-Control": "no-store",
+        ...(retryAfter === undefined ? {} : { "Retry-After": String(retryAfter) }),
+      },
+    },
+  );
 }
 
 export function retryAfterSeconds(value: string | null, now = Date.now()): number {

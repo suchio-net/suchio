@@ -5,6 +5,14 @@ import { defaultLocale } from "@/i18n/config";
 import { notFoundMessages } from "@/i18n/not-found";
 const copy = notFoundMessages[defaultLocale];
 ---
-<SiteLayout locale={defaultLocale} pathname="/404" documentTitle={copy.title} title={copy.title} description={copy.copy} noindex>
+
+<SiteLayout
+  locale={defaultLocale}
+  pathname="/404"
+  documentTitle={copy.title}
+  title={copy.title}
+  description={copy.copy}
+  noindex
+>
   <NotFoundPage copy={copy} homeHref="/" />
 </SiteLayout>

@@ -19,7 +19,11 @@ export interface ContactEmailConfig {
   to?: string;
 }
 
-export async function handleContactRequest(request: Request, emailConfig: ContactEmailConfig, transport: (url: string, init: RequestInit) => Promise<Response> = fetch) {
+export async function handleContactRequest(
+  request: Request,
+  emailConfig: ContactEmailConfig,
+  transport: (url: string, init: RequestInit) => Promise<Response> = fetch,
+) {
   const origin = request.headers.get("origin");
   if (origin && origin !== new URL(request.url).origin) return contactError("forbidden");
   if (!request.headers.get("content-type")?.includes("application/json")) return contactError("unsupported_content");
@@ -42,11 +46,17 @@ export async function handleContactRequest(request: Request, emailConfig: Contac
   const submissionId = cleanString(body.submissionId);
 
   if (
-    !name || name.length > 100 ||
-    !emailPattern.test(email) || email.length > 254 ||
+    !name ||
+    name.length > 100 ||
+    !emailPattern.test(email) ||
+    email.length > 254 ||
     company.length > 120 ||
-    companyUrl.length > 2048 || (companyUrl && !isHttpUrl(companyUrl)) ||
-    !locale || !message || message.length < 20 || message.length > 5000 ||
+    companyUrl.length > 2048 ||
+    (companyUrl && !isHttpUrl(companyUrl)) ||
+    !locale ||
+    !message ||
+    message.length < 20 ||
+    message.length > 5000 ||
     (!isServiceId(serviceId) && serviceId !== "not-sure") ||
     !isBudgetId(budgetId) ||
     !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(submissionId)
@@ -74,16 +84,28 @@ export async function handleContactRequest(request: Request, emailConfig: Contac
   try {
     const response = await transport("https://api.resend.com/emails", {
       method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json", "Idempotency-Key": `contact/${submissionId}` },
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": `contact/${submissionId}`,
+      },
       signal: AbortSignal.timeout(10_000),
-      body: JSON.stringify({ from, to: [to], reply_to: email, subject: emailContent.subject, text: emailContent.text, html: emailContent.html }),
+      body: JSON.stringify({
+        from,
+        to: [to],
+        reply_to: email,
+        subject: emailContent.subject,
+        text: emailContent.text,
+        html: emailContent.html,
+      }),
     });
     if (!response.ok) {
       console.error(JSON.stringify({ event: "contact.rejected", submissionId, status: response.status }));
       return contactError("delivery_failed");
     }
     const data: unknown = await response.json();
-    if (!data || typeof data !== "object" || !("id" in data) || typeof data.id !== "string" || !data.id) throw new Error("Invalid provider response");
+    if (!data || typeof data !== "object" || !("id" in data) || typeof data.id !== "string" || !data.id)
+      throw new Error("Invalid provider response");
     console.info(JSON.stringify({ event: "contact.accepted", submissionId, emailId: data.id }));
     return Response.json({ ok: true, id: data.id }, { headers: { "Cache-Control": "no-store" } });
   } catch {
