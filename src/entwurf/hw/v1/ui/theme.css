@@ -28,8 +28,8 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + 16px); background: var(--white); }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
-/* Lenis (smooth.ts) eases the scroll itself and snaps the hero steps in script. */
-html.lenis { scroll-behavior: auto; scroll-snap-type: none; }
+/* Lenis (smooth.ts) eases the scroll itself. */
+html.lenis { scroll-behavior: auto; }
 body { margin: 0; background: var(--white); color: var(--ink); font: 400 1rem/1.55 var(--sans); font-optical-sizing: auto; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: clip; }
 img, svg, canvas { display: block; max-width: 100%; }
 img { height: auto; }

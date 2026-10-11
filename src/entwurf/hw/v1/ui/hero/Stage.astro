@@ -170,14 +170,6 @@ const total = pad(steps.length);
   .step-card :global(.step-title) { font-size: clamp(2.6rem, 1.6rem + 4vw, 5rem); line-height: 0.95; letter-spacing: -0.06em; }
   .step-text { max-width: 30ch; font-size: 1.02rem; color: var(--ink-2); }
   .stage-track, .snaps { display: none; }
-  /* Wide layout on touch: a fast fling stops at the next trade instead of
-     passing it. With a mouse or trackpad Lenis turns this off and the script
-     snaps instead (theme.css, smooth.ts). */
-  @media (min-width: 960px), (orientation: landscape) {
-    :global(html) { scroll-snap-type: y proximity; }
-    .hero { scroll-snap-align: start; }
-    .step { scroll-snap-align: center; scroll-snap-stop: always; }
-  }
 
   /* Phones and portrait tablets: one pinned screen. The copy sits at the top,
      the model below it. Scrolling swaps the copy in place (hero, then each
@@ -188,11 +180,9 @@ const total = pad(steps.length);
     :global(html:not(.js)) .fallback, .stage:global(.no-webgl) .fallback { inset: 52% var(--gutter) 96px; }
     .stage-content { position: sticky; top: 0; height: 100svh; overflow: hidden; }
     .stage-track { display: block; height: calc(6.5 * 55svh); }
-    /* One snap point per state, so a swipe moves exactly one step and never
-       skips a trade. Offset by the scroll padding of the page (theme.css). */
-    :global(html) { scroll-snap-type: y proximity; }
+    /* One marker per state along the track; the script reads their spacing. */
     .snaps { display: block; position: absolute; inset: 0 0 auto; }
-    .snaps i { position: absolute; left: 0; width: 1px; height: 1px; top: calc(var(--n) * 55svh + var(--header-h) + 16px); scroll-snap-align: start; scroll-snap-stop: always; }
+    .snaps i { position: absolute; left: 0; width: 1px; height: 1px; top: calc(var(--n) * 55svh); }
 
     .hero, .step { position: absolute; inset: 0; padding-top: calc(var(--header-h) + 12px); transition: opacity 0.6s var(--ease), transform 0.8s var(--ease), visibility 0s; }
     .hero:not(:global(.on)), .step:not(:global(.on)) { opacity: 0; transform: translateY(-14px); visibility: hidden; transition: opacity 0.3s var(--ease), transform 0.5s var(--ease), visibility 0s 0.5s; }
@@ -228,7 +218,7 @@ const total = pad(steps.length);
 
 <script>
   import type { createHero } from "./scene";
-  import { gsap, lenis, ScrollTrigger, scrollToY } from "../smooth";
+  import { gsap, lenis, Observer, ScrollTrigger, scrollToY } from "../smooth";
 
   const stage = document.querySelector<HTMLElement>("[data-stage]");
   if (stage) {
@@ -338,9 +328,8 @@ const total = pad(steps.length);
     // Pitch notes change the height of the copy on phones.
     document.querySelector("[data-notes-toggle]")?.addEventListener("click", () => requestAnimationFrame(() => ScrollTrigger.refresh()));
 
-    // One wheel or trackpad gesture, one step. Touch uses CSS scroll snap (see
-    // the styles); with Lenis that is off and the stage snaps here instead,
-    // once the eased scroll has come to rest. A gesture that carries the page
+    // One wheel or trackpad gesture, one step. With Lenis the stage snaps once
+    // the eased scroll has come to rest. A gesture that carries the page
     // past more than one state eases back to the next one, so no trade is
     // skipped. Jumps that do not come from the wheel (keys, scrollbar, links)
     // settle on the nearest state, and coming back up from below the stage is
@@ -363,6 +352,65 @@ const total = pad(steps.length);
       };
       smooth.on("virtual-scroll", () => { snapping = false; wheel = true; });
       smooth.on("scroll", () => { if (snapping) return; clearTimeout(timer); timer = window.setTimeout(settle, 140); });
+    } else if (matchMedia("(pointer: coarse)").matches) {
+      // Touch: a native fling can carry the page past several trades before it
+      // stops, so inside the stage the swipe itself is held and every swipe
+      // plays exactly one step. A swipe during a step goes on to the next one
+      // from where the page is, so quick swipes still pass through each trade.
+      // Past the last trade the stage lets go and the page scrolls natively;
+      // scrolling back up into it picks the steps up again. Pinch zoom and the
+      // menu dialog are never held.
+      const proxy = { y: 0 };
+      let target = 0, used = false, tween: gsap.core.Tween | undefined;
+      const go = (to: number, y = stateY[to], done?: () => void) => {
+        target = to;
+        tween?.kill();
+        proxy.y = scrollY;
+        tween = gsap.to(proxy, {
+          y, duration: reduceMotion ? 0 : 0.85, ease: "power2.inOut",
+          onUpdate: () => { scrollTo({ top: proxy.y, behavior: "instant" }); sync(); },
+          onComplete: () => { tween = undefined; done?.(); },
+        });
+      };
+      const observer = Observer.create({
+        target: window, type: "touch", preventDefault: true, lockAxis: true, tolerance: 20,
+        ignore: "dialog",
+        ignoreCheck: event => "touches" in event && (event as TouchEvent).touches.length > 1,
+        onPress: () => { used = false; },
+        onUp: () => step(1),
+        onDown: () => step(-1),
+      });
+      const step = (dir: number) => {
+        if (used || target > last) return;
+        used = true;
+        const to = target + dir;
+        if (to < 0) return;
+        // Leaving: ease the next section in, then hand the page back. The hold
+        // stays on until then, so the rest of this swipe cannot fight the ease.
+        if (to > last) go(last + 1, Math.min(ScrollTrigger.maxScroll(window), stateY[last] + innerHeight * 0.6), () => observer.disable());
+        else go(to);
+      };
+      // Hold the steps whenever the page has come to rest inside the stage. A
+      // native swipe back into it is left to finish, finger and fling, first.
+      let touching = false;
+      const engage = () => {
+        if (touching || tween || observer.isEnabled || scrollY >= stateY[last] - 2) return;
+        observer.enable();
+        const to = Math.max(0, Math.min(last, Math.round(stateAt(scrollY))));
+        if (Math.abs(stateY[to] - scrollY) > 1) go(to); else target = to;
+      };
+      observer.disable();
+      target = Math.round(Math.min(last + 1, stateAt(scrollY)));
+      engage();
+      // Engage once the page has been still for a moment after the finger lifts.
+      let lastScroll = 0, timer = 0;
+      const idle = () => { clearTimeout(timer); timer = window.setTimeout(() => { if (performance.now() - lastScroll >= 150) engage(); else idle(); }, 160); };
+      addEventListener("scroll", () => { lastScroll = performance.now(); if (!observer.isEnabled && !touching) idle(); }, { passive: true });
+      addEventListener("touchstart", () => { touching = true; }, { passive: true });
+      for (const type of ["touchend", "touchcancel"]) addEventListener(type, () => { touching = false; if (!observer.isEnabled) idle(); }, { passive: true });
+      ScrollTrigger.addEventListener("refresh", () => {
+        if (observer.isEnabled && !tween && target <= last) scrollTo({ top: stateY[target], behavior: "instant" });
+      });
     }
 
     import("./scene").then(({ createHero }) => {

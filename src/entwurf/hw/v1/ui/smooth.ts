@@ -1,12 +1,14 @@
 // Smooth scrolling for v1: Lenis eases wheel and trackpad input, GSAP's ticker
 // drives it and ScrollTrigger reads the same scroll position. Touch keeps the
-// native scroll (and CSS scroll snap), and reduced motion keeps everything as is.
+// native scroll (the hero steps its swipes itself with Observer), and reduced
+// motion keeps everything as is.
 import { gsap } from "gsap";
+import { Observer } from "gsap/Observer";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Observer);
 
 const finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -25,4 +27,4 @@ export function scrollToY(y: number, onComplete?: () => void) {
   else { scrollTo({ top: y, behavior: reduceMotion ? "auto" : "smooth" }); onComplete?.(); }
 }
 
-export { gsap, ScrollTrigger };
+export { gsap, Observer, ScrollTrigger };
