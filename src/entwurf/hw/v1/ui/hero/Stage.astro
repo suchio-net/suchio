@@ -271,25 +271,28 @@ const total = pad(steps.length);
     // between the tallest copy panel and the progress row (or the draft menu,
     // whichever is higher); on wide screens it is right of the hero copy,
     // between the top row and the progress row, clear of the step rail.
-    // Measured relative to the hero, which covers the canvas exactly while the
-    // page is at the top.
+    // Measured in canvas pixels: vertically from the hero, which lines up with
+    // the canvas while the page is at the top, horizontally from the canvas,
+    // which spans the viewport while the hero is capped and centred.
     const draft = document.querySelector<HTMLElement>("[data-draft]");
     const rail = stage.querySelector<HTMLElement>(".trades-rail");
     const region = () => {
       const box = hero.getBoundingClientRect();
-      const rel = (el: Element) => { const r = el.getBoundingClientRect(); return { top: r.top - box.top, bottom: r.bottom - box.top, left: r.left - box.left, right: r.right - box.left }; };
+      const x0 = canvas.getBoundingClientRect().left;
+      const rel = (el: Element) => { const r = el.getBoundingClientRect(); return { top: r.top - box.top, bottom: r.bottom - box.top, left: r.left - x0, right: r.right - x0 }; };
       const floor = rel(hero.querySelector(".hero-bottom")!).top;
       const gutter = parseFloat(getComputedStyle(hero).paddingRight) || 20;
+      const left = box.left - x0 + gutter, right = box.right - x0 - gutter;
       if (split.matches) {
         const panels = [hero.querySelector(".hero-copy")!, ...steps.map(step => step.querySelector(".step-card")!)];
         const textBottom = Math.max(...panels.map(panel => rel(panel).bottom));
         const draftTop = draft ? draft.getBoundingClientRect().top - box.top : Infinity;
-        return { top: textBottom + 16, bottom: Math.min(floor, draftTop) - 12, left: gutter, right: box.width - gutter };
+        return { top: textBottom + 16, bottom: Math.min(floor, draftTop) - 12, left, right };
       }
       const copy = [...hero.querySelectorAll(".hero-copy .w, .hero-lead, .hero-actions > *")];
       const textRight = Math.max(...copy.map(el => rel(el).right));
       const railWidth = rail && getComputedStyle(rail).display !== "none" ? 64 : 0;
-      return { top: rel(hero.querySelector(".hero-top")!).bottom + 24, bottom: floor - 20, left: textRight + 40, right: box.width - gutter - railWidth };
+      return { top: rel(hero.querySelector(".hero-top")!).bottom + 24, bottom: floor - 20, left: textRight + 40, right: right - railWidth };
     };
 
     // Re-run the word and fade reveals of a panel each time it comes back.
