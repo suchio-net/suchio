@@ -2,12 +2,10 @@
  * Suchio's public design tokens. Tailwind generates the matching utilities.
  * Local illustration geometry and palettes stay with their components.
  */
-@theme inline {
-  --font-sans: var(--font-dm-sans);
-  --font-mono: var(--font-jetbrains-mono);
-}
-
 @theme {
+  --font-sans: "DM Sans Variable", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+
   /* Tailwind Neutral is the raw gray scale. Components use these semantic roles. */
   --color-canvas: #faf9f6;
   --color-surface: var(--color-white);

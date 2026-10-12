@@ -70,7 +70,7 @@ Contact drafts use tab-scoped `sessionStorage` to survive page and language chan
 
 ### Fonts, images, and client drafts
 
-The [Astro Fonts API](https://docs.astro.build/en/guides/fonts/) reads the locked Fontsource packages locally and serves hashed WOFF2 files. Only the DM Sans Latin subset is preloaded. Font display and fallback behavior are preserved. No font sync script or font CDN request is needed.
+Font files live in `src/assets/fonts`, so builds serve them with hashed, immutably cached URLs. DM Sans uses `font-display: optional` (text never switches fonts mid-visit) and only its Latin subset is preloaded. After updating the Fontsource packages, run `bun scripts/sync-fonts.mjs` to refresh the files and their `@font-face` CSS. The Astro Fonts API is not used: it lets the Fontsource CSS override `display` and does not expose subsets for a Latin-only preload.
 
 Drafts stay in this app and are excluded from indexing. Their GSAP, Lenis, and Three.js modules load only on draft routes. Suchio's 2D illustrations keep Motion. Static pages such as About load no React runtime.
 

@@ -3,7 +3,7 @@ import ScrollReveal from "@/components/scroll-reveal.astro";
 import SiteHeader from "@/components/header/site-header.astro";
 import SiteFooter from "@/components/site-footer.astro";
 import StructuredData from "@/components/structured-data.astro";
-import { Font } from "astro:assets";
+import dmSansLatin from "@/assets/fonts/dm-sans-latin-standard-normal.woff2?url";
 import { t, type Locale } from "@/lib/i18n";
 import { getServiceCatalog } from "@/lib/service-catalog";
 import { pageMetadata } from "@/lib/site";
@@ -96,8 +96,7 @@ const graph = noindex
     <link rel="icon" href="/suchio-favicon-96x96.png" type="image/png" sizes="96x96" />
     <link rel="icon" href="/suchio-favicon-32x32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <Font cssVariable="--font-dm-sans" preload={[{ subset: "latin" }]} />
-    <Font cssVariable="--font-jetbrains-mono" />
+    <link rel="preload" href={dmSansLatin} as="font" type="font/woff2" crossorigin="anonymous" />
     {graph && <StructuredData value={graph} />}
   </head>
   <body class="flex min-h-screen min-w-0 flex-col bg-canvas font-sans text-ink antialiased">

@@ -1,4 +1,4 @@
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
@@ -12,34 +12,6 @@ import { legacyServiceRoutes } from "./src/lib/public-routes";
 
 export default defineConfig({
   site: "https://suchio.net",
-  // Resolve the locked Fontsource packages locally; builds never fetch a font CDN.
-  fonts: [
-    {
-      name: "DM Sans Variable",
-      cssVariable: "--font-dm-sans",
-      provider: fontProviders.npm({ remote: false }),
-      options: { package: "@fontsource-variable/dm-sans", file: "standard.css" },
-      weights: ["100 1000"],
-      styles: ["normal"],
-      subsets: ["latin", "latin-ext"],
-      display: "optional",
-      fallbacks: ["-apple-system", "BlinkMacSystemFont", "system-ui", "sans-serif"],
-      optimizedFallbacks: false,
-    },
-    ...[400, 500].map((weight) => ({
-      name: "JetBrains Mono",
-      cssVariable: "--font-jetbrains-mono",
-      provider: fontProviders.npm({ remote: false }),
-      options: { package: "@fontsource/jetbrains-mono", file: `latin-${weight}.css` },
-      weights: [weight],
-      styles: ["normal"],
-      subsets: ["latin"],
-      formats: ["woff2"],
-      display: "swap",
-      fallbacks: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "monospace"],
-      optimizedFallbacks: false,
-    })),
-  ],
   trailingSlash: "never",
   build: { format: "file" },
   i18n: {
