@@ -44,6 +44,34 @@ const inkWidth = ink.x2 - ink.x1;
 const inkHeight = ink.y2 - ink.y1;
 
 const colors = { tile: "#101010", letter: "#FFFFFF", lens: "#52AEFF", glass: "rgba(255,255,255,0.12)" };
+const r = (n) => Number(n.toFixed(3));
+
+/** The mark's shapes in design units; `glass` fills the lens. */
+const markShapes = ({ letter, lens, glass }) => `
+    <path fill="${letter}" transform="translate(0 ${BASELINE}) scale(${r(scale)} ${-r(scale)})" d="${glyph.path.toSVG()}"/>
+    <circle cx="${r(lensCx)}" cy="${LENS.cy}" r="${LENS.r}" fill="${glass}" stroke="${lens}" stroke-width="${LENS.stroke}"/>
+    <line x1="${r(handle.x1)}" y1="${r(handle.y1)}" x2="${r(handle.x2)}" y2="${r(handle.y2)}" stroke="${lens}" stroke-width="${LENS.stroke}" stroke-linecap="round"/>`;
+
+// Centring the bounding box leaves the mark looking high and to the left, because the thin
+// handle stretches the box towards the bottom right. Centre the ink instead: its centroid
+// is where the visual weight of the "s" and the lens sits.
+const optical = await (async () => {
+  const width = 1000;
+  const height = Math.round((width * inkHeight) / inkWidth);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${ink.x1} ${ink.y1} ${inkWidth} ${inkHeight}" width="${width}" height="${height}">${markShapes({ letter: "#000", lens: "#000", glass: "none" })}</svg>`;
+  const { data, info } = await sharp(Buffer.from(svg)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  let mass = 0;
+  let sumX = 0;
+  let sumY = 0;
+  for (let y = 0; y < info.height; y++)
+    for (let x = 0; x < info.width; x++) {
+      const alpha = data[(y * info.width + x) * 4 + 3];
+      mass += alpha;
+      sumX += alpha * x;
+      sumY += alpha * y;
+    }
+  return { x: ink.x1 + (sumX / mass) * (inkWidth / info.width), y: ink.y1 + (sumY / mass) * (inkHeight / info.height) };
+})();
 
 /**
  * The mark on a square tile of `size` units.
@@ -54,19 +82,14 @@ const colors = { tile: "#101010", letter: "#FFFFFF", lens: "#52AEFF", glass: "rg
  */
 function iconSvg({ size = 512, markWidth, radius }) {
   const markScale = (size * markWidth) / inkWidth;
-  // Centre the ink box, nudged up slightly: the handle adds visual weight at the bottom right.
-  const x = (size - inkWidth * markScale) / 2 - ink.x1 * markScale;
-  const y = (size - inkHeight * markScale) / 2 - ink.y1 * markScale - size * 0.01;
-  const r = (n) => Number(n.toFixed(3));
+  const x = size / 2 - optical.x * markScale;
+  const y = size / 2 - optical.y * markScale;
   const tile = radius
     ? `<rect width="${size}" height="${size}" rx="${r(size * radius)}" fill="${colors.tile}"/>`
     : `<rect width="${size}" height="${size}" fill="${colors.tile}"/>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" role="img" aria-label="Suchio">
   ${tile}
-  <g transform="translate(${r(x)} ${r(y)}) scale(${r(markScale)})">
-    <path fill="${colors.letter}" transform="translate(0 ${BASELINE}) scale(${r(scale)} ${-r(scale)})" d="${glyph.path.toSVG()}"/>
-    <circle cx="${r(lensCx)}" cy="${LENS.cy}" r="${LENS.r}" fill="${colors.glass}" stroke="${colors.lens}" stroke-width="${LENS.stroke}"/>
-    <line x1="${r(handle.x1)}" y1="${r(handle.y1)}" x2="${r(handle.x2)}" y2="${r(handle.y2)}" stroke="${colors.lens}" stroke-width="${LENS.stroke}" stroke-linecap="round"/>
+  <g transform="translate(${r(x)} ${r(y)}) scale(${r(markScale)})">${markShapes(colors)}
   </g>
 </svg>
 `;
