@@ -29,12 +29,7 @@ export default defineConfig({
   // Hovered links load ahead of the click, as the former client router did.
   prefetch: { prefetchAll: true, defaultStrategy: "hover" },
   adapter: cloudflare({ imageService: "passthrough" }),
-  integrations: [
-    draftImagesIntegration(),
-    react(),
-    auditReportsIntegration(),
-    securityHeadersIntegration(),
-  ],
+  integrations: [draftImagesIntegration(), react(), auditReportsIntegration(), securityHeadersIntegration()],
   session: false,
   server: { host: "127.0.0.1", port: 3000 },
   vite: {
