@@ -1,5 +1,5 @@
 ---
-import VersionSwitcher from "@/entwurf/hw/VersionSwitcher.astro";
+import DraftTools from "@/entwurf/hw/DraftTools.astro";
 import Header from "./Header.astro";
 import Footer from "./Footer.astro";
 import Icon from "./Icon.astro";
@@ -126,19 +126,11 @@ const ogImage = new URL(`${assetBase}/img/og-handwerker-work.jpg`, Astro.site).h
       </nav>
     )}
 
-    <div class="pitch" role="group" aria-label="Suchio-Entwurf">
-      <a class="pitch-brand" href={`${base}/konzept`}>
-        Entwurf von <b>Suchio</b>
-      </a>
-      <button type="button" aria-pressed="false" data-notes-toggle>
-        Hinweise
-      </button>
-    </div>
+    <DraftTools version="v2" />
 
     <script>
       import "./client";
     </script>
-    <VersionSwitcher version="v2" />
   </body>
 </html>
 
@@ -186,44 +178,6 @@ const ogImage = new URL(`${assetBase}/img/og-handwerker-work.jpg`, Astro.site).h
     }
     .has-action-bar .site-footer {
       padding-bottom: calc(96px + env(safe-area-inset-bottom));
-    }
-  }
-  .pitch {
-    position: fixed;
-    left: 12px;
-    bottom: 12px;
-    z-index: 60;
-    display: flex;
-    align-items: stretch;
-    background: #fff;
-    border: 1px solid var(--slate);
-    font-size: 0.9rem;
-  }
-  .pitch-brand {
-    display: flex;
-    align-items: center;
-    gap: 0.3em;
-    padding: 0 12px;
-    color: var(--slate);
-    text-decoration: none;
-  }
-  .pitch button {
-    border: 0;
-    border-left: 1px solid var(--slate);
-    background: #0050c8;
-    color: #fff;
-    padding: 8px 12px;
-    font-weight: 700;
-    cursor: pointer;
-    min-height: 40px;
-  }
-  .pitch button[aria-pressed="true"] {
-    background: var(--slate);
-  }
-  @media (max-width: 760px) {
-    .has-action-bar .pitch {
-      bottom: calc(68px + env(safe-area-inset-bottom));
-      left: 8px;
     }
   }
 </style>

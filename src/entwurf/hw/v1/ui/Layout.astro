@@ -1,4 +1,5 @@
 ---
+import DraftTools from "@/entwurf/hw/DraftTools.astro";
 import Header from "./Header.astro";
 import Footer from "./Footer.astro";
 import Lightbox from "./Lightbox.astro";
@@ -118,32 +119,7 @@ const fonts = `${base}/fonts`;
       </nav>
     )}
 
-    <div class="draft" data-draft>
-      <div class="draft-panel" id="draft-panel" hidden data-draft-panel>
-        <a class="draft-brand" href="/entwurf/hw/v2/konzept">
-          Entwurf von <b>Suchio</b>
-          <span aria-hidden="true">→</span>
-        </a>
-        <button type="button" class="draft-notes" aria-pressed="false" data-notes-toggle>
-          Hinweise<i aria-hidden="true"></i>
-        </button>
-        <nav class="draft-versions" aria-label="Entwurfsversion">
-          <a href={base} aria-current="page">
-            V1
-          </a>
-          <a href="/entwurf/hw/v2">V2</a>
-        </nav>
-      </div>
-      <button
-        type="button"
-        class="draft-toggle mono"
-        aria-expanded="false"
-        aria-controls="draft-panel"
-        data-draft-toggle
-      >
-        <i aria-hidden="true"></i>Entwurf
-      </button>
-    </div>
+    <DraftTools version="v1" />
 
     <script>
       import "./client";
@@ -192,144 +168,6 @@ const fonts = `${base}/fonts`;
       transform: translateY(140%);
       opacity: 0;
       pointer-events: none;
-    }
-  }
-  /* Suchio draft tools in one small menu: concept link, pitch notes, version. */
-  .draft {
-    position: fixed;
-    left: 12px;
-    bottom: 12px;
-    z-index: 60;
-    display: grid;
-    justify-items: start;
-    gap: 8px;
-    font: 500 0.86rem/1.2 var(--sans);
-  }
-  .draft-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 36px;
-    padding: 0 14px;
-    border: 1px solid var(--line-2);
-    border-radius: 999px;
-    background: rgb(255 255 255 / 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    color: var(--ink);
-    cursor: pointer;
-  }
-  .draft-toggle i {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #0050c8;
-  }
-  .draft-toggle[aria-expanded="true"] {
-    background: var(--ink);
-    color: var(--white);
-    border-color: var(--ink);
-  }
-  .draft-panel {
-    display: grid;
-    min-width: 220px;
-    padding: 6px;
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    background: var(--white);
-    box-shadow: 0 24px 50px -24px rgb(0 0 0 / 0.35);
-    animation: draft-in 0.4s var(--ease) both;
-  }
-  .draft-panel[hidden] {
-    display: none;
-  }
-  @keyframes draft-in {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-  }
-  .draft-panel > a,
-  .draft-notes {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    min-height: 44px;
-    padding: 0 12px;
-    border: 0;
-    border-radius: 8px;
-    background: none;
-    color: var(--ink);
-    text-align: left;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  .draft-panel > a:hover,
-  .draft-notes:hover {
-    background: var(--mist);
-  }
-  .draft-notes i {
-    position: relative;
-    width: 30px;
-    height: 18px;
-    border-radius: 999px;
-    background: var(--fog);
-    transition: background-color 0.3s;
-  }
-  .draft-notes i::after {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--white);
-    box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
-    transition: transform 0.3s var(--ease);
-  }
-  .draft-notes[aria-pressed="true"] i {
-    background: #0050c8;
-  }
-  .draft-notes[aria-pressed="true"] i::after {
-    transform: translateX(12px);
-  }
-  .draft-versions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4px;
-    padding: 6px 0 0;
-    margin-top: 4px;
-    border-top: 1px solid var(--line);
-  }
-  .draft-versions a {
-    display: grid;
-    place-items: center;
-    min-height: 40px;
-    border-radius: 8px;
-    color: var(--ink);
-    font-weight: 600;
-    text-decoration: none;
-  }
-  .draft-versions a:hover {
-    background: var(--mist);
-  }
-  .draft-versions a[aria-current] {
-    background: var(--ink);
-    color: var(--white);
-  }
-  @media (max-width: 760px) {
-    .has-action-bar .draft {
-      left: auto;
-      right: 8px;
-      bottom: calc(70px + env(safe-area-inset-bottom));
-      justify-items: end;
-    }
-    .draft-toggle {
-      min-height: 32px;
-      padding: 0 12px;
-      font-size: 0.66rem;
     }
   }
 </style>
