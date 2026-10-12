@@ -7,7 +7,6 @@ import { redirects as draftRedirects } from "./src/entwurf/hw/v1/routes.mjs";
 import { auditReportsIntegration } from "./src/integrations/audit-reports";
 import { securityHeadersIntegration } from "./src/integrations/security-headers";
 import { draftImagesIntegration } from "./src/integrations/draft-images";
-import { socialImagesIntegration } from "./src/integrations/social-images.mjs";
 import { legacyServiceRoutes } from "./src/lib/public-routes";
 
 export default defineConfig({
@@ -34,7 +33,6 @@ export default defineConfig({
     draftImagesIntegration(),
     react(),
     auditReportsIntegration(),
-    socialImagesIntegration(),
     securityHeadersIntegration(),
   ],
   session: false,

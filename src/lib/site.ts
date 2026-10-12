@@ -17,9 +17,7 @@ export function absoluteUrl(path: string): string {
 
 export function pageMetadata({ locale, pathname, title, description }: PageMetadataInput) {
   const pageTitle = title ? `${title} | Suchio` : t(locale, "meta.siteTitle");
-  const pageImage = socialImagePath(pathname, locale);
-  const openGraphImage = absoluteUrl(pageImage ?? "/suchio-social-card.png");
-  const twitterImage = absoluteUrl(pageImage ?? "/suchio-twitter-card.png");
+  const image = { url: absoluteUrl(socialImagePath(pathname, locale)), width: 1200, height: 630, alt: pageTitle };
   const languageAlternates = Object.fromEntries(
     locales.map((candidate) => [candidate, absoluteUrl(alternatePath(pathname, candidate))]),
   );
@@ -43,20 +41,9 @@ export function pageMetadata({ locale, pathname, title, description }: PageMetad
       title: pageTitle,
       description,
       url: absoluteUrl(pathname),
-      images: [{ url: openGraphImage, width: 1200, height: 630, alt: pageImage ? pageTitle : "Suchio" }],
+      images: [image],
     },
-    twitter: {
-      card: pageImage ? "summary_large_image" : "summary",
-      title: pageTitle,
-      description,
-      images: [
-        {
-          url: twitterImage,
-          width: pageImage ? 1200 : 400,
-          height: pageImage ? 630 : 400,
-          alt: pageImage ? pageTitle : "Suchio",
-        },
-      ],
-    },
+    // X reads title, description and image from the Open Graph tags.
+    twitter: { card: "summary_large_image" },
   };
 }

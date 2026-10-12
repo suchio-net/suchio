@@ -22,7 +22,7 @@ export function siteNodes(locale: Locale, serviceNames: readonly string[]): Sche
       name: "Suchio",
       url: absoluteUrl("/"),
       description: t(locale, "meta.aboutDescription"),
-      logo: { "@type": "ImageObject", url: absoluteUrl("/apple-touch-icon.png"), width: 180, height: 180 },
+      logo: { "@type": "ImageObject", url: absoluteUrl("/suchio-icon-512.png"), width: 512, height: 512 },
       email: publicContactEmail,
       telephone: publicContactPhone,
       address: { "@type": "PostalAddress", ...publicBusinessAddress },

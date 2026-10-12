@@ -35,6 +35,8 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
     { path: "/robots.txt", status: 200 },
     { path: "/sitemap.xml", status: 200 },
     { path: "/llms.txt", status: 200 },
+    { path: "/favicon.ico", status: 200 },
+    { path: "/site.webmanifest", status: 200 },
     // A local preview may intentionally have no mail credentials. Its readiness contract still must work.
     { path: "/api/health", status: origin === siteOrigin ? 200 : [200, 503] },
     { path: "/entwurf/parkhotel", status: 200 },

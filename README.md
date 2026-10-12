@@ -76,7 +76,13 @@ Drafts stay in this app and are excluded from indexing. Their GSAP, Lenis, and T
 
 Both Handwerker versions share `src/entwurf/hw/content.ts`, the photo manifest, schema helpers, and picture/note components. Each version owns its layout and navigation. The 20 original photos live in `src/assets/entwurf/hw`; `src/integrations/draft-images.ts` generates shared AVIF/WebP files for development and builds. Derivatives and the `.astro/draft-images` cache are ignored by Git. The cache key includes the original, widths, encoder versions, and processing settings. Generation preserves the approved sharpening and quality; Astro's default image transforms do not reproduce that treatment, so these prepared assets use the passthrough service. Change photos or widths in the manifest and restart/build to regenerate. Old published asset URLs redirect to the shared files.
 
-Parkhotel's finished HTML lives in `src/entwurf/parkhotel/index.html` and is emitted unchanged by an Astro page. Its original `/entwurf/parkhotel` URL remains valid. Page-specific 1200×630 social images for About, Contact, and services are generated during builds from each locale's metadata and the existing DM Sans font. The homepage keeps its approved brand cards. An unused social banner is preserved in `src/assets/brand` instead of being deployed.
+Parkhotel's finished HTML lives in `src/entwurf/parkhotel/index.html` and is emitted unchanged by an Astro page. Its original `/entwurf/parkhotel` URL remains valid. An unused social banner is preserved in `src/assets/brand` instead of being deployed.
+
+### Social cards and icons
+
+Every page has a 1200×630 preview card in `public/social` for link previews (Open Graph and X). Indexable pages have their own card per language; legal, audit and error pages use their language's home card. Cards reuse the site's visuals: the home headline with its highlighted word, the localized service illustrations, the services list and the call-to-action buttons. After changing headlines, service copy or illustrations, run `bun run build` and then `bun run social-cards` (needs Chrome or Chromium; set `CHROME_PATH` if it is not found), and commit the updated images. Tests fail if a page has no card or a card has the wrong size.
+
+`bun run icons` regenerates the favicons, Apple touch icon, web app manifest icons and the structured-data logo from the approved mark. Search engines use the 48px multiples; home screen icons fill the square and keep the mark inside the circle Android crops to.
 
 ### Dependency maintenance
 
