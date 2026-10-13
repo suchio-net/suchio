@@ -24,7 +24,7 @@ export const GET: APIRoute = () => {
     "## Company",
     "",
     `- [About](${absoluteUrl(localizePath("/about", "en"))}): ${t("en", "meta.aboutDescription")}`,
-    `- [Contact](${absoluteUrl(localizePath("/contact", "en"))}): ${t("en", "contact.copy")}`,
+    `- [Contact](${absoluteUrl(localizePath("/contact", "en"))}): ${t("en", "meta.contactDescription")}`,
     "",
     "## Languages",
     "",

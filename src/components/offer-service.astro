@@ -1,5 +1,5 @@
 ---
-import Disclosure from "@/components/disclosure.astro";
+import { Check } from "@lucide/astro";
 import CtaButton from "@/components/cta-button.astro";
 import OfferVisual from "@/components/offer-visual.astro";
 import type { ServiceCatalogEntry } from "@/lib/service-catalog";
@@ -16,29 +16,24 @@ const { copy } = service;
 <div class="reveal mb-content-stack last:mb-0" data-reveal style={{ "--reveal-delay": `${revealDelay}ms` }}>
   <article class="grid grid-cols-2 items-center gap-x-8 max-nav:grid-cols-1 max-nav:gap-10">
     <div class={`min-w-0 max-w-[31rem] ${service.reverse ? "nav:order-2 nav:justify-self-end" : ""}`}>
-      <h3 class="m-0 text-heading-md">{copy.name}</h3>
+      <h3 class="m-0 text-heading-lg text-balance">{copy.headline}</h3>
       <p class="mt-4 max-w-[46ch] text-lg/7 text-muted">{copy.summary}</p>
-      <div class="relative mt-8">
-        {copy.rows.map(([label, detail], row) => (
-          <Disclosure
-            id={`service-${service.id}-${row}`}
-            group={`service-${service.id}`}
-            title={label}
-            compact
-            defaultOpen={row === 0}
-          >
-            <p class="m-0 max-w-[44ch]">{detail}</p>
-          </Disclosure>
+      <ul class="m-0 mt-7 grid list-none gap-3 p-0">
+        {copy.highlights.map((item) => (
+          <li class="grid grid-cols-[1.25rem_minmax(0,1fr)] items-start gap-3 text-base/6 text-ink">
+            <Check aria-hidden="true" class="mt-0.5 size-5 text-brand-500" stroke-width={2} />
+            <span>{item}</span>
+          </li>
         ))}
-      </div>
-      <CtaButton href={service.href} className="mt-6">
+      </ul>
+      <CtaButton href={service.href} className="mt-8">
         {copy.cta}
       </CtaButton>
     </div>
     <OfferVisual
       animation={service.animation}
       locale={locale}
-      className={service.reverse ? "nav:order-1" : undefined}
+      className={`max-nav:order-first ${service.reverse ? "nav:order-1" : ""}`}
     />
   </article>
 </div>

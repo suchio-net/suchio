@@ -45,7 +45,6 @@ export type AutomationAnimationCopy = {
   review: string;
 };
 
-type CopyRow = readonly [label: string, copy: string];
 type ContentItem = { id: string; title: string; copy: string };
 export type ScopeGroup = { id: string; title: string; copy: string; items: readonly string[] };
 type FaqItem = { id: string; question: string; answer: string };
@@ -54,8 +53,10 @@ export type ServiceCopy = {
   id: ServiceId;
   name: string;
   navDescription: string;
+  /** Home card: a short claim, a two-sentence explanation and a visible checklist. */
+  headline: string;
   summary: string;
-  rows: readonly CopyRow[];
+  highlights: readonly string[];
   cta: string;
   page: {
     /** Search result title; the page heading stays in `title`. */

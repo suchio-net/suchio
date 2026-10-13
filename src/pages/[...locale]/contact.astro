@@ -3,8 +3,9 @@ import type { GetStaticPaths } from "astro";
 import SiteLayout from "@/layouts/site-layout.astro";
 import { ContactForm, type ContactFormCopy } from "@/components/contact-form";
 import EditorialHero from "@/components/editorial-hero.astro";
+import WhatsAppButton from "@/components/whatsapp-button.astro";
 import { getServiceCopy } from "@/i18n/services";
-import { publicContactEmail } from "@/lib/contact";
+import { publicContactEmail, publicWhatsAppNumber } from "@/lib/contact";
 import { budgetOptions } from "@/lib/contact-options";
 import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
 import { breadcrumbNode, organizationReference, pageNode } from "@/lib/structured-data";
@@ -52,7 +53,7 @@ const formCopy = {
 <SiteLayout
   locale={locale}
   title={t(locale, "meta.contactTitle")}
-  description={t(locale, "contact.copy")}
+  description={t(locale, "meta.contactDescription")}
   schema={[
     pageNode(locale, localizePath("/contact", locale), t(locale, "meta.contactTitle"), "ContactPage", {
       mainEntity: organizationReference,
@@ -61,7 +62,15 @@ const formCopy = {
   ]}
 >
   <main id="main-content">
-    <EditorialHero title={t(locale, "contact.title")} copy={t(locale, "contact.copy")} />
+    <EditorialHero title={t(locale, "contact.title")} copy={t(locale, "contact.copy")}>
+      <div class="mt-2 flex items-center gap-3 text-left">
+        <WhatsAppButton locale={locale} />
+        <p class="m-0 text-ui">
+          <span class="block font-semibold text-ink">{t(locale, "contact.whatsapp")}</span>
+          <span class="block text-muted">{publicWhatsAppNumber}</span>
+        </p>
+      </div>
+    </EditorialHero>
     <section class="px-page pb-section">
       <div class="reveal mx-auto max-w-[50rem]" data-reveal>
         <div class="rounded-shell bg-white p-10 shadow-surface max-narrow:p-card-padding">

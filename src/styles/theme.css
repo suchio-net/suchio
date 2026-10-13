@@ -36,6 +36,8 @@
   --color-focus: var(--color-brand-500);
   --color-highlight: #fff500;
   --color-error: #b42318;
+  --color-whatsapp: #25d366;
+  --color-whatsapp-hover: #1fb855;
 
   /* Shared service identities. */
   --color-service-websites-bg: #eaf2ff;

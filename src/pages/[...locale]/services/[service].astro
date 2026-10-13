@@ -29,6 +29,7 @@ import OfferVisual from "@/components/offer-visual.astro";
 import ServiceScopeGrid from "@/components/service-scope-grid.astro";
 import Reveal from "@/components/reveal.astro";
 import SectionHeading from "@/components/section-heading.astro";
+import WhatsAppButton from "@/components/whatsapp-button.astro";
 import type { ServiceId } from "@/i18n/services";
 import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
 import { getServiceCatalog } from "@/lib/service-catalog";
@@ -82,9 +83,10 @@ const related = services.filter((entry) => entry.id !== serviceId);
         <Reveal className="min-w-0 max-w-[39rem]">
           <h1 class="m-0 text-display-service text-balance">{copy.page.title}</h1>
           <p class="mt-6 max-w-[38rem] text-lead text-muted text-balance">{copy.page.intro}</p>
-          <CtaButton href={contact} className="mt-8">
-            {copy.page.finalCta}
-          </CtaButton>
+          <div class="mt-8 flex gap-3">
+            <CtaButton href={contact}>{copy.page.finalCta}</CtaButton>
+            <WhatsAppButton locale={locale} />
+          </div>
         </Reveal>
         <Reveal className="min-w-0" delay={70}>
           <OfferVisual
@@ -228,9 +230,12 @@ const related = services.filter((entry) => entry.id !== serviceId);
       <Reveal className="min-w-0 w-full">
         <h2 class="mx-auto max-w-[18ch] text-display-sm text-white">{copy.page.finalTitle}</h2>
         <p class="mx-auto mt-6 mb-7 max-w-[35rem] text-lg/7 text-inverse-muted">{copy.page.finalCopy}</p>
-        <CtaButton href={contact} light>
-          {copy.page.finalCta}
-        </CtaButton>
+        <div class="flex justify-center gap-3">
+          <CtaButton href={contact} light>
+            {copy.page.finalCta}
+          </CtaButton>
+          <WhatsAppButton locale={locale} />
+        </div>
       </Reveal>
     </section>
   </main>

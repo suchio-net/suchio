@@ -1,8 +1,8 @@
 {
+  "translationKey": "faq-5",
   "locale": "fr",
   "slug": "faq-5",
-  "translationKey": "faq-5",
-  "order": 5,
-  "question": "À qui appartient le travail une fois le projet terminé ?",
-  "answer": "À vous. Nous transmettons à votre équipe toutes les maquettes validées, le code source, le contenu, les comptes actifs et les notes du projet."
+  "question": "Vous occupez-vous de l’hébergement et de la maintenance après le lancement ?",
+  "answer": "Si vous le souhaitez, oui. Nous prenons en charge l’hébergement, les mises à jour et les petites modifications. Vous pouvez aussi héberger le site vous-même, et nous vous aidons en cas de besoin.",
+  "order": 5
 }

@@ -133,7 +133,9 @@ function Scene({ copy, geometry, scale }: { copy: WebExperienceAnimationCopy; ge
   }, [animate, isInView, morph, noMotion, scope, settle]);
 
   return (
-    <div ref={scope} className="absolute inset-0">
+    // The phone layer spans the whole stage and slides right as it settles. Its empty area would widen the
+    // page and push the header off-screen on phones, so it is clipped here; the margin keeps shadows intact.
+    <div ref={scope} className="absolute inset-0 overflow-clip [overflow-clip-margin:1.5rem]">
       <div className="absolute top-1/2 left-1/2" style={stageStyle(stage, scale)}>
         <div className="absolute inset-0">
           <motion.div

@@ -148,6 +148,9 @@ button {
 .pill-button--light:hover {
   background: var(--color-neutral-200);
 }
+.pill-button--whatsapp:hover {
+  background: var(--color-whatsapp-hover);
+}
 @media (hover: hover) and (pointer: fine) {
   .header-language:hover .header-language__icon--out {
     opacity: 0;

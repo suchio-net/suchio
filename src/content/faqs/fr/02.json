@@ -1,8 +1,8 @@
 {
+  "translationKey": "faq-2",
   "locale": "fr",
   "slug": "faq-2",
-  "translationKey": "faq-2",
-  "order": 2,
-  "question": "Qui travaillera sur notre projet ?",
-  "answer": "Les spécialistes que vous rencontrez réalisent le travail. Votre équipe principale vous accompagne de la première session au lancement, puis lors des évolutions suivantes."
+  "question": "Combien coûte un site web ou un projet avec Suchio ?",
+  "answer": "Cela dépend du périmètre. Après le premier échange, vous recevez une proposition écrite avec nos honoraires, le calendrier et tous les frais de tiers comme l’hébergement, les licences ou le budget publicitaire. Nous ne commençons qu’après votre accord.",
+  "order": 2
 }
