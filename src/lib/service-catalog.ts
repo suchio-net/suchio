@@ -22,7 +22,6 @@ export type ServiceCatalogEntry = {
   animation: ServiceAnimation;
   href: string;
   reverse: boolean;
-  theme: string;
 };
 
 export function getServiceCatalog(locale: Locale): ServiceCatalogEntry[] {
@@ -48,7 +47,6 @@ export function getServiceCatalog(locale: Locale): ServiceCatalogEntry[] {
       animation: animationById[id],
       href: getServicePath(id, locale),
       reverse: id === "seo-ai-visibility" || id === "ai-automation",
-      theme: "bg-white text-ink",
     };
   });
 }

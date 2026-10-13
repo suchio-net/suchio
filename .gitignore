@@ -1,8 +1,4 @@
 .astro/
-# Archived local output from the former framework.
-.next/
-.vinext/
-next-env.d.ts
 node_modules/
 .env*
 !.env.example

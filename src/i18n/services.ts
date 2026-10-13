@@ -6,22 +6,29 @@ import fr from "./fr/services";
 export type ServiceId = "websites-apps" | "seo-ai-visibility" | "paid-campaigns" | "ai-automation";
 
 export type WebExperienceAnimationCopy = {
-  desktopLabel: string;
-  mobileLabel: string;
+  nav: readonly [string, string, string];
+  kicker: string;
   headline: string;
+  intro: string;
   cta: string;
+  cards: readonly [string, string, string];
 };
 
 export type OptimizationAnimationCopy = {
-  query: string;
-  resultLabel: string;
-  rankLabel: string;
-  topRankedLabel: string;
+  question: string;
+  answerLabel: string;
+  answerBefore: string;
+  answerAfter: string;
+  resultsLabel: string;
+  searching: string;
   winnerDescription: string;
   descriptions: readonly string[];
 };
 
-export type CampaignAnimationCopy = { metricLabel: string };
+export type CampaignAnimationCopy = {
+  metricLabel: string;
+  events: readonly [string, string, string];
+};
 
 export type AutomationAnimationCopy = {
   trigger: string;

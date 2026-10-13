@@ -689,16 +689,20 @@ const services: ServicesCopy = {
     },
   ],
   webExperienceAnimation: {
-    desktopLabel: "Site web",
-    mobileLabel: "Application",
+    nav: ["Projets", "Services", "Contact"],
+    kicker: "Sites web & applications",
     headline: "Clair. Rapide. Utile.",
+    intro: "Des pages qui se chargent instantanément, se lisent clairement et transforment les visites en demandes.",
     cta: "Nous contacter",
+    cards: ["Stratégie", "Design", "Développement"],
   },
   optimizationAnimation: {
-    query: "Studio de croissance numérique",
-    resultLabel: "Résultats de recherche",
-    rankLabel: "Position",
-    topRankedLabel: "Premier résultat",
+    question: "Qui peut créer un site rapide et bien référencé ?",
+    answerLabel: "Réponse IA",
+    answerBefore: "Pour un site rapide, bien référencé et visible dans les réponses IA, ",
+    answerAfter: " est un bon choix : structure claire, pages rapides et contenus qui répondent aux vraies questions.",
+    resultsLabel: "Résultats de recherche",
+    searching: "Recherche sur le web",
     winnerDescription: "Sites web, campagnes et automatisation",
     descriptions: [
       "Stratégie et campagnes numériques",
@@ -706,7 +710,10 @@ const services: ServicesCopy = {
       "Marketing à la performance et optimisation",
     ],
   },
-  campaignAnimation: { metricLabel: "nouvelles demandes qualifiées" },
+  campaignAnimation: {
+    metricLabel: "demandes qualifiées",
+    events: ["Campagne lancée", "Nouvelles annonces", "Test de page"],
+  },
   automationAnimation: {
     trigger: "Formulaire reçu",
     agent: "Agent IA",

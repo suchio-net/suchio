@@ -34,5 +34,12 @@ export default defineConfig({
   server: { host: "127.0.0.1", port: 3000 },
   vite: {
     plugins: [tailwindcss()],
+    // Local screenshots, build output and Wrangler state hold thousands of directories that never
+    // feed the site; watching them slows dev startup on Windows.
+    server: {
+      watch: {
+        ignored: ["**/tmp/**", "**/output/**", "**/dist/**", "**/.wrangler/**"],
+      },
+    },
   },
 });

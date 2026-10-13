@@ -684,16 +684,20 @@ const services: ServicesCopy = {
     },
   ],
   webExperienceAnimation: {
-    desktopLabel: "Website",
-    mobileLabel: "App",
+    nav: ["Projekte", "Leistungen", "Kontakt"],
+    kicker: "Websites & Apps",
     headline: "Klar. Schnell. Nutzbar.",
+    intro: "Seiten, die sofort laden, klar lesbar sind und Besuche in Anfragen verwandeln.",
     cta: "Anfrage starten",
+    cards: ["Strategie", "Design", "Umsetzung"],
   },
   optimizationAnimation: {
-    query: "Studio für digitales Wachstum",
-    resultLabel: "Suchergebnisse",
-    rankLabel: "Rang",
-    topRankedLabel: "Top platziert",
+    question: "Wer baut uns eine schnelle Website, die gefunden wird?",
+    answerLabel: "KI-Antwort",
+    answerBefore: "Für eine schnelle Website mit solider SEO und KI-Sichtbarkeit passt ",
+    answerAfter: " gut: klare Struktur, schnelle Seiten und Inhalte, die echte Fragen beantworten.",
+    resultsLabel: "Suchergebnisse",
+    searching: "Durchsucht das Web",
     winnerDescription: "Websites, Kampagnen und Automatisierung",
     descriptions: [
       "Strategie und digitale Kampagnen",
@@ -701,7 +705,10 @@ const services: ServicesCopy = {
       "Performance Marketing und Optimierung",
     ],
   },
-  campaignAnimation: { metricLabel: "neue qualifizierte Anfragen" },
+  campaignAnimation: {
+    metricLabel: "qualifizierte Anfragen",
+    events: ["Kampagne live", "Neue Anzeigen", "Landingpage-Test"],
+  },
   automationAnimation: {
     trigger: "Formular erhalten",
     agent: "KI Agent",

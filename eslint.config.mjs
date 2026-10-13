@@ -13,9 +13,6 @@ export default defineConfig([
   },
   globalIgnores([
     ".astro/**",
-    // Archived local build output; these directories are no longer development paths.
-    ".next/**",
-    ".vinext/**",
     ".wrangler/**",
     "dist/**",
     "output/**",

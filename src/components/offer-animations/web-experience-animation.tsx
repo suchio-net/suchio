@@ -1,557 +1,361 @@
-import { useEffect, useId, useRef } from "react";
+import { ArrowRight, Menu } from "lucide-react";
+import {
+  motion,
+  useAnimate,
+  useInView,
+  useMotionValue,
+  useTransform,
+  type AnimationSequence,
+  type MotionValue,
+} from "motion/react";
+import { useEffect, useRef } from "react";
+import { OFFER_EASE_IN_OUT, OFFER_EASE_OUT, OFFER_VIEWPORT } from "@/components/offer-animations/motion-tokens";
+import { stageStyle, useStage, type StageMode } from "@/components/offer-animations/stage";
+import { useHydratedReducedMotion } from "@/components/offer-animations/use-hydrated-reduced-motion";
 import type { WebExperienceAnimationCopy } from "@/i18n/services";
 
-type SceneVariant = "desktop" | "phone";
-type RectGeometry = { x: number; y: number; width: number; height: number };
-type SceneGeometry = {
-  device: RectGeometry & { rx: number };
-  divider: RectGeometry;
-  urlCenterY: number;
-  accent: RectGeometry;
-  headline: { x: number; y: number };
-  primaryLine: RectGeometry;
-  secondaryLine: RectGeometry;
-  cta: { x: number; y: number };
-  imageBounds: RectGeometry;
-  cards: {
-    back: RectGeometry;
-    middle: RectGeometry;
-    front: RectGeometry;
-  };
-  frontCard: {
-    innerX: number;
-    innerY: number;
-    innerWidth: number;
-    blueHeight: number;
-    firstLineY: number;
-    secondLineY: number;
-    firstLineWidth: number;
-    secondLineWidth: number;
-  };
+// Designed at 1.25× the shared stage box so the page mock keeps fine detail; scaled back down to fit.
+const DETAIL = 1.25;
+
+type Frame = { x: number; y: number; width: number; height: number; radius: number };
+type Geometry = {
+  stage: { width: number; height: number };
+  // On phones the desktop window is shown smaller (content scale k) so the whole page still fits.
+  desktop: Frame & { k: number };
+  phone: Frame;
+  finalDesktop: { x: number; y: number; scale: number };
+  finalPhone: { x: number; y: number; scale: number };
 };
 
-const SCENES: Record<SceneVariant, SceneGeometry> = {
+// The page is built in a browser window, the window then narrows into a phone, and finally the desktop
+// page returns behind the phone so both layouts stay visible. The end state stays flat: a 3D tilt is
+// rasterised as one layer and softens the small type.
+const GEOMETRY: Record<StageMode, Geometry> = {
+  wide: {
+    stage: { width: 600, height: 475 },
+    desktop: { x: 60, y: 68, width: 480, height: 340, radius: 12, k: 1 },
+    phone: { x: 192, y: 34, width: 216, height: 408, radius: 28 },
+    finalDesktop: { x: 8, y: 70, scale: 0.86 },
+    finalPhone: { x: 430, y: 120, scale: 0.75 },
+  },
+  narrow: {
+    stage: { width: 400, height: 490 },
+    desktop: { x: 10, y: 110, width: 480, height: 340, radius: 12, k: 0.79 },
+    phone: { x: 92, y: 41, width: 216, height: 408, radius: 28 },
+    finalDesktop: { x: 6, y: 40, scale: 1 },
+    finalPhone: { x: 238, y: 150, scale: 0.72 },
+  },
+};
+
+// Frame-local positions for each layout. Copy is sized in em, so it scales without re-wrapping mid-morph.
+const LAYOUT = {
   desktop: {
-    device: { x: 20, y: 54, width: 460, height: 342, rx: 14 },
-    divider: { x: 20, y: 88.2, width: 460, height: 1 },
-    urlCenterY: 71.1,
-    accent: { x: 52.5, y: 162, width: 37, height: 6 },
-    headline: { x: 52.5, y: 204 },
-    primaryLine: { x: 52.5, y: 247.5, width: 142.5, height: 6 },
-    secondaryLine: { x: 52.5, y: 263.25, width: 105, height: 6 },
-    cta: { x: 52.5, y: 290 },
-    imageBounds: { x: 277.5, y: 148.5, width: 157.5, height: 162 },
-    cards: {
-      back: { x: 327.9, y: 158.22, width: 100.8, height: 110.16 },
-      middle: { x: 283.8, y: 193.86, width: 100.8, height: 110.16 },
-      front: { x: 312.15, y: 171.18, width: 100.8, height: 116.64 },
-    },
-    frontCard: {
-      innerX: 322.15,
-      innerY: 183.18,
-      innerWidth: 80.8,
-      blueHeight: 36,
-      firstLineY: 225,
-      secondLineY: 235,
-      firstLineWidth: 63,
-      secondLineWidth: 45,
-    },
+    brand: { x: 22, y: 42, size: 14 },
+    column: { x: 22, y: 80, size: 14, width: 228 },
+    image: { x: 266, y: 80, width: 192, height: 164, radius: 10 },
+    cards: { y: 290 },
   },
   phone: {
-    device: { x: 170, y: 22.5, width: 160, height: 405, rx: 34 },
-    divider: { x: 170, y: 63, width: 160, height: 1 },
-    // Center the domain between the notch and the browser divider.
-    urlCenterY: 47.8,
-    accent: { x: 190, y: 94.5, width: 37, height: 6 },
-    headline: { x: 190, y: 128 },
-    primaryLine: { x: 190, y: 162, width: 120, height: 6 },
-    secondaryLine: { x: 190, y: 180, width: 100, height: 6 },
-    cta: { x: 190, y: 208 },
-    imageBounds: { x: 190, y: 261, width: 120, height: 123.3 },
-    cards: {
-      back: { x: 228.4, y: 268.4, width: 76.8, height: 83.84 },
-      middle: { x: 194.8, y: 295.52, width: 76.8, height: 83.84 },
-      front: { x: 216.4, y: 278.26, width: 76.8, height: 88.78 },
-    },
-    frontCard: {
-      innerX: 224.4,
-      innerY: 287.26,
-      innerWidth: 60.8,
-      blueHeight: 27,
-      firstLineY: 319,
-      secondLineY: 327,
-      firstLineWidth: 47,
-      secondLineWidth: 34,
-    },
+    brand: { x: 16, y: 30, size: 13 },
+    column: { x: 16, y: 62, size: 13.5, width: 184 },
+    image: { x: 16, y: 294, width: 184, height: 90, radius: 9 },
+    cards: { y: 390 },
   },
-};
+} as const;
 
-const TIMELINE_DURATION = 2_800;
-const FRAME_BUILT = 0.13;
-const MORPH_START = 0.39;
-const INITIAL_DEVICE = { x: 210, y: 202.5, width: 80, height: 45, rx: 8 };
 const REVEALS = [
-  { selector: '[data-web-experience-reveal="chrome"]', delay: 364, duration: 180 },
-  { selector: '[data-web-experience-part="accent"]', delay: 364, duration: 336 },
-  { selector: '[data-web-experience-card="back"]', delay: 364, duration: 336 },
-  { selector: '[data-web-experience-part="headline"]', delay: 476, duration: 336 },
-  { selector: '[data-web-experience-card="middle"]', delay: 532, duration: 336 },
-  { selector: '[data-web-experience-part="primary-line"]', delay: 644, duration: 336 },
-  { selector: '[data-web-experience-card="front"]', delay: 700, duration: 336 },
-  { selector: '[data-web-experience-part="secondary-line"]', delay: 756, duration: 336 },
-  { selector: '[data-web-experience-part="cta"]', delay: 840, duration: 252 },
+  ["chrome", 0.1],
+  ["nav", 0.16],
+  ["kicker", 0.22],
+  ["headline", 0.27],
+  ["intro", 0.34],
+  ["image", 0.4],
+  ["cta", 0.46],
+  ["card-0", 0.52],
+  ["card-1", 0.56],
+  ["card-2", 0.6],
 ] as const;
+
+const MORPH_AT = 1.25;
+const SETTLE_AT = 2.25;
 
 export function WebExperienceAnimation({ copy }: { copy: WebExperienceAnimationCopy }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const animationFrameRef = useRef<number | null>(null);
-  const clipId = `web-experience-${useId().replaceAll(":", "")}`;
-
-  useEffect(() => {
-    const container = containerRef.current;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (!container) return;
-
-    let observer: IntersectionObserver | undefined;
-    let started = false;
-
-    const finishForReducedMotion = ({ matches }: MediaQueryListEvent) => {
-      if (!matches) return;
-      started = true;
-      observer?.disconnect();
-      if (animationFrameRef.current !== null) cancelAnimationFrame(animationFrameRef.current);
-      animationFrameRef.current = null;
-      renderFrame(container, 1);
-    };
-
-    const start = () => {
-      if (started) return;
-      started = true;
-      observer?.disconnect();
-      if (reducedMotion.matches) {
-        renderFrame(container, 1);
-        return;
-      }
-
-      let startedAt: number | null = null;
-      const tick = (timestamp: number) => {
-        startedAt ??= timestamp;
-        const progress = Math.min((timestamp - startedAt) / TIMELINE_DURATION, 1);
-        renderFrame(container, progress);
-        animationFrameRef.current = progress < 1 ? requestAnimationFrame(tick) : null;
-      };
-      animationFrameRef.current = requestAnimationFrame(tick);
-    };
-
-    if (reducedMotion.matches || !("IntersectionObserver" in window)) {
-      start();
-    } else {
-      observer = new IntersectionObserver(
-        (entries) => {
-          if (entries.some((entry) => entry.isIntersecting)) start();
-        },
-        { rootMargin: "120px 0px", threshold: 0.15 },
-      );
-      observer.observe(container);
-    }
-
-    reducedMotion.addEventListener("change", finishForReducedMotion);
-    return () => {
-      observer?.disconnect();
-      reducedMotion.removeEventListener("change", finishForReducedMotion);
-      if (animationFrameRef.current !== null) cancelAnimationFrame(animationFrameRef.current);
-    };
-  }, []);
-
+  const { mode, scale } = useStage(containerRef);
   return (
-    <div ref={containerRef} className="relative isolate h-full min-h-0 w-full overflow-hidden">
-      <Scene clipId={clipId} copy={copy} />
+    <div ref={containerRef} data-web-experience className="relative size-full min-h-0 select-none">
+      {/* Remount per layout so the motion values are rebuilt for the new geometry. */}
+      <Scene key={mode} copy={copy} geometry={GEOMETRY[mode]} scale={scale / DETAIL} />
     </div>
   );
 }
 
-function renderFrame(container: HTMLDivElement, progress: number) {
-  const desktop = SCENES.desktop;
-  const phone = SCENES.phone;
-  const morphProgress = progress <= MORPH_START ? 0 : easeInOut((progress - MORPH_START) / (1 - MORPH_START));
-  const scene = interpolateScene(desktop, phone, morphProgress);
-  const device =
-    progress < FRAME_BUILT
-      ? interpolateDevice(INITIAL_DEVICE, desktop.device, easeOut(progress / FRAME_BUILT))
-      : progress <= MORPH_START
-        ? desktop.device
-        : scene.device;
+function Scene({ copy, geometry, scale }: { copy: WebExperienceAnimationCopy; geometry: Geometry; scale: number }) {
+  const { stage, desktop, phone, finalDesktop, finalPhone } = geometry;
+  const [scope, animate] = useAnimate<HTMLDivElement>();
+  const isInView = useInView(scope, OFFER_VIEWPORT);
+  const noMotion = useHydratedReducedMotion();
+  const morph = useMotionValue(0);
+  const settle = useMotionValue(0);
+  const desktopOnly = useMotionValue(0);
+  const backdropOpacity = useTransform(settle, [0.15, 0.7], [0, 1]);
+  const backdropX = useTransform(settle, [0, 1], [desktop.x, finalDesktop.x]);
+  const backdropY = useTransform(settle, [0, 1], [desktop.y + 6, finalDesktop.y]);
+  const backdropScale = useTransform(settle, [0, 1], [finalDesktop.scale * 0.9, finalDesktop.scale]);
+  const phoneX = useTransform(settle, [0, 1], [0, finalPhone.x - phone.x]);
+  const phoneY = useTransform(settle, [0, 1], [0, finalPhone.y - phone.y]);
+  const phoneScale = useTransform(settle, [0, 1], [1, finalPhone.scale]);
 
-  setRect(find(container, "[data-web-experience-device]"), device);
-  setRect(find(container, "[data-web-experience-clip]"), device);
-  setRect(find(container, "[data-web-experience-divider]"), scene.divider);
-  setRect(find(container, '[data-web-experience-part="accent"] rect'), scene.accent);
-  setRect(find(container, '[data-web-experience-part="primary-line"] rect'), scene.primaryLine);
-  setRect(find(container, '[data-web-experience-part="secondary-line"] rect'), scene.secondaryLine);
-  setRect(find(container, "[data-web-experience-image-bounds]"), scene.imageBounds);
-  setRect(find(container, '[data-web-experience-card="back"] rect'), scene.cards.back);
-  setRect(find(container, '[data-web-experience-card="middle"] rect'), scene.cards.middle);
-
-  const headline = find(container, "[data-web-experience-headline]");
-  setAttribute(headline, "x", scene.headline.x);
-  setAttribute(headline, "y", scene.headline.y);
-  container
-    .querySelectorAll<SVGTSpanElement>("[data-web-experience-headline] tspan")
-    .forEach((line) => setAttribute(line, "x", scene.headline.x));
-
-  const urlBoxY = scene.urlCenterY - 5;
-  const urlBaselineY = scene.urlCenterY + 2.45;
-  setAttribute(find(container, "[data-web-experience-url-box]"), "y", urlBoxY);
-  container
-    .querySelectorAll<SVGTextElement>("[data-web-experience-url] text")
-    .forEach((text) => setAttribute(text, "y", urlBaselineY));
-
-  setAttribute(find(container, "[data-web-experience-cta-bg]"), "x", scene.cta.x);
-  setAttribute(find(container, "[data-web-experience-cta-bg]"), "y", scene.cta.y);
-  setAttribute(find(container, "[data-web-experience-cta-label]"), "x", scene.cta.x + 46);
-  setAttribute(find(container, "[data-web-experience-cta-label]"), "y", scene.cta.y + 12);
-
-  const frontRects = container.querySelectorAll<SVGRectElement>('[data-web-experience-card="front"] rect');
-  setRect(frontRects.item(0), scene.cards.front);
-  setRect(frontRects.item(1), {
-    x: scene.frontCard.innerX,
-    y: scene.frontCard.innerY,
-    width: scene.frontCard.innerWidth,
-    height: scene.frontCard.blueHeight,
-  });
-  setRect(frontRects.item(2), {
-    x: scene.frontCard.innerX,
-    y: scene.frontCard.firstLineY,
-    width: scene.frontCard.firstLineWidth,
-    height: 5,
-  });
-  setRect(frontRects.item(3), {
-    x: scene.frontCard.innerX,
-    y: scene.frontCard.secondLineY,
-    width: scene.frontCard.secondLineWidth,
-    height: 5,
-  });
-
-  const elapsed = progress * TIMELINE_DURATION;
-  for (const { selector, delay, duration } of REVEALS) {
-    const element = container.querySelector(selector);
-    if (element instanceof SVGElement) {
-      element.style.opacity = String(easeOut(clamp((elapsed - delay) / duration)));
+  useEffect(() => {
+    if (noMotion) {
+      scope.current?.querySelectorAll<HTMLElement>("[data-web-reveal]").forEach((element) => {
+        element.style.opacity = "1";
+        element.style.transform = "none";
+      });
+      morph.set(1);
+      settle.set(1);
+      return;
     }
-  }
+    if (!isInView) return;
 
-  const desktopControls = find(container, "[data-web-experience-desktop-controls]");
-  const phoneControls = container.querySelectorAll<SVGElement>(
-    "[data-web-experience-notch], [data-web-experience-home-indicator]",
-  );
-  if (desktopControls) desktopControls.style.opacity = String(1 - easeInOut(clamp((progress - 0.35) / 0.04)));
-  phoneControls.forEach((element) => {
-    element.style.opacity = String(easeInOut(clamp((progress - 0.72) / 0.28)));
-  });
-}
-
-function interpolateScene(from: SceneGeometry, to: SceneGeometry, progress: number): SceneGeometry {
-  return {
-    device: interpolateDevice(from.device, to.device, progress),
-    divider: interpolateRect(from.divider, to.divider, progress),
-    urlCenterY: interpolate(from.urlCenterY, to.urlCenterY, progress),
-    accent: interpolateRect(from.accent, to.accent, progress),
-    headline: {
-      x: interpolate(from.headline.x, to.headline.x, progress),
-      y: interpolate(from.headline.y, to.headline.y, progress),
-    },
-    primaryLine: interpolateRect(from.primaryLine, to.primaryLine, progress),
-    secondaryLine: interpolateRect(from.secondaryLine, to.secondaryLine, progress),
-    cta: {
-      x: interpolate(from.cta.x, to.cta.x, progress),
-      y: interpolate(from.cta.y, to.cta.y, progress),
-    },
-    imageBounds: interpolateRect(from.imageBounds, to.imageBounds, progress),
-    cards: {
-      back: interpolateRect(from.cards.back, to.cards.back, progress),
-      middle: interpolateRect(from.cards.middle, to.cards.middle, progress),
-      front: interpolateRect(from.cards.front, to.cards.front, progress),
-    },
-    frontCard: {
-      innerX: interpolate(from.frontCard.innerX, to.frontCard.innerX, progress),
-      innerY: interpolate(from.frontCard.innerY, to.frontCard.innerY, progress),
-      innerWidth: interpolate(from.frontCard.innerWidth, to.frontCard.innerWidth, progress),
-      blueHeight: interpolate(from.frontCard.blueHeight, to.frontCard.blueHeight, progress),
-      firstLineY: interpolate(from.frontCard.firstLineY, to.frontCard.firstLineY, progress),
-      secondLineY: interpolate(from.frontCard.secondLineY, to.frontCard.secondLineY, progress),
-      firstLineWidth: interpolate(from.frontCard.firstLineWidth, to.frontCard.firstLineWidth, progress),
-      secondLineWidth: interpolate(from.frontCard.secondLineWidth, to.frontCard.secondLineWidth, progress),
-    },
-  };
-}
-
-function interpolateDevice(
-  from: SceneGeometry["device"],
-  to: SceneGeometry["device"],
-  progress: number,
-): SceneGeometry["device"] {
-  return {
-    ...interpolateRect(from, to, progress),
-    rx: interpolate(from.rx, to.rx, progress),
-  };
-}
-
-function interpolateRect(from: RectGeometry, to: RectGeometry, progress: number): RectGeometry {
-  return {
-    x: interpolate(from.x, to.x, progress),
-    y: interpolate(from.y, to.y, progress),
-    width: interpolate(from.width, to.width, progress),
-    height: interpolate(from.height, to.height, progress),
-  };
-}
-
-function interpolate(from: number, to: number, progress: number) {
-  return from + (to - from) * progress;
-}
-
-function easeOut(progress: number) {
-  return 1 - (1 - clamp(progress)) ** 3;
-}
-
-function easeInOut(progress: number) {
-  const value = clamp(progress);
-  return value * value * (3 - 2 * value);
-}
-
-function clamp(value: number) {
-  return Math.min(Math.max(value, 0), 1);
-}
-
-function find(container: HTMLDivElement, selector: string) {
-  return container.querySelector<SVGElement>(selector);
-}
-
-function setRect(element: SVGElement | null, geometry: RectGeometry & { rx?: number }) {
-  setAttribute(element, "x", geometry.x);
-  setAttribute(element, "y", geometry.y);
-  setAttribute(element, "width", geometry.width);
-  setAttribute(element, "height", geometry.height);
-  if (geometry.rx !== undefined) setAttribute(element, "rx", geometry.rx);
-}
-
-function setAttribute(element: SVGElement | null, name: string, value: number) {
-  element?.setAttribute(name, String(value));
-}
-
-function Scene({ clipId, copy }: { clipId: string; copy: WebExperienceAnimationCopy }) {
-  const scene = SCENES.desktop;
-  const { device } = scene;
+    const sequence: AnimationSequence = [
+      ['[data-web-reveal="device"]', { opacity: [0, 1], y: [10, 0] }, { duration: 0.4, at: 0, ease: OFFER_EASE_OUT }],
+      ...REVEALS.map(([part, at]): AnimationSequence[number] => [
+        `[data-web-reveal="${part}"]`,
+        { opacity: [0, 1], y: [6, 0] },
+        { duration: 0.35, at, ease: OFFER_EASE_OUT },
+      ]),
+      [morph, 1, { duration: 0.95, at: MORPH_AT, ease: OFFER_EASE_IN_OUT }],
+      [settle, 1, { duration: 0.95, at: SETTLE_AT, ease: OFFER_EASE_IN_OUT }],
+    ];
+    const controls = animate(sequence);
+    return () => controls.stop();
+  }, [animate, isInView, morph, noMotion, scope, settle]);
 
   return (
-    <svg
-      aria-hidden="true"
-      className="absolute inset-0 size-full overflow-visible"
-      preserveAspectRatio="xMidYMid meet"
-      shapeRendering="geometricPrecision"
-      textRendering="geometricPrecision"
-      viewBox="0 0 500 450"
+    <div ref={scope} className="absolute inset-0">
+      <div className="absolute top-1/2 left-1/2" style={stageStyle(stage, scale)}>
+        <div className="absolute inset-0">
+          <motion.div
+            className="absolute origin-top-left"
+            style={{ left: 0, top: 0, x: backdropX, y: backdropY, scale: backdropScale, opacity: backdropOpacity }}
+          >
+            <Device copy={copy} geometry={geometry} morph={desktopOnly} />
+          </motion.div>
+
+          <motion.div className="absolute inset-0 origin-top-left" style={{ x: phoneX, y: phoneY }}>
+            <motion.div
+              className="absolute inset-0"
+              style={{ scale: phoneScale, transformOrigin: `${phone.x}px ${phone.y}px` }}
+            >
+              <div data-web-reveal="device" className="absolute inset-0" style={{ opacity: 0 }}>
+                <Device copy={copy} geometry={geometry} morph={morph} reveal positioned />
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function useMix(value: MotionValue<number>, from: number, to: number) {
+  return useTransform(value, [0, 1], [from, to]);
+}
+
+function Device({
+  copy,
+  geometry,
+  morph,
+  reveal = false,
+  positioned = false,
+}: {
+  copy: WebExperienceAnimationCopy;
+  geometry: Geometry;
+  morph: MotionValue<number>;
+  reveal?: boolean;
+  positioned?: boolean;
+}) {
+  const { desktop, phone } = LAYOUT;
+  const { desktop: desktopFrame, phone: phoneFrame } = geometry;
+  const frameX = useMix(morph, desktopFrame.x, phoneFrame.x);
+  const frameY = useMix(morph, desktopFrame.y, phoneFrame.y);
+  const width = useMix(morph, desktopFrame.width * desktopFrame.k, phoneFrame.width);
+  const height = useMix(morph, desktopFrame.height * desktopFrame.k, phoneFrame.height);
+  const radius = useMix(morph, desktopFrame.radius * desktopFrame.k, phoneFrame.radius);
+  // The page inside is laid out at full size and scaled by k, which reaches 1 as it becomes the phone.
+  const contentScale = useMix(morph, desktopFrame.k, 1);
+  const contentWidth = useTransform(() => width.get() / contentScale.get());
+  const contentHeight = useTransform(() => height.get() / contentScale.get());
+  const bezel = useTransform(
+    morph,
+    [0, 1],
+    [
+      "0 0 0 1px rgba(15, 40, 90, 0.1), 0 30px 60px -30px rgba(8, 30, 80, 0.35)",
+      "0 0 0 4.5px rgba(17, 17, 17, 1), 0 30px 60px -26px rgba(8, 30, 80, 0.5)",
+    ],
+  );
+  const desktopChrome = useTransform(morph, [0, 0.35], [1, 0]);
+  const phoneChrome = useTransform(morph, [0.6, 0.95], [0, 1]);
+  const brandX = useMix(morph, desktop.brand.x, phone.brand.x);
+  const brandY = useMix(morph, desktop.brand.y, phone.brand.y);
+  const brandSize = useMix(morph, desktop.brand.size, phone.brand.size);
+  const columnX = useMix(morph, desktop.column.x, phone.column.x);
+  const columnY = useMix(morph, desktop.column.y, phone.column.y);
+  const columnSize = useMix(morph, desktop.column.size, phone.column.size);
+  const columnWidth = useMix(morph, desktop.column.width, phone.column.width);
+  const imageX = useMix(morph, desktop.image.x, phone.image.x);
+  const imageY = useMix(morph, desktop.image.y, phone.image.y);
+  const imageWidth = useMix(morph, desktop.image.width, phone.image.width);
+  const imageHeight = useMix(morph, desktop.image.height, phone.image.height);
+  const imageRadius = useMix(morph, desktop.image.radius, phone.image.radius);
+  const cardsY = useMix(morph, desktop.cards.y, phone.cards.y);
+  const cardsOpacity = useTransform(morph, [0, 0.3], [1, 0]);
+
+  const part = (name: string) => (reveal ? { "data-web-reveal": name, style: { opacity: 0 } } : {});
+
+  return (
+    <motion.div
+      className="absolute overflow-hidden bg-white"
+      style={{
+        left: positioned ? frameX : 0,
+        top: positioned ? frameY : 0,
+        width,
+        height,
+        borderRadius: radius,
+        boxShadow: bezel,
+      }}
     >
-      <defs>
-        <clipPath id={clipId}>
-          <rect data-web-experience-clip {...device} />
-        </clipPath>
-      </defs>
-
-      <rect
-        data-web-experience-device
-        fill="white"
-        stroke="var(--color-line-strong)"
-        vectorEffect="non-scaling-stroke"
-        {...device}
-      />
-
-      <g clipPath={`url(#${clipId})`}>
-        <HeroScene copy={copy} scene={scene} />
-      </g>
-
-      <BrowserChrome scene={scene} />
-    </svg>
-  );
-}
-
-function BrowserChrome({ scene }: { scene: SceneGeometry }) {
-  const urlBoxY = scene.urlCenterY - 5;
-  const urlBaselineY = scene.urlCenterY + 2.45;
-
-  return (
-    <g data-web-experience-reveal="chrome" style={{ opacity: 0 }}>
-      <rect data-web-experience-divider fill="var(--color-line)" {...scene.divider} />
-
-      <g data-web-experience-desktop-controls>
-        {[40, 48, 56].map((cx) => (
-          <circle cx={cx} cy="71.1" fill="var(--color-neutral-200)" key={cx} r="3" />
-        ))}
-      </g>
-
-      <g data-web-experience-url>
-        <rect data-web-experience-url-box fill="transparent" height="10" width="76" x="212" y={urlBoxY} />
-        <text
-          fill="var(--color-neutral-400)"
-          fontFamily="inherit"
-          fontSize="10"
-          textAnchor="middle"
-          x="250"
-          y={urlBaselineY}
-        >
-          suchio.net
-        </text>
-      </g>
-
-      <rect
-        data-web-experience-notch
-        fill="var(--color-neutral-900)"
-        height="4"
-        rx="2"
-        style={{ opacity: 0 }}
-        width="22.5"
-        x="238.75"
-        y="28.6"
-      />
-      <rect
-        data-web-experience-home-indicator
-        fill="var(--color-neutral-900)"
-        height="2"
-        rx="1"
-        style={{ opacity: 0 }}
-        width="32.5"
-        x="233.75"
-        y="420.5"
-      />
-    </g>
-  );
-}
-
-function HeroScene({ copy, scene }: { copy: WebExperienceAnimationCopy; scene: SceneGeometry }) {
-  const words = copy.headline.trim().split(/\s+/);
-  const secondLine = words.pop() ?? "";
-  const firstLine = words.join(" ");
-
-  return (
-    <g>
-      <g data-web-experience-part="accent" style={{ opacity: 0 }}>
-        <rect fill="var(--color-brand-400)" rx="3" {...scene.accent} />
-      </g>
-
-      <g data-web-experience-part="headline" style={{ opacity: 0 }}>
-        <text
-          data-web-experience-headline
-          fill="var(--color-neutral-900)"
-          fontFamily="inherit"
-          fontSize="18.4"
-          fontWeight="600"
-          x={scene.headline.x}
-          y={scene.headline.y}
-        >
-          <tspan x={scene.headline.x}>{firstLine}</tspan>
-          <tspan dy="1.03em" x={scene.headline.x}>
-            {secondLine}
-          </tspan>
-        </text>
-      </g>
-
-      <IllustrationLine geometry={scene.primaryLine} part="primary-line" />
-      <IllustrationLine geometry={scene.secondaryLine} part="secondary-line" />
-      <InquiryCta copy={copy} geometry={scene.cta} />
-      <CardStack scene={scene} />
-    </g>
-  );
-}
-
-function IllustrationLine({ geometry, part }: { geometry: RectGeometry; part: string }) {
-  return (
-    <g data-web-experience-part={part} style={{ opacity: 0 }}>
-      <rect fill="var(--color-neutral-200)" rx="3" {...geometry} />
-    </g>
-  );
-}
-
-function InquiryCta({ copy, geometry }: { copy: WebExperienceAnimationCopy; geometry: { x: number; y: number } }) {
-  const width = 92;
-  const height = 24;
-
-  return (
-    <g data-web-experience-part="cta" style={{ opacity: 0 }}>
-      <rect
-        data-web-experience-cta-bg
-        fill="var(--color-neutral-900)"
-        height={height}
-        rx="12"
-        width={width}
-        x={geometry.x}
-        y={geometry.y}
-      />
-      <text
-        data-web-experience-cta-label
-        dominantBaseline="middle"
-        fill="white"
-        fontFamily="inherit"
-        fontSize="10"
-        fontWeight="600"
-        textAnchor="middle"
-        textRendering="optimizeLegibility"
-        x={geometry.x + width / 2}
-        y={geometry.y + height / 2}
+      <motion.div
+        className="absolute top-0 left-0 origin-top-left"
+        style={{ width: contentWidth, height: contentHeight, scale: contentScale }}
       >
-        {copy.cta}
-      </text>
-    </g>
+        <div {...part("chrome")} className="absolute inset-0">
+          <motion.div className="absolute inset-x-0 top-0 h-[26px]" style={{ opacity: desktopChrome }}>
+            <div className="absolute top-[10px] left-[12px] flex gap-[4px]">
+              {[0, 1, 2].map((dot) => (
+                <span key={dot} className="size-[6px] rounded-full bg-neutral-200" />
+              ))}
+            </div>
+            <span className="absolute top-[6px] left-1/2 flex h-[14px] w-[120px] -translate-x-1/2 items-center justify-center rounded-full bg-neutral-100 text-[9px] leading-none text-neutral-400">
+              suchio.net
+            </span>
+            <span className="absolute inset-x-0 bottom-0 h-px bg-neutral-100" />
+          </motion.div>
+          <motion.span
+            className="absolute top-[7px] left-1/2 h-[8px] w-[36px] -translate-x-1/2 rounded-full bg-neutral-900"
+            style={{ opacity: phoneChrome }}
+          />
+          <motion.span
+            className="absolute bottom-[6px] left-1/2 h-[3px] w-[40px] -translate-x-1/2 rounded-full bg-neutral-900"
+            style={{ opacity: phoneChrome }}
+          />
+        </div>
+
+        <motion.div
+          {...part("nav")}
+          className="absolute flex items-center gap-1.5 leading-none font-semibold tracking-[-0.02em] text-neutral-900"
+          style={{ left: brandX, top: brandY, fontSize: brandSize, ...(reveal ? { opacity: 0 } : {}) }}
+        >
+          <span className="size-[0.8em] rounded-full bg-brand-500" />
+          suchio
+        </motion.div>
+        <motion.div
+          className="absolute top-[43px] right-[22px] flex items-center text-[12px] leading-none font-medium text-neutral-500"
+          style={{ opacity: desktopChrome }}
+        >
+          <span {...part("nav")} className="flex gap-3.5">
+            {copy.nav.map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+          </span>
+        </motion.div>
+        <motion.span className="absolute top-[27px] right-[13px] text-neutral-700" style={{ opacity: phoneChrome }}>
+          <Menu className="size-[11px]" strokeWidth={2.2} aria-hidden="true" />
+        </motion.span>
+
+        <motion.div
+          className="absolute flex flex-col items-start"
+          style={{ left: columnX, top: columnY, fontSize: columnSize, width: columnWidth }}
+        >
+          <span {...part("kicker")} className="text-[0.9em] font-medium text-brand-600">
+            {copy.kicker}
+          </span>
+          <span
+            {...part("headline")}
+            className="mt-[0.4em] text-[1.8em] leading-[1.05] font-semibold tracking-[-0.035em] text-balance text-neutral-900"
+          >
+            {copy.headline}
+          </span>
+          <span {...part("intro")} className="mt-[0.75em] text-[1em] leading-[1.4] text-pretty text-neutral-600">
+            {copy.intro}
+          </span>
+          <span
+            {...part("cta")}
+            className="mt-[0.85em] inline-flex items-center gap-[0.5em] rounded-full bg-neutral-900 py-[0.5em] pr-[0.5em] pl-[1.1em] text-[0.95em] font-semibold text-white shadow-[0_6px_14px_-6px_rgb(0_0_0/45%)]"
+          >
+            {copy.cta}
+            <span className="flex size-[1.45em] items-center justify-center rounded-full bg-white text-neutral-900">
+              <ArrowRight className="size-[0.95em]" strokeWidth={2.4} aria-hidden="true" />
+            </span>
+          </span>
+        </motion.div>
+
+        <motion.div
+          className="absolute overflow-hidden"
+          style={{ left: imageX, top: imageY, width: imageWidth, height: imageHeight, borderRadius: imageRadius }}
+        >
+          <div {...part("image")} className="absolute inset-0">
+            <PosterArt />
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="absolute right-[22px] left-[22px] grid grid-cols-3 gap-2"
+          style={{ top: cardsY, opacity: cardsOpacity }}
+        >
+          {copy.cards.map((title, index) => (
+            <div
+              key={title}
+              {...part(`card-${index}`)}
+              className="rounded-[8px] bg-white px-2.5 py-[7px] shadow-[0_0_0_1px_rgb(15_40_90/8%),0_6px_14px_-8px_rgb(15_40_90/25%)]"
+            >
+              <span className="block font-mono text-[8.5px] leading-none font-medium text-brand-500">0{index + 1}</span>
+              <span className="mt-1 block truncate text-[11.5px] leading-none font-semibold text-neutral-900">
+                {title}
+              </span>
+            </div>
+          ))}
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 }
 
-function CardStack({ scene }: { scene: SceneGeometry }) {
+function PosterArt() {
   return (
-    <g data-web-experience-part="image">
-      <rect data-web-experience-image-bounds fill="transparent" {...scene.imageBounds} />
-      <g data-web-experience-card="back" style={{ opacity: 0 }}>
-        <SvgCard fill="var(--color-neutral-100)" geometry={scene.cards.back} stroke="var(--color-neutral-300)" />
-      </g>
-      <g data-web-experience-card="middle" style={{ opacity: 0 }}>
-        <SvgCard fill="white" geometry={scene.cards.middle} stroke="var(--color-line-strong)" />
-      </g>
-      <g data-web-experience-card="front" style={{ opacity: 0 }}>
-        <FrontCard geometry={scene.cards.front} values={scene.frontCard} />
-      </g>
-    </g>
-  );
-}
-
-function SvgCard({ fill, geometry, stroke }: { fill: string; geometry: RectGeometry; stroke: string }) {
-  return <rect fill={fill} rx="8" stroke={stroke} vectorEffect="non-scaling-stroke" {...geometry} />;
-}
-
-function FrontCard({ geometry, values }: { geometry: RectGeometry; values: SceneGeometry["frontCard"] }) {
-  return (
-    <>
-      <rect fill="white" rx="8" stroke="var(--color-brand-400)" vectorEffect="non-scaling-stroke" {...geometry} />
-      <rect
-        fill="var(--color-brand-400)"
-        height={values.blueHeight}
-        rx="6"
-        width={values.innerWidth}
-        x={values.innerX}
-        y={values.innerY}
+    <div
+      className="absolute inset-0"
+      style={{ background: "linear-gradient(165deg, #0a3d9e 0%, #0f63e6 52%, #67a8ff 100%)" }}
+    >
+      <div
+        className="absolute rounded-full"
+        style={{
+          width: "62%",
+          aspectRatio: "1",
+          right: "-12%",
+          top: "-14%",
+          background: "radial-gradient(circle at 35% 35%, #ffe2b8, #ffb36b 70%)",
+        }}
       />
-      <rect
-        fill="var(--color-neutral-200)"
-        height="5"
-        rx="2.5"
-        width={values.firstLineWidth}
-        x={values.innerX}
-        y={values.firstLineY}
-      />
-      <rect
-        fill="var(--color-neutral-200)"
-        height="5"
-        rx="2.5"
-        width={values.secondLineWidth}
-        x={values.innerX}
-        y={values.secondLineY}
-      />
-    </>
+      {[0, 1, 2].map((ring) => (
+        <div
+          key={ring}
+          className="absolute rounded-t-full border border-b-0 border-white/35"
+          style={{ left: `${8 + ring * 9}%`, right: `${8 + ring * 9}%`, bottom: 0, height: `${72 - ring * 16}%` }}
+        />
+      ))}
+      <div className="absolute inset-x-0 bottom-0 h-[22%] bg-[#082c75]/55" />
+    </div>
   );
 }

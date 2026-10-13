@@ -1,0 +1,23 @@
+---
+import { OfferAnimation } from "@/components/offer-animations/offer-animation";
+import type { ServiceAnimation } from "@/lib/service-catalog";
+import type { Locale } from "@/i18n/config";
+
+interface Props {
+  animation: ServiceAnimation;
+  locale: Locale;
+  className?: string;
+}
+const { animation, locale, className } = Astro.props;
+---
+
+<div
+  data-offer-visual={animation.type}
+  class:list={[
+    "relative grid aspect-[24/19] w-full min-w-0 text-ink [&>*]:relative max-nav:mx-auto max-nav:max-w-[44rem] max-narrow:aspect-[40/49]",
+    className,
+  ]}
+  aria-hidden="true"
+>
+  <OfferAnimation client:load animation={animation} locale={locale} />
+</div>

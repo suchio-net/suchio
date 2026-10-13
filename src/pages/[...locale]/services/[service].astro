@@ -25,7 +25,7 @@ import {
 } from "@lucide/astro";
 import CtaButton from "@/components/cta-button.astro";
 import Faq from "@/components/faq.astro";
-import { OfferAnimation } from "@/components/offer-animations/offer-animation";
+import OfferVisual from "@/components/offer-visual.astro";
 import ServiceScopeGrid from "@/components/service-scope-grid.astro";
 import Reveal from "@/components/reveal.astro";
 import SectionHeading from "@/components/section-heading.astro";
@@ -87,12 +87,11 @@ const related = services.filter((entry) => entry.id !== serviceId);
           </CtaButton>
         </Reveal>
         <Reveal className="min-w-0" delay={70}>
-          <div
-            class={`relative grid aspect-[1.1/1] min-h-[24rem] overflow-hidden rounded-card p-10 shadow-surface [&>*]:relative ${service.theme} max-wide:mx-auto max-wide:aspect-[4/3] max-wide:min-h-0 max-wide:w-full max-wide:max-w-[44rem] max-narrow:h-[clamp(19rem,68vw,25rem)] max-narrow:aspect-auto max-narrow:p-4`}
-            aria-hidden="true"
-          >
-            <OfferAnimation client:load animation={service.animation} locale={locale} />
-          </div>
+          <OfferVisual
+            animation={service.animation}
+            locale={locale}
+            className="max-wide:mx-auto max-wide:max-w-[44rem]"
+          />
         </Reveal>
       </div>
     </section>

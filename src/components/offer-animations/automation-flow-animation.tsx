@@ -1,441 +1,383 @@
-import { Bot, BrainCircuit, Database, GitBranch, ListTodo, Search, UserRoundPlus, Webhook } from "lucide-react";
-import { motion, useInView } from "motion/react";
-import { useRef } from "react";
-import { OFFER_EASE_IN_OUT, OFFER_EASE_OUT, OFFER_VIEWPORT } from "@/components/offer-animations/motion-tokens";
+import { Bot, BrainCircuit, Check, Database, GitBranch, ListTodo, Search, UserRoundPlus, Webhook } from "lucide-react";
+import { animate, motion, useInView, useMotionValue, useTransform, type MotionValue } from "motion/react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { OFFER_EASE_IN_OUT, OFFER_EASE_OUT } from "@/components/offer-animations/motion-tokens";
+import { FLAT_FILL, STAGE_BOX, stageStyle, useStage, type StageMode } from "@/components/offer-animations/stage";
 import { useHydratedReducedMotion } from "@/components/offer-animations/use-hydrated-reduced-motion";
 import type { AutomationAnimationCopy } from "@/i18n/services";
 
-const tools = [
+type Box = { left: number; top: number; width: number; height: number };
+type Layout = {
+  // The flow is drawn in a block of this height, centred vertically in the shared stage box.
+  height: number;
+  trigger: Box;
+  agent: Box;
+  condition: Box;
+  lead: Box;
+  review: Box;
+  paths: { intake: string; decide: string; lead: string; review: string };
+};
+
+// Wide: intake beside the agent, as in the original flow. Narrow: one column with the intake as a row.
+const LAYOUTS: Record<StageMode, Layout> = {
+  wide: {
+    height: 346,
+    trigger: { left: 0, top: 0, width: 130, height: 120 },
+    agent: { left: 146, top: 0, width: 334, height: 120 },
+    condition: { left: 90, top: 168, width: 300, height: 44 },
+    lead: { left: 0, top: 262, width: 232, height: 84 },
+    review: { left: 248, top: 262, width: 232, height: 84 },
+    paths: {
+      intake: "M 130 60 H 146",
+      decide: "M 240 120 V 168",
+      lead: "M 240 212 V 226 Q 240 232 234 232 H 122 Q 116 232 116 238 V 262",
+      review: "M 240 212 V 226 Q 240 232 246 232 H 358 Q 364 232 364 238 V 262",
+    },
+  },
+  narrow: {
+    height: 352,
+    trigger: { left: 0, top: 0, width: 320, height: 40 },
+    agent: { left: 0, top: 62, width: 320, height: 108 },
+    condition: { left: 0, top: 192, width: 320, height: 40 },
+    lead: { left: 0, top: 268, width: 154, height: 84 },
+    review: { left: 166, top: 268, width: 154, height: 84 },
+    paths: {
+      intake: "M 160 40 V 62",
+      decide: "M 160 170 V 192",
+      lead: "M 160 232 V 244 Q 160 250 154 250 H 83 Q 77 250 77 256 V 268",
+      review: "M 160 232 V 244 Q 160 250 166 250 H 237 Q 243 250 243 256 V 268",
+    },
+  },
+};
+const TOOLS = [
   { key: "model", Icon: BrainCircuit },
   { key: "context", Icon: Database },
   { key: "research", Icon: Search },
 ] as const;
+const COLORS = { flow: "#6650a6", lead: "#1f8a5b", review: "#b7791f", idle: "rgb(102 80 166 / 20%)" } as const;
+const NODE_SHADOW = "0 0 0 1px rgba(60, 40, 120, 0.08), 0 12px 26px -16px rgba(60, 40, 120, 0.45)";
 
-const nodeVariants = {
-  hidden: { opacity: 0, y: 9, scale: 0.88 },
-  visible: { opacity: 1, y: 0, scale: 1 },
-};
+type Outcome = "lead" | "review";
+type Step = "idle" | "intake" | "agent" | "decide" | "route" | "done";
 
-// Draw the connections and send the signal as the cards finish popping into place.
-const TIMING = {
-  trigger: 0,
-  agent: 0.14,
-  condition: 0.28,
-  success: 0.42,
-  fallback: 0.56,
-  lines: { input: 0, decision: 0.14, stem: 0.28, rails: 0.38, legs: 0.58 },
-  signals: { input: 0.42, decision: 0.64, stem: 0.88, rails: 0.96, legs: 1.12 },
-  confirmed: 1.28,
-} as const;
-
-const lineTones = {
-  brand: { line: "bg-service-automation-fg", signal: "ring-service-automation-fg" },
-  success: { line: "bg-service-automation-fg", signal: "ring-service-automation-fg" },
-  muted: { line: "bg-service-automation-fg/25", signal: "ring-service-automation-fg" },
-} as const;
-
-function TriggerPulse({ running }: { running: boolean }) {
-  return (
-    <motion.span
-      data-flow-pulse="trigger"
-      className="pointer-events-none absolute inset-0 rounded-full border border-service-automation-fg"
-      initial={false}
-      animate={
-        running
-          ? { opacity: [0, 0.42, 0], transform: ["scale(0.8)", "scale(1.35)", "scale(1.35)"] }
-          : { opacity: 0, transform: "scale(0.8)" }
-      }
-      transition={
-        running ? { delay: TIMING.signals.input - 0.04, duration: 0.4, ease: OFFER_EASE_OUT } : { duration: 0 }
-      }
-      aria-hidden="true"
-    />
-  );
-}
-
-function ProcessEmphasis({ running, delay, success = false }: { running: boolean; delay: number; success?: boolean }) {
-  return (
-    <motion.span
-      data-flow-card-pulse
-      className={`pointer-events-none absolute inset-0 rounded-[inherit] ring-2 ring-inset ${success ? "ring-emerald-500" : "ring-service-automation-fg"}`}
-      initial={false}
-      animate={
-        running
-          ? { opacity: [0, 0.36, 0], transform: ["scale(0.995)", "scale(1.01)", "scale(1.018)"] }
-          : { opacity: 0, transform: "scale(1)" }
-      }
-      transition={running ? { duration: 0.34, delay, ease: OFFER_EASE_IN_OUT } : { duration: 0 }}
-      aria-hidden="true"
-    />
-  );
-}
-
-function LineSignal({
-  running,
-  delay,
-  duration,
-  direction,
-  name,
-  tone,
-  ease,
-}: {
-  running: boolean;
-  delay: number;
-  duration: number;
-  direction: "forward" | "reverse" | "down";
-  name: string;
-  tone: keyof typeof lineTones;
-  ease: typeof OFFER_EASE_OUT | "linear";
-}) {
-  const startTransform =
-    direction === "forward" ? "translateX(-100%)" : direction === "reverse" ? "translateX(100%)" : "translateY(-100%)";
-  const endTransform = direction === "down" ? "translateY(0%)" : "translateX(0%)";
-  const bubblePosition =
-    direction === "forward"
-      ? "right-0 top-1/2 translate-x-1/2 -translate-y-1/2"
-      : direction === "reverse"
-        ? "top-1/2 left-0 -translate-x-1/2 -translate-y-1/2"
-        : "bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2";
-
-  return (
-    <motion.span
-      data-flow-signal={name}
-      className="pointer-events-none absolute inset-0 z-10 block overflow-visible"
-      initial={false}
-      animate={
-        running
-          ? {
-              opacity: [0, 1, 1, 0],
-              transform: [startTransform, endTransform],
-            }
-          : { opacity: 0, transform: startTransform }
-      }
-      transition={
-        running
-          ? {
-              opacity: { duration, delay, times: [0, 0.08, 0.9, 1], ease: "linear" },
-              transform: { duration, delay, ease },
-            }
-          : { duration: 0 }
-      }
-      aria-hidden="true"
-    >
-      <span className={`absolute size-1.5 rounded-full bg-white ring-2 ${lineTones[tone].signal} ${bubblePosition}`} />
-    </motion.span>
-  );
-}
-
-function FlowLine({
-  name,
-  segment = false,
-  className,
-  direction,
-  start,
-  duration,
-  signalStart,
-  signalDuration = duration,
-  signalEase = "linear",
-  tone = "brand",
-  running,
-  noMotion,
-}: {
-  name: string;
-  segment?: boolean;
-  className: string;
-  direction: "forward" | "reverse" | "down";
-  start: number;
-  duration: number;
-  signalStart?: number;
-  signalDuration?: number;
-  signalEase?: typeof OFFER_EASE_OUT | "linear";
-  tone?: keyof typeof lineTones;
-  running: boolean;
-  noMotion: boolean;
-}) {
-  const vertical = direction === "down";
-  return (
-    <span
-      data-flow-connector={segment ? undefined : name}
-      data-flow-segment={segment ? name : undefined}
-      className={className}
-      aria-hidden="true"
-    >
-      <motion.span
-        data-flow-line={name}
-        className={`absolute inset-0 ${lineTones[tone].line} ${vertical ? "origin-top" : direction === "reverse" ? "origin-right" : "origin-left"}`}
-        initial={false}
-        variants={
-          vertical
-            ? { hidden: { scaleY: 0 }, visible: { scaleY: 1 } }
-            : { hidden: { scaleX: 0 }, visible: { scaleX: 1 } }
-        }
-        transition={{ delay: noMotion ? 0 : start, duration: noMotion ? 0 : duration, ease: "linear" }}
-      />
-      {/* Keep the signal outside the scaled line so it travels at a steady speed. */}
-      {signalStart !== undefined ? (
-        <LineSignal
-          running={running}
-          delay={signalStart}
-          duration={signalDuration}
-          direction={direction}
-          name={name}
-          tone={tone}
-          ease={signalEase}
-        />
-      ) : null}
-    </span>
-  );
-}
+const wait = (seconds: number) => new Promise((resolve) => window.setTimeout(resolve, seconds * 1000));
 
 export function AutomationFlowAnimation({ copy }: { copy: AutomationAnimationCopy }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(containerRef, OFFER_VIEWPORT);
+  const isInView = useInView(containerRef, { once: true, amount: 0.45 });
   const noMotion = useHydratedReducedMotion();
-  const active = noMotion || isInView;
-  const running = !noMotion && isInView;
-  const completionTransition = {
-    delay: noMotion ? 0 : TIMING.confirmed,
-    duration: noMotion ? 0 : 0.18,
-    ease: OFFER_EASE_OUT,
-  };
-  const cardTransition = (delay: number) =>
-    noMotion
-      ? { duration: 0 }
-      : {
-          delay,
-          type: "spring" as const,
-          duration: 0.4,
-          bounce: 0.24,
-          opacity: { delay, duration: 0.14, ease: OFFER_EASE_OUT },
-        };
+  const { mode, scale } = useStage(containerRef);
+  const stage = STAGE_BOX[mode];
+  const layout = LAYOUTS[mode];
+  const narrow = mode === "narrow";
+  const [step, setStep] = useState<Step>("idle");
+  const [tools, setTools] = useState(0);
+  const [appeared, setAppeared] = useState(false);
+  const intake = useMotionValue(0);
+  const decide = useMotionValue(0);
+  const lead = useMotionValue(0);
+
+  // One inquiry, in strict order: each signal starts only when the previous step has finished.
+  useEffect(() => {
+    if (noMotion || !isInView) return;
+    let cancelled = false;
+    const travel = (value: MotionValue<number>, duration: number) =>
+      animate(value, 1, { duration, ease: OFFER_EASE_IN_OUT }).then(() => undefined);
+
+    const run = async () => {
+      setAppeared(true);
+      await wait(0.45);
+      if (cancelled) return;
+      setStep("intake");
+      await travel(intake, 0.4);
+      if (cancelled) return;
+      setStep("agent");
+      for (let tool = 1; tool <= TOOLS.length; tool += 1) {
+        await wait(0.18);
+        if (cancelled) return;
+        setTools(tool);
+      }
+      await wait(0.2);
+      if (cancelled) return;
+      setStep("decide");
+      await travel(decide, 0.3);
+      await wait(0.3);
+      if (cancelled) return;
+      setStep("route");
+      await travel(lead, 0.5);
+      if (!cancelled) setStep("done");
+    };
+    void run();
+    return () => {
+      cancelled = true;
+      [intake, decide, lead].forEach((value) => value.stop());
+    };
+  }, [decide, intake, isInView, lead, noMotion]);
+
+  const shown: Step = noMotion ? "done" : step;
+  const visible = noMotion || appeared;
+  const litTools = noMotion ? TOOLS.length : tools;
+  const routed = shown === "route" || shown === "done";
+  const finished = shown === "done";
+  const { paths } = layout;
 
   return (
-    <motion.div
-      ref={containerRef}
-      data-automation-flow
-      className="grid h-full min-h-0 w-full place-items-center"
-      initial={false}
-      animate={active ? "visible" : "hidden"}
-    >
-      <div className="w-full max-w-md">
-        <div className="grid grid-cols-[minmax(5rem,.7fr)_1rem_minmax(0,1.5fr)] items-stretch">
-          <motion.div
-            data-flow-node="trigger"
-            className="relative grid min-w-0 place-items-center rounded-xl bg-white p-3 text-center shadow-surface max-[600px]:p-2"
-            variants={nodeVariants}
-            transition={cardTransition(TIMING.trigger)}
+    <div ref={containerRef} data-automation-flow className="relative size-full min-h-0 select-none">
+      <div className="absolute top-1/2 left-1/2" style={stageStyle(stage, scale * FLAT_FILL)}>
+        <div className="absolute inset-x-0" style={{ top: (stage.height - layout.height) / 2, height: layout.height }}>
+          <svg className="absolute inset-0 overflow-visible" width={stage.width} height={layout.height}>
+            {Object.values(paths).map((path) => (
+              <path key={path} d={path} fill="none" stroke={COLORS.idle} strokeWidth="2" />
+            ))}
+            <Trail d={paths.intake} progress={intake} color={COLORS.flow} full={noMotion} />
+            <Trail d={paths.decide} progress={decide} color={COLORS.flow} full={noMotion} />
+            <Trail d={paths.lead} progress={lead} color={COLORS.lead} full={noMotion} />
+          </svg>
+
+          {!noMotion ? (
+            <>
+              <Signal path={paths.intake} progress={intake} color={COLORS.flow} />
+              <Signal path={paths.decide} progress={decide} color={COLORS.flow} />
+              <Signal path={paths.lead} progress={lead} color={COLORS.lead} />
+            </>
+          ) : null}
+
+          <Node
+            className={`flex items-center justify-center gap-2.5 ${narrow ? "" : "flex-col text-center"}`}
+            box={layout.trigger}
+            delay={0}
+            visible={visible}
           >
-            <ProcessEmphasis running={running} delay={TIMING.signals.input - 0.02} />
-            <span className="min-w-0">
-              <span className="relative mx-auto grid size-7 place-items-center">
-                <TriggerPulse running={running} />
-                <Webhook className="relative size-5 text-brand-600" strokeWidth={1.8} aria-hidden="true" />
-              </span>
-              <span className="mt-2 block text-xs font-semibold text-pretty [overflow-wrap:normal] hyphens-none">
-                {copy.trigger}
-              </span>
+            <Pulse active={shown === "intake"} />
+            <Webhook className="size-5 shrink-0 text-[#6650a6]" strokeWidth={1.8} aria-hidden="true" />
+            <span className="text-[14px] leading-tight font-semibold whitespace-nowrap text-neutral-900">
+              {copy.trigger}
             </span>
-          </motion.div>
+          </Node>
 
-          <FlowLine
-            name="trigger-agent"
-            className="relative my-auto block h-0.5"
-            direction="forward"
-            start={TIMING.lines.input}
-            duration={0.2}
-            signalStart={TIMING.signals.input}
-            signalDuration={0.18}
-            signalEase={[0.42, 0, 1, 1]}
-            tone="brand"
-            running={running}
-            noMotion={noMotion}
-          />
-
-          <motion.div
-            data-flow-node="agent"
-            className="relative min-w-0 rounded-xl bg-brand-50 p-3 shadow-accent-surface max-[600px]:p-2"
-            variants={nodeVariants}
-            transition={cardTransition(TIMING.agent)}
-          >
-            <ProcessEmphasis running={running} delay={TIMING.signals.input + 0.18} />
-            <div className="flex min-w-0 items-center gap-2">
-              <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-neutral-900 text-white">
+          <Node className="p-3" box={layout.agent} delay={0.1} visible={visible}>
+            <Pulse active={shown === "agent"} />
+            <div className="flex items-center gap-2.5">
+              <span className="grid size-8 shrink-0 place-items-center rounded-[9px] bg-neutral-900 text-white">
                 <Bot className="size-4" strokeWidth={1.8} aria-hidden="true" />
               </span>
-              <span className="min-w-0">
-                <span className="block text-sm font-semibold text-pretty [overflow-wrap:normal] hyphens-none">
-                  {copy.agent}
-                </span>
-                <span className="block text-xs text-pretty [overflow-wrap:normal] hyphens-none text-neutral-400 max-[400px]:hidden">
-                  {copy.extract}
-                </span>
+              <span className="min-w-0 leading-tight">
+                <span className="block text-[14px] font-semibold text-neutral-900">{copy.agent}</span>
+                <span className="block truncate text-[12px] text-neutral-600">{copy.extract}</span>
               </span>
             </div>
-            <div className="mt-3 grid grid-cols-3 gap-2 max-[600px]:mt-2 max-[600px]:gap-1">
-              {tools.map(({ key, Icon }) => (
-                <span
-                  className="grid min-w-0 place-items-center gap-1 rounded-lg bg-white p-2 text-center shadow-surface max-[600px]:p-1"
-                  key={key}
-                >
-                  <Icon className="size-3.5 text-neutral-500" strokeWidth={1.8} aria-hidden="true" />
-                  <span className="text-xs font-medium text-neutral-500">{copy[key]}</span>
-                </span>
-              ))}
+            <div className={`mt-3 grid grid-cols-3 gap-2`}>
+              {TOOLS.map(({ key, Icon }, index) => {
+                const lit = litTools > index;
+                return (
+                  <span
+                    key={key}
+                    className={`relative flex items-center justify-center gap-1.5 ${narrow ? "h-[36px]" : "h-[40px]"} rounded-[9px] text-[12px] font-medium transition-[background-color,color,box-shadow] duration-300 ${
+                      lit
+                        ? "bg-[#f3efff] text-[#4b3a85] shadow-[inset_0_0_0_1.5px_#6650a6]"
+                        : "bg-neutral-50 text-neutral-400 shadow-[inset_0_0_0_1px_rgb(0_0_0/6%)]"
+                    }`}
+                  >
+                    <Icon className="size-3.5" strokeWidth={1.9} aria-hidden="true" />
+                    {copy[key]}
+                    <motion.span
+                      className="absolute -top-1.5 -right-1.5 grid size-4 place-items-center rounded-full bg-[#6650a6] text-white"
+                      initial={false}
+                      animate={{ scale: lit ? 1 : 0, opacity: lit ? 1 : 0 }}
+                      transition={noMotion ? { duration: 0 } : { type: "spring", stiffness: 500, damping: 22 }}
+                    >
+                      <Check className="size-2.5" strokeWidth={3} aria-hidden="true" />
+                    </motion.span>
+                  </span>
+                );
+              })}
             </div>
-          </motion.div>
-        </div>
+          </Node>
 
-        <FlowLine
-          name="agent-condition"
-          className="relative mx-auto block h-8 w-0.5 max-[600px]:h-3"
-          direction="down"
-          start={TIMING.lines.decision}
-          duration={0.2}
-          signalStart={TIMING.signals.decision}
-          signalDuration={0.18}
-          tone="brand"
-          running={running}
-          noMotion={noMotion}
-        />
+          <Node
+            className="flex items-center justify-center gap-2 rounded-full px-2"
+            box={layout.condition}
+            delay={0.2}
+            visible={visible}
+          >
+            <Pulse active={shown === "decide"} />
+            <GitBranch className="size-4 text-[#6650a6]" strokeWidth={1.9} aria-hidden="true" />
+            <span className="text-[13px] font-semibold text-neutral-900">{copy.condition}</span>
+            <motion.span
+              className="rounded-full px-1.5 py-1 text-[12px] leading-none font-semibold text-white"
+              style={{ background: COLORS.lead }}
+              initial={false}
+              animate={{ opacity: routed ? 1 : 0, scale: routed ? 1 : 0.6 }}
+              transition={noMotion ? { duration: 0 } : { type: "spring", stiffness: 500, damping: 24 }}
+            >
+              {copy.yes}
+            </motion.span>
+          </Node>
 
-        <motion.div
-          data-flow-node="condition"
-          className="relative mx-auto flex w-full max-w-xs min-w-0 items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-center shadow-surface max-[600px]:px-3 max-[600px]:py-2"
-          variants={nodeVariants}
-          transition={cardTransition(TIMING.condition)}
-        >
-          <ProcessEmphasis running={running} delay={TIMING.signals.decision + 0.18} />
-          <GitBranch className="size-5 shrink-0 text-brand-600" strokeWidth={1.9} aria-hidden="true" />
-          <span className="text-xs font-semibold text-pretty [overflow-wrap:normal] hyphens-none">
-            {copy.condition}
-          </span>
-        </motion.div>
-
-        <div
-          data-flow-connector="condition-outcomes"
-          className="relative grid h-12 w-full grid-cols-2 gap-3 max-[600px]:h-6"
-          aria-hidden="true"
-        >
-          <FlowLine
-            name="stem"
-            segment
-            className="absolute top-0 left-1/2 z-10 h-[calc(.75rem+2px)] w-0.5 -translate-x-1/2"
-            direction="down"
-            start={TIMING.lines.stem}
-            duration={0.1}
-            signalStart={TIMING.signals.stem}
-            signalDuration={0.08}
-            tone="brand"
-            running={running}
-            noMotion={noMotion}
+          <OutcomeNode
+            box={layout.lead}
+            compact={narrow}
+            tone="lead"
+            icon={<UserRoundPlus className="size-[18px]" strokeWidth={1.8} aria-hidden="true" />}
+            label={copy.yes}
+            title={copy.success}
+            lit={finished}
+            visible={visible}
+            delay={0.3}
           />
-
-          <div className="relative">
-            <FlowLine
-              name="left-rail"
-              segment
-              className="absolute top-3 right-[-0.375rem] left-1/2 h-0.5"
-              direction="reverse"
-              start={TIMING.lines.rails}
-              duration={0.2}
-              signalStart={TIMING.signals.rails}
-              signalDuration={0.16}
-              tone="success"
-              running={running}
-              noMotion={noMotion}
-            />
-            <FlowLine
-              name="left-leg"
-              segment
-              className="absolute top-3 bottom-0 left-1/2 w-0.5 -translate-x-1/2"
-              direction="down"
-              start={TIMING.lines.legs}
-              duration={0.16}
-              signalStart={TIMING.signals.legs}
-              signalDuration={0.16}
-              signalEase={OFFER_EASE_OUT}
-              tone="success"
-              running={running}
-              noMotion={noMotion}
-            />
-          </div>
-
-          <div className="relative">
-            <FlowLine
-              name="right-rail"
-              segment
-              className="absolute top-3 right-1/2 left-[-0.375rem] h-0.5"
-              direction="forward"
-              start={TIMING.lines.rails}
-              duration={0.2}
-              tone="muted"
-              running={running}
-              noMotion={noMotion}
-            />
-            <FlowLine
-              name="right-leg"
-              segment
-              className="absolute top-3 right-1/2 bottom-0 w-0.5 translate-x-1/2"
-              direction="down"
-              start={TIMING.lines.legs}
-              duration={0.16}
-              tone="muted"
-              running={running}
-              noMotion={noMotion}
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3">
-          <motion.div
-            data-flow-node="success"
-            className="relative flex min-w-0 items-center gap-2 rounded-xl bg-white p-3 shadow-surface max-[600px]:p-2"
-            variants={{
-              hidden: {
-                ...nodeVariants.hidden,
-                backgroundColor: "var(--color-white)",
-                color: "var(--color-neutral-500)",
-                boxShadow: "var(--shadow-surface)",
-              },
-              visible: {
-                ...nodeVariants.visible,
-                backgroundColor: "var(--color-emerald-50)",
-                color: "var(--color-emerald-700)",
-                boxShadow: "inset 0 0 0 1px var(--color-emerald-200)",
-              },
-            }}
-            transition={{
-              ...cardTransition(TIMING.success),
-              backgroundColor: completionTransition,
-              color: completionTransition,
-              boxShadow: completionTransition,
-            }}
-          >
-            <ProcessEmphasis running={running} delay={TIMING.confirmed} success />
-            <UserRoundPlus className="size-5 shrink-0" strokeWidth={1.8} aria-hidden="true" />
-            <span className="min-w-0">
-              <span className="block text-xs font-medium">{copy.yes}</span>
-              <span className="block text-xs font-semibold text-pretty [overflow-wrap:normal] hyphens-none text-neutral-900">
-                {copy.success}
-              </span>
-            </span>
-          </motion.div>
-          <motion.div
-            data-flow-node="fallback"
-            className="relative flex min-w-0 items-center gap-2 rounded-xl bg-white p-3 shadow-surface max-[600px]:p-2"
-            variants={nodeVariants}
-            transition={cardTransition(TIMING.fallback)}
-          >
-            <ListTodo className="size-5 shrink-0 text-neutral-500" strokeWidth={1.8} aria-hidden="true" />
-            <span className="min-w-0">
-              <span className="block text-xs font-medium text-neutral-400">{copy.review}</span>
-              <span className="block text-xs font-semibold text-pretty [overflow-wrap:normal] hyphens-none">
-                {copy.fallback}
-              </span>
-            </span>
-          </motion.div>
+          <OutcomeNode
+            box={layout.review}
+            compact={narrow}
+            tone="review"
+            icon={<ListTodo className="size-[18px]" strokeWidth={1.8} aria-hidden="true" />}
+            label={copy.review}
+            title={copy.fallback}
+            lit={false}
+            visible={visible}
+            delay={0.36}
+          />
         </div>
       </div>
+    </div>
+  );
+}
+
+function Node({
+  className,
+  box,
+  delay,
+  visible,
+  children,
+}: {
+  className: string;
+  box: Box;
+  delay: number;
+  visible: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <motion.div
+      className={`absolute rounded-[14px] bg-white ${className}`}
+      style={{ ...box, boxShadow: NODE_SHADOW }}
+      initial={false}
+      animate={visible ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 8, scale: 0.94 }}
+      transition={{ delay: visible ? delay : 0, type: "spring", duration: 0.45, bounce: 0.2 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+// A soft ring on the step that is currently working.
+function Pulse({ active }: { active: boolean }) {
+  return (
+    <motion.span
+      className="pointer-events-none absolute -inset-px rounded-[inherit]"
+      style={{ boxShadow: `0 0 0 2px ${COLORS.flow}` }}
+      initial={false}
+      animate={{ opacity: active ? 0.55 : 0 }}
+      transition={{ duration: 0.3, ease: OFFER_EASE_OUT }}
+    />
+  );
+}
+
+// The lit part of a connector grows with the same value that moves its signal, so both stay in step.
+function Trail({
+  d,
+  progress,
+  color,
+  full = false,
+}: {
+  d: string;
+  progress: MotionValue<number>;
+  color: string;
+  full?: boolean;
+}) {
+  const opacity = useTransform(progress, [0, 0.02], [0, 1]);
+  return (
+    <motion.path
+      d={d}
+      fill="none"
+      stroke={color}
+      strokeWidth="2"
+      strokeLinecap="round"
+      style={{ pathLength: full ? 1 : progress, opacity: full ? 1 : opacity }}
+    />
+  );
+}
+
+function Signal({ path, progress, color }: { path: string; progress: MotionValue<number>; color: string }) {
+  const distance = useTransform(progress, (value) => `${value * 100}%`);
+  const opacity = useTransform(progress, [0, 0.04, 0.96, 1], [0, 1, 1, 0]);
+  return (
+    <motion.span
+      className="pointer-events-none absolute top-0 left-0 size-[10px] rounded-full"
+      style={{
+        offsetPath: `path("${path}")`,
+        offsetRotate: "0deg",
+        offsetDistance: distance,
+        opacity,
+        background: color,
+        boxShadow: `0 0 0 3px #ffffff, 0 0 0 7px ${color}26`,
+      }}
+    />
+  );
+}
+
+function OutcomeNode({
+  box,
+  compact,
+  tone,
+  icon,
+  label,
+  title,
+  lit,
+  visible,
+  delay,
+}: {
+  box: Box;
+  compact: boolean;
+  tone: Outcome;
+  icon: ReactNode;
+  label: string;
+  title: string;
+  lit: boolean;
+  visible: boolean;
+  delay: number;
+}) {
+  const color = COLORS[tone];
+  return (
+    <motion.div
+      className={`absolute flex items-center rounded-[14px] ${compact ? "gap-2 px-2.5" : "gap-3 px-3.5"}`}
+      style={box}
+      initial={false}
+      animate={{
+        opacity: visible ? 1 : 0,
+        y: visible ? 0 : 8,
+        boxShadow: lit ? `0 0 0 1.5px ${color}, 0 16px 30px -18px ${color}` : NODE_SHADOW,
+        backgroundColor: lit ? (tone === "lead" ? "#eef8f2" : "#fdf5e6") : "#ffffff",
+      }}
+      transition={{
+        opacity: { delay: visible ? delay : 0, duration: 0.3 },
+        y: { delay: visible ? delay : 0, type: "spring", duration: 0.45, bounce: 0.2 },
+        boxShadow: { duration: 0.35, ease: OFFER_EASE_OUT },
+        backgroundColor: { duration: 0.35, ease: OFFER_EASE_OUT },
+      }}
+    >
+      <motion.span
+        className={`grid shrink-0 place-items-center rounded-[9px] ${compact ? "size-7" : "size-8"}`}
+        initial={false}
+        animate={{ backgroundColor: lit ? color : "#f5f5f5", color: lit ? "#ffffff" : "#737373" }}
+        transition={{ duration: 0.35, ease: OFFER_EASE_OUT }}
+      >
+        {icon}
+      </motion.span>
+      <span className="min-w-0 leading-tight">
+        <span className="block text-[12px] font-medium" style={{ color }}>
+          {label}
+        </span>
+        <span className="block text-[13px] font-semibold text-pretty text-neutral-900">{title}</span>
+      </span>
     </motion.div>
   );
 }

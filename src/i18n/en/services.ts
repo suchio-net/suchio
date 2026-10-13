@@ -677,16 +677,20 @@ const services: ServicesCopy = {
     },
   ],
   webExperienceAnimation: {
-    desktopLabel: "Website",
-    mobileLabel: "App",
+    nav: ["Work", "Services", "Contact"],
+    kicker: "Websites & apps",
     headline: "Clear. Fast. Useful.",
+    intro: "Pages that load instantly, read clearly, and turn visits into inquiries.",
     cta: "Start an inquiry",
+    cards: ["Strategy", "Design", "Build"],
   },
   optimizationAnimation: {
-    query: "Digital growth studio",
-    resultLabel: "Search results",
-    rankLabel: "Rank",
-    topRankedLabel: "Top ranked",
+    question: "Who can build us a fast website that gets found?",
+    answerLabel: "AI answer",
+    answerBefore: "For a fast website with solid SEO and AI visibility, ",
+    answerAfter: " is a good fit: clear structure, quick pages, and content that answers real questions.",
+    resultsLabel: "Search results",
+    searching: "Searching the web",
     winnerDescription: "Websites, campaigns, and automation",
     descriptions: [
       "Strategy and digital campaigns",
@@ -694,7 +698,10 @@ const services: ServicesCopy = {
       "Performance marketing and optimization",
     ],
   },
-  campaignAnimation: { metricLabel: "new qualified inquiries" },
+  campaignAnimation: {
+    metricLabel: "qualified inquiries",
+    events: ["Campaign live", "New ads", "Landing page test"],
+  },
   automationAnimation: {
     trigger: "Form received",
     agent: "AI agent",

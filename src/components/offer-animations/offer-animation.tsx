@@ -107,22 +107,20 @@ function StaticOfferVisual({ type, failed = false }: { type: ServiceAnimationDef
         </>
       ) : type === "optimization" ? (
         <>
-          <rect x="32" y="32" width="256" height="40" rx="20" />
-          <circle cx="54" cy="50" r="7" />
-          <path d="m59 56 5 5M88 52h136" />
-          {[96, 144, 192].map((y) => (
-            <g key={y}>
-              <rect className="text-line-strong" x="32" y={y} width="256" height="32" rx="8" />
-              <path d={`M48 ${y + 16}h${y === 96 ? 160 : 112}`} />
-            </g>
+          <rect x="136" y="24" width="152" height="32" rx="16" />
+          <rect className="text-line-strong" x="32" y="70" width="256" height="92" rx="14" />
+          <path d="M52 98h196M52 118h172M52 138h120" />
+          {[32, 120, 208].map((x) => (
+            <rect className="text-line-strong" key={x} x={x} y="180" width="80" height="40" rx="10" />
           ))}
         </>
       ) : (
         <>
-          <rect className="text-line-strong" x="24" y="36" width="272" height="168" rx="12" />
-          <path d="M24 68h272M44 52h28M48 104h100M48 124h76" />
-          <rect x="48" y="152" width="64" height="24" rx="12" />
-          <rect x="184" y="92" width="88" height="84" rx="8" />
+          <rect className="text-line-strong" x="16" y="44" width="244" height="164" rx="12" />
+          <path d="M36 70h28M36 104h100M36 124h76" />
+          <rect x="36" y="150" width="64" height="20" rx="10" />
+          <rect x="150" y="84" width="90" height="80" rx="8" />
+          <rect x="244" y="96" width="60" height="124" rx="14" />
         </>
       )}
     </svg>
