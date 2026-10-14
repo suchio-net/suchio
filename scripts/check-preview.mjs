@@ -1,5 +1,6 @@
 import { preview } from "astro";
 import { spawn } from "node:child_process";
+import { checkSocialCards } from "./check-social-cards.mjs";
 
 // Uses the built Worker with local bindings; no deployment or mail delivery occurs.
 const server = await preview({ server: { host: "127.0.0.1", port: 4310 } });
@@ -10,6 +11,7 @@ try {
     checker.once("error", reject);
     checker.once("exit", (code) => (code === 0 ? resolve() : reject(new Error(`Preview checks failed (${code})`))));
   });
+  await checkSocialCards(`http://127.0.0.1:${server.port}`);
 } finally {
   await server.stop();
 }

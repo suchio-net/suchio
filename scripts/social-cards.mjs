@@ -8,24 +8,16 @@
  *
  * Usage, after `bun run build`: node scripts/social-cards.mjs
  * Requires Chrome or Chromium; set CHROME_PATH if it is not in a standard location.
- * Run it again after changing page headlines, service copy or illustrations.
+ * Run it again after changing page headlines, service copy or illustrations; `bun run check:preview`
+ * fails while the recorded headlines or illustration sources differ from the build.
  */
-import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { preview } from "astro";
-import puppeteer from "puppeteer-core";
 import sharp from "sharp";
+import { launchChrome, sitemapPaths, startPreview } from "./lib/browser.mjs";
+import { pageHeadlines, recordFile, sourceHash } from "./lib/social-card-inputs.mjs";
 
 const root = new URL("../", import.meta.url);
 const outDir = new URL("public/social/", root);
-const chrome = [
-  process.env.CHROME_PATH,
-  "C:/Program Files/Google/Chrome/Application/chrome.exe",
-  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-  "/usr/bin/google-chrome",
-  "/usr/bin/chromium",
-].find((path) => path && existsSync(path));
-if (!chrome) throw new Error("Chrome was not found; set CHROME_PATH.");
 
 const dataUrl = (bytes, type) => `data:${type};base64,${Buffer.from(bytes).toString("base64")}`;
 const fontFile = (name) => readFile(new URL(`src/assets/fonts/${name}`, root));
@@ -36,22 +28,13 @@ const fonts = {
 const wordmark = dataUrl(await readFile(new URL("public/suchio-logo-light.svg", root)), "image/svg+xml");
 const escape = (text) => text.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
-const server = await preview({
-  root: root.pathname.replace(/^\/([A-Za-z]:)/, "$1"),
-  logLevel: "error",
-  server: { host: "127.0.0.1", port: 4330 },
-});
-const origin = `http://127.0.0.1:${server.port}`;
-const browser = await puppeteer.launch({
-  executablePath: chrome,
-  headless: true,
-  args: ["--font-render-hinting=none"],
-});
+const server = await startPreview(4330);
+const { origin } = server;
+const browser = await launchChrome();
 
 try {
   // Indexable pages come from the sitemap: home, about, contact and the services, per language.
-  const sitemap = await (await fetch(`${origin}/sitemap.xml`)).text();
-  const urls = [...sitemap.matchAll(/<loc>https:\/\/suchio\.net([^<]*)<\/loc>/g)].map(([, path]) => path || "/");
+  const urls = await sitemapPaths(origin);
   const pages = urls.map((path) => {
     const [, prefix, rest] = path.match(/^\/(en|fr)(\/.*)?$/) ?? [null, "de", path];
     const base = rest ?? "/";
@@ -81,9 +64,10 @@ try {
       const token = active && tokens[active.getAttribute("href").split("/").pop()];
       const theme = getComputedStyle(document.documentElement);
       return {
+        // Keeps the page's line breaks; punctuation after the accent stays on the accent's line.
         headline: h1.innerHTML
-          .replace(/<br\s*\/?>/g, " ")
           .replace(/\s+/g, " ")
+          .replace(/(<em\b[^>]*>.*?<\/em>[.,!?]?)/, '<span class="nowrap">$1</span>')
           .trim(),
         copy: h1.nextElementSibling?.matches("p") ? h1.nextElementSibling.textContent.trim() : "",
         service: active && {
@@ -201,8 +185,10 @@ try {
       .service .tile svg { width: 26px; height: 26px; }
       .service strong { display: block; font-size: 23px; font-weight: 600; letter-spacing: -0.015em; }
       .service span:not(.tile) { display: block; margin-top: 4px; color: #525252; font-size: 18px; line-height: 1.35; }
-      .mosaic { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; }
-      .mosaic img { display: block; width: 100%; aspect-ratio: 1.1; object-fit: cover; object-position: center; border-radius: 12px; }
+      .nowrap { white-space: nowrap; }
+      /* The illustrations share the 24:19 stage they have on the site and appear unframed, as they do there. */
+      .mosaic { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 16px; width: 100%; }
+      .mosaic img { display: block; width: 100%; aspect-ratio: 24 / 19; object-fit: contain; }
       .contact { display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; position: relative; width: 100%; height: 400px; padding: 40px;
         border-radius: 16px; background: #101010; color: #fff; }
       .contact-mail { font-size: 34px; font-weight: 500; letter-spacing: -0.03em; }
@@ -239,6 +225,8 @@ try {
   }
   // The former generic card URL keeps working with the German home card.
   await writeFile(new URL("public/suchio-social-card.png", root), await readFile(new URL("de-home.png", outDir)));
+  const record = { sources: await sourceHash(), headlines: await pageHeadlines(origin, urls) };
+  await writeFile(recordFile, `${JSON.stringify(record, null, 2)}\n`);
 } finally {
   await browser.close();
   await server.stop();
