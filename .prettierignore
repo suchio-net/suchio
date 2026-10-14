@@ -9,3 +9,6 @@ src/worker-configuration.d.ts
 migrations/
 # A finished draft file, published byte for byte.
 src/entwurf/parkhotel/
+# Vendored agent skills, kept identical to their upstream files.
+.agents/
+.claude/skills/
