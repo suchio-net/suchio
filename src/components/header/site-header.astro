@@ -462,7 +462,8 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
       const locale = link.dataset.localeLink ?? "";
       if (!hasLocale(locale)) continue;
       // The error page can be served at any missing URL; switching language keeps that URL.
-      link.href = alternatePath(location.pathname, locale);
+      // The query and fragment carry context such as the service a contact link preselected.
+      link.href = alternatePath(location.pathname, locale) + location.search + location.hash;
       link.addEventListener("pointerenter", () => highlight(locale));
       link.addEventListener("pointerleave", () => highlight(null));
       link.addEventListener("focus", () => highlight(locale));
