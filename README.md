@@ -11,7 +11,14 @@ bun ci
 bun run dev
 ```
 
-The Astro development server runs at `http://127.0.0.1:3000`, using Cloudflare's local Workers runtime. There is one development and production framework path.
+The Astro development server runs at `http://127.0.0.1:3000`, using Cloudflare's local Workers runtime. There is one development and production framework path. `bun install` also points Git at `.githooks`, whose pre-push hook runs the format, lint, type and test checks (`git push --no-verify` skips it).
+
+### Servers and screenshots
+
+- A dev server on port 3000 belongs to whoever started it. Reuse it and read its errors in `tmp/dev.log`, which `bun run dev` writes. Do not start a second one: Astro allows one per project, and a second run re-optimizes the shared Vite cache under the first, which then answers with 500 errors.
+- After dependency changes, restart the dev server; a long-running one keeps pointing at outdated files in `node_modules/.vite`.
+- Scripts that look at the built site start their own preview on a separate port and close it: `check:preview`, `check:overflow`, `capture` and `social-cards`. On Windows a preview left running locks `dist`, so stop any preview before `bun run build`.
+- For screenshots, run `bun run capture` after a build (or `--dev` against the dev server). It captures pages after their animations end at phone and desktop width, in any locales (`--locales=de,en,fr`), and with `--visuals` puts the offer illustrations side by side. Output goes to `tmp/captures/`. Use it when the in-app preview browser times out.
 
 For local contact delivery, copy `.env.example` to `.env.local` and supply `RESEND_API_KEY`, `CONTACT_EMAIL_TO`, and `CONTACT_EMAIL_FROM`. Use a sender configured in Resend. These values are also required as production Worker bindings; local environment files do not configure production. Development uses local D1 data. Apply its schema with `bunx wrangler d1 migrations apply AUDIT_DB --local` before testing audit consent or administration locally.
 
@@ -24,7 +31,7 @@ bun run start
 
 The build produces static pages and assets in `dist/client` and the Cloudflare Worker and generated deployment configuration in `dist/server`. Astro preview runs the built application locally through Cloudflare's runtime.
 
-Checks are `bun run format:check`, `bun run lint`, `bun run typecheck`, and `bun run test`. Tests cover contact delivery, audit consent and administration, request limits, security reports, locale paths, redirects, and the sitemap. After building, `bun run check:preview` starts the built Worker with local bindings, checks public routes, localized 404s, legacy redirects, metadata, draft pages, and draft assets, then closes the preview. A local health response may indicate missing mail configuration; the production availability check requires it to be ready. The complete verification sequence lives in [.github/workflows/ci.yml](.github/workflows/ci.yml).
+Checks are `bun run format:check`, `bun run lint`, `bun run typecheck`, and `bun run test`. Tests cover contact delivery, audit consent and administration, request limits, security reports, locale paths, redirects, and the sitemap. After building, `bun run check:preview` starts the built Worker with local bindings, checks public routes, localized 404s, legacy redirects, metadata, draft pages, draft assets, and whether the social cards still match the page headlines and illustrations, then closes the preview. `bun run check:overflow` plays every indexable page (or just the paths given, such as `/en services/seo`) in Chrome at phone and desktop width and fails if a page ends up wider than the screen; it runs in its own workflow, [.github/workflows/browser.yml](.github/workflows/browser.yml), because deployment builds have no browser. A local health response may indicate missing mail configuration; the production availability check requires it to be ready. The complete verification sequence lives in [.github/workflows/ci.yml](.github/workflows/ci.yml).
 
 ## Deployment
 
@@ -72,7 +79,7 @@ Contact drafts use tab-scoped `sessionStorage` to survive page and language chan
 
 Font files live in `src/assets/fonts`, so builds serve them with hashed, immutably cached URLs. DM Sans uses `font-display: optional` (text never switches fonts mid-visit) and only its Latin subset is preloaded. After updating the Fontsource packages, run `bun scripts/sync-fonts.mjs` to refresh the files and their `@font-face` CSS. The Astro Fonts API is not used: it lets the Fontsource CSS override `display` and does not expose subsets for a Latin-only preload.
 
-Drafts stay in this app and are excluded from indexing. Their GSAP, Lenis, and Three.js modules load only on draft routes. Suchio's 2D illustrations keep Motion. Static pages such as About load no React runtime.
+Drafts stay in this app and are excluded from indexing. Their GSAP, Lenis, and Three.js modules load only on draft routes. Suchio's 2D illustrations use Motion, except the SEO illustration, which uses GSAP and SplitText; its chunk loads only when the illustration nears the viewport. Static pages such as About load no React runtime.
 
 Both Handwerker versions share `src/entwurf/hw/content.ts`, the photo manifest, schema helpers, and picture/note components. Each version owns its layout and navigation. The 20 original photos live in `src/assets/entwurf/hw`; `src/integrations/draft-images.ts` generates shared AVIF/WebP files for development and builds. Derivatives and the `.astro/draft-images` cache are ignored by Git. The cache key includes the original, widths, encoder versions, and processing settings. Generation preserves the approved sharpening and quality; Astro's default image transforms do not reproduce that treatment, so these prepared assets use the passthrough service. Change photos or widths in the manifest and restart/build to regenerate. Old published asset URLs redirect to the shared files.
 
@@ -80,7 +87,7 @@ Parkhotel's finished HTML lives in `src/entwurf/parkhotel/index.html` and is emi
 
 ### Social cards and icons
 
-Every page has a 1200×630 preview card in `public/social` for link previews (Open Graph and X). Indexable pages have their own card per language; legal, audit and error pages use their language's home card. Cards reuse the site's visuals: the home headline with its highlighted word, the localized service illustrations, the services list and the call-to-action buttons. After changing headlines, service copy or illustrations, run `bun run build` and then `bun run social-cards` (needs Chrome or Chromium; set `CHROME_PATH` if it is not found), and commit the updated images. Tests fail if a page has no card or a card has the wrong size.
+Every page has a 1200×630 preview card in `public/social` for link previews (Open Graph and X). Indexable pages have their own card per language; legal, audit and error pages use their language's home card. Cards reuse the site's visuals: the home headline with its highlighted word, the localized service illustrations, the services list and the call-to-action buttons. After changing headlines, service copy or illustrations, run `bun run build` and then `bun run social-cards` (needs Chrome or Chromium; set `CHROME_PATH` if it is not found), and commit the updated images with `scripts/social-cards.json`. That file records the headlines and illustration sources the cards were made from; `bun run check:preview` fails when the build no longer matches it. Tests fail if a page has no card or a card has the wrong size.
 
 `bun run icons` regenerates the favicons, Apple touch icon, web app manifest icons and the structured-data logo from the approved mark. Search engines use the 48px multiples; home screen icons fill the square and keep the mark inside the circle Android crops to.
 

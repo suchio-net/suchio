@@ -35,6 +35,16 @@ export function launchChrome() {
   return puppeteer.launch({ executablePath: findChrome(), headless: true, args: ["--font-render-hinting=none"] });
 }
 
+/**
+ * Page paths from command-line arguments. Git Bash turns `/services/seo` into
+ * `C:/Program Files/Git/services/seo`, so that prefix is removed and `services/seo` works as well.
+ */
+export function pagePaths(args) {
+  return args
+    .filter((arg) => !arg.startsWith("--"))
+    .map((arg) => `/${arg.replace(/^[A-Za-z]:[\\/].*?[\\/]Git[\\/]/i, "").replace(/^\/+|\/+$/g, "")}`);
+}
+
 /** Paths listed in the built sitemap: every indexable page in every language. */
 export async function sitemapPaths(origin) {
   const sitemap = await (await fetch(`${origin}/sitemap.xml`)).text();
