@@ -40,6 +40,9 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
     // A local preview may intentionally have no mail credentials. Its readiness contract still must work.
     { path: "/api/health", status: origin === siteOrigin ? 200 : [200, 503] },
     { path: "/entwurf/parkhotel", status: 200 },
+    { path: "/entwurf/hw", status: 200 },
+    { path: "/entwurf/hw/analyse", status: 200 },
+    { path: "/entwurf/hw/analyse.pdf", status: 200, contentType: "application/pdf" },
     { path: "/entwurf/hw/v1", status: 200 },
     { path: "/entwurf/hw/v2", status: 200 },
     { path: "/entwurf/hw/v2/referenzen", status: 200 },
@@ -79,6 +82,8 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
             !(Array.isArray(check.status) ? check.status.includes(response.status) : response.status === check.status)
           )
             throw new Error(`expected ${check.status}, received ${response.status}`);
+          if (check.contentType && !response.headers.get("content-type")?.startsWith(check.contentType))
+            throw new Error(`expected content type ${check.contentType}`);
           if (check.destination) {
             const destination = response.headers.get("location");
             if (!destination || new URL(destination, url).href !== new URL(check.destination, origin).href)

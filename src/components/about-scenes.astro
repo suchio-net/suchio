@@ -1,0 +1,497 @@
+---
+import { LoaderCircle, Mail, Search } from "@lucide/astro";
+import { serviceIcons } from "@/components/service-icons";
+import { serviceStyles } from "@/components/service-styles";
+import type { ServiceId } from "@/i18n/services";
+import type { MessageKey } from "@/i18n/translations";
+import { t, type Locale } from "@/lib/i18n";
+import { getServiceCatalog } from "@/lib/service-catalog";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const services = new Map(getServiceCatalog(locale).map((service) => [service.id, service]));
+
+// One made-up enquiry, three places it gets lost. Each problem sits between two services, which the
+// caption names and links; the UI fragment above it shows the problem happening.
+const scenes: {
+  id: "search" | "ad" | "form";
+  label: MessageKey;
+  title: MessageKey;
+  services: [ServiceId, ServiceId];
+}[] = [
+  {
+    id: "search",
+    label: "about.sceneSearchLabel",
+    title: "about.sceneSearchTitle",
+    services: ["websites-apps", "seo-ai-visibility"],
+  },
+  { id: "ad", label: "about.sceneAdLabel", title: "about.sceneAdTitle", services: ["paid-campaigns", "websites-apps"] },
+  {
+    id: "form",
+    label: "about.sceneFormLabel",
+    title: "about.sceneFormTitle",
+    services: ["websites-apps", "ai-automation"],
+  },
+];
+const business = "Mustermann Bäder";
+const domain = "mustermann-baeder.de";
+const customer = "Anna Schmidt";
+// The part of the name typed so far when the scene stops.
+const typed = [...customer.slice(0, 9)];
+---
+
+<ul class="m-0 grid list-none grid-cols-3 gap-6 p-0 max-nav:grid-cols-1 max-nav:gap-12">
+  {scenes.map((scene, index) => (
+    <li class="about-scene min-w-0" style={{ "--scene": index }} data-reveal data-reveal-threshold="half">
+      <div class="scene-stage" aria-hidden="true">
+        {scene.id === "search" && (
+          <div class="fragment">
+            <div class="ui search-bar">
+              <Search class="size-3.5 shrink-0 text-subtle" stroke-width={2.2} />
+              <span class="truncate">{t(locale, "about.sceneSearchQuery")}</span>
+            </div>
+            <div class="ui results">
+              {[
+                ["62%", "38%"],
+                ["50%", "44%"],
+              ].map(([title, url], rank) => (
+                <div class="result">
+                  <span class="rank">{rank + 1}</span>
+                  <span class="placeholder">
+                    <i style={{ width: title }} />
+                    <i style={{ width: url }} />
+                  </span>
+                </div>
+              ))}
+              <div class="result result--mine">
+                <span class="rank">3</span>
+                <span class="min-w-0 flex-1">
+                  <b>{business}</b>
+                  <span class="loading-bar">
+                    <span />
+                  </span>
+                </span>
+                <LoaderCircle class="loader size-3.5 shrink-0 text-subtle" stroke-width={2.2} />
+              </div>
+            </div>
+          </div>
+        )}
+        {scene.id === "ad" && (
+          <div class="fragment">
+            <div class="ui ad">
+              <span class="ad-label">{t(locale, "about.sceneAdSponsored")}</span>
+              <span class="ad-title">{t(locale, "about.sceneAdHeadline")}</span>
+              <span class="ad-url">{domain}</span>
+            </div>
+            <span class="ad-click" />
+            <div class="ui browser">
+              <div class="browser-bar">
+                <i />
+                <i />
+                <i />
+                <span>{domain}</span>
+              </div>
+              <div class="browser-page">
+                <span class="min-w-0">
+                  <span class="page-title">{t(locale, "about.sceneAdPage")}</span>
+                  <i class="page-line" style={{ width: "88%" }} />
+                  <i class="page-line" style={{ width: "62%" }} />
+                </span>
+                <span class="page-image" />
+              </div>
+            </div>
+          </div>
+        )}
+        {scene.id === "form" && (
+          <div class="fragment">
+            <div class="ui mail">
+              <span class="mail-icon">
+                <Mail class="size-3.5" stroke-width={2} />
+              </span>
+              <span class="min-w-0">
+                <b>{t(locale, "about.sceneFormMail")}</b>
+                <small>{customer}</small>
+              </span>
+            </div>
+            <div class="ui crm">
+              <div class="crm-row crm-head">
+                <span>{t(locale, "about.sceneCrmName")}</span>
+                <span>{t(locale, "about.sceneCrmSource")}</span>
+                <span>{t(locale, "about.sceneCrmStatus")}</span>
+              </div>
+              <div class="crm-row">
+                <span>T. Wagner</span>
+                <span>{t(locale, "about.sceneCrmPhone")}</span>
+                <span class="crm-won">{t(locale, "about.sceneCrmWon")}</span>
+              </div>
+              <div class="crm-row crm-typing">
+                <span class="whitespace-pre">
+                  {typed.map((character, position) => (
+                    <span class="typed" style={{ "--char": position }}>
+                      {character}
+                    </span>
+                  ))}
+                  <span class="caret" />
+                </span>
+                <span class="crm-empty" />
+                <span />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <p class="mt-5 mb-0 text-meta text-subtle">{t(locale, scene.label)}</p>
+      <h3 class="mt-1.5 mb-0 text-heading-sm text-balance">{t(locale, scene.title)}</h3>
+      <p class="mt-3 mb-0 flex flex-wrap items-center gap-x-2 gap-y-1.5 text-meta text-muted">
+        {scene.services.map((id, position) => {
+          const service = services.get(id)!;
+          const Icon = serviceIcons[id];
+          // The "+" stays with the link after it, so a wrapped pair never ends a line on it.
+          return (
+            <span class="inline-flex items-center gap-2">
+              {position > 0 && (
+                <span class="text-subtle" aria-hidden="true">
+                  +
+                </span>
+              )}
+              <a
+                class="inline-flex items-center gap-1.5 text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
+                href={service.href}
+              >
+                <span class={`grid size-5 shrink-0 place-items-center rounded-[5px] ${serviceStyles[id].icon}`}>
+                  <Icon class="size-3" stroke-width={2} aria-hidden="true" />
+                </span>
+                {service.copy.name}
+              </a>
+            </span>
+          );
+        })}
+      </p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .scene-stage {
+    display: grid;
+    place-items: center;
+    height: 16rem;
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background: color-mix(in oklab, var(--color-canvas), black 4%);
+    padding: 1.25rem;
+  }
+  .fragment {
+    width: min(100%, 17rem);
+    font-size: 12px;
+    line-height: 1.35;
+    color: var(--color-ink);
+  }
+  .ui {
+    display: block;
+    border-radius: 14px;
+    background: var(--color-surface);
+    box-shadow:
+      0 0 0 1px rgb(0 0 0 / 6%),
+      0 12px 26px -16px rgb(0 0 0 / 28%);
+  }
+  .fragment b {
+    display: block;
+    font-weight: 600;
+  }
+  .fragment small {
+    display: block;
+    font-size: 11px;
+    color: var(--color-subtle);
+  }
+  .fragment i {
+    display: block;
+    border-radius: 3px;
+    background: var(--color-neutral-200);
+  }
+
+  /* Search: two results above Mustermann Bäder, whose page is still loading. */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.55rem 0.75rem;
+  }
+  .results {
+    margin-top: 0.625rem;
+    padding-block: 0.25rem;
+  }
+  .result {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 2.5rem;
+    padding: 0.4rem 0.75rem;
+  }
+  .result + .result {
+    border-top: 1px solid rgb(0 0 0 / 6%);
+  }
+  .rank {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-neutral-100);
+    color: var(--color-subtle);
+    font-size: 10px;
+  }
+  .placeholder {
+    display: grid;
+    flex: 1;
+    gap: 5px;
+  }
+  .placeholder i {
+    height: 6px;
+  }
+  .placeholder i + i {
+    height: 5px;
+    background: var(--color-neutral-100);
+  }
+  .loading-bar {
+    display: block;
+    width: 7.5rem;
+    max-width: 100%;
+    height: 3px;
+    margin-top: 6px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--color-neutral-200);
+  }
+  .loading-bar span {
+    display: block;
+    width: 34%;
+    height: 100%;
+    background: #c9910f;
+  }
+
+  /* Ad: a fixed-price promise that lands on the generic home page. */
+  .ad {
+    padding: 0.75rem 0.875rem;
+  }
+  .ad-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .ad-title {
+    display: block;
+    margin-top: 3px;
+    color: #1a0dab;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .ad-url {
+    display: block;
+    margin-top: 2px;
+    color: var(--color-service-search-fg);
+    font-size: 10.5px;
+  }
+  .ad-click {
+    display: block;
+    width: 2px;
+    height: 0.75rem;
+    margin-inline: auto;
+    background: var(--color-neutral-300);
+    transform-origin: top;
+  }
+  .browser {
+    overflow: hidden;
+  }
+  .browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-bottom: 1px solid rgb(0 0 0 / 6%);
+    padding: 7px 10px;
+  }
+  .browser-bar i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+  .browser-bar span {
+    margin-left: 6px;
+    overflow: hidden;
+    border-radius: 5px;
+    background: var(--color-neutral-100);
+    padding: 1px 8px;
+    color: var(--color-subtle);
+    font-size: 9.5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .browser-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 4.25rem;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.75rem;
+  }
+  .page-title {
+    display: block;
+    color: var(--color-muted);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .fragment .page-line {
+    height: 5px;
+    margin-top: 6px;
+    background: var(--color-neutral-100);
+  }
+  .page-image {
+    height: 3.25rem;
+    border-radius: 6px;
+    background: var(--color-neutral-200);
+  }
+
+  /* Form: the enquiry arrives by email and someone types it into the CRM. */
+  .mail {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 0.75rem;
+  }
+  .mail-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--color-neutral-100);
+    color: var(--color-subtle);
+  }
+  .crm {
+    margin-top: 0.75rem;
+    overflow: hidden;
+  }
+  .crm-row {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr 0.8fr;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2rem;
+    padding: 0.3rem 0.75rem;
+  }
+  .crm-row > span {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .crm-row + .crm-row {
+    border-top: 1px solid rgb(0 0 0 / 6%);
+  }
+  .crm-head {
+    min-height: 1.75rem;
+    background: var(--color-neutral-50);
+    color: var(--color-subtle);
+    font-size: 10px;
+  }
+  .crm-won {
+    justify-self: start;
+    border-radius: 5px;
+    background: var(--color-service-search-bg);
+    padding: 1px 6px;
+    color: var(--color-service-search-fg);
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .crm-typing {
+    background: #fffcf0;
+  }
+  .caret {
+    display: inline-block;
+    width: 1.5px;
+    height: 12px;
+    margin-left: 1px;
+    background: var(--color-ink);
+    vertical-align: -2px;
+  }
+  .crm-empty {
+    height: 6px;
+    width: 70%;
+    border-radius: 3px;
+    background: var(--color-neutral-100);
+  }
+
+  /*
+   * Each scene plays once when it scrolls into view: the page stalls while loading, the ad opens the
+   * wrong page, the name gets typed by hand. On desktop the three start one after another.
+   */
+  .about-scene {
+    --start: calc(var(--scene) * 250ms + 250ms);
+  }
+  @media (width < 56.25rem) {
+    .about-scene {
+      --start: 250ms;
+    }
+  }
+  :global(.reveal-ready) .about-scene:not(.is-visible) .loading-bar span {
+    width: 0;
+  }
+  :global(.reveal-ready) .about-scene:not(.is-visible) .loader {
+    transform: none;
+  }
+  .loader {
+    transform: rotate(540deg);
+  }
+  :global(.reveal-ready) .about-scene:not(.is-visible) .ad-click {
+    transform: scaleY(0);
+  }
+  :global(.reveal-ready) .about-scene:not(.is-visible) .browser {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  :global(.reveal-ready) .about-scene:not(.is-visible) .page-title,
+  :global(.reveal-ready) .about-scene:not(.is-visible) .typed {
+    opacity: 0;
+  }
+  :global(.reveal-ready) .about-scene.is-visible .loading-bar span {
+    transition: width 1.6s var(--ease-out) var(--start);
+  }
+  :global(.reveal-ready) .about-scene.is-visible .loader {
+    transition: transform 1.8s var(--ease-out) var(--start);
+  }
+  :global(.reveal-ready) .about-scene.is-visible .ad-click {
+    transition: transform 240ms var(--ease-out) var(--start);
+  }
+  :global(.reveal-ready) .about-scene.is-visible .browser {
+    transition:
+      opacity 420ms var(--ease-out) calc(var(--start) + 220ms),
+      transform 420ms var(--ease-out) calc(var(--start) + 220ms);
+  }
+  :global(.reveal-ready) .about-scene.is-visible .page-title {
+    transition: opacity 360ms var(--ease-out) calc(var(--start) + 700ms);
+  }
+  :global(.reveal-ready) .about-scene.is-visible .typed {
+    transition: opacity 0s linear calc(var(--start) + 400ms + var(--char) * 110ms);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.reveal-ready) .about-scene:not(.is-visible) .loading-bar span {
+      width: 34%;
+    }
+    :global(.reveal-ready) .about-scene:not(.is-visible) .ad-click {
+      transform: none;
+    }
+    :global(.reveal-ready) .about-scene:not(.is-visible) :is(.browser, .page-title, .typed) {
+      opacity: 1;
+      transform: none;
+    }
+    .about-scene * {
+      transition: none !important;
+    }
+  }
+</style>
