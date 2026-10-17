@@ -1,0 +1,25 @@
+---
+// Screenshot of the Flughotel Nordtor concept, taken at 1440 x 900 without the pitch-notes pill.
+// The concept's text link carries the meaning, so the picture is decorative.
+interface Props {
+  sizes?: string;
+}
+const { sizes = "(max-width: 760px) 100vw, 640px" } = Astro.props;
+const base = "/examples/hotels/flughotel-nordtor-preview";
+const srcset = (ext: string) => `${base}-720.${ext} 720w, ${base}-1440.${ext} 1440w`;
+---
+
+<picture>
+  <source type="image/avif" srcset={srcset("avif")} sizes={sizes} />
+  <img
+    src={`${base}-1440.webp`}
+    srcset={srcset("webp")}
+    sizes={sizes}
+    width="1440"
+    height="900"
+    alt=""
+    loading="lazy"
+    decoding="async"
+    class="block h-auto w-full rounded-control border border-line shadow-surface"
+  />
+</picture>
