@@ -5,15 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="referrer" content="no-referrer">
-<title>Parkhotel am Posthof – Entwurf</title>
+<title>Flughotel Nordtor – Konzept von Suchio</title>
 <script>
   document.documentElement.classList.add('js');
   setTimeout(() => { if (!window.__motion) document.documentElement.classList.add('static'); }, 3000);
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..700;1,400..500&display=swap");
+@font-face{font-family:"Schibsted Grotesk";font-style:normal;font-weight:400 700;font-display:swap;src:url("/examples/hotels/flughotel-nordtor/fonts/schibsted-grotesk-latin-wght-normal.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 :root{
   --paper:#f4f2ed;
   --paper-2:#ebe8e1;
@@ -30,6 +28,7 @@
   --ease:cubic-bezier(.16,1,.3,1);
   --gutter:clamp(20px,4vw,56px);
   --grade:saturate(.86) contrast(1.04);
+  --kbar:36px;
 }
 *{box-sizing:border-box}
 html{background:var(--paper);-webkit-text-size-adjust:100%}
@@ -70,21 +69,17 @@ p{text-wrap:pretty}
 .link:hover{text-underline-offset:.45em}
 
 /* Header */
-header.site{position:fixed;inset:0 0 auto;z-index:40;color:#fff;transition:background .45s var(--ease),color .45s var(--ease),box-shadow .45s var(--ease)}
+header.site{position:fixed;inset:var(--kbar) 0 auto;z-index:40;color:#fff;transition:background .45s var(--ease),color .45s var(--ease),box-shadow .45s var(--ease)}
 header.site .wrap{display:flex;align-items:center;height:88px;gap:40px;transition:height .45s var(--ease)}
-.logo{position:relative;display:block;height:54px;transition:height .45s var(--ease)}
-.logo img{height:100%;width:auto;transition:opacity .45s var(--ease)}
-.logo .on-light{position:absolute;inset:0;opacity:0}
+.logo{position:relative;display:flex;align-items:center;height:54px;font-size:1.2rem;font-weight:600;letter-spacing:-.03em;line-height:1;color:inherit;text-decoration:none;white-space:nowrap;transition:height .45s var(--ease),font-size .45s var(--ease)}
 header.site.scrolled{background:rgba(244,242,237,.9);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);color:var(--ink);box-shadow:0 1px 0 var(--line)}
 header.site.scrolled .wrap{height:72px}
-header.site.scrolled .logo{height:46px}
-header.site.scrolled .on-dark{opacity:0}
-header.site.scrolled .on-light{opacity:1}
+header.site.scrolled .logo{height:46px;font-size:1.05rem}
 nav.main{display:flex;gap:32px;font-size:.95rem;font-weight:500;margin-left:auto}
 nav.main a{text-decoration:none;position:relative;padding:6px 0}
 nav.main a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
 nav.main a:hover::after{transform:scaleX(1);transform-origin:left}
-.head-right{display:flex;align-items:center;gap:22px;font-size:.93rem}
+.head-right{position:relative;display:flex;align-items:center;gap:22px;font-size:.93rem}
 .head-right .tel{text-decoration:none;font-weight:500;font-variant-numeric:tabular-nums}
 .lang{opacity:.7;text-decoration:none}
 header .btn{--h:44px;padding-left:18px}
@@ -103,8 +98,6 @@ header:not(.scrolled) .btn .btn-icon{background:var(--ink);color:#fff}
 .menu-foot a{text-decoration:none}
 .menu-foot .btn{justify-content:space-between}
 body.menu-open header.site{background:transparent;color:#fff;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
-body.menu-open header.site .on-dark{opacity:1}
-body.menu-open header.site .on-light{opacity:0}
 
 /* Hero */
 .hero{position:relative;height:100vh;height:100svh;min-height:560px;color:#fff;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
@@ -314,8 +307,8 @@ td:not(:first-child){font-weight:400;color:var(--muted)}
 .routes .ico{width:22px;height:22px;color:var(--navy);margin-top:2px}
 .routes dt{font-weight:500}
 .routes dd{color:var(--muted);font-size:.95rem}
-.map{min-height:520px;background:#e5e3dd}
-.map iframe{width:100%;height:100%;min-height:520px;border:0;display:block}
+.map{min-height:520px;background:var(--paper-2)}
+.map svg{width:100%;height:100%;min-height:520px;display:block}
 
 /* Footer */
 footer.site{background:var(--night);color:#b9c1d4;padding:clamp(90px,10vw,140px) 0 40px}
@@ -323,7 +316,7 @@ footer.site{background:var(--night);color:#b9c1d4;padding:clamp(90px,10vw,140px)
 .foot-cta h2{color:#fff;font-size:clamp(2.4rem,4.6vw,4.4rem);letter-spacing:-.04em}
 .foot-cta p{margin-top:14px;max-width:44ch}
 .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-top:40px;border-top:1px solid var(--line-inv);font-size:.95rem}
-.foot-grid img{height:64px;width:auto;margin-bottom:22px}
+.foot-grid .wordmark{display:block;height:64px;margin-bottom:22px;font-size:1.5rem;font-weight:600;letter-spacing:-.03em;line-height:64px;color:#fff;white-space:nowrap}
 .foot-grid h3{font-size:.95rem;font-weight:500;color:#fff;margin:0 0 14px;letter-spacing:0}
 .foot-grid ul{display:grid;gap:8px}
 .foot-grid a{text-decoration:none}
@@ -333,6 +326,20 @@ footer.site{background:var(--night);color:#b9c1d4;padding:clamp(90px,10vw,140px)
 .legal a:hover{color:#fff}
 
 .mbar{display:none}
+
+/* Konzept banner, always on top, and the notice that replaces the booking step */
+picture{display:contents}
+.kbanner{position:fixed;top:0;left:0;right:0;z-index:41;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:2px 12px;padding:8px var(--gutter);background:var(--ink);color:#d5dbea;font:500 .85rem/1.35 "Schibsted Grotesk",sans-serif;text-align:center}
+.kbanner a{color:#fff;text-underline-offset:.3em}
+.kbanner .kbanner-sep{opacity:.6}
+@media (max-width:760px){.kbanner-sep{display:none}}
+.ki-msg{display:block;margin-top:14px;max-width:44ch;font-size:.9rem;line-height:1.45;color:var(--muted)}
+.book .ki-msg{grid-column:1/-1;margin:0;max-width:none;padding:10px 16px 8px;font-size:.88rem;color:var(--muted)}
+.head-right .ki-msg{position:absolute;top:100%;right:0;margin-top:12px;width:max-content;max-width:300px;padding:10px 14px;border-radius:12px;background:var(--white);color:var(--ink);box-shadow:0 16px 32px -14px rgba(10,18,40,.4);font-size:.84rem;line-height:1.4}
+.foot-cta .ki-msg{flex-basis:100%;margin:0;max-width:none;color:#b9c1d4}
+.psf-copy .ki-msg{color:#b9c1d4}
+.menu-foot .ki-msg{margin:0;max-width:none;color:#d5dbea}
+.mbar .ki-msg{position:absolute;left:14px;right:14px;bottom:100%;margin:0 0 10px;padding:10px 14px;border-radius:12px;background:var(--ink);color:#fff;font-size:.84rem;line-height:1.4}
 
 /* Reveal states (only while Motion runs) */
 .js:not(.static) .hero .line>span{transform:translateY(105%)}
@@ -394,7 +401,7 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
   .review p{font-size:.95rem}
   .who span,.review small{font-size:.8rem}
   .loc-card{grid-template-columns:1fr 1fr}
-  .map,.map iframe{min-height:100%}
+  .map,.map svg{min-height:100%}
   .routes div{flex-direction:row}
 }
 @media (max-width:760px) and (max-height:720px){
@@ -403,7 +410,7 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
 @media (max-width:760px){
   body{font-size:16px}
   header.site .wrap,header.site.scrolled .wrap{height:64px}
-  .logo,header.site.scrolled .logo{height:40px}
+  .logo,header.site.scrolled .logo{height:40px;font-size:1rem}
   .head-right .tel,.lang,header .btn{display:none}
   .burger{position:relative;display:block;margin-left:auto;width:44px;height:44px;border:0;background:none;color:inherit;cursor:pointer}
   .burger span{position:absolute;left:10px;right:10px;top:50%;height:1.6px;margin-top:-.8px;border-radius:2px;background:currentColor;transition:transform .5s var(--ease)}
@@ -466,7 +473,7 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
   .step b{font-size:1rem}
   .step>span:last-child{font-size:.8rem;padding-inline:4px}
   .review-grid{grid-template-columns:1fr}
-  .map,.map iframe{min-height:360px}
+  .map,.map svg{min-height:360px}
   .foot-grid{grid-template-columns:1fr}
   .legal a{margin:0 16px 0 0}
   footer.site{padding-bottom:120px}
@@ -489,12 +496,11 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
 </head>
 <body>
 
+<div class="kbanner"><span>Konzept von Suchio – fiktives Hotel, keine Kundenseite</span><span class="kbanner-sep" aria-hidden="true">·</span><a href="/examples/hotels">Zurück zum Beispiel</a></div>
+
 <header class="site">
   <div class="wrap">
-    <a class="logo" href="#" aria-label="Parkhotel am Posthof, Startseite">
-      <img class="on-dark" src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2017/07/parkhotel-logo-white.png" alt="Parkhotel am Posthof">
-      <img class="on-light" src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/Parkhotel.png" alt="" aria-hidden="true">
-    </a>
+    <a class="logo" href="#" aria-label="Flughotel Nordtor, Startseite">Flughotel Nordtor</a>
     <nav class="main" aria-label="Hauptnavigation">
       <a href="#psf">Park, Sleep &amp; Fly</a>
       <a href="#zimmer">Zimmer</a>
@@ -502,9 +508,9 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
       <a href="#anfahrt">Anfahrt</a>
     </nav>
     <div class="head-right">
-      <a class="tel" href="tel:+49619089990">06190 89990</a>
+      <a class="tel" href="tel:+496900000000">069 0000 0000</a>
       <a class="lang" href="#" lang="en">EN</a>
-      <a class="btn" href="https://ibev5.hotels-online-buchen.de/ibe/posthofhattersheim"><span class="btn-track"><span>Buchen</span><span aria-hidden="true">Buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a>
+      <a class="btn" href="#" data-konzept><span class="btn-track"><span>Buchen</span><span aria-hidden="true">Buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a>
     </div>
     <button class="burger" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
   </div>
@@ -518,25 +524,25 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
     <a href="#anfahrt" style="--i:3">Anfahrt</a>
   </nav>
   <div class="menu-foot">
-    <div class="row"><a href="tel:+49619089990">06190 89990</a><a href="#" lang="en">English</a></div>
-    <a class="btn light" href="https://ibev5.hotels-online-buchen.de/ibe/posthofhattersheim"><span class="btn-track"><span>Zimmer buchen</span><span aria-hidden="true">Zimmer buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a>
+    <div class="row"><a href="tel:+496900000000">069 0000 0000</a><a href="#" lang="en">English</a></div>
+    <a class="btn light" href="#" data-konzept><span class="btn-track"><span>Zimmer buchen</span><span aria-hidden="true">Zimmer buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a>
   </div>
 </div>
 
 <main>
   <section class="hero">
-    <div class="hero-media"><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8153-hdr-1.jpg" alt="Das Parkhotel am Posthof in Hattersheim von außen"></div>
+    <div class="hero-media"><picture><source type="image/avif" srcset="/examples/hotels/flughotel-nordtor/img/slot-01-w390.avif 390w, /examples/hotels/flughotel-nordtor/img/slot-01-w780.avif 780w, /examples/hotels/flughotel-nordtor/img/slot-01-w1440.avif 1440w, /examples/hotels/flughotel-nordtor/img/slot-01-w2880.avif 2880w" sizes="100vw"><source type="image/webp" srcset="/examples/hotels/flughotel-nordtor/img/slot-01-w390.webp 390w, /examples/hotels/flughotel-nordtor/img/slot-01-w780.webp 780w, /examples/hotels/flughotel-nordtor/img/slot-01-w1440.webp 1440w, /examples/hotels/flughotel-nordtor/img/slot-01-w2880.webp 2880w" sizes="100vw"><img src="/examples/hotels/flughotel-nordtor/img/slot-01-w1440.jpg" srcset="/examples/hotels/flughotel-nordtor/img/slot-01-w390.jpg 390w, /examples/hotels/flughotel-nordtor/img/slot-01-w780.jpg 780w, /examples/hotels/flughotel-nordtor/img/slot-01-w1440.jpg 1440w, /examples/hotels/flughotel-nordtor/img/slot-01-w2880.jpg 2880w" sizes="100vw" alt="Niedrige Perspektive auf eine helle Fassade mit blauen Fenstern vor blauem Himmel"></picture></div>
     <div class="wrap hero-copy rel">
-      <h1><span class="line"><span class="hero-name">Parkhotel am Posthof</span></span><span class="line"><span>Ruhig schlafen,</span></span><span class="line"><span>entspannt abfliegen.</span></span></h1>
-      <p class="hero-sub" data-fade>Ihr Hotel am Park in Hattersheim, nur wenige Minuten vom Frankfurter Flughafen.</p>
-      <span class="note" style="right:var(--gutter);bottom:calc(100% + 24px)"><i>1</i>Ihr Haus im ersten Bild, eine klare Aussage und die Buchung sofort sichtbar, ohne Scrollen.</span>
+      <h1><span class="line"><span class="hero-name">Flughotel Nordtor</span></span><span class="line"><span>Ruhig schlafen,</span></span><span class="line"><span>entspannt abfliegen.</span></span></h1>
+      <p class="hero-sub" data-fade>Ihr Hotel am Nordrand des Frankfurter Flughafens, wenige Minuten vom Terminal.</p>
+      <span class="note" style="right:var(--gutter);bottom:calc(100% + 24px)"><i>1</i>Das Haus im ersten Bild, eine klare Aussage und die Buchung sofort sichtbar, ohne Scrollen.</span>
     </div>
     <div class="wrap book-wrap rel" data-fade>
-      <form class="book" action="https://ibev5.hotels-online-buchen.de/ibe/posthofhattersheim" method="get" aria-label="Verfügbarkeit prüfen">
+      <form class="book" method="get" aria-label="Verfügbarkeit prüfen">
         <button class="field" type="button" data-open="cal" aria-haspopup="dialog" aria-expanded="false"><span class="field-ico"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="field-text"><span class="field-label">Anreise</span><span class="field-value" data-value="arr"></span></span></button>
         <button class="field" type="button" data-open="cal" aria-haspopup="dialog" aria-expanded="false"><span class="field-ico"><svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span><span class="field-text"><span class="field-label">Abreise</span><span class="field-value" data-value="dep"></span></span></button>
         <button class="field" type="button" data-open="rooms" aria-haspopup="dialog" aria-expanded="false"><span class="field-ico"><svg viewBox="0 0 24 24"><path d="M3 18v-5.5A2.5 2.5 0 0 1 5.5 10h13a2.5 2.5 0 0 1 2.5 2.5V18M3 15h18M3 18v2M21 18v2M6 10V7.5A1.5 1.5 0 0 1 7.5 6h9A1.5 1.5 0 0 1 18 7.5V10"/></svg></span><span class="field-text"><span class="field-label">Zimmer</span><span class="field-value" data-value="rooms"></span></span></button>
-        <button class="btn navy" type="submit"><span class="btn-track"><span>Verfügbarkeit prüfen</span><span aria-hidden="true">Verfügbarkeit prüfen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></button>
+        <button class="btn navy" type="submit" data-konzept><span class="btn-track"><span>Verfügbarkeit prüfen</span><span aria-hidden="true">Verfügbarkeit prüfen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></button>
         <input type="hidden" name="arrival" id="in-arr"><input type="hidden" name="nights" id="in-nights"><input type="hidden" name="ez" id="in-ez"><input type="hidden" name="dz" id="in-dz">
       </form>
       <div class="book-perks">
@@ -544,23 +550,23 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
         <span><svg class="ico" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Kostenlose Parkplätze</span>
         <span><svg class="ico" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Frühstücksbuffet</span>
       </div>
-      <span class="note" style="right:var(--gutter);bottom:calc(100% + 16px)"><i>2</i>Gebucht wird über Ihr bestehendes System. Jede Direktbuchung spart Provision an Buchungsportale.</span>
+      <span class="note" style="right:var(--gutter);bottom:calc(100% + 16px)"><i>2</i>Gebucht wird über das bestehende Buchungssystem des Hotels. Jede Direktbuchung spart die Provision an Buchungsportale.</span>
     </div>
   </section>
 
   <section class="intro">
     <div class="wrap intro-grid">
       <div>
-        <p class="statement">Ein ruhiges Hotel direkt am Park, mit kurzen Wegen zum Flughafen, zur Messe und in die Frankfurter Innenstadt.</p>
+        <p class="statement">Ein ruhiges Hotel am Flughafen, mit kurzen Wegen zum Terminal, zur Messe und in die Frankfurter Innenstadt.</p>
         <ul class="facts" data-fade>
-          <li><svg class="ico" viewBox="0 0 24 24"><path d="M3 18v-5.5A2.5 2.5 0 0 1 5.5 10h13a2.5 2.5 0 0 1 2.5 2.5V18M3 15h18M3 18v2M21 18v2M6 10V7.5A1.5 1.5 0 0 1 7.5 6h9A1.5 1.5 0 0 1 18 7.5V10"/></svg>58 Zimmer<small>teils mit Balkon</small></li>
+          <li><svg class="ico" viewBox="0 0 24 24"><path d="M3 18v-5.5A2.5 2.5 0 0 1 5.5 10h13a2.5 2.5 0 0 1 2.5 2.5V18M3 15h18M3 18v2M21 18v2M6 10V7.5A1.5 1.5 0 0 1 7.5 6h9A1.5 1.5 0 0 1 18 7.5V10"/></svg>72 Zimmer<small>alle schallgedämmt</small></li>
           <li><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="4"/><path d="M10 16.5v-9h2.75a2.75 2.75 0 0 1 0 5.5H10"/></svg>Kostenlose Parkplätze<small>direkt am Haus</small></li>
-          <li><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Vier Tagungsräume<small>bis 80 Personen</small></li>
+          <li><svg class="ico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Drei Tagungsräume<small>bis 60 Personen</small></li>
         </ul>
       </div>
       <div class="collage">
-        <figure class="one photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8098-hdr-1.jpg" alt="Restaurant mit Fensterfront zum Park" loading="lazy"></figure>
-        <figure class="two photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8063-hdr-1.jpg" alt="Sitzecke mit zwei Sesseln vor bodentiefen Fenstern" loading="lazy"></figure>
+        <figure class="one photo" data-reveal><picture><source type="image/avif" srcset="/examples/hotels/flughotel-nordtor/img/slot-02-w252.avif 252w, /examples/hotels/flughotel-nordtor/img/slot-02-w433.avif 433w, /examples/hotels/flughotel-nordtor/img/slot-02-w504.avif 504w, /examples/hotels/flughotel-nordtor/img/slot-02-w866.avif 866w" sizes="(max-width: 760px) 72vw, (max-width: 1080px) 60vw, 433px"><source type="image/webp" srcset="/examples/hotels/flughotel-nordtor/img/slot-02-w252.webp 252w, /examples/hotels/flughotel-nordtor/img/slot-02-w433.webp 433w, /examples/hotels/flughotel-nordtor/img/slot-02-w504.webp 504w, /examples/hotels/flughotel-nordtor/img/slot-02-w866.webp 866w" sizes="(max-width: 760px) 72vw, (max-width: 1080px) 60vw, 433px"><img src="/examples/hotels/flughotel-nordtor/img/slot-02-w433.jpg" srcset="/examples/hotels/flughotel-nordtor/img/slot-02-w252.jpg 252w, /examples/hotels/flughotel-nordtor/img/slot-02-w433.jpg 433w, /examples/hotels/flughotel-nordtor/img/slot-02-w504.jpg 504w, /examples/hotels/flughotel-nordtor/img/slot-02-w866.jpg 866w" sizes="(max-width: 760px) 72vw, (max-width: 1080px) 60vw, 433px" alt="Frühstücksbuffet mit Gebäck, Kaffeekannen und Tulpen" loading="lazy"></picture></figure>
+        <figure class="two photo" data-reveal><picture><source type="image/avif" srcset="/examples/hotels/flughotel-nordtor/img/slot-03-w161.avif 161w, /examples/hotels/flughotel-nordtor/img/slot-03-w276.avif 276w, /examples/hotels/flughotel-nordtor/img/slot-03-w322.avif 322w, /examples/hotels/flughotel-nordtor/img/slot-03-w552.avif 552w" sizes="(max-width: 760px) 46vw, (max-width: 1080px) 30vw, 276px"><source type="image/webp" srcset="/examples/hotels/flughotel-nordtor/img/slot-03-w161.webp 161w, /examples/hotels/flughotel-nordtor/img/slot-03-w276.webp 276w, /examples/hotels/flughotel-nordtor/img/slot-03-w322.webp 322w, /examples/hotels/flughotel-nordtor/img/slot-03-w552.webp 552w" sizes="(max-width: 760px) 46vw, (max-width: 1080px) 30vw, 276px"><img src="/examples/hotels/flughotel-nordtor/img/slot-03-w276.jpg" srcset="/examples/hotels/flughotel-nordtor/img/slot-03-w161.jpg 161w, /examples/hotels/flughotel-nordtor/img/slot-03-w276.jpg 276w, /examples/hotels/flughotel-nordtor/img/slot-03-w322.jpg 322w, /examples/hotels/flughotel-nordtor/img/slot-03-w552.jpg 552w" sizes="(max-width: 760px) 46vw, (max-width: 1080px) 30vw, 276px" alt="Sitzecke mit grauen Sesseln und Stehlampe vor bodentiefen Fenstern" loading="lazy"></picture></figure>
       </div>
     </div>
   </section>
@@ -570,13 +576,13 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
       <div class="psf-grid rel">
         <div class="psf-copy">
           <h2 data-fade>Park, Sleep &amp; Fly</h2>
-          <p data-fade>Am Vorabend anreisen, ausschlafen und mit dem Shuttle zum Terminal. Ihr Auto bleibt bis zu 21 Tage auf unserem Parkplatz.</p>
-          <ul class="includes" data-fade><li>Übernachtung</li><li>Frühstücksbuffet</li><li>Parken bis zu 21 Tage</li><li>Shuttle zum Flughafen</li></ul>
-          <div data-fade><a class="btn light" href="https://ibev5.hotels-online-buchen.de/ibe/posthofhattersheim"><span class="btn-track"><span>Paket buchen</span><span aria-hidden="true">Paket buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a></div>
+          <p data-fade>Am Vorabend anreisen, ausschlafen und mit dem Shuttle zum Terminal. Ihr Auto bleibt bis zu 14 Tage auf unserem Parkplatz.</p>
+          <ul class="includes" data-fade><li>Übernachtung</li><li>Frühstücksbuffet</li><li>Parken bis zu 14 Tage</li><li>Shuttle zum Flughafen</li></ul>
+          <div data-fade><a class="btn light" href="#" data-konzept><span class="btn-track"><span>Paket buchen</span><span aria-hidden="true">Paket buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a></div>
           <p class="fine" data-fade>Buchbar mit gültigem Flugticket.</p>
         </div>
-        <figure class="psf-media photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8143-hdr-1.jpg" alt="Parkhotel am Posthof mit hoteleigenem Parkplatz" loading="lazy"></figure>
-        <span class="note" style="right:24px;top:-40px"><i>3</i>Ein Angebot, das nur Sie so haben, steht heute nur in einem Pop-up. Ihre Angebotsseite nennt 119 €, das Pop-up 229 €. Welcher Preis gilt?</span>
+        <figure class="psf-media photo" data-reveal><picture><source type="image/avif" srcset="/examples/hotels/flughotel-nordtor/img/slot-04-w350.avif 350w, /examples/hotels/flughotel-nordtor/img/slot-04-w655.avif 655w, /examples/hotels/flughotel-nordtor/img/slot-04-w700.avif 700w, /examples/hotels/flughotel-nordtor/img/slot-04-w1310.avif 1310w" sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 655px"><source type="image/webp" srcset="/examples/hotels/flughotel-nordtor/img/slot-04-w350.webp 350w, /examples/hotels/flughotel-nordtor/img/slot-04-w655.webp 655w, /examples/hotels/flughotel-nordtor/img/slot-04-w700.webp 700w, /examples/hotels/flughotel-nordtor/img/slot-04-w1310.webp 1310w" sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 655px"><img src="/examples/hotels/flughotel-nordtor/img/slot-04-w655.jpg" srcset="/examples/hotels/flughotel-nordtor/img/slot-04-w350.jpg 350w, /examples/hotels/flughotel-nordtor/img/slot-04-w655.jpg 655w, /examples/hotels/flughotel-nordtor/img/slot-04-w700.jpg 700w, /examples/hotels/flughotel-nordtor/img/slot-04-w1310.jpg 1310w" sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 655px" alt="Parkplatz unter Bäumen mit parkenden Autos auf Kopfsteinpflaster" loading="lazy"></picture></figure>
+        <span class="note" style="right:24px;top:-40px"><i>3</i>Das Angebot, das nur dieses Haus hat, bekommt einen eigenen Bereich und einen Preis, der überall gleich ist, statt in einem Pop-up zu verschwinden.</span>
       </div>
 
       <div class="journey">
@@ -633,26 +639,26 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
       <div class="sec-head">
         <div>
           <h2 data-fade>Zimmer für eine Nacht<br>oder die ganze Messewoche</h2>
-          <div class="amenities" data-fade><span>Dusche und WC</span><span>Schreibtisch</span><span>Minibar</span><span>Kabel-TV</span><span>WLAN</span><span>teils mit Balkon</span></div>
+          <div class="amenities" data-fade><span>Dusche und WC</span><span>Schreibtisch</span><span>Minibar</span><span>Kabel-TV</span><span>WLAN</span><span>Schallschutzfenster</span></div>
         </div>
         <a class="link" data-fade href="#">Alle Fotos ansehen</a>
       </div>
       <div class="rooms-grid">
-        <figure class="a photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8023-hdr-1.jpg" alt="Doppelzimmer mit großem Fenster und Sessel" loading="lazy"></figure>
-        <figure class="b photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8043-hdr-1.jpg" alt="Zimmer mit Balkontür zum Grünen" loading="lazy"></figure>
-        <figure class="c photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8062-hdr-1.jpg" alt="Zimmer mit Arbeitsplatz und Fernseher" loading="lazy"></figure>
-        <figure class="d photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8063-hdr-1.jpg" alt="Sitzecke mit Sesseln vor bodentiefen Fenstern" loading="lazy"></figure>
-        <figure class="e photo" data-reveal><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8003-hdr-1.jpg" alt="Doppelzimmer mit warmem Licht" loading="lazy"></figure>
+        <figure class="a photo" data-reveal><picture><source type="image/avif" srcset="/examples/hotels/flughotel-nordtor/img/slot-05-w410.avif 410w, /examples/hotels/flughotel-nordtor/img/slot-05-w742.avif 742w, /examples/hotels/flughotel-nordtor/img/slot-05-w820.avif 820w, /examples/hotels/flughotel-nordtor/img/slot-05-w1484.avif 1484w" sizes="(max-width: 760px) 110vw, (max-width: 1080px) 60vw, 742px"><source type="image/webp" srcset="/examples/hotels/flughotel-nordtor/img/slot-05-w410.webp 410w, /examples/hotels/flughotel-nordtor/img/slot-05-w742.webp 742w, /examples/hotels/flughotel-nordtor/img/slot-05-w820.webp 820w, /examples/hotels/flughotel-nordtor/img/slot-05-w1484.webp 1484w" sizes="(max-width: 760px) 110vw, (max-width: 1080px) 60vw, 742px"><img src="/examples/hotels/flughotel-nordtor/img/slot-05-w742.jpg" srcset="/examples/hotels/flughotel-nordtor/img/slot-05-w410.jpg 410w, /examples/hotels/flughotel-nordtor/img/slot-05-w742.jpg 742w, /examples/hotels/flughotel-nordtor/img/slot-05-w820.jpg 820w, /examples/hotels/flughotel-nordtor/img/slot-05-w1484.jpg 1484w" sizes="(max-width: 760px) 110vw, (max-width: 1080px) 60vw, 742px" alt="Doppelzimmer mit großem Bett, Nachttisch und Fenster mit Stadtblick" loading="lazy"></picture></figure>
+        <figure class="b photo" data-reveal><picture><source type="image/avif" srcset="/examples/hotels/flughotel-nordtor/img/slot-06-w410.avif 410w, /examples/hotels/flughotel-nordtor/img/slot-06-w530.avif 530w, /examples/hotels/flughotel-nordtor/img/slot-06-w820.avif 820w, /examples/hotels/flughotel-nordtor/img/slot-06-w1060.avif 1060w" sizes="(max-width: 760px) 110vw, (max-width: 1080px) 40vw, 530px"><source type="image/webp" srcset="/examples/hotels/flughotel-nordtor/img/slot-06-w410.webp 410w, /examples/hotels/flughotel-nordtor/img/slot-06-w530.webp 530w, /examples/hotels/flughotel-nordtor/img/slot-06-w820.webp 820w, /examples/hotels/flughotel-nordtor/img/slot-06-w1060.webp 1060w" sizes="(max-width: 760px) 110vw, (max-width: 1080px) 40vw, 530px"><img src="/examples/hotels/flughotel-nordtor/img/slot-06-w530.jpg" srcset="/examples/hotels/flughotel-nordtor/img/slot-06-w410.jpg 410w, /examples/hotels/flughotel-nordtor/img/slot-06-w530.jpg 530w, /examples/hotels/flughotel-nordtor/img/slot-06-w820.jpg 820w, /examples/hotels/flughotel-nordtor/img/slot-06-w1060.jpg 1060w" sizes="(max-width: 760px) 110vw, (max-width: 1080px) 40vw, 530px" alt="Zimmer mit hellen Vorhängen und großem Fenster" loading="lazy"></picture></figure>
+        <figure class="c photo" data-reveal><picture><source type="image/avif" srcset="/examples/hotels/flughotel-nordtor/img/slot-07-w410.avif 410w, /examples/hotels/flughotel-nordtor/img/slot-07-w530.avif 530w, /examples/hotels/flughotel-nordtor/img/slot-07-w820.avif 820w, /examples/hotels/flughotel-nordtor/img/slot-07-w1060.avif 1060w" sizes="(max-width: 760px) 110vw, (max-width: 1080px) 40vw, 530px"><source type="image/webp" srcset="/examples/hotels/flughotel-nordtor/img/slot-07-w410.webp 410w, /examples/hotels/flughotel-nordtor/img/slot-07-w530.webp 530w, /examples/hotels/flughotel-nordtor/img/slot-07-w820.webp 820w, /examples/hotels/flughotel-nordtor/img/slot-07-w1060.webp 1060w" sizes="(max-width: 760px) 110vw, (max-width: 1080px) 40vw, 530px"><img src="/examples/hotels/flughotel-nordtor/img/slot-07-w530.jpg" srcset="/examples/hotels/flughotel-nordtor/img/slot-07-w410.jpg 410w, /examples/hotels/flughotel-nordtor/img/slot-07-w530.jpg 530w, /examples/hotels/flughotel-nordtor/img/slot-07-w820.jpg 820w, /examples/hotels/flughotel-nordtor/img/slot-07-w1060.jpg 1060w" sizes="(max-width: 760px) 110vw, (max-width: 1080px) 40vw, 530px" alt="Zimmer mit Schreibtisch, Stuhl und Bett vor einem großen Fenster" loading="lazy"></picture></figure>
+        <figure class="d photo" data-reveal><picture><source type="image/avif" srcset="/examples/hotels/flughotel-nordtor/img/slot-08-w410.avif 410w, /examples/hotels/flughotel-nordtor/img/slot-08-w820.avif 820w" sizes="110vw"><source type="image/webp" srcset="/examples/hotels/flughotel-nordtor/img/slot-08-w410.webp 410w, /examples/hotels/flughotel-nordtor/img/slot-08-w820.webp 820w" sizes="110vw"><img src="/examples/hotels/flughotel-nordtor/img/slot-08-w820.jpg" srcset="/examples/hotels/flughotel-nordtor/img/slot-08-w410.jpg 410w, /examples/hotels/flughotel-nordtor/img/slot-08-w820.jpg 820w" sizes="110vw" alt="Lounge mit blauen Sesseln und Sofas vor einer Glaswand" loading="lazy"></picture></figure>
+        <figure class="e photo" data-reveal><picture><source type="image/avif" srcset="/examples/hotels/flughotel-nordtor/img/slot-09-w410.avif 410w, /examples/hotels/flughotel-nordtor/img/slot-09-w820.avif 820w" sizes="110vw"><source type="image/webp" srcset="/examples/hotels/flughotel-nordtor/img/slot-09-w410.webp 410w, /examples/hotels/flughotel-nordtor/img/slot-09-w820.webp 820w" sizes="110vw"><img src="/examples/hotels/flughotel-nordtor/img/slot-09-w820.jpg" srcset="/examples/hotels/flughotel-nordtor/img/slot-09-w410.jpg 410w, /examples/hotels/flughotel-nordtor/img/slot-09-w820.jpg 820w" sizes="110vw" alt="Doppelzimmer mit Bett, dunklem Vorhang und warmem Licht am Fenster" loading="lazy"></picture></figure>
       </div>
       <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
     </div>
   </section>
 
   <section class="breakfast" aria-label="Frühstück">
-    <div class="photo"><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/parkhotel-8103-hdr-1.jpg" alt="Heller Frühstücksraum mit Fensterfront und Pflanzen" loading="lazy"></div>
+    <div class="photo"><picture><source type="image/avif" srcset="/examples/hotels/flughotel-nordtor/img/slot-10-w1230.avif 1230w, /examples/hotels/flughotel-nordtor/img/slot-10-w1490.avif 1490w, /examples/hotels/flughotel-nordtor/img/slot-10-w2000.avif 2000w" sizes="(max-width: 1080px) 110vw, 1490px"><source type="image/webp" srcset="/examples/hotels/flughotel-nordtor/img/slot-10-w1230.webp 1230w, /examples/hotels/flughotel-nordtor/img/slot-10-w1490.webp 1490w, /examples/hotels/flughotel-nordtor/img/slot-10-w2000.webp 2000w" sizes="(max-width: 1080px) 110vw, 1490px"><img src="/examples/hotels/flughotel-nordtor/img/slot-10-w1490.jpg" srcset="/examples/hotels/flughotel-nordtor/img/slot-10-w1230.jpg 1230w, /examples/hotels/flughotel-nordtor/img/slot-10-w1490.jpg 1490w, /examples/hotels/flughotel-nordtor/img/slot-10-w2000.jpg 2000w" sizes="(max-width: 1080px) 110vw, 1490px" alt="Frühstücksbuffet mit Müslidosen, Säften und frischem Obst" loading="lazy"></picture></div>
     <div class="bf-copy">
       <h2 data-fade>Gut in den Tag starten</h2>
-      <p data-fade>Jeden Morgen ein reichhaltiges Buffet im hellen Frühstücksraum, mit Fensterfront zum Park.</p>
+      <p data-fade>Jeden Morgen ein reichhaltiges Buffet im hellen Frühstücksraum mit großer Fensterfront.</p>
     </div>
   </section>
 
@@ -660,19 +666,18 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
     <div class="wrap meet-grid">
       <div class="meet-copy">
         <h2 data-fade>Tagen zwischen Flughafen und Messe</h2>
-        <p class="lede" data-fade>Vier Räume mit Technik und Verpflegung, die Zimmer im selben Haus. Ihre Teilnehmenden parken kostenlos.</p>
-        <p class="meet-price" data-fade><strong>ab 42 €</strong>Tagungspauschale pro Person</p>
-        <div data-fade><a class="btn" href="#"><span class="btn-track"><span>Tagung anfragen</span><span aria-hidden="true">Tagung anfragen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a></div>
+        <p class="lede" data-fade>Drei Räume mit Technik und Verpflegung, die Zimmer im selben Haus. Ihre Teilnehmenden parken kostenlos.</p>
+        <p class="meet-price" data-fade><strong>ab 49 €</strong>Tagungspauschale pro Person</p>
+        <div data-fade><a class="btn" href="#" data-konzept><span class="btn-track"><span>Tagung anfragen</span><span aria-hidden="true">Tagung anfragen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a></div>
       </div>
       <div class="meet-card" data-fade>
-        <figure class="meet-media photo"><img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2013/01/t1.jpg" alt="Tagungsraum mit Tischen in U-Form und Leinwand" loading="lazy"></figure>
+        <figure class="meet-media photo"><picture><source type="image/avif" srcset="/examples/hotels/flughotel-nordtor/img/slot-11-w350.avif 350w, /examples/hotels/flughotel-nordtor/img/slot-11-w610.avif 610w, /examples/hotels/flughotel-nordtor/img/slot-11-w700.avif 700w, /examples/hotels/flughotel-nordtor/img/slot-11-w1220.avif 1220w" sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 610px"><source type="image/webp" srcset="/examples/hotels/flughotel-nordtor/img/slot-11-w350.webp 350w, /examples/hotels/flughotel-nordtor/img/slot-11-w610.webp 610w, /examples/hotels/flughotel-nordtor/img/slot-11-w700.webp 700w, /examples/hotels/flughotel-nordtor/img/slot-11-w1220.webp 1220w" sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 610px"><img src="/examples/hotels/flughotel-nordtor/img/slot-11-w610.jpg" srcset="/examples/hotels/flughotel-nordtor/img/slot-11-w350.jpg 350w, /examples/hotels/flughotel-nordtor/img/slot-11-w610.jpg 610w, /examples/hotels/flughotel-nordtor/img/slot-11-w700.jpg 700w, /examples/hotels/flughotel-nordtor/img/slot-11-w1220.jpg 1220w" sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 610px" alt="Besprechungsraum mit langem Tisch, Stühlen und Fensterfront" loading="lazy"></picture></figure>
         <table>
           <thead><tr><th scope="col">Raum</th><th scope="col">Fläche</th><th scope="col">Personen</th></tr></thead>
           <tbody>
-            <tr><td>Mainz und Frankfurt</td><td>105 m²</td><td>bis 80</td></tr>
-            <tr><td>Frankfurt</td><td>69 m²</td><td>bis 60</td></tr>
-            <tr><td>Wiesbaden</td><td>42 m²</td><td>bis 20</td></tr>
-            <tr><td>Mainz</td><td>32 m²</td><td>bis 20</td></tr>
+            <tr><td>Startbahn</td><td>90 m²</td><td>bis 60</td></tr>
+            <tr><td>Rollfeld</td><td>48 m²</td><td>bis 24</td></tr>
+            <tr><td>Gate</td><td>30 m²</td><td>bis 12</td></tr>
           </tbody>
         </table>
       </div>
@@ -683,7 +688,7 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
     <div class="wrap rel">
       <div class="sec-head">
         <h2 data-fade>Das sagen unsere Gäste</h2>
-        <a class="link" data-fade href="#">Alle Bewertungen auf Google</a>
+        <p data-fade>Alle Bewertungen auf Google</p>
       </div>
       <div class="review-grid">
         <article class="review">
@@ -705,7 +710,7 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
           <small>Urlaub</small>
         </article>
       </div>
-      <span class="note" style="right:var(--gutter);top:-30px"><i>6</i>Beispieltexte. Auf der fertigen Seite erscheinen hier Ihre echten Google-Bewertungen.</span>
+      <span class="note" style="right:var(--gutter);top:-30px"><i>6</i>Beispieltexte. Auf einer echten Hotel-Website erscheinen hier die Google-Bewertungen des Hauses.</span>
     </div>
   </section>
 
@@ -714,17 +719,16 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
       <div class="loc-card" data-fade>
         <div class="loc-copy">
           <h2>Anfahrt</h2>
-          <address>Mainzer Landstraße 33<br>65795 Hattersheim am Main</address>
-          <a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Parkhotel%20am%20Posthof%2C%20Mainzer%20Landstra%C3%9Fe%2033%2C%2065795%20Hattersheim%20am%20Main">Route planen</a>
+          <address>Nordtorweg 1<br>60549 Frankfurt am Main</address>
           <dl class="routes">
-            <div><svg class="ico" viewBox="0 0 24 24"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg><span><dt>Mit dem Auto</dt><dd>A66, Abfahrt Hattersheim (12). Parkplätze direkt am Hotel.</dd></span></div>
-            <div><svg class="ico" viewBox="0 0 24 24"><path d="M10.5 4.5c0-1 .7-1.8 1.5-1.8s1.5.8 1.5 1.8V9l7 4v2l-7-2v4.5l2.2 1.6V21L12 20l-3.7 1v-1.9l2.2-1.6V13l-7 2v-2l7-4z"/></svg><span><dt>Vom Flughafen</dt><dd>Über B43 und B40a, wenige Minuten Fahrt.</dd></span></div>
-            <div><svg class="ico" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="14" rx="3"/><path d="M6 11h12M9 21l1.5-4M15 21l-1.5-4M9 14h.01M15 14h.01"/></svg><span><dt>Mit der Bahn</dt><dd>S1 bis Hattersheim, dann etwa 10 Minuten zu Fuß.</dd></span></div>
+            <div><svg class="ico" viewBox="0 0 24 24"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg><span><dt>Mit dem Auto</dt><dd>A3 oder A5, Abfahrt Flughafen. Parkplätze direkt am Hotel.</dd></span></div>
+            <div><svg class="ico" viewBox="0 0 24 24"><path d="M10.5 4.5c0-1 .7-1.8 1.5-1.8s1.5.8 1.5 1.8V9l7 4v2l-7-2v4.5l2.2 1.6V21L12 20l-3.7 1v-1.9l2.2-1.6V13l-7 2v-2l7-4z"/></svg><span><dt>Vom Flughafen</dt><dd>Mit unserem Shuttle, rund um die Uhr.</dd></span></div>
+            <div><svg class="ico" viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="14" rx="3"/><path d="M6 11h12M9 21l1.5-4M15 21l-1.5-4M9 14h.01M15 14h.01"/></svg><span><dt>Mit der Bahn</dt><dd>S8 oder S9 bis Frankfurt Flughafen Regionalbahnhof, von dort mit dem Shuttle.</dd></span></div>
           </dl>
         </div>
-        <div class="map"><iframe title="Karte: Parkhotel am Posthof, Hattersheim am Main" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Parkhotel+am+Posthof,+Mainzer+Landstra%C3%9Fe+33,+65795+Hattersheim+am+Main&amp;z=15&amp;output=embed"></iframe></div>
+        <div class="map"><svg viewBox="0 0 720 560" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Karte: Flughotel Nordtor, Frankfurt am Main"><rect width="720" height="560" fill="#ebe8e1"/><rect x="-20" y="-20" width="260" height="120" rx="40" fill="#e2ddd0"/><rect x="520" y="430" width="240" height="170" rx="40" fill="#e2ddd0"/><rect x="40" y="330" width="640" height="36" rx="4" fill="#cdc6b6"/><line x1="70" y1="348" x2="650" y2="348" stroke="#f7f5f0" stroke-width="2" stroke-dasharray="16 14"/><rect x="170" y="390" width="330" height="26" rx="4" fill="#cdc6b6"/><path d="M-10 118C140 118 250 136 400 150" fill="none" stroke="rgba(20,27,44,.12)" stroke-width="16" stroke-linecap="round"/><path d="M-10 118C140 118 250 136 400 150" fill="none" stroke="#fffdf8" stroke-width="12" stroke-linecap="round"/><rect x="250" y="236" width="170" height="70" rx="8" fill="#1a2f66"/><rect x="285" y="306" width="18" height="24" fill="#1a2f66" opacity=".55"/><rect x="330" y="306" width="18" height="24" fill="#1a2f66" opacity=".55"/><rect x="375" y="306" width="18" height="24" fill="#1a2f66" opacity=".55"/><ellipse cx="400" cy="152" rx="10" ry="3" fill="rgba(20,27,44,.2)"/><g transform="translate(400 150)"><path d="M0 0C-6-10-26-26-26-48C-26-62-15-72 0-72C15-72 26-62 26-48C26-26 6-10 0 0Z" fill="#1a2f66"/><circle cx="0" cy="-48" r="9" fill="#fff"/></g><rect x="436" y="86" width="180" height="36" rx="18" fill="#fff" stroke="rgba(20,27,44,.1)"/><text x="526" y="104" text-anchor="middle" dominant-baseline="middle" font-family="Schibsted Grotesk, system-ui, sans-serif" font-size="15" font-weight="600" fill="#141b2c">Flughotel Nordtor</text></svg></div>
       </div>
-      <span class="note" style="right:calc(var(--gutter) + 24px);top:-30px"><i>4</i>Die Karte auf Ihrer aktuellen Seite zeigt eine Adresse in San Francisco. Hier stimmt der Standort.</span>
+      <span class="note" style="right:calc(var(--gutter) + 24px);top:-30px"><i>4</i>Anfahrt für die drei Wege, auf denen Gäste kommen: Auto, Flughafen und Bahn, mit dem Parken gleich dabei.</span>
     </div>
   </section>
 </main>
@@ -733,28 +737,28 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
   <div class="wrap rel">
     <div class="foot-cta">
       <div>
-        <h2 data-fade>Bis bald in Hattersheim.</h2>
-        <p data-fade>Fragen zu Zimmern, Gruppen oder Tagungen? Rufen Sie uns an unter <a href="tel:+49619089990">06190 89990</a>.</p>
+        <h2 data-fade>Bis bald am Nordtor.</h2>
+        <p data-fade>Fragen zu Zimmern, Gruppen oder Tagungen? Rufen Sie uns an unter <a href="tel:+496900000000">069 0000 0000</a>.</p>
       </div>
-      <a class="btn light" data-fade href="https://ibev5.hotels-online-buchen.de/ibe/posthofhattersheim"><span class="btn-track"><span>Zimmer buchen</span><span aria-hidden="true">Zimmer buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a>
+      <a class="btn light" data-fade href="#" data-konzept><span class="btn-track"><span>Zimmer buchen</span><span aria-hidden="true">Zimmer buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a>
     </div>
     <div class="foot-grid">
       <div>
-        <img src="https://www.frankfurtairport-hotel.de/wp-content/uploads/2017/07/parkhotel-logo-white.png" alt="Parkhotel am Posthof">
-        <p>Mainzer Landstraße 33<br>65795 Hattersheim am Main</p>
+        <span class="wordmark">Flughotel Nordtor</span>
+        <p>Nordtorweg 1<br>60549 Frankfurt am Main</p>
       </div>
-      <div><h3>Kontakt</h3><ul><li><a href="tel:+49619089990">06190 89990</a></li><li><a href="mailto:info@frankfurtairport-hotel.de">info@frankfurtairport-hotel.de</a></li></ul></div>
+      <div><h3>Kontakt</h3><ul><li><a href="tel:+496900000000">069 0000 0000</a></li><li><a href="mailto:info@flughotel-nordtor.example">info@flughotel-nordtor.example</a></li></ul></div>
       <div><h3>Hotel</h3><ul><li><a href="#zimmer">Zimmer</a></li><li><a href="#psf">Park, Sleep &amp; Fly</a></li><li><a href="#">Fotogalerie</a></li><li><a href="#">Messetermine</a></li></ul></div>
-      <div><h3>Tagungen</h3><ul><li><a href="#tagungen">Räume</a></li><li><a href="#">Pauschalen</a></li><li><a href="https://www.facebook.com/ParkhotelAmPosthof">Facebook</a></li></ul></div>
+      <div><h3>Tagungen</h3><ul><li><a href="#tagungen">Räume</a></li><li><a href="#">Pauschalen</a></li></ul></div>
     </div>
-    <div class="legal"><span>© 2026 Parkhotel am Posthof</span><span><a href="#">Impressum</a><a href="#">Datenschutz</a></span></div>
-    <span class="note" style="left:var(--gutter);bottom:90px"><i>5</i>Ihr Footer verlinkt noch auf Google+, das 2019 eingestellt wurde. Hier stehen nur Kanäle, die es gibt.</span>
+    <div class="legal"><span>© 2026 Flughotel Nordtor · Konzept von Suchio</span><span><a href="/imprint">Impressum</a><a href="/datenschutz">Datenschutz</a></span></div>
+    <span class="note" style="left:var(--gutter);bottom:90px"><i>5</i>Im Footer stehen nur Kanäle und Seiten, die gepflegt werden.</span>
   </div>
 </footer>
 
 <div class="mbar">
-  <a class="tel-btn" href="tel:+49619089990" aria-label="Anrufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a>
-  <a class="btn navy" href="https://ibev5.hotels-online-buchen.de/ibe/posthofhattersheim"><span class="btn-track"><span>Zimmer buchen</span><span aria-hidden="true">Zimmer buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a>
+  <a class="tel-btn" href="tel:+496900000000" aria-label="Anrufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a>
+  <a class="btn navy" href="#" data-konzept><span class="btn-track"><span>Zimmer buchen</span><span aria-hidden="true">Zimmer buchen</span></span><span class="btn-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"/></svg></span></a>
 </div>
 
 <div class="scrim"></div>
@@ -774,13 +778,13 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
   <div class="stepper-row"><div><b>Einzelzimmer</b><span>für 1 Person</span></div><div class="stepper"><button class="icon-btn" type="button" data-k="ez" data-d="-1" aria-label="Einzelzimmer entfernen"><svg viewBox="0 0 24 24"><path d="M6 12h12"/></svg></button><output data-out="ez"></output><button class="icon-btn" type="button" data-k="ez" data-d="1" aria-label="Einzelzimmer hinzufügen"><svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></button></div></div>
   <div class="stepper-row"><div><b>Doppelzimmer</b><span>für 2 Personen</span></div><div class="stepper"><button class="icon-btn" type="button" data-k="dz" data-d="-1" aria-label="Doppelzimmer entfernen"><svg viewBox="0 0 24 24"><path d="M6 12h12"/></svg></button><output data-out="dz"></output><button class="icon-btn" type="button" data-k="dz" data-d="1" aria-label="Doppelzimmer hinzufügen"><svg viewBox="0 0 24 24"><path d="M12 6v12M6 12h12"/></svg></button></div></div>
   <div class="pop-foot">
-    <p class="pop-note">Gruppen ab 10 Zimmern: <a href="tel:+49619089990">06190 89990</a></p>
+    <p class="pop-note">Gruppen ab 10 Zimmern: <a href="tel:+496900000000">069 0000 0000</a></p>
     <div class="pop-actions"><button class="btn navy" type="button" data-done><span class="btn-track"><span>Übernehmen</span><span aria-hidden="true">Übernehmen</span></span></button></div>
   </div>
 </div>
 
 <div class="pitch" role="group" aria-label="Suchio-Entwurf">
-  <b>suchi<i>o</i></b><span>Entwurf</span>
+  <b>suchi<i>o</i></b><span>Konzept</span>
   <button type="button" aria-pressed="false">Hinweise</button>
 </div>
 
@@ -958,6 +962,25 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
   };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
+  // Booking actions: the concept has no booking system, so the action explains itself on the page.
+  const konzeptHinweis = btn => {
+    let msg = btn.nextElementSibling;
+    if (!msg || !msg.classList.contains('ki-msg')) {
+      msg = document.createElement('p');
+      msg.className = 'ki-msg';
+      msg.setAttribute('role', 'status');
+      btn.insertAdjacentElement('afterend', msg);
+    }
+    msg.textContent = 'Im Konzept ohne Buchung. Auf einer echten Hotel-Website führt dieser Knopf direkt ins Buchungssystem des Hauses.';
+  };
+  document.querySelectorAll('[data-konzept]').forEach(btn => btn.addEventListener('click', e => { e.preventDefault(); konzeptHinweis(btn); }));
+  document.querySelector('.book').addEventListener('submit', e => { e.preventDefault(); konzeptHinweis(e.submitter || e.target.querySelector('.btn')); });
+
+  // The concept banner sits above the header; the header starts below it.
+  const banner = document.querySelector('.kbanner');
+  const setBanner = () => document.documentElement.style.setProperty('--kbar', banner.offsetHeight + 'px');
+  addEventListener('resize', setBanner); setBanner();
+
   const toggle = document.querySelector('.pitch button');
   const setNotes = on => { document.body.classList.toggle('notes', on); toggle.setAttribute('aria-pressed', on); };
   toggle.addEventListener('click', () => setNotes(!document.body.classList.contains('notes')));
@@ -1070,7 +1093,7 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
     document.documentElement.style.overflow = open ? 'hidden' : '';
   };
   burger.addEventListener('click', () => setMenu(!menu.classList.contains('open')));
-  menu.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+  menu.addEventListener('click', e => { if (e.target.closest('a') && !e.target.closest('[data-konzept]')) setMenu(false); });
   addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
 
   // Mobile room carousel: depth while swiping, and the indicator follows.
@@ -1101,7 +1124,7 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
   const root = document.documentElement;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let m;
-  try { m = await import('https://cdn.jsdelivr.net/npm/motion@12.23.12/+esm'); } catch { root.classList.add('static'); }
+  try { m = await import('/examples/hotels/flughotel-nordtor/js/motion.mjs'); } catch { root.classList.add('static'); }
 
   if (m && !reduce && !root.classList.contains('static')) {
     window.__motion = true;
@@ -1116,7 +1139,13 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
     animate('.book-wrap', { opacity: [0, 1], y: [28, 0] }, { duration: 1.1, ease, delay: 0.7 });
 
     // Hero photo drifts as the page scrolls away.
-    scroll(animate('.hero-media', { y: ['0%', '18%'] }, { ease: 'linear' }), { target: document.querySelector('.hero'), offset: ['start start', 'end start'] });
+    // Measured by hand: Motion's scroll offset started half-way, which showed a gap above the photo at the top of the page.
+    const heroEl = document.querySelector('.hero');
+    const heroMedia = document.querySelector('.hero-media');
+    let drift = 0;
+    const setDrift = () => { drift = 0; const p = Math.min(Math.max(scrollY / heroEl.offsetHeight, 0), 1); heroMedia.style.transform = `translateY(${p * 18}%)`; };
+    addEventListener('scroll', () => { if (!drift) drift = requestAnimationFrame(setDrift); }, { passive: true });
+    setDrift();
 
     document.querySelectorAll('[data-fade]').forEach(el => { if (el.closest('.hero')) return;
       inView(el, () => { animate(el, { opacity: [0, 1], y: [20, 0] }, { duration: 0.9, ease }); }, { amount: 0.3 });
@@ -1124,7 +1153,7 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
     inView('.review-grid', grid => { animate([...grid.children], { opacity: [0, 1], y: [28, 0] }, { duration: 0.9, ease, delay: stagger(0.12) }); }, { amount: 0.3 });
 
     inView('[data-reveal]', el => {
-      const child = el.firstElementChild;
+      const child = el.querySelector('img');
       animate(child, { clipPath: ['inset(100% 0 0 0)', 'inset(0% 0 0 0)'] }, { duration: 1.3, ease });
       animate(child, { scale: [1.18, 1] }, { duration: 1.8, ease });
     }, { amount: 0.25 });
