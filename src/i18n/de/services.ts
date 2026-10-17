@@ -17,10 +17,10 @@ const services: ServicesCopy = {
       ],
       cta: "Mehr zu Websites & Apps",
       page: {
-        metaTitle: "Webdesign Rhein-Main: Website erstellen lassen",
+        metaTitle: "Webdesign Frankfurt: Website erstellen lassen",
         metaDescription:
           "Website erstellen lassen in Hattersheim, Frankfurt und dem Rhein-Main-Gebiet. Suchio plant, gestaltet und entwickelt schnelle Websites, Onlineshops und Apps.",
-        title: "Websites, die schnell laden, Anfragen bringen und die du selbst pflegen kannst.",
+        title: "Website erstellen lassen, die schnell lädt und Anfragen bringt.",
         intro:
           "Wir erstellen Websites, Onlineshops und Apps für Betriebe im Rhein-Main-Gebiet und in ganz Deutschland. Vom ersten Entwurf bis zum Launch arbeitest du mit denselben Leuten.",
         outcomesHeading: "Was die fertige Website leisten muss",
@@ -179,10 +179,10 @@ const services: ServicesCopy = {
       ],
       cta: "Mehr zu SEO & KI-Sichtbarkeit",
       page: {
-        metaTitle: "SEO im Rhein-Main-Gebiet: Google & KI-Sichtbarkeit",
+        metaTitle: "SEO Frankfurt: Google- & KI-Sichtbarkeit",
         metaDescription:
           "SEO für Betriebe in Frankfurt und dem Rhein-Main-Gebiet: technisches SEO, Google-Unternehmensprofil, Inhalte und Sichtbarkeit in ChatGPT und KI-Antworten.",
-        title: "Bei Google und in KI-Antworten gefunden werden.",
+        title: "SEO, damit du bei Google und in KI-Antworten gefunden wirst.",
         intro:
           "Wir beheben technische Fehler, schreiben Inhalte zu echten Suchanfragen und pflegen dein Google-Unternehmensprofil. So finden dich Kunden in der normalen Suche, in Google Maps und in KI-Antworten.",
         outcomesHeading: "Was bessere Sichtbarkeit braucht",
@@ -347,7 +347,7 @@ const services: ServicesCopy = {
       ],
       cta: "Mehr zu Werbekampagnen",
       page: {
-        metaTitle: "Google Ads & Social Ads Betreuung im Rhein-Main-Gebiet",
+        metaTitle: "Google Ads & Social Ads für Frankfurt & Rhein-Main",
         metaDescription:
           "Google Ads und Social Ads für Betriebe im Rhein-Main-Gebiet: Kampagnenaufbau, Anzeigen, Landingpages und Tracking, damit aus Klicks Anfragen werden.",
         title: "Google Ads und Social Ads vom Klick bis zur Anfrage.",
@@ -517,10 +517,10 @@ const services: ServicesCopy = {
       ],
       cta: "Mehr zu KI & Automatisierung",
       page: {
-        metaTitle: "KI & Automatisierung für Betriebe und KMU",
+        metaTitle: "KI & Automatisierung für KMU im Raum Frankfurt",
         metaDescription:
           "KI und Automatisierung für Betriebe im Rhein-Main-Gebiet: Anfragen, E-Mails und Dokumente automatisch verarbeiten, Programme verbinden und Handarbeit sparen.",
-        title: "Wiederkehrende Arbeit automatisieren, ohne die Kontrolle abzugeben.",
+        title: "KI und Automatisierung, ohne die Kontrolle abzugeben.",
         intro:
           "Wir verbinden deine Programme, automatisieren wiederkehrende Aufgaben und setzen KI dort ein, wo sie deinem Team Arbeit abnimmt, etwa bei Anfragen, E-Mails und Dokumenten.",
         outcomesHeading: "Erst der Ablauf, dann das Werkzeug",

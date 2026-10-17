@@ -20,7 +20,7 @@ const services: ServicesCopy = {
         metaTitle: "Création de site web, région de Francfort",
         metaDescription:
           "Création de sites web à Hattersheim, Francfort et en Rhin-Main. Suchio conçoit des sites rapides, des boutiques en ligne et des applications.",
-        title: "Des sites qui se chargent vite, apportent des demandes et que vous modifiez vous-même.",
+        title: "Création de site web : un site rapide qui apporte des demandes.",
         intro:
           "Nous créons des sites web, des boutiques en ligne et des applications pour les entreprises de la région Rhin-Main et de toute l’Allemagne. Du premier croquis au lancement, vous travaillez avec les mêmes personnes.",
         outcomesHeading: "Ce que le site final doit accomplir",
@@ -178,10 +178,10 @@ const services: ServicesCopy = {
       ],
       cta: "En savoir plus sur le SEO",
       page: {
-        metaTitle: "SEO région de Francfort : Google & visibilité IA",
+        metaTitle: "Référencement SEO près de Francfort",
         metaDescription:
           "SEO pour les entreprises de la région de Francfort : SEO technique, fiche Google, contenus et visibilité dans ChatGPT et les réponses IA.",
-        title: "Être trouvé sur Google et dans les réponses IA.",
+        title: "Le SEO pour être trouvé sur Google et dans les réponses IA.",
         intro:
           "Nous corrigeons les problèmes techniques, rédigeons des contenus pour de vraies recherches et entretenons votre fiche d’établissement Google. Vos clients vous trouvent ainsi dans la recherche classique, dans Google Maps et dans les réponses IA.",
         outcomesHeading: "Ce qu’exige une meilleure visibilité",
@@ -348,7 +348,7 @@ const services: ServicesCopy = {
       ],
       cta: "En savoir plus sur les campagnes",
       page: {
-        metaTitle: "Google Ads & réseaux sociaux, région de Francfort",
+        metaTitle: "Google Ads & publicité sociale, région de Francfort",
         metaDescription:
           "Google Ads et réseaux sociaux pour les entreprises de la région Rhin-Main : campagnes, annonces, pages de destination et suivi des demandes.",
         title: "Google Ads et réseaux sociaux, du clic à la demande.",
@@ -517,10 +517,10 @@ const services: ServicesCopy = {
       ],
       cta: "En savoir plus sur l’automatisation",
       page: {
-        metaTitle: "IA & automatisation pour les entreprises",
+        metaTitle: "IA & automatisation pour PME, région de Francfort",
         metaDescription:
           "IA et automatisation pour les entreprises de la région Rhin-Main : traiter demandes, e-mails et documents automatiquement et réduire le travail manuel.",
-        title: "Automatisez les tâches répétitives sans perdre le contrôle.",
+        title: "IA et automatisation, sans perdre le contrôle.",
         intro:
           "Nous relions vos outils, automatisons les tâches répétitives et utilisons l’IA là où elle soulage votre équipe, par exemple pour les demandes, les e-mails et les documents.",
         outcomesHeading: "D’abord le processus, ensuite l’outil",

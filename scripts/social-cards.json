@@ -10,9 +10,9 @@
     "/en/examples": "Examples",
     "/en/examples/hotels": "Websites for hotels",
     "/en/services/ads": "Google Ads and social ads from click to enquiry.",
-    "/en/services/automation": "Automate repetitive work without giving up control.",
-    "/en/services/seo": "Get found on Google and in AI answers.",
-    "/en/services/websites": "Websites that load fast, bring in enquiries, and that you can update yourself.",
+    "/en/services/automation": "AI and automation without giving up control.",
+    "/en/services/seo": "SEO that gets you found on Google and in AI answers.",
+    "/en/services/websites": "Get a website built that loads fast and brings in enquiries.",
     "/examples": "Beispiele",
     "/examples/hotels": "Website für Hotels",
     "/fr": "Plus de demandes. Moins de travail manuel.",
@@ -21,12 +21,12 @@
     "/fr/examples": "Exemples",
     "/fr/examples/hotels": "Sites web pour hôtels",
     "/fr/services/ads": "Google Ads et réseaux sociaux, du clic à la demande.",
-    "/fr/services/automation": "Automatisez les tâches répétitives sans perdre le contrôle.",
-    "/fr/services/seo": "Être trouvé sur Google et dans les réponses IA.",
-    "/fr/services/websites": "Des sites qui se chargent vite, apportent des demandes et que vous modifiez vous-même.",
+    "/fr/services/automation": "IA et automatisation, sans perdre le contrôle.",
+    "/fr/services/seo": "Le SEO pour être trouvé sur Google et dans les réponses IA.",
+    "/fr/services/websites": "Création de site web : un site rapide qui apporte des demandes.",
     "/services/ads": "Google Ads und Social Ads vom Klick bis zur Anfrage.",
-    "/services/automation": "Wiederkehrende Arbeit automatisieren, ohne die Kontrolle abzugeben.",
-    "/services/seo": "Bei Google und in KI-Antworten gefunden werden.",
-    "/services/websites": "Websites, die schnell laden, Anfragen bringen und die du selbst pflegen kannst."
+    "/services/automation": "KI und Automatisierung, ohne die Kontrolle abzugeben.",
+    "/services/seo": "SEO, damit du bei Google und in KI-Antworten gefunden wirst.",
+    "/services/websites": "Website erstellen lassen, die schnell lädt und Anfragen bringt."
   }
 }

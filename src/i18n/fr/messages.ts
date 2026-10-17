@@ -11,10 +11,10 @@ const messages: Readonly<Record<MessageKey, string>> = {
   "nav.openMenu": "Ouvrir la navigation",
   "nav.closeMenu": "Fermer la navigation",
   "nav.selectLocale": "Choisir la langue",
-  "meta.siteTitle": "Suchio | Sites web, SEO & Google Ads, région de Francfort",
+  "meta.siteTitle": "Sites web, SEO & Google Ads, région de Francfort | Suchio",
   "meta.homeDescription":
     "Création de sites, SEO, Google Ads et automatisation depuis Hattersheim am Main, pour les entreprises de Francfort, de Rhin-Main et de toute l’Allemagne.",
-  "meta.aboutTitle": "À propos : studio indépendant à Hattersheim am Main",
+  "meta.aboutTitle": "À propos : studio web & SEO près de Francfort",
   "meta.contactTitle": "Contact : demander un projet",
   "meta.contactDescription":
     "Site web, SEO, Google Ads ou automatisation ? Décrivez brièvement votre projet, nous revenons vers vous avec notre avis et une première étape.",

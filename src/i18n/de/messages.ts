@@ -9,10 +9,10 @@ const messages = {
   "nav.openMenu": "Navigation öffnen",
   "nav.closeMenu": "Navigation schließen",
   "nav.selectLocale": "Sprache auswählen",
-  "meta.siteTitle": "Suchio | Webdesign, SEO & Google Ads im Rhein-Main-Gebiet",
+  "meta.siteTitle": "Webdesign, SEO & Google Ads im Raum Frankfurt | Suchio",
   "meta.homeDescription":
     "Webdesign, SEO, Google Ads und Automatisierung aus Hattersheim am Main für Betriebe in Frankfurt, im Rhein-Main-Gebiet und in ganz Deutschland.",
-  "meta.aboutTitle": "Über uns: unabhängiges Studio in Hattersheim am Main",
+  "meta.aboutTitle": "Über uns: Webdesign- & SEO-Studio aus Hattersheim",
   "meta.contactTitle": "Kontakt: Projekt anfragen",
   "meta.contactDescription":
     "Website, SEO, Google Ads oder Automatisierung anfragen. Beschreib kurz dein Vorhaben, und wir melden uns mit einer Einschätzung und einem ersten Schritt.",

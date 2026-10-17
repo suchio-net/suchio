@@ -17,10 +17,10 @@ const services: ServicesCopy = {
       ],
       cta: "More on Websites & Apps",
       page: {
-        metaTitle: "Web Design in Frankfurt Rhine-Main",
+        metaTitle: "Web Design Frankfurt: Websites, Shops & Apps",
         metaDescription:
           "Web design in Hattersheim, Frankfurt, and the Rhine-Main area. Suchio plans, designs, and builds fast websites, online shops, and apps.",
-        title: "Websites that load fast, bring in enquiries, and that you can update yourself.",
+        title: "Get a website built that loads fast and brings in enquiries.",
         intro:
           "We build websites, online shops, and apps for businesses in the Frankfurt Rhine-Main area and across Germany. You work with the same people from the first draft through launch.",
         outcomesHeading: "What the finished website needs to do",
@@ -178,10 +178,10 @@ const services: ServicesCopy = {
       ],
       cta: "More on SEO & AI Visibility",
       page: {
-        metaTitle: "SEO in Frankfurt Rhine-Main: Google & AI Visibility",
+        metaTitle: "SEO Frankfurt: Google & AI Visibility",
         metaDescription:
           "SEO for businesses in Frankfurt and the Rhine-Main area: technical SEO, Google Business Profile, content, and visibility in ChatGPT and AI answers.",
-        title: "Get found on Google and in AI answers.",
+        title: "SEO that gets you found on Google and in AI answers.",
         intro:
           "We fix technical problems, write content for real search queries, and maintain your Google Business Profile. That way customers find you in regular search, in Google Maps, and in AI answers.",
         outcomesHeading: "What better visibility requires",
@@ -346,7 +346,7 @@ const services: ServicesCopy = {
       ],
       cta: "More on Paid Campaigns",
       page: {
-        metaTitle: "Google Ads & Social Ads Management, Frankfurt Rhine-Main",
+        metaTitle: "Google Ads & Social Ads Management, Frankfurt Area",
         metaDescription:
           "Google Ads and social ads for businesses in the Frankfurt Rhine-Main area: campaign setup, ads, landing pages, and tracking that turn clicks into enquiries.",
         title: "Google Ads and social ads from click to enquiry.",
@@ -510,10 +510,10 @@ const services: ServicesCopy = {
       ],
       cta: "More on AI & Automation",
       page: {
-        metaTitle: "AI & Automation for Local Businesses",
+        metaTitle: "AI & Automation for Businesses near Frankfurt",
         metaDescription:
           "AI and automation for businesses in the Frankfurt Rhine-Main area: process enquiries, emails, and documents automatically and save manual work.",
-        title: "Automate repetitive work without giving up control.",
+        title: "AI and automation without giving up control.",
         intro:
           "We connect your software, automate repetitive tasks, and use AI where it takes work off your team, for example with enquiries, emails, and documents.",
         outcomesHeading: "The workflow first, then the tool",

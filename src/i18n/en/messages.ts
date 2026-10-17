@@ -11,10 +11,10 @@ const messages: Readonly<Record<MessageKey, string>> = {
   "nav.openMenu": "Open navigation",
   "nav.closeMenu": "Close navigation",
   "nav.selectLocale": "Select language",
-  "meta.siteTitle": "Suchio | Web Design, SEO & Google Ads in Frankfurt Rhine-Main",
+  "meta.siteTitle": "Web Design, SEO & Google Ads near Frankfurt | Suchio",
   "meta.homeDescription":
     "Web design, SEO, Google Ads, and automation from Hattersheim am Main for businesses in Frankfurt, the Rhine-Main area, and across Germany.",
-  "meta.aboutTitle": "About us: an independent studio in Hattersheim am Main",
+  "meta.aboutTitle": "About us: web design & SEO studio near Frankfurt",
   "meta.contactTitle": "Contact: start a project",
   "meta.contactDescription":
     "Ask about a website, SEO, Google Ads, or automation. Briefly describe your project, and we will reply with our view and a first step.",
