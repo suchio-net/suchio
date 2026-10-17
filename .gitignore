@@ -10,3 +10,5 @@ node_modules/
 # Responsive draft derivatives are generated from src/projekte/handwerker-work/photos.
 /public/projekte/handwerker-work/img/*.avif
 /public/projekte/handwerker-work/img/*.webp
+# Worktrees that Claude Code agents create for isolated tasks.
+/.claude/worktrees/

@@ -15,3 +15,4 @@ src/projekte/handwerker-work/analyse/PROVENANCE.md
 # Vendored agent skills, kept identical to their upstream files.
 .agents/
 .claude/skills/
+.claude/worktrees/
