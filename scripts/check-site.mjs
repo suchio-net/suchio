@@ -1,6 +1,7 @@
 import { siteOrigin } from "../src/lib/site-config.ts";
 import { defaultLocale, locales } from "../src/i18n/config.ts";
-import { publicRoutes, legacyServiceRoutes } from "../src/lib/public-routes.ts";
+import { indexableBasePaths, publicRoutes, legacyServiceRoutes } from "../src/lib/public-routes.ts";
+import { alternatePath } from "../src/lib/locale-path.ts";
 
 const project = "/projekte/handwerker-work";
 const serviceSlugs = ["badsanierung", "sanitaer-heizung", "elektro", "fliesen", "renovierung"];
@@ -43,6 +44,7 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
       status: 200,
       locale: route.locale,
       canonical: route.pathname,
+      indexable: indexableBasePaths.includes(route.basePath),
     })),
     ...locales.map((locale) => ({
       path: `${locale === defaultLocale ? "" : `/${locale}`}/__availability-missing-page`,
@@ -73,8 +75,12 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
     { path: "/site.webmanifest", status: 200 },
     // A local preview may intentionally have no mail credentials. Its readiness contract still must work.
     { path: "/api/health", status: origin === siteOrigin ? 200 : [200, 503] },
-    { path: "/entwurf/parkhotel", status: 200 },
-    { path: "/entwurf/parkhotel/index.html", status: 301, destination: "/entwurf/parkhotel" },
+    ...["/entwurf/parkhotel", "/entwurf/parkhotel/", "/entwurf/parkhotel/index.html"].map((path) => ({
+      path,
+      status: 308,
+      destination: "/examples/hotels",
+    })),
+    { path: "/examples/hotels/flughotel-nordtor", status: 200, draft: true },
     ...[
       project,
       `${project}/analyse`,
@@ -189,13 +195,43 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
               if (imageResponse.status !== 200 || !imageResponse.headers.get("content-type")?.startsWith("image/png"))
                 throw new Error("social image is unavailable");
               await imageResponse.body?.cancel();
+              for (const language of [...locales, "x-default"]) {
+                const href = new URL(
+                  alternatePath(check.canonical, language === "x-default" ? defaultLocale : language),
+                  siteOrigin,
+                ).href;
+                if (!body.includes(`hreflang="${language}" href="${href}"`))
+                  throw new Error(`missing ${language} language alternate`);
+              }
+              if (check.indexable && /\bname="robots"[^>]*content="noindex/.test(body))
+                throw new Error("public page unexpectedly marked noindex");
+              if (/\/examples\/hotels$/.test(check.canonical)) {
+                const graph =
+                  JSON.parse(
+                    body.match(/<script\b[^>]*type="application\/ld\+json"[^>]*>(.*?)<\/script>/s)?.[1] ?? "{}",
+                  )["@graph"] ?? [];
+                for (const type of ["WebPage", "FAQPage", "BreadcrumbList"])
+                  if (!graph.some((node) => node["@type"] === type)) throw new Error(`missing ${type} schema`);
+                const faq = graph.find((node) => node["@type"] === "FAQPage");
+                if (faq.mainEntity?.length !== 6) throw new Error("incorrect hotel FAQ schema");
+                const prefix = check.locale === defaultLocale ? "" : `/${check.locale}`;
+                if (!body.includes(`href="${prefix}/contact?service=websites-apps"`))
+                  throw new Error("missing hotel contact service preselection");
+                if (!body.includes(`href="${prefix}/services/seo"`)) throw new Error("missing hotel SEO link");
+              }
             }
             if (check.path === "/robots.txt" && !body.includes(`Sitemap: ${siteOrigin}/sitemap.xml`))
               throw new Error("missing sitemap directive");
             if (check.path === "/sitemap.xml" && !body.includes(`<loc>${siteOrigin}/fr/contact</loc>`))
               throw new Error("missing localized sitemap entry");
-            if (check.path === "/sitemap.xml" && body.includes("/projekte/"))
-              throw new Error("client project leaked into sitemap");
+            if (check.path === "/sitemap.xml") {
+              if (["/projekte/", "/entwurf/", "/examples/hotels/flughotel-nordtor"].some((path) => body.includes(path)))
+                throw new Error("concept leaked into sitemap");
+              for (const prefix of ["", "/en", "/fr"])
+                for (const path of ["/examples", "/examples/hotels"])
+                  if (!body.includes(`<loc>${siteOrigin}${prefix}${path}</loc>`))
+                    throw new Error("missing examples sitemap entry");
+            }
             if (
               check.path === "/llms.txt" &&
               (!body.startsWith("# Suchio") || !body.includes(`${siteOrigin}/en/services/seo`))

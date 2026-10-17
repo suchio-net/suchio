@@ -24,6 +24,26 @@ try {
       await tab.goto(server.origin + path, { waitUntil: "networkidle0" });
       const { width: pageWidth, viewport } = await playThrough(tab);
       const label = `${path} at ${width}px`;
+      const headerProblems = await tab.evaluate(() => {
+        const header = document.querySelector("header[data-navigation-enhanced]");
+        if (!header) return [];
+        const problems = [];
+        const box = header.getBoundingClientRect();
+        if (box.left < 0 || box.right > innerWidth) problems.push("header extends beyond the viewport");
+        const nav = header.querySelector("nav");
+        if (nav && getComputedStyle(nav).display !== "none") {
+          for (const item of nav.querySelectorAll(":scope > a, :scope > [data-services] > button")) {
+            for (const node of item.childNodes) {
+              if (node.nodeType !== Node.TEXT_NODE || !node.textContent.trim()) continue;
+              const range = document.createRange();
+              range.selectNodeContents(node);
+              if (range.getClientRects().length > 1) problems.push(`header label wraps: ${node.textContent.trim()}`);
+            }
+          }
+        }
+        return problems;
+      });
+      failures.push(...headerProblems.map((problem) => `${label}: ${problem}`));
       if (pageWidth > viewport) failures.push(`${label}: the page is ${pageWidth - viewport}px wider than the screen`);
       else console.log(`${label}: OK`);
     }

@@ -16,6 +16,7 @@ interface Props {
 const { locale, pathname } = Astro.props;
 const services = getServiceCatalog(locale);
 const navItems = [
+  { href: localizePath("/examples", locale), label: t(locale, "nav.examples") },
   { href: localizePath("/about", locale), label: t(locale, "nav.about") },
   { href: localizePath("/contact", locale), label: t(locale, "nav.contact") },
 ];
@@ -48,7 +49,7 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
           </a>
         ))}
         {navItems.map((item) => (
-          <a class="py-2" href={item.href}>
+          <a class="py-2" href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
             {item.label}
           </a>
         ))}
@@ -247,6 +248,7 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
         href={item.href}
         data-scroll-top
         data-menu-link
+        aria-current={isActive(item.href) ? "page" : undefined}
       >
         <span class="text-meta text-inverse-muted tabular-nums">{String(index + 2).padStart(2, "0")}</span>
         <span>{item.label}</span>

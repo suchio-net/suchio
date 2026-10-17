@@ -33,7 +33,7 @@ const { origin } = server;
 const browser = await launchChrome();
 
 try {
-  // Indexable pages come from the sitemap: home, about, contact and the services, per language.
+  // Indexable pages come from the sitemap, per language.
   const urls = await sitemapPaths(origin);
   const pages = urls.map((path) => {
     const [, prefix, rest] = path.match(/^\/(en|fr)(\/.*)?$/) ?? [null, "de", path];
@@ -80,7 +80,7 @@ try {
     });
     const visual = { ...data };
     const cta = await capture.$("main .pill-button");
-    if (cta && page.card !== "about" && page.card !== "contact") {
+    if (cta && page.card !== "about" && page.card !== "contact" && !page.card.startsWith("examples")) {
       const box = await cta.boundingBox();
       visual.cta = { src: await shot(cta), width: box.width, height: box.height };
     }
@@ -127,6 +127,7 @@ try {
 
   for (const page of pages) {
     const data = content[`${page.locale}-${page.card}`];
+    const headlineCard = page.card === "examples" || page.card === "examples-hotels";
     const illustrations = ["websites", "seo", "ads", "automation"].map(
       (slug) => content[`${page.locale}-services-${slug}`].illustration,
     );
@@ -196,7 +197,10 @@ try {
       .muted { color: #a3a3a3; }
       .contact-arrow { position: absolute; top: 40px; left: 40px; display: grid; place-items: center; width: 64px; height: 64px; border-radius: 999px; background: #fff; color: #171717; }
       .contact-arrow svg { width: 30px; height: 30px; }
-    </style></head><body><div class="card">
+      .headline-card { grid-template-columns: 1fr; }
+      .headline-card .text { max-width: 960px; }
+      .headline-card .right { display: none; }
+    </style></head><body><div class="card${headlineCard ? " headline-card" : ""}">
       <div class="left">
         <img class="logo" src="${wordmark}" alt="Suchio">
         <div class="text">${label}<h1>${data.headline}</h1>${data.copy && !data.cta ? `<p class="copy">${escape(data.copy)}</p>` : ""}</div>

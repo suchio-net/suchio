@@ -31,6 +31,7 @@ import Reveal from "@/components/reveal.astro";
 import SectionHeading from "@/components/section-heading.astro";
 import WhatsAppButton from "@/components/whatsapp-button.astro";
 import type { ServiceId } from "@/i18n/services";
+import { getExamplesCopy } from "@/i18n/examples";
 import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
 import { getServiceCatalog } from "@/lib/service-catalog";
 import { serviceOrder, serviceRouteSlugs } from "@/lib/service-routes";
@@ -225,6 +226,19 @@ const related = services.filter((entry) => entry.id !== serviceId);
         </nav>
       </div>
     </section>
+
+    {serviceId === "websites-apps" && (
+      <div class="px-page pb-section-compact">
+        <div class="mx-auto max-w-[70rem]">
+          <a
+            class="text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
+            href={localizePath("/examples/hotels", locale)}
+          >
+            {getExamplesCopy(locale).websitesLink}
+          </a>
+        </div>
+      </div>
+    )}
 
     <section class="flex min-h-[28rem] flex-col items-center justify-center bg-black px-page py-section text-center text-inverse">
       <Reveal className="min-w-0 w-full">

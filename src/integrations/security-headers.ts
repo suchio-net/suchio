@@ -5,7 +5,7 @@ import type { AstroIntegration } from "astro";
 import { securityHeaders } from "../lib/security-headers";
 
 // Client drafts load the client's own photos, fonts, map and booking engine, so the site policy does not apply there.
-const draftPrefixes = ["entwurf/", "projekte/"];
+const draftPrefixes = ["entwurf/", "projekte/", "examples/hotels/flughotel-nordtor"];
 const isDraft = (page: string) => draftPrefixes.some((prefix) => page.replaceAll("\\", "/").startsWith(prefix));
 
 const hash = (content: string) => `'sha256-${createHash("sha256").update(content).digest("base64")}'`;

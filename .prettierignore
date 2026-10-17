@@ -8,7 +8,7 @@ public/
 src/worker-configuration.d.ts
 migrations/
 # A finished draft file, published byte for byte.
-src/entwurf/parkhotel/
+src/examples/hotels/flughotel-nordtor/
 # Generated report with embedded fonts and evidence images.
 src/projekte/handwerker-work/analyse/index.html
 src/projekte/handwerker-work/analyse/PROVENANCE.md

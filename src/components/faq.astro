@@ -2,7 +2,7 @@
 import Disclosure from "@/components/disclosure.astro";
 import type { Faq } from "@/lib/faqs";
 interface Props {
-  items: readonly Pick<Faq, "question" | "answer">[];
+  items: readonly (Pick<Faq, "question" | "answer"> & { answerLink?: { text: string; href: string } })[];
   id?: string;
 }
 const { items, id = "faq" } = Astro.props;
@@ -11,7 +11,22 @@ const { items, id = "faq" } = Astro.props;
 <div class="reveal" data-reveal>
   {items.map((item, index) => (
     <Disclosure id={`${id}-${index}`} group={id} title={item.question}>
-      <p class="m-0">{item.answer}</p>
+      <p class="m-0">
+        {item.answerLink ? (
+          <>
+            {item.answer.slice(0, item.answer.indexOf(item.answerLink.text))}
+            <a
+              class="underline decoration-line-strong underline-offset-4 hover:decoration-ink"
+              href={item.answerLink.href}
+            >
+              {item.answerLink.text}
+            </a>
+            {item.answer.slice(item.answer.indexOf(item.answerLink.text) + item.answerLink.text.length)}
+          </>
+        ) : (
+          item.answer
+        )}
+      </p>
     </Disclosure>
   ))}
 </div>

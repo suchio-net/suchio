@@ -21,7 +21,12 @@ export default defineConfig({
   redirects: {
     ...draftRedirects,
     ...legacyRedirects,
-    "/entwurf/parkhotel/index.html": "/entwurf/parkhotel",
+    ...Object.fromEntries(
+      ["/entwurf/parkhotel", "/entwurf/parkhotel/index.html"].map((from) => [
+        from,
+        { status: 308, destination: "/examples/hotels" },
+      ]),
+    ),
     // Old service slugs stay reachable.
     ...Object.fromEntries(legacyServiceRoutes.map(({ from, to }) => [from, { status: 308, destination: to }])),
   },

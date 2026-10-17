@@ -5,7 +5,7 @@ import { socialImagePath } from "../src/lib/social-image";
 
 test("every public page has a 1200×630 social card", async () => {
   const cards = new Set(publicRoutes.map(({ pathname, locale }) => socialImagePath(pathname, locale)));
-  expect(cards.size).toBe(21);
+  expect(cards.size).toBe(27);
   for (const card of cards) {
     const { width, height, format } = await sharp(`public${card}`).metadata();
     expect({ card, width, height, format }).toEqual({ card, width: 1200, height: 630, format: "png" });

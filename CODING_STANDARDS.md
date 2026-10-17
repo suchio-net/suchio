@@ -23,6 +23,8 @@ Judgement calls for reviewing a change before it is handed back. Mechanical rule
 
 ## Client concepts (`/projekte/<client>`)
 
+Industry concepts under `/examples` are fictional businesses, carry a visible "Konzept · fiktiv" banner, use only licensed photos with sources recorded, and use no real business's name, photos or text.
+
 Pitch websites for prospective clients. They must read as a clear improvement of the client's own site, not as a template.
 
 - Build the navigation from the client's real pages, one real page per item, and move their real content into it. Big changes are fine; invented services, claims or visuals are not, and extras only mirror something the client already offers.

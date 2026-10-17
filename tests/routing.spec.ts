@@ -26,10 +26,15 @@ test("sitemap excludes legal pages and drafts and gives every URL reciprocal lan
   const response = await sitemap({} as Parameters<typeof sitemap>[0]);
   const xml = await response.text();
   const entries = [...xml.matchAll(/<url>(.*?)<\/url>/g)].map(([, entry]) => entry);
-  expect(entries).toHaveLength(21);
+  expect(entries).toHaveLength(27);
   expect(xml).not.toContain("/privacy");
   expect(xml).not.toContain("/entwurf/");
   expect(xml).not.toContain("/projekte/");
+  expect(xml).not.toContain("/examples/hotels/flughotel-nordtor");
+  for (const prefix of ["", "/en", "/fr"]) {
+    expect(xml).toContain(`<loc>https://suchio.net${prefix}/examples</loc>`);
+    expect(xml).toContain(`<loc>https://suchio.net${prefix}/examples/hotels</loc>`);
+  }
   for (const entry of entries) {
     for (const language of ["de", "en", "fr", "x-default"]) expect(entry).toContain(`hreflang="${language}"`);
     expect(entry).toContain("<loc>https://suchio.net/");

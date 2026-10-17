@@ -12,6 +12,7 @@ Astro generates the multilingual public pages and metadata. Cloudflare Workers h
 
 ## Where files go
 
+- Industry concepts: `src/examples/<industry>/<concept>/`, with thin routes in `src/pages/examples/<industry>/`. These fictional concepts are separate from client concepts in `src/projekte/`.
 - Client concepts: `src/projekte/<client>/`, with thin routes in `src/pages/projekte/<client>/` and static files in `public/projekte/<client>/`. Handwerker.work uses `website-a/` and `website-b/` for Website A and Website B.
 - Scratch work: `tmp/<task>/`. It is disposable and may be deleted at any time.
 - Repo tools write to `tmp/<tool>/`, for example `tmp/captures` and `tmp/dev.log`.

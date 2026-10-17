@@ -7,6 +7,8 @@ export const indexableBasePaths = [
   "/",
   "/about",
   "/contact",
+  "/examples",
+  "/examples/hotels",
   ...serviceOrder.map((id) => `/services/${serviceRouteSlugs[id]}`),
 ] as const;
 export const legalBasePaths = ["/imprint", "/privacy"] as const;

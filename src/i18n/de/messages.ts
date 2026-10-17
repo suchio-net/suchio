@@ -1,5 +1,6 @@
 const messages = {
   "nav.services": "Leistungen",
+  "nav.examples": "Beispiele",
   "nav.about": "Über uns",
   "nav.contact": "Kontakt",
   "nav.brandHome": "Suchio Startseite",
