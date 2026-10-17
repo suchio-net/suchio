@@ -347,16 +347,10 @@ picture{display:contents}
 .js:not(.static) [data-reveal]>*{clip-path:inset(100% 0 0 0)}
 
 /* Suchio pitch layer */
-.pitch{position:fixed;left:20px;bottom:20px;z-index:60;display:flex;align-items:center;gap:12px;background:#fff;border-radius:999px;padding:6px 6px 6px 16px;box-shadow:0 12px 32px -12px rgba(0,0,0,.3),0 0 0 1px rgba(0,0,0,.06);font:500 .85rem/1 "Schibsted Grotesk",sans-serif;color:var(--ink)}
+.pitch{position:fixed;left:20px;bottom:20px;z-index:60;display:flex;align-items:center;gap:12px;background:#fff;border-radius:999px;padding:10px 16px;box-shadow:0 12px 32px -12px rgba(0,0,0,.3),0 0 0 1px rgba(0,0,0,.06);font:500 .85rem/1 "Schibsted Grotesk",sans-serif;color:var(--ink)}
 .pitch b{font-weight:700;letter-spacing:-.02em}
 .pitch b i{font-style:normal;color:var(--suchio)}
 .pitch span{color:var(--muted)}
-.pitch button{border:0;border-radius:999px;background:var(--suchio);color:#fff;font:inherit;padding:9px 14px;cursor:pointer}
-.pitch button[aria-pressed=true]{background:var(--ink)}
-.note{display:none}
-body.notes .note{position:absolute;z-index:30;display:flex;gap:10px;align-items:flex-start;max-width:290px;background:var(--suchio);color:#fff;padding:10px 14px 11px 10px;border-radius:12px;font:500 .84rem/1.35 "Schibsted Grotesk",sans-serif;text-align:left;box-shadow:0 16px 32px -14px rgba(0,60,160,.6);animation:note-in .5s var(--ease) both}
-body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#fff;color:var(--suchio);font-style:normal;font-weight:700;font-size:.8rem}
-@keyframes note-in{from{opacity:0;transform:translateY(6px) scale(.97)}}
 .rel{position:relative}
 
 @media (max-width:1080px){
@@ -484,7 +478,6 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
   .pitch{bottom:84px;left:12px}
   .pitch{transition:opacity .4s var(--ease)}
   body:not(.past-hero) .pitch{opacity:0;pointer-events:none}
-  body.notes .note{position:relative;inset:auto!important;max-width:none;margin:14px 0;font-size:.82rem}
 }
 @media (max-width:400px){
   .includes{grid-template-columns:1fr}
@@ -535,7 +528,6 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
     <div class="wrap hero-copy rel">
       <h1><span class="line"><span class="hero-name">Flughotel Nordtor</span></span><span class="line"><span>Ruhig schlafen,</span></span><span class="line"><span>entspannt abfliegen.</span></span></h1>
       <p class="hero-sub" data-fade>Ihr Hotel am Nordrand des Frankfurter Flughafens, wenige Minuten vom Terminal.</p>
-      <span class="note" style="right:var(--gutter);bottom:calc(100% + 24px)"><i>1</i>Das Haus im ersten Bild, eine klare Aussage und die Buchung sofort sichtbar, ohne Scrollen.</span>
     </div>
     <div class="wrap book-wrap rel" data-fade>
       <form class="book" method="get" aria-label="Verfügbarkeit prüfen">
@@ -550,7 +542,6 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
         <span><svg class="ico" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Kostenlose Parkplätze</span>
         <span><svg class="ico" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Frühstücksbuffet</span>
       </div>
-      <span class="note" style="right:var(--gutter);bottom:calc(100% + 16px)"><i>2</i>Gebucht wird über das bestehende Buchungssystem des Hotels. Jede Direktbuchung spart die Provision an Buchungsportale.</span>
     </div>
   </section>
 
@@ -582,7 +573,6 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
           <p class="fine" data-fade>Buchbar mit gültigem Flugticket.</p>
         </div>
         <figure class="psf-media photo" data-reveal><picture><source type="image/avif" srcset="/examples/hotels/flughotel-nordtor/img/slot-04-w350.avif 350w, /examples/hotels/flughotel-nordtor/img/slot-04-w655.avif 655w, /examples/hotels/flughotel-nordtor/img/slot-04-w700.avif 700w, /examples/hotels/flughotel-nordtor/img/slot-04-w1310.avif 1310w" sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 655px"><source type="image/webp" srcset="/examples/hotels/flughotel-nordtor/img/slot-04-w350.webp 350w, /examples/hotels/flughotel-nordtor/img/slot-04-w655.webp 655w, /examples/hotels/flughotel-nordtor/img/slot-04-w700.webp 700w, /examples/hotels/flughotel-nordtor/img/slot-04-w1310.webp 1310w" sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 655px"><img src="/examples/hotels/flughotel-nordtor/img/slot-04-w655.jpg" srcset="/examples/hotels/flughotel-nordtor/img/slot-04-w350.jpg 350w, /examples/hotels/flughotel-nordtor/img/slot-04-w655.jpg 655w, /examples/hotels/flughotel-nordtor/img/slot-04-w700.jpg 700w, /examples/hotels/flughotel-nordtor/img/slot-04-w1310.jpg 1310w" sizes="(max-width: 760px) 100vw, (max-width: 1080px) 50vw, 655px" alt="Parkplatz unter Bäumen mit parkenden Autos auf Kopfsteinpflaster" loading="lazy"></picture></figure>
-        <span class="note" style="right:24px;top:-40px"><i>3</i>Das Angebot, das nur dieses Haus hat, bekommt einen eigenen Bereich und einen Preis, der überall gleich ist, statt in einem Pop-up zu verschwinden.</span>
       </div>
 
       <div class="journey">
@@ -710,7 +700,6 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
           <small>Urlaub</small>
         </article>
       </div>
-      <span class="note" style="right:var(--gutter);top:-30px"><i>6</i>Beispieltexte. Auf einer echten Hotel-Website erscheinen hier die Google-Bewertungen des Hauses.</span>
     </div>
   </section>
 
@@ -728,7 +717,6 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
         </div>
         <div class="map"><svg viewBox="0 0 720 560" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Karte: Flughotel Nordtor, Frankfurt am Main"><rect width="720" height="560" fill="#ebe8e1"/><rect x="-20" y="-20" width="260" height="120" rx="40" fill="#e2ddd0"/><rect x="520" y="430" width="240" height="170" rx="40" fill="#e2ddd0"/><rect x="40" y="330" width="640" height="36" rx="4" fill="#cdc6b6"/><line x1="70" y1="348" x2="650" y2="348" stroke="#f7f5f0" stroke-width="2" stroke-dasharray="16 14"/><rect x="170" y="390" width="330" height="26" rx="4" fill="#cdc6b6"/><path d="M-10 118C140 118 250 136 400 150" fill="none" stroke="rgba(20,27,44,.12)" stroke-width="16" stroke-linecap="round"/><path d="M-10 118C140 118 250 136 400 150" fill="none" stroke="#fffdf8" stroke-width="12" stroke-linecap="round"/><rect x="250" y="236" width="170" height="70" rx="8" fill="#1a2f66"/><rect x="285" y="306" width="18" height="24" fill="#1a2f66" opacity=".55"/><rect x="330" y="306" width="18" height="24" fill="#1a2f66" opacity=".55"/><rect x="375" y="306" width="18" height="24" fill="#1a2f66" opacity=".55"/><ellipse cx="400" cy="152" rx="10" ry="3" fill="rgba(20,27,44,.2)"/><g transform="translate(400 150)"><path d="M0 0C-6-10-26-26-26-48C-26-62-15-72 0-72C15-72 26-62 26-48C26-26 6-10 0 0Z" fill="#1a2f66"/><circle cx="0" cy="-48" r="9" fill="#fff"/></g><rect x="436" y="86" width="180" height="36" rx="18" fill="#fff" stroke="rgba(20,27,44,.1)"/><text x="526" y="104" text-anchor="middle" dominant-baseline="middle" font-family="Schibsted Grotesk, system-ui, sans-serif" font-size="15" font-weight="600" fill="#141b2c">Flughotel Nordtor</text></svg></div>
       </div>
-      <span class="note" style="right:calc(var(--gutter) + 24px);top:-30px"><i>4</i>Anfahrt für die drei Wege, auf denen Gäste kommen: Auto, Flughafen und Bahn, mit dem Parken gleich dabei.</span>
     </div>
   </section>
 </main>
@@ -752,7 +740,6 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
       <div><h3>Tagungen</h3><ul><li><a href="#tagungen">Räume</a></li><li><a href="#">Pauschalen</a></li></ul></div>
     </div>
     <div class="legal"><span>© 2026 Flughotel Nordtor · Konzept von Suchio</span><span><a href="/imprint">Impressum</a><a href="/datenschutz">Datenschutz</a></span></div>
-    <span class="note" style="left:var(--gutter);bottom:90px"><i>5</i>Im Footer stehen nur Kanäle und Seiten, die gepflegt werden.</span>
   </div>
 </footer>
 
@@ -785,7 +772,6 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
 
 <div class="pitch" role="group" aria-label="Suchio-Entwurf">
   <b>suchi<i>o</i></b><span>Konzept</span>
-  <button type="button" aria-pressed="false">Hinweise</button>
 </div>
 
 <script>
@@ -980,11 +966,6 @@ body.notes .note i{flex:none;display:grid;place-items:center;width:22px;height:2
   const banner = document.querySelector('.kbanner');
   const setBanner = () => document.documentElement.style.setProperty('--kbar', banner.offsetHeight + 'px');
   addEventListener('resize', setBanner); setBanner();
-
-  const toggle = document.querySelector('.pitch button');
-  const setNotes = on => { document.body.classList.toggle('notes', on); toggle.setAttribute('aria-pressed', on); };
-  toggle.addEventListener('click', () => setNotes(!document.body.classList.contains('notes')));
-  if (new URLSearchParams(location.search).has('hinweise')) setNotes(true);
 
   const statement = document.querySelector('.statement');
   statement.innerHTML = statement.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' ');
