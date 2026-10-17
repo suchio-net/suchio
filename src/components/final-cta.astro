@@ -5,8 +5,20 @@ import { localizePath, t, type Locale } from "@/lib/i18n";
 interface Props {
   locale: Locale;
   singleLine?: boolean;
+  /** Page-specific copy; the site-wide closing copy is used for anything left out. */
+  title?: string;
+  copy?: string;
+  button?: string;
+  href?: string;
 }
-const { locale, singleLine = false } = Astro.props;
+const {
+  locale,
+  singleLine = false,
+  title = t(locale, "finalCta.title"),
+  copy = t(locale, "finalCta.copy"),
+  button = t(locale, "home.ctaContact"),
+  href = localizePath("/contact", locale),
+} = Astro.props;
 ---
 
 <section class="flex min-h-[28rem] flex-col items-center justify-center bg-black px-page py-section text-center text-inverse">
@@ -14,12 +26,12 @@ const { locale, singleLine = false } = Astro.props;
     <h2
       class={`mx-auto text-display-sm text-white ${singleLine ? "w-max max-w-full whitespace-nowrap max-nav:w-auto max-nav:whitespace-normal" : "max-w-[18ch]"}`}
     >
-      {t(locale, "finalCta.title")}
+      {title}
     </h2>
-    <p class="mx-auto mt-6 mb-7 max-w-[35rem] text-lg/7 text-inverse-muted">{t(locale, "finalCta.copy")}</p>
+    <p class="mx-auto mt-6 mb-7 max-w-[35rem] text-lg/7 text-inverse-muted">{copy}</p>
     <div class="flex justify-center gap-3">
-      <CtaButton href={localizePath("/contact", locale)} light>
-        {t(locale, "home.ctaContact")}
+      <CtaButton href={href} light className="[&>span:first-child]:min-w-0">
+        {button}
       </CtaButton>
       <WhatsAppButton locale={locale} />
     </div>

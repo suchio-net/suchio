@@ -2,15 +2,16 @@ import type { ExamplesCopy } from "../examples";
 
 const examples = {
   overview: {
-    title: "Examples: websites for your industry | Suchio",
+    label: "Examples",
+    title: "Website examples by industry | Suchio",
     description:
-      "Concepts by Suchio that show what a website for your industry can look like. The businesses are invented; the solutions are what we build.",
-    h1: "Examples",
+      "Concepts by Suchio that show what a website for your industry can look like. The businesses are invented; we design your website for your business.",
+    h1: "Website examples for your industry",
     intro:
-      "Concepts that show what a website for your industry can look like. The businesses are invented; the solutions are what we build.",
+      "Concepts that show what a website for your industry can look like. The businesses are invented; we design your website for your business.",
     cardTitle: "Hotels",
     cardText: "A hotel website built for direct bookings. With a concept: Flughotel Nordtor.",
-    cardLink: "View",
+    cardLink: "View hotel websites",
   },
   hotels: {
     title: "Hotel website design – more direct bookings | Suchio",
@@ -19,45 +20,52 @@ const examples = {
     h1: "Websites for hotels",
     intro:
       "A hotel website has one job: guests should book directly with you instead of through a portal that takes a cut of every booking. We build hotel websites that show rooms, prices and booking at once, load fast on phones and are found on Google and in AI answers.",
-    concept: {
-      label: "Concept · fictional hotel",
-      title: "Flughotel Nordtor",
-      text: "An invented airport hotel we designed as a concept. This is what a hotel website built for direct bookings can look like. The concept is in German.",
-      link: "View the concept",
-    },
+    conceptsHeading: "Hotel concepts",
+    conceptsText: "Invented hotels that show what is possible. We design your website for your property.",
+    conceptLabel: "Concept",
+    concepts: [
+      {
+        slug: "flughotel-nordtor",
+        name: "Flughotel Nordtor",
+        kind: "Airport hotel",
+        summary:
+          "Park, sleep & fly, meetings and rooms for trade fairs, on a website built for direct bookings. The concept is in German.",
+        link: "View the concept",
+      },
+    ],
     requirementsHeading: "What a hotel website has to do",
     requirements: [
       {
+        title: "In your guests' languages",
+        copy: "Each language on its own page, so guests from abroad find you in their language too.",
+      },
+      {
         title: "Booking in the first screen",
-        copy: "Arrival, departure and availability before anyone scrolls.",
-      },
-      {
-        title: "Direct booking",
-        copy: "Your existing booking system is built in, instead of sending guests to someone else's site.",
-      },
-      {
-        title: "Rooms guests can picture",
-        copy: "Photos, amenities and prices that match everywhere on the site.",
+        copy: "Arrival, departure and availability before anyone scrolls. Your booking system is built in, instead of sending guests to someone else's site.",
       },
       {
         title: "What only you offer",
         copy: "Packages such as park & fly, meetings or trade-fair rooms in plain view, not in a pop-up.",
       },
       {
+        title: "Rooms guests can picture",
+        copy: "Photos, amenities and prices that match everywhere on the site.",
+      },
+      {
+        title: "Real reviews",
+        copy: "Your Google reviews right on the site, so guests don't have to look elsewhere.",
+      },
+      {
         title: "Directions that are right",
         copy: "The correct location, parking and the way from the station or airport.",
       },
       {
-        title: "In your guests' languages",
-        copy: "Each language on its own page, so guests from abroad find you in their language too.",
+        title: "Complete",
+        copy: "Imprint, privacy policy and every way to get in touch, so nothing is missing.",
       },
       {
         title: "Fast on phones",
         copy: "That is where many guests search and book on the go.",
-      },
-      {
-        title: "Complete",
-        copy: "Real Google reviews, imprint and privacy policy.",
       },
     ],
     costsHeading: "What the cost depends on",

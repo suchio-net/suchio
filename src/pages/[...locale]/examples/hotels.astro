@@ -1,14 +1,17 @@
 ---
 import type { GetStaticPaths } from "astro";
+import { LayoutTemplate, LifeBuoy, MessagesSquare, Rocket } from "@lucide/astro";
 import ConceptPreview from "@/components/concept-preview.astro";
 import CtaButton from "@/components/cta-button.astro";
 import EditorialHero from "@/components/editorial-hero.astro";
 import Faq from "@/components/faq.astro";
+import FinalCta from "@/components/final-cta.astro";
 import SectionHeading from "@/components/section-heading.astro";
 import SiteLayout from "@/layouts/site-layout.astro";
 import { getExamplesCopy } from "@/i18n/examples";
 import { localeStaticPaths, localizePath, type Locale } from "@/lib/i18n";
 import { breadcrumbNode, faqEntities, pageNode } from "@/lib/structured-data";
+import { hotelConcepts, type HotelConceptSlug } from "@/examples/hotels/concepts";
 
 export const getStaticPaths = (() => localeStaticPaths()) satisfies GetStaticPaths;
 interface Props {
@@ -17,7 +20,7 @@ interface Props {
 const { locale } = Astro.props;
 const { overview, hotels: copy } = getExamplesCopy(locale);
 const path = localizePath("/examples/hotels", locale);
-const conceptHref = "/examples/hotels/flughotel-nordtor";
+const processIcons = [MessagesSquare, LayoutTemplate, Rocket, LifeBuoy];
 const faqs = copy.faqs.map((item) => ({
   ...item,
   answerLink: item.linkText ? { text: item.linkText, href: localizePath("/services/seo", locale) } : undefined,
@@ -35,7 +38,7 @@ const faqs = copy.faqs.map((item) => ({
       mainEntity: faqEntities(copy.faqs),
     }),
     breadcrumbNode(locale, [
-      { name: overview.h1, path: localizePath("/examples", locale) },
+      { name: overview.label, path: localizePath("/examples", locale) },
       { name: overview.cardTitle, path },
     ]),
   ]}
@@ -48,7 +51,7 @@ const faqs = copy.faqs.map((item) => ({
             class="underline decoration-line-strong underline-offset-4 hover:decoration-ink"
             href={localizePath("/examples", locale)}
           >
-            {overview.h1}
+            {overview.label}
           </a>
         </li>
         <li aria-hidden="true">›</li>
@@ -56,61 +59,103 @@ const faqs = copy.faqs.map((item) => ({
       </ol>
     </EditorialHero>
 
-    <section class="px-page pb-section">
-      <article class="mx-auto grid max-w-[70rem] grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-center gap-8 rounded-card bg-white p-card-fluid shadow-surface max-compact:grid-cols-1">
-        <div>
-          <p class="m-0 text-sm text-muted">{copy.concept.label}</p>
-          <h2 class="mt-3 text-heading-md">{copy.concept.title}</h2>
-          <p class="mt-3 max-w-reading text-lg/7 text-muted">{copy.concept.text}</p>
-          <a
-            class="mt-6 inline-block text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
-            href={conceptHref}
-          >
-            {copy.concept.link}
-          </a>
-        </div>
-        <a href={conceptHref} tabindex="-1" aria-hidden="true" class="block max-compact:-order-1">
-          <ConceptPreview />
-        </a>
-      </article>
+    <section class="px-page pt-section-compact pb-section">
+      <div class="mx-auto max-w-layout">
+        <SectionHeading title={copy.conceptsHeading} copy={copy.conceptsText} />
+        <ul class={`m-0 grid list-none gap-x-8 gap-y-14 p-0 ${copy.concepts.length > 1 ? "nav:grid-cols-2" : ""}`}>
+          {copy.concepts.map((concept) => (
+            <li
+              class={`group grid gap-x-12 gap-y-6 ${copy.concepts.length === 1 ? "items-end nav:grid-cols-[minmax(0,8fr)_minmax(0,4fr)]" : ""}`}
+            >
+              <a
+                href={hotelConcepts[concept.slug as HotelConceptSlug].live}
+                tabindex="-1"
+                aria-hidden="true"
+                class="block overflow-hidden rounded-shell shadow-floating"
+              >
+                <ConceptPreview
+                  base={hotelConcepts[concept.slug as HotelConceptSlug].preview}
+                  sizes="(max-width: 900px) 100vw, 50rem"
+                  className="transition-transform duration-700 ease-out group-has-[a:hover]:scale-[1.02]"
+                />
+              </a>
+              <div>
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+                  <h3 class="m-0 text-heading-md">{concept.name}</h3>
+                  <span class="rounded-pill bg-surface-selected px-2.5 py-0.5 text-meta text-muted">
+                    {copy.conceptLabel}
+                  </span>
+                </div>
+                <p class="mt-1 text-lg/7 text-muted">{concept.kind}</p>
+                <p class="mt-4 max-w-[26rem] text-lg/7 text-muted">{concept.summary}</p>
+                <CtaButton
+                  href={hotelConcepts[concept.slug as HotelConceptSlug].live}
+                  className="mt-8 [&>span:first-child]:min-w-0"
+                >
+                  {concept.link}
+                </CtaButton>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
 
     <section class="px-page py-section">
-      <div class="mx-auto max-w-[70rem]">
+      <div class="mx-auto max-w-layout">
         <SectionHeading title={copy.requirementsHeading} />
-        <ol class="m-0 grid list-none grid-cols-2 gap-4 p-0 max-compact:grid-cols-1">
+        <ul class="m-0 grid list-none grid-cols-2 gap-x-split p-0 max-nav:grid-cols-1">
           {copy.requirements.map((item) => (
-            <li class="rounded-card bg-white p-card-padding shadow-surface">
+            <li class="border-t border-line py-6">
               <h3 class="m-0 text-heading-sm">{item.title}</h3>
-              <p class="mt-3 text-base/6 text-muted">{item.copy}</p>
+              <p class="mt-2 max-w-[30rem] text-base/6 text-muted">{item.copy}</p>
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
     </section>
 
     <section class="bg-white px-page py-section">
-      <div class="mx-auto max-w-[70rem]">
-        <SectionHeading title={copy.costsHeading} />
-        <ul class="m-0 grid gap-3 pl-5 text-lg/7 text-muted">
+      <div class="mx-auto grid max-w-layout grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-x-split gap-y-8 max-nav:grid-cols-1">
+        <div class="reveal" data-reveal>
+          <h2 class="m-0 text-heading-lg">{copy.costsHeading}</h2>
+          <p class="mt-4 max-w-[26rem] text-lg/7 text-muted">{copy.costsAfter}</p>
+        </div>
+        <ul class="m-0 list-none border-b border-line p-0">
           {copy.costs.map((item) => (
-            <li>{item}</li>
+            <li class="border-t border-line py-5 text-heading-sm">{item}</li>
           ))}
         </ul>
-        <p class="mt-6 text-lg/7 text-muted">{copy.costsAfter}</p>
       </div>
     </section>
 
     <section class="px-page py-section">
       <div class="mx-auto max-w-[70rem]">
-        <SectionHeading title={copy.processHeading} />
-        <ol class="m-0 grid list-inside list-decimal grid-cols-2 gap-4 p-0 max-compact:grid-cols-1">
-          {copy.process.map((item) => (
-            <li class="rounded-card bg-white p-card-padding text-meta text-muted shadow-surface">
-              <h3 class="mt-4 text-heading-sm text-ink">{item.title}</h3>
-              <p class="mt-3 text-base/6 text-muted">{item.copy}</p>
-            </li>
-          ))}
+        <SectionHeading title={copy.processHeading} align="center" />
+        <ol class="process-list m-0 grid list-none grid-cols-4 gap-4 p-0 pt-13 max-nav:grid-cols-1 max-nav:pt-0">
+          {copy.process.map((item, index) => {
+            const Icon = processIcons[index]!;
+            return (
+              <li
+                class="process-step relative rounded-card bg-white p-card-padding shadow-surface max-nav:ml-12"
+                style={{ "--process-delay": `${index * 160}ms` }}
+                data-reveal
+                data-reveal-threshold="half"
+              >
+                <span
+                  class="process-node absolute -top-13 left-[calc(50%_-_19px)] z-[1] grid size-[38px] place-items-center rounded-full bg-ink font-mono text-meta text-white tabular-nums max-nav:top-6 max-nav:-left-12"
+                  aria-hidden="true"
+                >
+                  {index + 1}
+                </span>
+                <Icon class="block size-8" stroke-width={1.7} aria-hidden="true" />
+                <div class="pt-4">
+                  <h3 class="mt-0 mb-2 text-heading-sm">{item.title}</h3>
+                  <p class="text-base/6 text-muted">{item.copy}</p>
+                </div>
+              </li>
+            );
+          })}
         </ol>
       </div>
     </section>
@@ -122,20 +167,12 @@ const faqs = copy.faqs.map((item) => ({
       </div>
     </section>
 
-    <section class="flex min-h-[28rem] flex-col items-center justify-center bg-black px-page py-section text-center text-inverse">
-      <div class="reveal min-w-0 w-full" data-reveal>
-        <h2 class="mx-auto max-w-[18ch] text-display-sm text-white">{copy.cta.heading}</h2>
-        <p class="mx-auto mt-6 mb-7 max-w-[35rem] text-lg/7 text-inverse-muted">{copy.cta.text}</p>
-        <div class="flex justify-center gap-3">
-          <CtaButton
-            href={`${localizePath("/contact", locale)}?service=websites-apps`}
-            light
-            className="[&>span:first-child]:min-w-0"
-          >
-            {copy.cta.button}
-          </CtaButton>
-        </div>
-      </div>
-    </section>
+    <FinalCta
+      locale={locale}
+      title={copy.cta.heading}
+      copy={copy.cta.text}
+      button={copy.cta.button}
+      href={`${localizePath("/contact", locale)}?service=websites-apps`}
+    />
   </main>
 </SiteLayout>

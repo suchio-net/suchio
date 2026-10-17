@@ -1,7 +1,9 @@
 ---
 import type { GetStaticPaths } from "astro";
 import ConceptPreview from "@/components/concept-preview.astro";
+import CtaButton from "@/components/cta-button.astro";
 import EditorialHero from "@/components/editorial-hero.astro";
+import FinalCta from "@/components/final-cta.astro";
 import SiteLayout from "@/layouts/site-layout.astro";
 import { getExamplesCopy } from "@/i18n/examples";
 import { localeStaticPaths, localizePath, type Locale } from "@/lib/i18n";
@@ -31,14 +33,13 @@ const { overview: copy } = getExamplesCopy(locale);
           </a>
           <h2 class="m-0 text-heading-md">{copy.cardTitle}</h2>
           <p class="mt-3 text-lg/7 text-muted">{copy.cardText}</p>
-          <a
-            class="mt-6 inline-block text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
-            href={localizePath("/examples/hotels", locale)}
-          >
+          <CtaButton href={localizePath("/examples/hotels", locale)} className="mt-8 [&>span:first-child]:min-w-0">
             {copy.cardLink}
-          </a>
+          </CtaButton>
         </article>
       </div>
     </section>
+
+    <FinalCta locale={locale} />
   </main>
 </SiteLayout>

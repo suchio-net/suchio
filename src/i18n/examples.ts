@@ -5,10 +5,16 @@ import fr from "./fr/examples";
 
 type PageCopy = { title: string; description: string; h1: string; intro: string };
 type Item = { title: string; copy: string };
+/** One concept of an industry, shown as a tile on the industry page that opens the concept. */
+export type ConceptCopy = { slug: string; name: string; kind: string; summary: string; link: string };
 export type ExamplesCopy = {
-  overview: PageCopy & { cardTitle: string; cardText: string; cardLink: string };
+  /** `label` is the short name breadcrumbs use. */
+  overview: PageCopy & { label: string; cardTitle: string; cardText: string; cardLink: string };
   hotels: PageCopy & {
-    concept: { label: string; title: string; text: string; link: string };
+    conceptsHeading: string;
+    conceptsText: string;
+    conceptLabel: string;
+    concepts: ConceptCopy[];
     requirementsHeading: string;
     requirements: Item[];
     costsHeading: string;

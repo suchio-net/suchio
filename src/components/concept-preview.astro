@@ -1,11 +1,16 @@
 ---
-// Screenshot of the Flughotel Nordtor concept, taken at 1440 x 900 without the pitch-notes pill.
-// The concept's text link carries the meaning, so the picture is decorative.
+// Screenshot of a concept's first screen, taken at 1440 x 900 without the pitch-notes pill.
+// The link next to it carries the meaning, so the picture is decorative.
 interface Props {
+  base?: string;
   sizes?: string;
+  className?: string;
 }
-const { sizes = "(max-width: 760px) 100vw, 640px" } = Astro.props;
-const base = "/examples/hotels/flughotel-nordtor-preview";
+const {
+  base = "/examples/hotels/flughotel-nordtor-preview",
+  sizes = "(max-width: 760px) 100vw, 640px",
+  className = "rounded-control border border-line shadow-surface",
+} = Astro.props;
 const srcset = (ext: string) => `${base}-720.${ext} 720w, ${base}-1440.${ext} 1440w`;
 ---
 
@@ -20,6 +25,6 @@ const srcset = (ext: string) => `${base}-720.${ext} 720w, ${base}-1440.${ext} 14
     alt=""
     loading="lazy"
     decoding="async"
-    class="block h-auto w-full rounded-control border border-line shadow-surface"
+    class={`block h-auto w-full ${className}`}
   />
 </picture>

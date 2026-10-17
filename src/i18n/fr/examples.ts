@@ -2,62 +2,71 @@ import type { ExamplesCopy } from "../examples";
 
 const examples = {
   overview: {
-    title: "Exemples : des sites pour votre secteur | Suchio",
+    label: "Exemples",
+    title: "Exemples de sites web par secteur | Suchio",
     description:
-      "Des concepts de Suchio qui montrent à quoi peut ressembler un site pour votre secteur. Les entreprises sont fictives, les solutions sont celles que nous réalisons.",
-    h1: "Exemples",
+      "Des concepts de Suchio qui montrent à quoi peut ressembler un site pour votre secteur. Les entreprises sont fictives ; votre site, nous le concevons pour votre entreprise.",
+    h1: "Exemples de sites web pour votre secteur",
     intro:
-      "Des concepts qui montrent à quoi peut ressembler un site pour votre secteur. Les entreprises sont fictives, les solutions sont celles que nous réalisons.",
+      "Des concepts qui montrent à quoi peut ressembler un site pour votre secteur. Les entreprises sont fictives ; votre site, nous le concevons pour votre entreprise.",
     cardTitle: "Hôtels",
     cardText: "Un site d'hôtel conçu pour les réservations directes. Avec un concept : Flughotel Nordtor.",
-    cardLink: "Voir",
+    cardLink: "Voir les sites d'hôtel",
   },
   hotels: {
-    title: "Création de site web pour hôtel – plus de réservations directes | Suchio",
+    title: "Site web pour hôtel – plus de réservations directes | Suchio",
     description:
       "Des sites d'hôtel qui montrent chambres, prix et réservation d'emblée, se chargent vite sur mobile et sont trouvés sur Google et dans les réponses d'IA. Avec un concept en exemple.",
     h1: "Sites web pour hôtels",
     intro:
       "Un site d'hôtel a une mission : que les clients réservent directement chez vous plutôt que via une plateforme qui prend une commission sur chaque réservation. Nous créons des sites d'hôtel qui montrent chambres, prix et réservation d'emblée, se chargent vite sur mobile et sont trouvés sur Google et dans les réponses d'IA.",
-    concept: {
-      label: "Concept · hôtel fictif",
-      title: "Flughotel Nordtor",
-      text: "Un hôtel d'aéroport imaginaire, conçu par nous comme concept. Voici à quoi peut ressembler un site d'hôtel pensé pour les réservations directes. Le concept est en allemand.",
-      link: "Voir le concept",
-    },
+    conceptsHeading: "Concepts pour hôtels",
+    conceptsText:
+      "Des hôtels imaginaires qui montrent ce qui est possible. Votre site, nous le concevons pour votre établissement.",
+    conceptLabel: "Concept",
+    concepts: [
+      {
+        slug: "flughotel-nordtor",
+        name: "Flughotel Nordtor",
+        kind: "Hôtel d'aéroport",
+        summary:
+          "Park, sleep & fly, séminaires et chambres pour les salons, sur un site pensé pour les réservations directes. Le concept est en allemand.",
+        link: "Voir le concept",
+      },
+    ],
     requirementsHeading: "Ce qu'un site d'hôtel doit faire",
     requirements: [
       {
+        title: "Dans les langues de vos clients",
+        copy: "Chaque langue sur sa propre page, pour que les clients étrangers vous trouvent aussi dans leur langue.",
+      },
+      {
         title: "La réservation dès le premier écran",
-        copy: "Arrivée, départ et disponibilités avant même de faire défiler.",
-      },
-      {
-        title: "Réserver en direct",
-        copy: "Votre système de réservation est intégré, au lieu d'envoyer vos clients sur un autre site.",
-      },
-      {
-        title: "Des chambres qu'on imagine",
-        copy: "Photos, équipements et prix identiques partout sur le site.",
+        copy: "Arrivée, départ et disponibilités avant même de faire défiler. Votre système de réservation est intégré, au lieu d'envoyer vos clients sur un autre site.",
       },
       {
         title: "Ce que vous seul proposez",
         copy: "Des forfaits comme park & fly, séminaires ou chambres pour salons bien visibles, pas dans une fenêtre pop-up.",
       },
       {
+        title: "Des chambres qu'on imagine",
+        copy: "Photos, équipements et prix identiques partout sur le site.",
+      },
+      {
+        title: "De vrais avis",
+        copy: "Vos avis Google directement sur le site, pour que vos clients n'aient pas à chercher ailleurs.",
+      },
+      {
         title: "Un accès exact",
         copy: "Le bon emplacement, le stationnement et le trajet depuis la gare ou l'aéroport.",
       },
       {
-        title: "Dans les langues de vos clients",
-        copy: "Chaque langue sur sa propre page, pour que les clients étrangers vous trouvent aussi dans leur langue.",
+        title: "Complet",
+        copy: "Mentions légales, politique de confidentialité et tous les moyens de contact, pour que rien ne manque.",
       },
       {
         title: "Rapide sur mobile",
         copy: "C'est là que beaucoup de clients cherchent et réservent en déplacement.",
-      },
-      {
-        title: "Complet",
-        copy: "De vrais avis Google, mentions légales et politique de confidentialité.",
       },
     ],
     costsHeading: "De quoi dépend le prix",
