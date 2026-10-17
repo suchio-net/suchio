@@ -3,7 +3,7 @@ import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
 import tailwindcss from "@tailwindcss/vite";
 import i18nConfig from "./src/i18n/config.json" with { type: "json" };
-import { redirects as draftRedirects } from "./src/entwurf/hw/v1/routes.mjs";
+import { redirects as draftRedirects, legacyRedirects } from "./src/projekte/handwerker-work/website-a/routes.mjs";
 import { auditReportsIntegration } from "./src/integrations/audit-reports";
 import { securityHeadersIntegration } from "./src/integrations/security-headers";
 import { draftImagesIntegration } from "./src/integrations/draft-images";
@@ -20,8 +20,7 @@ export default defineConfig({
   },
   redirects: {
     ...draftRedirects,
-    "/entwurf/handwerker-work/favicon.svg": "/entwurf/hw/favicon.svg",
-    "/entwurf/hw/v1/favicon.svg": "/entwurf/hw/favicon.svg",
+    ...legacyRedirects,
     "/entwurf/parkhotel/index.html": "/entwurf/parkhotel",
     // Old service slugs stay reachable.
     ...Object.fromEntries(legacyServiceRoutes.map(({ from, to }) => [from, { status: 308, destination: to }])),

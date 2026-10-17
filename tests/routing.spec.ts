@@ -29,6 +29,7 @@ test("sitemap excludes legal pages and drafts and gives every URL reciprocal lan
   expect(entries).toHaveLength(21);
   expect(xml).not.toContain("/privacy");
   expect(xml).not.toContain("/entwurf/");
+  expect(xml).not.toContain("/projekte/");
   for (const entry of entries) {
     for (const language of ["de", "en", "fr", "x-default"]) expect(entry).toContain(`hreflang="${language}"`);
     expect(entry).toContain("<loc>https://suchio.net/");

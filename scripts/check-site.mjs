@@ -2,6 +2,40 @@ import { siteOrigin } from "../src/lib/site-config.ts";
 import { defaultLocale, locales } from "../src/i18n/config.ts";
 import { publicRoutes, legacyServiceRoutes } from "../src/lib/public-routes.ts";
 
+const project = "/projekte/handwerker-work";
+const serviceSlugs = ["badsanierung", "sanitaer-heizung", "elektro", "fliesen", "renovierung"];
+const draftSuffixes = [
+  "leistungen",
+  ...serviceSlugs.map((slug) => `leistungen/${slug}`),
+  "gebaeudebetreuung",
+  "referenzen",
+  "kontakt",
+  "konzept",
+];
+const websiteATarget = (suffix) =>
+  suffix === "konzept" ? `${project}/website-b/konzept` : `${project}/website-a#${suffix.replace("leistungen/", "")}`;
+const movedPages = [
+  ["/entwurf/hw", project],
+  ["/entwurf/hw/analyse", `${project}/analyse`],
+  ["/entwurf/hw/v1", `${project}/website-a`],
+  ["/entwurf/hw/v2", `${project}/website-b`],
+  ...draftSuffixes.map((suffix) => [`/entwurf/hw/v1/${suffix}`, websiteATarget(suffix)]),
+  ...draftSuffixes.map((suffix) => [`/entwurf/hw/v2/${suffix}`, `${project}/website-b/${suffix}`]),
+];
+const movedAssets = [
+  ["analyse.pdf", "analyse.pdf"],
+  ["favicon.svg", "favicon.svg"],
+  ["img/og-handwerker-work.jpg", "img/og-handwerker-work.jpg"],
+  ["img/bad-led-480.webp", "img/bad-led-480.webp"],
+  ["img/bad-led-480.avif", "img/bad-led-480.avif"],
+  ["badges/check24-2019.svg", "badges/check24-2019.svg"],
+  ["v1/img/bad-led-480.webp", "img/bad-led-480.webp"],
+  ["v1/badges/myhammer.webp", "badges/myhammer.webp"],
+  ["v1/favicon.svg", "favicon.svg"],
+  ["v1/fonts/dm-sans-latin-opsz-normal.woff2", "website-a/fonts/dm-sans-latin-opsz-normal.woff2"],
+  ["v2/fonts/d-din.woff2", "website-b/fonts/d-din.woff2"],
+];
+
 export async function checkSite(origin = siteOrigin, transport = fetch) {
   const checks = [
     ...publicRoutes.map((route) => ({
@@ -40,20 +74,38 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
     // A local preview may intentionally have no mail credentials. Its readiness contract still must work.
     { path: "/api/health", status: origin === siteOrigin ? 200 : [200, 503] },
     { path: "/entwurf/parkhotel", status: 200 },
-    { path: "/entwurf/hw", status: 200 },
-    { path: "/entwurf/hw/analyse", status: 200 },
-    { path: "/entwurf/hw/analyse.pdf", status: 200, contentType: "application/pdf" },
-    { path: "/entwurf/hw/v1", status: 200 },
-    { path: "/entwurf/hw/v2", status: 200 },
-    { path: "/entwurf/hw/v2/referenzen", status: 200 },
     { path: "/entwurf/parkhotel/index.html", status: 301, destination: "/entwurf/parkhotel" },
+    ...[
+      project,
+      `${project}/analyse`,
+      `${project}/website-a`,
+      `${project}/website-b`,
+      ...draftSuffixes.map((suffix) => `${project}/website-b/${suffix}`),
+    ].map((path) => ({ path, status: 200, draft: true })),
+    ...movedPages.flatMap(([from, destination]) =>
+      [from, `${from}.html`].map((path) => ({ path, status: 308, destination })),
+    ),
+    ...draftSuffixes.flatMap((suffix) =>
+      [suffix, `${suffix}.html`].map((path) => ({
+        path: `${project}/website-a/${path}`,
+        status: 302,
+        destination: websiteATarget(suffix),
+      })),
+    ),
+    ...movedAssets.flatMap(([from, to]) => [
+      { path: `/entwurf/hw/${from}`, status: 308, destination: `${project}/${to}` },
+      { path: `${project}/${to}`, status: 200, ...(to === "analyse.pdf" ? { contentType: "application/pdf" } : {}) },
+    ]),
     {
-      path: "/entwurf/handwerker-work/img/bad-led-480.webp",
-      status: 301,
-      destination: "/entwurf/hw/img/bad-led-480.webp",
+      path: "/entwurf/hw/v2/kontakt?hinweise",
+      status: 308,
+      destination: `${project}/website-b/kontakt?hinweise`,
     },
-    { path: "/entwurf/hw/v1/img/bad-led-480.webp", status: 301, destination: "/entwurf/hw/img/bad-led-480.webp" },
-    { path: "/entwurf/hw/img/bad-led-480.webp", status: 200 },
+    {
+      path: "/entwurf/hw/v1/leistungen/badsanierung.html?hinweise",
+      status: 308,
+      destination: `${project}/website-a?hinweise#badsanierung`,
+    },
     ...(origin === siteOrigin
       ? [
           {
@@ -96,6 +148,28 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
             if (ok !== (response.status === 200)) throw new Error("incorrect contact readiness response");
           } else {
             const body = await response.text();
+            if (check.draft) {
+              if (!/<meta\b[^>]*name="robots"[^>]*content="noindex, nofollow(?:, noarchive)?"/.test(body))
+                throw new Error("missing draft robots meta");
+              if (response.headers.get("x-robots-tag") !== "noindex, nofollow, noarchive")
+                throw new Error("missing draft robots header");
+              if (
+                response.headers.has("content-security-policy") ||
+                response.headers.has("content-security-policy-report-only") ||
+                /<meta\b[^>]*http-equiv="Content-Security-Policy"/.test(body)
+              )
+                throw new Error("draft unexpectedly received the public site CSP");
+              if (body.includes("/entwurf/hw")) throw new Error("draft still links to its old location");
+              if (body.includes('type="application/ld+json"')) {
+                const canonical = body.match(/<link\b[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1];
+                const ogUrl = body.match(/<meta\b[^>]*property="og:url"[^>]*content="([^"]+)"/)?.[1];
+                if (canonical !== new URL(check.path, siteOrigin).href || ogUrl !== canonical)
+                  throw new Error("draft canonical or Open Graph URL uses the wrong location");
+                const graph = body.match(/<script\b[^>]*type="application\/ld\+json"[^>]*>(.*?)<\/script>/s)?.[1];
+                if (!graph?.includes(`${siteOrigin}${project}/website-`) || graph.includes('"https://handwerker.work/'))
+                  throw new Error("draft schema URLs use the wrong location");
+              }
+            }
             if (check.locale && (!body.includes(`lang="${check.locale}"`) || (body.match(/<h1\b/g) ?? []).length !== 1))
               throw new Error("missing localized page content");
             if (
@@ -120,6 +194,8 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
               throw new Error("missing sitemap directive");
             if (check.path === "/sitemap.xml" && !body.includes(`<loc>${siteOrigin}/fr/contact</loc>`))
               throw new Error("missing localized sitemap entry");
+            if (check.path === "/sitemap.xml" && body.includes("/projekte/"))
+              throw new Error("client project leaked into sitemap");
             if (
               check.path === "/llms.txt" &&
               (!body.startsWith("# Suchio") || !body.includes(`${siteOrigin}/en/services/seo`))

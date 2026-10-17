@@ -10,7 +10,8 @@ migrations/
 # A finished draft file, published byte for byte.
 src/entwurf/parkhotel/
 # Generated report with embedded fonts and evidence images.
-src/entwurf/hw/analyse/index.html
+src/projekte/handwerker-work/analyse/index.html
+src/projekte/handwerker-work/analyse/PROVENANCE.md
 # Vendored agent skills, kept identical to their upstream files.
 .agents/
 .claude/skills/

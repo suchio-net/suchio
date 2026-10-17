@@ -5,7 +5,8 @@ import type { AstroIntegration } from "astro";
 import { securityHeaders } from "../lib/security-headers";
 
 // Client drafts load the client's own photos, fonts, map and booking engine, so the site policy does not apply there.
-const isDraft = (page: string) => page.replaceAll("\\", "/").startsWith("entwurf/");
+const draftPrefixes = ["entwurf/", "projekte/"];
+const isDraft = (page: string) => draftPrefixes.some((prefix) => page.replaceAll("\\", "/").startsWith(prefix));
 
 const hash = (content: string) => `'sha256-${createHash("sha256").update(content).digest("base64")}'`;
 
@@ -70,8 +71,12 @@ export function securityHeadersIntegration(): AstroIntegration {
         const site = `/*\n${[...securityHeaders, { key: "Content-Security-Policy-Report-Only", value: reportOnly }]
           .map(({ key, value }) => `  ${key}: ${value}`)
           .join("\n")}\n`;
-        const drafts =
-          "/entwurf/*\n  ! Content-Security-Policy\n  ! Content-Security-Policy-Report-Only\n  X-Robots-Tag: noindex, nofollow, noarchive\n";
+        const drafts = draftPrefixes
+          .map(
+            (prefix) =>
+              `/${prefix}*\n  ! Content-Security-Policy\n  ! Content-Security-Policy-Report-Only\n  X-Robots-Tag: noindex, nofollow, noarchive\n`,
+          )
+          .join("\n");
         await writeFile(headersFile, [site, drafts, existing.trim()].filter(Boolean).join("\n") + "\n");
         logger.info(
           `Enforced a Content Security Policy on ${pages.length} pages (${scripts.length} script and ${styles.length} style hashes).`,

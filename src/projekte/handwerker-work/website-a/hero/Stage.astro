@@ -1,0 +1,1085 @@
+---
+// Home stage: the hero and the six trade steps share one sticky 3D model.
+// The intro assembles the bathroom; scrolling through the steps opens it again
+// and puts each trade in front. Copy stays HTML, the canvas is decoration.
+import Note from "@/projekte/handwerker-work/shared/Note.astro";
+import Picture from "@/projekte/handwerker-work/shared/Picture.astro";
+import Split from "../Split.astro";
+import { company, sections } from "../data";
+
+const steps = [
+  {
+    id: "renovierung",
+    name: "Innenausbau",
+    text: "Rückbau, Trockenbau, Estrich und Böden.",
+    link: "Renovierung anfragen",
+  },
+  {
+    id: "elektro",
+    name: "Elektro",
+    text: "Leitungen nach VDE, Licht, Smart Home, Wallbox.",
+    link: "Elektroinstallation anfragen",
+  },
+  {
+    id: "sanitaer-heizung",
+    name: "Sanitär",
+    text: "Trinkwasser, Abwasser und Vorwandinstallation.",
+    link: "Sanitär anfragen",
+  },
+  { id: "heizung", name: "Heizung", text: "Fußbodenheizung, Wärmepumpe und Regelung.", link: "Heizung anfragen" },
+  {
+    id: "fliesen",
+    name: "Fliesen",
+    text: "Großformat und Naturstein, abgedichtet nach DIN 18534.",
+    link: "Fliesenarbeiten anfragen",
+  },
+  {
+    id: "badsanierung",
+    name: "Komplettbad",
+    text: "Alle Gewerke in einer Hand, koordiniert von einem Ansprechpartner.",
+    link: "Badsanierung anfragen",
+  },
+];
+const pad = (n: number) => String(n).padStart(2, "0");
+const total = pad(steps.length);
+---
+
+<section class="stage" data-stage aria-labelledby="hero-title">
+  <div class="stage-sticky" aria-hidden="true">
+    <canvas class="stage-canvas" data-stage-canvas></canvas>
+    <div class="labels">
+      {steps.map((step, index) => (
+        <span class="label mono" data-stage-label>
+          <i></i>
+          <b></b>
+          <span>
+            {pad(index + 1)} {step.name}
+          </span>
+        </span>
+      ))}
+    </div>
+    <div class="fallback">
+      <Picture name="bad-doppelwaschtisch" alt="" sizes="(min-width: 960px) 60vw, 100vw" />
+    </div>
+  </div>
+
+  <div class="stage-content">
+    <div class="hero wrap" data-hero>
+      <div class="hero-top mono">
+        <span>Meisterbetrieb · SHK seit über 8 Jahren</span>
+        <span class="coords">
+          {company.geo.lat.toFixed(4)}° N&ensp;{company.geo.lng.toFixed(4)}° E
+        </span>
+      </div>
+      <div class="hero-copy rel">
+        <h1 id="hero-title">
+          <Split as="span" text={"Alle Gewerke.\nEin Ansprechpartner."} class="hero-split" />
+        </h1>
+        <p class="hero-lead mute">Meisterbetrieb für Elektrotechnik, Sanitär-Heizung und Fliesen.</p>
+        <div class="actions hero-actions">
+          <a class="btn" href={sections.kontakt}>
+            Kostenlose Besichtigung<span class="arrow" aria-hidden="true"></span>
+          </a>
+          <a class="btn btn-line" href={company.phone.href}>
+            {company.phone.display}
+          </a>
+        </div>
+        <Note n={1} style="left:0;top:-80px">
+          Statt Werbe-Popup sieht der Besucher sofort, was Sie machen, wo und wer sein Ansprechpartner ist. Das Popup
+          verzögert heute den Seitenaufbau mobil auf 10,2 s.
+        </Note>
+      </div>
+      <div class="hero-bottom mono">
+        <p class="hud" aria-hidden="true">
+          <span class="hud-label">Montage</span>
+          <span class="hud-bar">
+            {steps.map(() => (
+              <i data-hud-tick></i>
+            ))}
+          </span>
+          <span>
+            <span data-hud-step>01</span>/{total}
+          </span>
+          <span class="hud-name" data-hud-name>
+            {steps[0].name}
+          </span>
+        </p>
+        <a class="rating" href="https://g.page/handwerker-works" rel="noopener">
+          <b>{company.rating.value}</b>
+          <span class="stars" aria-hidden="true">
+            ★★★★★
+          </span>
+          {company.rating.count} Google-Bewertungen
+        </a>
+        <span class="cue">
+          Scrollen<i aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="trades wrap rel" id="leistungen" aria-labelledby="trades-title">
+      <div class="trades-rail" aria-hidden="true">
+        {steps.map((_, index) => (
+          <i data-rail-tick>
+            <span class="mono">{pad(index + 1)}</span>
+          </i>
+        ))}
+      </div>
+      <h2 id="trades-title" class="trades-title mono">
+        Leistungen · {steps.length} Gewerke
+      </h2>
+      <ol class="steps">
+        {steps.map((step, index) => (
+          <li class="step" id={step.id} data-step>
+            <div class="step-card">
+              <p class="mono mute">
+                {pad(index + 1)} / {total}
+              </p>
+              <Split as="h3" text={step.name} class="step-title" />
+              <p class="step-text" data-reveal>
+                {step.text}
+              </p>
+              <a class="link" href={sections.kontakt} data-reveal style="--delay:0.08s">
+                {step.link}
+                <span class="arrow" aria-hidden="true"></span>
+              </a>
+              {index === 0 && (
+                <Note n={2} style="left:0;top:-64px">
+                  Eine echte Seite pro Leistung, statt vier fast gleicher Standortseiten. Das TFM-Angebot hat seinen
+                  eigenen Platz für Hausverwaltungen.
+                </Note>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+  <div class="stage-track" aria-hidden="true"></div>
+  <div class="snaps" aria-hidden="true">
+    {[0, ...steps].map((_, index) => (
+      <i data-snap style={`--n:${index}`}></i>
+    ))}
+  </div>
+</section>
+
+<style>
+  .stage {
+    position: relative;
+  }
+  .stage-sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+  }
+  /* A faint measuring grid behind the model, fading out towards the edges. */
+  .stage-sticky::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgb(11 11 12 / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(11 11 12 / 0.05) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-position: center;
+    mask-image: radial-gradient(ellipse 60% 60% at 62% 50%, #000 10%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 62% 50%, #000 10%, transparent 75%);
+  }
+  .stage-canvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.4s var(--ease);
+  }
+  .stage:global(.ready) .stage-canvas {
+    opacity: 1;
+  }
+  .fallback {
+    display: none;
+  }
+  :global(html:not(.js)) .fallback,
+  .stage:global(.no-webgl) .fallback {
+    position: absolute;
+    display: block;
+    inset: 14% var(--gutter) 30% 42%;
+  }
+  .fallback :global(picture),
+  .fallback :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .labels {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    height: 0;
+    white-space: nowrap;
+    color: var(--ink);
+    visibility: hidden;
+    will-change: transform, opacity;
+  }
+  .label i {
+    width: 7px;
+    height: 7px;
+    margin-left: -3.5px;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    background: var(--white);
+    flex: none;
+  }
+  .label b {
+    width: var(--len, 40px);
+    height: 1px;
+    background: var(--ink);
+    opacity: 0.6;
+  }
+  .label span {
+    padding: 4px 8px;
+    margin-left: 6px;
+    background: var(--ink);
+    color: var(--white);
+    font-size: 0.66rem;
+  }
+  @media (max-width: 600px) {
+    .label span {
+      padding: 3px 6px;
+      font-size: 0.6rem;
+    }
+  }
+  .label:global(.flip) {
+    flex-direction: row-reverse;
+  }
+  .label:global(.flip) i {
+    margin: 0 -3.5px 0 0;
+  }
+  .label:global(.flip) span {
+    margin: 0 6px 0 0;
+  }
+
+  .stage-content {
+    position: relative;
+    z-index: 2;
+    margin-top: -100svh;
+    pointer-events: none;
+  }
+  .stage-content :is(a, button, h1, h2, h3, p, .step-card) {
+    pointer-events: auto;
+  }
+
+  /* The bottom padding keeps the progress row clear of the draft menu. */
+  .hero {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100svh;
+    padding-top: calc(var(--header-h) + 12px);
+    padding-bottom: 64px;
+  }
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--mute);
+  }
+  /* On wide screens the copy keeps to its own column; the model is framed
+     in the space to its right (see region() below). */
+  .hero-copy {
+    align-self: end;
+    display: grid;
+    gap: 22px;
+    max-width: min(600px, 42vw);
+    padding-bottom: clamp(28px, 6vh, 72px);
+  }
+  h1 :global(.hero-split) {
+    display: block;
+    font-size: clamp(2.3rem, 4.4vw, 5.75rem);
+  }
+  .hero-lead {
+    font-size: 1rem;
+    max-width: 34ch;
+  }
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 16px 40px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .hud {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: none;
+    color: var(--mute);
+  }
+  .hud-bar {
+    display: flex;
+    gap: 3px;
+  }
+  .hud-bar i {
+    width: 18px;
+    height: 3px;
+    background: var(--fog);
+    transition: background-color 0.4s var(--ease);
+  }
+  .hud-bar i:global(.on) {
+    background: var(--ink);
+  }
+  .hud [data-hud-step] {
+    color: var(--ink);
+  }
+  .hud-name {
+    color: var(--ink);
+    min-width: 12ch;
+  }
+  .rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    text-decoration: none;
+  }
+  .rating b {
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .stars {
+    letter-spacing: 2px;
+  }
+  .rating:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .cue {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--mute);
+  }
+  .cue i {
+    position: relative;
+    width: 1px;
+    height: 28px;
+    overflow: hidden;
+    background: var(--line-2);
+  }
+  .cue i::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    animation: cue 2.2s var(--ease-in-out) infinite;
+  }
+  @keyframes cue {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+  @media (max-width: 959px) {
+    .hero-bottom {
+      grid-template-columns: 1fr auto;
+    }
+    .cue {
+      display: none;
+    }
+    .hero-top .coords {
+      display: none;
+    }
+  }
+  @media (max-width: 600px) {
+    .hero-bottom {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .hud-label {
+      display: none;
+    }
+    .hero-actions .btn {
+      flex: 1 1 auto;
+    }
+  }
+
+  /* Hero copy rises in with the model. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html.js) .hero-lead,
+    :global(html.js) .hero-actions,
+    :global(html.js) .hero-top,
+    :global(html.js) .hero-bottom {
+      animation: rise 1.2s var(--ease) both;
+    }
+    :global(html.js) .hero-lead {
+      animation-delay: 0.55s;
+    }
+    :global(html.js) .hero-actions {
+      animation-delay: 0.7s;
+    }
+    :global(html.js) .hero-top {
+      animation-delay: 0.3s;
+    }
+    :global(html.js) .hero-bottom {
+      animation-delay: 0.9s;
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+  }
+
+  .trades {
+    padding-bottom: 10svh;
+  }
+  @media (min-width: 960px) {
+    .trades-title {
+      position: sticky;
+      top: calc(var(--header-h) + 8px);
+    }
+  }
+  .trades-title {
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 32px;
+    color: var(--mute);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+  }
+  .trades-title::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: var(--ink);
+  }
+  .trades-rail {
+    position: absolute;
+    top: 0;
+    bottom: 10svh;
+    right: var(--gutter);
+    display: none;
+  }
+  .trades-rail::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 3px;
+    width: 1px;
+    background: var(--line);
+  }
+  @media (min-width: 960px) {
+    .trades-rail {
+      display: block;
+    }
+    .trades-rail {
+      position: absolute;
+    }
+    .trades-rail i {
+      position: sticky;
+      top: calc(50svh - 84px + var(--n) * 28px);
+    }
+  }
+  .trades-rail i {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    height: 28px;
+    color: var(--mute);
+    transition: color 0.4s;
+  }
+  .trades-rail i::after {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border: 1px solid currentColor;
+    background: var(--white);
+    transition: background-color 0.4s;
+  }
+  .trades-rail i:global(.on) {
+    color: var(--ink);
+  }
+  .trades-rail i:global(.on)::after {
+    background: var(--ink);
+  }
+  .steps {
+    display: grid;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    min-height: 100svh;
+  }
+  .step-card {
+    position: relative;
+    display: grid;
+    gap: 16px;
+    max-width: 380px;
+    padding: 28px 0;
+  }
+  .step-card :global(.step-title) {
+    font-size: clamp(2.6rem, 1.6rem + 4vw, 5rem);
+    line-height: 0.95;
+    letter-spacing: -0.06em;
+  }
+  .step-text {
+    max-width: 30ch;
+    font-size: 1.02rem;
+    color: var(--ink-2);
+  }
+  .stage-track,
+  .snaps {
+    display: none;
+  }
+
+  /* Phones and portrait tablets: one pinned screen. The copy sits at the top,
+     the model below it. Scrolling swaps the copy in place (hero, then each
+     trade) while the model stays where it is; .stage-track provides the
+     scroll distance. The script fits the model into the space that is left. */
+  @media (max-width: 959px) and (orientation: portrait) {
+    .stage-sticky::before {
+      mask-image: radial-gradient(ellipse 75% 32% at 50% 70%, #000 10%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse 75% 32% at 50% 70%, #000 10%, transparent 75%);
+    }
+    :global(html:not(.js)) .fallback,
+    .stage:global(.no-webgl) .fallback {
+      inset: 52% var(--gutter) 96px;
+    }
+    .stage-content {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      overflow: hidden;
+    }
+    .stage-track {
+      display: block;
+      height: calc(6.5 * 55svh);
+    }
+    /* One marker per state along the track; the script reads their spacing. */
+    .snaps {
+      display: block;
+      position: absolute;
+      inset: 0 0 auto;
+    }
+    .snaps i {
+      position: absolute;
+      left: 0;
+      width: 1px;
+      height: 1px;
+      top: calc(var(--n) * 55svh);
+    }
+
+    .hero,
+    .step {
+      position: absolute;
+      inset: 0;
+      padding-top: calc(var(--header-h) + 12px);
+      transition:
+        opacity 0.6s var(--ease),
+        transform 0.8s var(--ease),
+        visibility 0s;
+    }
+    .hero:not(:global(.on)),
+    .step:not(:global(.on)) {
+      opacity: 0;
+      transform: translateY(-14px);
+      visibility: hidden;
+      transition:
+        opacity 0.3s var(--ease),
+        transform 0.5s var(--ease),
+        visibility 0s 0.5s;
+    }
+    :global(html:not(.js)) .step {
+      display: none;
+    }
+    :global(html:not(.js)) .hero {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+
+    .hero {
+      display: block;
+      min-height: 0;
+    }
+    .hero-top,
+    .rating,
+    .cue,
+    .hero-actions .btn-line {
+      display: none;
+    }
+    .hero-copy {
+      gap: 16px;
+      max-width: none;
+      padding: 0;
+    }
+    h1 :global(.hero-split) {
+      font-size: clamp(2.1rem, 9.2vw, 3.6rem);
+    }
+    .hero-lead {
+      font-size: 0.95rem;
+    }
+    .hero-actions .btn {
+      flex: 0 1 auto;
+    }
+    .hero-bottom {
+      position: absolute;
+      left: var(--gutter);
+      right: var(--gutter);
+      bottom: calc(84px + env(safe-area-inset-bottom));
+      grid-template-columns: 1fr;
+      padding: 0;
+      border: 0;
+    }
+    .hud {
+      gap: 10px;
+    }
+    .hud-bar i {
+      width: 10px;
+    }
+
+    .trades {
+      position: static;
+      padding: 0;
+    }
+    .trades-title {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .steps {
+      display: block;
+    }
+    .step {
+      display: block;
+      min-height: 0;
+      padding-inline: var(--gutter);
+    }
+    .step-card {
+      gap: 12px;
+      max-width: none;
+      padding: 0;
+    }
+    .step-card :global(.step-title) {
+      font-size: clamp(2.4rem, 11vw, 4rem);
+    }
+    .step-text {
+      max-width: 34ch;
+      font-size: 0.95rem;
+    }
+  }
+  @media (min-width: 761px) and (max-width: 959px) and (orientation: portrait) {
+    .hero-bottom {
+      bottom: 28px;
+    }
+  }
+  @media (min-width: 960px) {
+    .step-card {
+      opacity: 0.18;
+      transition: opacity 0.6s var(--ease);
+    }
+    .step:global(.on) .step-card {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  import type { createHero } from "./scene";
+  import { gsap, lenis, Observer, ScrollTrigger, scrollToY } from "../smooth";
+
+  const stage = document.querySelector<HTMLElement>("[data-stage]");
+  if (stage) {
+    const canvas = stage.querySelector<HTMLCanvasElement>("[data-stage-canvas]")!;
+    const labels = [...stage.querySelectorAll<HTMLElement>("[data-stage-label]")];
+    const steps = [...stage.querySelectorAll<HTMLElement>("[data-step]")];
+    const railTicks = [...stage.querySelectorAll<HTMLElement>("[data-rail-tick]")];
+    const hudTicks = [...stage.querySelectorAll<HTMLElement>("[data-hud-tick]")];
+    const hudStep = stage.querySelector<HTMLElement>("[data-hud-step]")!;
+    const hudName = stage.querySelector<HTMLElement>("[data-hud-name]")!;
+    const names = steps.map((step) => step.querySelector("h3")?.textContent?.trim() ?? "");
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const layerCount = labels.length;
+    railTicks.forEach((tick, index) => tick.style.setProperty("--n", String(index)));
+
+    const showIntro = (index: number) => {
+      const shown = Math.max(0, Math.min(layerCount - 1, index));
+      hudTicks.forEach((tick, i) => tick.classList.toggle("on", index >= 0 && i <= shown));
+      hudStep.textContent = String(shown + 1).padStart(2, "0");
+      hudName.textContent = index >= layerCount - 1 ? `${names[shown]} ✓` : names[shown];
+    };
+
+    // States: 0 is the hero, 1..6 the trade steps. stateY holds the scroll
+    // position of each. On wide screens a step is in its state when its centre
+    // crosses the middle of the viewport; on phones the screen is pinned and
+    // every snap point along the track is one state.
+    const hero = stage.querySelector<HTMLElement>("[data-hero]")!;
+    const split = matchMedia("(max-width: 959px) and (orientation: portrait)");
+    const snaps = [...stage.querySelectorAll<HTMLElement>("[data-snap]")];
+    const last = steps.length;
+    let stateY: number[] = [];
+    const measureStates = () => {
+      const top = stage.getBoundingClientRect().top + scrollY;
+      if (split.matches) {
+        const unit = Math.max(1, snaps[1].offsetTop - snaps[0].offsetTop);
+        stateY = snaps.map((_, k) => top + k * unit);
+      } else {
+        stateY = [
+          top,
+          ...steps.map((step) => {
+            const r = step.getBoundingClientRect();
+            return r.top + scrollY + r.height / 2 - innerHeight / 2;
+          }),
+        ];
+      }
+    };
+    /** Continuous state at a scroll position: 0 hero, 6 Komplettbad, above 6 on the way out. */
+    const stateAt = (y: number) => {
+      if (y <= stateY[0]) return 0;
+      for (let k = 0; k < last; k++) {
+        if (y < stateY[k + 1]) return k + (y - stateY[k]) / Math.max(1, stateY[k + 1] - stateY[k]);
+      }
+      return last + (y - stateY[last]) / innerHeight;
+    };
+
+    // The model is framed in the space the copy leaves free. On phones that is
+    // between the tallest copy panel and the progress row (or the draft menu,
+    // whichever is higher); on wide screens it is right of the hero copy,
+    // between the top row and the progress row, clear of the step rail.
+    // Measured in canvas pixels: vertically from the hero, which lines up with
+    // the canvas while the page is at the top, horizontally from the canvas,
+    // which spans the viewport while the hero is capped and centred.
+    const draft = document.querySelector<HTMLElement>("[data-draft]");
+    const rail = stage.querySelector<HTMLElement>(".trades-rail");
+    const region = () => {
+      const box = hero.getBoundingClientRect();
+      const x0 = canvas.getBoundingClientRect().left;
+      const rel = (el: Element) => {
+        const r = el.getBoundingClientRect();
+        return { top: r.top - box.top, bottom: r.bottom - box.top, left: r.left - x0, right: r.right - x0 };
+      };
+      const floor = rel(hero.querySelector(".hero-bottom")!).top;
+      const gutter = parseFloat(getComputedStyle(hero).paddingRight) || 20;
+      const left = box.left - x0 + gutter,
+        right = box.right - x0 - gutter;
+      if (split.matches) {
+        const panels = [hero.querySelector(".hero-copy")!, ...steps.map((step) => step.querySelector(".step-card")!)];
+        const textBottom = Math.max(...panels.map((panel) => rel(panel).bottom));
+        const draftTop = draft ? draft.getBoundingClientRect().top - box.top : Infinity;
+        return { top: textBottom + 16, bottom: Math.min(floor, draftTop) - 12, left, right };
+      }
+      const copy = [...hero.querySelectorAll(".hero-copy .w, .hero-lead, .hero-actions > *")];
+      const textRight = Math.max(...copy.map((el) => rel(el).right));
+      const railWidth = rail && getComputedStyle(rail).display !== "none" ? 64 : 0;
+      return {
+        top: rel(hero.querySelector(".hero-top")!).bottom + 24,
+        bottom: floor - 20,
+        left: textRight + 40,
+        right: right - railWidth,
+      };
+    };
+
+    // Re-run the word and fade reveals of a panel each time it comes back.
+    const replay = (panel: HTMLElement) => {
+      if (reduceMotion) return;
+      const parts = [...panel.querySelectorAll<HTMLElement>("[data-split], [data-reveal]")];
+      parts.forEach((part) => part.classList.remove("in"));
+      void panel.offsetWidth;
+      parts.forEach((part) => part.classList.add("in"));
+    };
+
+    let scene: ReturnType<typeof createHero> | undefined;
+    let current = -2;
+    const sync = () => {
+      if (!stateY.length) return;
+      const state = stateAt(scrollY);
+      scene?.setProgress(Math.min(last, state) - 1);
+      const active = state < 0.5 ? -1 : Math.min(last, Math.round(state)) - 1;
+      if (active === current) return;
+      const first = current === -2;
+      current = active;
+      hero.classList.toggle("on", active === -1);
+      steps.forEach((step, i) => step.classList.toggle("on", i === active));
+      railTicks.forEach((tick, i) => tick.classList.toggle("on", i === active));
+      if (split.matches && !first && active >= 0) replay(steps[active]);
+    };
+    const measure = () => {
+      measureStates();
+      scene?.setRegion(region());
+      sync();
+    };
+    let scrollToState = (to: number) => scrollToY(stateY[to]);
+    let releaseStage = () => {};
+
+    // ScrollTrigger reads the scroll (from Lenis where it runs) and re-measures
+    // on every refresh: resize, orientation change, fonts.
+    ScrollTrigger.create({ trigger: stage, start: "top top", end: "bottom top", onUpdate: sync, onRefresh: measure });
+    measure();
+    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    split.addEventListener("change", () => ScrollTrigger.refresh());
+    // Pitch notes change the height of the copy on phones.
+    document
+      .querySelector("[data-notes-toggle]")
+      ?.addEventListener("click", () => requestAnimationFrame(() => ScrollTrigger.refresh()));
+
+    // One wheel or trackpad gesture, one step. With Lenis the stage snaps once
+    // the eased scroll has come to rest. A gesture that carries the page
+    // past more than one state eases back to the next one, so no trade is
+    // skipped. Jumps that do not come from the wheel (keys, scrollbar, links)
+    // settle on the nearest state, and coming back up from below the stage is
+    // never held.
+    if (lenis) {
+      const smooth = lenis;
+      let settled = Math.round(Math.min(last + 1, stateAt(scrollY))),
+        snapping = false,
+        wheel = false,
+        timer = 0;
+      scrollToState = (to) => {
+        clearTimeout(timer);
+        wheel = false;
+        snapping = true;
+        scrollToY(stateY[to], () => {
+          snapping = false;
+          settled = to;
+        });
+      };
+      const settle = () => {
+        const y = scrollY,
+          s = stateAt(y),
+          gesture = wheel;
+        wheel = false;
+        if (s > last + 0.02) {
+          settled = last + 1;
+          return;
+        }
+        let to: number;
+        if (!gesture || settled > last || Math.abs(s - settled) < 0.12) to = Math.round(s);
+        else if (s > settled) to = Math.min(settled + 1, Math.floor(s) + (s - Math.floor(s) > 0.12 ? 1 : 0));
+        else to = Math.max(settled - 1, Math.ceil(s) - (Math.ceil(s) - s > 0.12 ? 1 : 0));
+        to = Math.max(0, Math.min(last, to));
+        if (Math.abs(stateY[to] - y) < 1) {
+          settled = to;
+          return;
+        }
+        snapping = true;
+        scrollToY(stateY[to], () => {
+          snapping = false;
+          settled = to;
+        });
+      };
+      smooth.on("virtual-scroll", () => {
+        snapping = false;
+        wheel = true;
+      });
+      smooth.on("scroll", () => {
+        clearTimeout(timer);
+        if (snapping) return;
+        timer = window.setTimeout(settle, 140);
+      });
+    } else if (matchMedia("(pointer: coarse)").matches) {
+      // Touch: a native fling can carry the page past several trades before it
+      // stops, so inside the stage the swipe itself is held and every swipe
+      // plays exactly one step. A swipe during a step goes on to the next one
+      // from where the page is, so quick swipes still pass through each trade.
+      // Past the last trade the stage lets go and the page scrolls natively;
+      // scrolling back up into it picks the steps up again. Pinch zoom and the
+      // menu dialog are never held.
+      const proxy = { y: 0 };
+      let target = 0,
+        used = false,
+        tween: gsap.core.Tween | undefined;
+      const go = (to: number, y = stateY[to], done?: () => void) => {
+        target = to;
+        tween?.kill();
+        proxy.y = scrollY;
+        tween = gsap.to(proxy, {
+          y,
+          duration: reduceMotion ? 0 : 0.85,
+          ease: "power2.inOut",
+          onUpdate: () => {
+            scrollTo({ top: proxy.y, behavior: "instant" });
+            sync();
+          },
+          onComplete: () => {
+            tween = undefined;
+            done?.();
+          },
+        });
+      };
+      const observer = Observer.create({
+        target: window,
+        type: "touch",
+        preventDefault: true,
+        lockAxis: true,
+        tolerance: 20,
+        ignore: "dialog",
+        ignoreCheck: (event) => "touches" in event && (event as TouchEvent).touches.length > 1,
+        onPress: () => {
+          used = false;
+        },
+        onUp: () => step(1),
+        onDown: () => step(-1),
+      });
+      const step = (dir: number) => {
+        if (used || target > last) return;
+        used = true;
+        const to = target + dir;
+        if (to < 0) return;
+        // Leaving: ease the next section in, then hand the page back. The hold
+        // stays on until then, so the rest of this swipe cannot fight the ease.
+        if (to > last)
+          go(last + 1, Math.min(ScrollTrigger.maxScroll(window), stateY[last] + innerHeight * 0.6), () =>
+            observer.disable(),
+          );
+        else go(to);
+      };
+      scrollToState = (to) => {
+        observer.enable();
+        go(to);
+      };
+      // Hold the steps whenever the page has come to rest inside the stage. A
+      // native swipe back into it is left to finish, finger and fling, first.
+      let touching = false,
+        sectionJump = false;
+      const engage = () => {
+        if (touching || sectionJump || tween || observer.isEnabled || scrollY >= stateY[last] - 2) return;
+        observer.enable();
+        const to = Math.max(0, Math.min(last, Math.round(stateAt(scrollY))));
+        if (Math.abs(stateY[to] - scrollY) > 1) go(to);
+        else target = to;
+      };
+      observer.disable();
+      target = Math.round(Math.min(last + 1, stateAt(scrollY)));
+      engage();
+      // Engage once the page has been still for a moment after the finger lifts.
+      let lastScroll = 0,
+        timer = 0;
+      releaseStage = () => {
+        clearTimeout(timer);
+        tween?.kill();
+        tween = undefined;
+        target = last + 1;
+        // A smooth anchor jump crosses the hero; do not re-engage mid-jump.
+        // A new touch lets native scrolling back into the hero engage as usual.
+        sectionJump = true;
+        observer.disable();
+      };
+      const idle = () => {
+        clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          if (performance.now() - lastScroll >= 150) engage();
+          else idle();
+        }, 160);
+      };
+      addEventListener(
+        "scroll",
+        () => {
+          lastScroll = performance.now();
+          // Native anchor jumps and history restoration can bypass the swipes.
+          if (observer.isEnabled && !tween && scrollY > stateY[last] + 2) releaseStage();
+          if (!observer.isEnabled && !touching) idle();
+        },
+        { passive: true },
+      );
+      addEventListener(
+        "touchstart",
+        () => {
+          touching = true;
+          sectionJump = false;
+        },
+        { passive: true },
+      );
+      for (const type of ["touchend", "touchcancel"])
+        addEventListener(
+          type,
+          () => {
+            touching = false;
+            if (!observer.isEnabled) idle();
+          },
+          { passive: true },
+        );
+      ScrollTrigger.addEventListener("refreshInit", () => {
+        // Android's browser bar can resize the viewport after a section jump.
+        // Check before re-measuring so a held trade still follows its new position.
+        if (scrollY > stateY[last] + 2) releaseStage();
+      });
+      ScrollTrigger.addEventListener("refresh", () => {
+        if (observer.isEnabled && !tween && target <= last) scrollTo({ top: stateY[target], behavior: "instant" });
+      });
+    }
+
+    // On portrait screens the trade panels overlap. Navigate to their measured
+    // scroll states so menu links select the right copy and model on every screen.
+    const navigateToTrade = (hash: string) => {
+      const id = hash.slice(1);
+      const index = steps.findIndex((step) => step.id === id);
+      if (index < 0 && id !== "leistungen") {
+        // Other sections scroll natively. Stop any hero tween before the jump
+        // and release its touch handler so the next swipe stays at that section.
+        if (id && document.getElementById(id)) releaseStage();
+        return false;
+      }
+      scrollToState(index < 0 ? 1 : index + 1);
+      return true;
+    };
+    document.addEventListener("click", (event) => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = (event.target as Element).closest<HTMLAnchorElement>("a[href]");
+      if (!link || link.target || link.hasAttribute("download")) return;
+      const url = new URL(link.href);
+      if (url.origin !== location.origin || url.pathname !== location.pathname || !navigateToTrade(url.hash)) return;
+      event.preventDefault();
+      // The mobile menu's link handler has closed the dialog; keep Lenis's
+      // generic anchor handler from scrolling to an overlapping panel afterward.
+      event.stopPropagation();
+      if (location.hash !== url.hash) history.pushState(null, "", url);
+    });
+    addEventListener("hashchange", () => navigateToTrade(location.hash));
+    document.fonts.ready.then(() => navigateToTrade(location.hash));
+
+    import("./scene")
+      .then(({ createHero }) => {
+        try {
+          scene = createHero({ canvas, labels, reduceMotion, onIntroStep: showIntro });
+        } catch {
+          stage.classList.add("no-webgl");
+          showIntro(layerCount - 1);
+          return;
+        }
+        measure();
+        gsap.ticker.add(scene.tick);
+        scene.ready.then(() => stage.classList.add("ready"));
+        if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+          addEventListener(
+            "pointermove",
+            (event: PointerEvent) =>
+              scene?.setPointer((event.clientX / innerWidth) * 2 - 1, (event.clientY / innerHeight) * 2 - 1),
+            { passive: true },
+          );
+        }
+      })
+      .catch(() => {
+        stage.classList.add("no-webgl");
+        showIntro(layerCount - 1);
+      });
+  }
+</script>

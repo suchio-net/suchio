@@ -1,0 +1,334 @@
+---
+import Layout from "@/projekte/handwerker-work/website-a/Layout.astro";
+import Stage from "@/projekte/handwerker-work/website-a/hero/Stage.astro";
+import Split from "@/projekte/handwerker-work/website-a/Split.astro";
+import Rail from "@/projekte/handwerker-work/website-a/Rail.astro";
+import Reviews from "@/projekte/handwerker-work/website-a/Reviews.astro";
+import { company, faqsHome, places, references, sections, tfm } from "@/projekte/handwerker-work/website-a/data";
+import { businessNode, faqNode, webPageNode, websiteNode } from "@/projekte/handwerker-work/shared/schema";
+
+const title = "Renovierung, Sanierung & Badsanierung in Bad Nauheim, Wetterau & Frankfurt | Handwerker.work";
+const description =
+  "Meisterbetrieb aus Bad Nauheim: Renovierung, Sanierung und Modernisierung mit Badsanierung, Fliesen, Elektro, Sanitär und Heizung aus einer Hand. Ein fester Ansprechpartner, kostenlose Besichtigung.";
+const schema = [businessNode(), websiteNode(), webPageNode("/", title, description), faqNode("/", faqsHome)];
+const photo = (name: string) => references.find((item) => item.name === name)!;
+const rail = [
+  "bad-wanne-holz",
+  "dusche-nische",
+  "elektro-raum",
+  "bad-mosaik",
+  "naturstein-wand",
+  "fliesen-verlegung",
+  "theke-led",
+  "dusche-regen",
+  "bad-doppelwaschtisch",
+].map(photo);
+const facts = [
+  {
+    value: company.rating.value.replace(",", "."),
+    decimals: 1,
+    label: "Google-Bewertung",
+    sub: `aus ${company.rating.count} Rezensionen`,
+  },
+  { value: "3", decimals: 0, label: "Meistergewerke", sub: "Elektro · SHK · Fliesen" },
+  { value: String(places.length), decimals: 0, label: "Orte im Einsatz", sub: "Wetterau bis Frankfurt" },
+  { value: "0", decimals: 0, unit: "€", label: "Besichtigung", sub: "und Angebot, unverbindlich" },
+];
+const process = [
+  { title: "Anfrage", text: "Telefon, WhatsApp oder Formular. Fotos helfen beim Einschätzen." },
+  { title: "Besichtigung", text: "Wir sehen uns alles vor Ort an und beraten Sie. Kostenlos." },
+  { title: "Ausführung", text: "Transparentes Angebot, dann koordinieren wir alle Gewerke." },
+];
+---
+
+<Layout title={title} description={description} livePath="/" schema={schema}>
+  <Stage />
+
+  <section class="facts wrap" aria-labelledby="facts-title">
+    <h2 id="facts-title" class="index mono">
+      Auf einen Blick
+    </h2>
+    <div class="rule"></div>
+    <dl class="facts-grid">
+      {facts.map((fact, index) => (
+        <div class="fact" data-reveal style={`--delay:${index * 0.08}s`}>
+          <dt class="mono mute">{fact.label}</dt>
+          <dd class="fact-value">
+            <span data-count={fact.value} data-decimals={fact.decimals}>
+              {fact.value.replace(".", ",")}
+            </span>
+            {fact.unit && <span class="unit">{fact.unit}</span>}
+          </dd>
+          <dd class="mute">{fact.sub}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <div class="ticker mono" aria-hidden="true">
+    <div class="ticker-track">
+      {[0, 1].map(() => (
+        <span>
+          {places.map((place) => (
+            <Fragment>
+              {place.name}
+              <i></i>
+            </Fragment>
+          ))}
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <Rail id="referenzen" index="Projekte" title="Echte Projekte. Keine Renderings." items={rail} />
+
+  <section class="process wrap" aria-labelledby="process-title">
+    <p class="index mono">Ablauf</p>
+    <Split as="h2" id="process-title" text={"Drei Schritte\nzum fertigen Raum."} />
+    <ol class="process-grid">
+      {process.map((step, index) => (
+        <li class="process-step" data-reveal style={`--delay:${index * 0.12}s`}>
+          <div class="rule" style={`transition-delay:${index * 0.15}s`}></div>
+          <span class="process-n mono">{String(index + 1).padStart(2, "0")}</span>
+          <h3>{step.title}</h3>
+          <p class="mute">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="wrap tfm-wrap" id="gebaeudebetreuung" aria-label={tfm.name}>
+    <a class="tfm" href={sections.kontakt}>
+      <span class="mono tfm-kicker">Für Hausverwaltungen &amp; Gewerbe</span>
+      <span class="tfm-title">
+        {tfm.name}
+        <span class="arrow" aria-hidden="true"></span>
+      </span>
+      <span class="tfm-text">{tfm.summary}</span>
+    </a>
+  </section>
+
+  <Reviews />
+
+  <section class="faq-section wrap" aria-labelledby="faq-title">
+    <div class="faq-head">
+      <p class="index mono">FAQ</p>
+      <Split as="h2" id="faq-title" text="Häufige Fragen." />
+      <p class="mute">
+        Noch etwas offen?{" "}
+        <a class="link" href={company.phone.href}>
+          {company.phone.display}
+        </a>
+      </p>
+    </div>
+    <div class="faq">
+      {faqsHome.map((faq) => (
+        <details name="faq-home">
+          <summary>{faq.q}</summary>
+          <div class="answer">
+            {faq.a.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .facts {
+    display: grid;
+    gap: 24px;
+    padding-block: clamp(48px, 6vw, 96px) clamp(48px, 6vw, 80px);
+  }
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 24px;
+  }
+  @media (min-width: 960px) {
+    .facts-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .fact {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+  }
+  .fact dd {
+    margin: 0;
+  }
+  .fact-value {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-size: clamp(3.2rem, 2rem + 4.4vw, 6.5rem);
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: -0.065em;
+    font-variant-numeric: tabular-nums;
+  }
+  .unit {
+    font-size: 0.42em;
+    letter-spacing: -0.02em;
+  }
+  .fact dd.mute {
+    font-size: 0.9rem;
+  }
+
+  .ticker {
+    overflow: hidden;
+    padding-block: 18px;
+    border-block: 1px solid var(--line);
+    color: var(--mute);
+    white-space: nowrap;
+  }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker 60s linear infinite;
+  }
+  .ticker span {
+    display: flex;
+    align-items: center;
+  }
+  .ticker i {
+    width: 4px;
+    height: 4px;
+    margin-inline: 28px;
+    background: var(--ink);
+  }
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+      animation: none;
+    }
+  }
+
+  .process {
+    display: grid;
+    gap: 24px;
+    padding-block: clamp(96px, 12vw, 180px) clamp(64px, 8vw, 120px);
+  }
+  .process :global(h2) {
+    margin-bottom: clamp(24px, 4vw, 56px);
+  }
+  .process-grid {
+    display: grid;
+    gap: 48px 32px;
+  }
+  @media (min-width: 860px) {
+    .process-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .process-step {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+  }
+  .process-step .rule {
+    background: var(--ink);
+    margin-bottom: 14px;
+  }
+  .process-n {
+    color: var(--mute);
+  }
+  .process-step h3 {
+    font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.3rem);
+    letter-spacing: -0.045em;
+  }
+  .process-step p {
+    max-width: 32ch;
+  }
+
+  .tfm-wrap {
+    padding-bottom: clamp(48px, 6vw, 96px);
+  }
+  .tfm {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    gap: 14px;
+    padding: clamp(28px, 4vw, 56px);
+    overflow: hidden;
+    border: 1px solid var(--ink);
+    text-decoration: none;
+    transition: color 0.6s var(--ease);
+  }
+  .tfm::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--ink);
+    transform: translateY(101%);
+    transition: transform 0.8s var(--ease);
+  }
+  .tfm-kicker {
+    color: var(--mute);
+    transition: color 0.6s var(--ease);
+  }
+  .tfm-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    font-size: clamp(1.7rem, 1rem + 3vw, 3.6rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+  .tfm-title .arrow {
+    width: 0.6em;
+    height: 0.6em;
+  }
+  .tfm-title .arrow::before,
+  .tfm-title .arrow::after {
+    font-size: 0.5em;
+  }
+  .tfm-text {
+    max-width: 52ch;
+    color: var(--mute);
+    transition: color 0.6s var(--ease);
+  }
+  @media (hover: hover) {
+    .tfm:hover {
+      color: var(--white);
+    }
+    .tfm:hover::before {
+      transform: none;
+    }
+    .tfm:hover .tfm-kicker,
+    .tfm:hover .tfm-text {
+      color: var(--mute-night);
+    }
+  }
+
+  .faq-section {
+    display: grid;
+    gap: 40px 64px;
+    padding-block: clamp(64px, 8vw, 120px) clamp(96px, 12vw, 160px);
+  }
+  @media (min-width: 960px) {
+    .faq-section {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      align-items: start;
+    }
+    .faq-head {
+      position: sticky;
+      top: calc(var(--header-h) + 32px);
+    }
+  }
+  .faq-head {
+    display: grid;
+    gap: 22px;
+    align-content: start;
+  }
+</style>

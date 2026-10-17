@@ -21,7 +21,7 @@ Judgement calls for reviewing a change before it is handed back. Mechanical rule
 - Motion runs once and takes about 3–4 s. No gimmicks (decorative arrows, fake counts), and no zoom or tilt on layers with small text, which blurs it.
 - Evidence: all four side by side after their animations end, at desktop and phone width, in at least two locales (`bun run capture --visuals --locales=de,fr`). Check for clipped edges, gaps, wrapped labels and labels covering the chart line.
 
-## Client concepts (`/entwurf`)
+## Client concepts (`/projekte/<client>`)
 
 Pitch websites for prospective clients. They must read as a clear improvement of the client's own site, not as a template.
 
@@ -29,5 +29,6 @@ Pitch websites for prospective clients. They must read as a clear improvement of
 - Unconfirmed client facts carry a pitch note. Reviews are quoted verbatim. Every project photo opens at full size.
 - Reject the patterns the user called AI slop: an eyebrow label with a line above every heading, the same headline-plus-split layout repeated, glowing pill buttons, diagrams that mean nothing, sticky-left/scrolling-right sections, reveal-on-scroll everywhere, and a navbar that only jumps to sections.
 - Plan palette, type and layout from the client's trade and brand first, and spend boldness in one place; see `.agents/skills/frontend-design/SKILL.md`.
-- Versions shown side by side (`/entwurf/hw/v1`, `/v2`) share routes and content but each has its own layouts and visual language.
+- Website A and Website B shown side by side (`/projekte/handwerker-work/website-a`, `/projekte/handwerker-work/website-b`) share routes and content but each has its own layouts and visual language.
 - Draft code stays out of `src/components`. A concept keeps its "Hinweise" pitch-annotation layer and its `/konzept` pitch page.
+- Keep each client's code and photos in `src/projekte/<client>/`, thin routes in `src/pages/projekte/<client>/`, and static files in `public/projekte/<client>/`.

@@ -1,0 +1,268 @@
+---
+import { v1Destination } from "../website-a/routes.mjs";
+
+interface Props {
+  version: "v1" | "v2";
+}
+const { version } = Astro.props;
+const suffix = Astro.url.pathname
+  .replace(/\.html$/, "")
+  .replace(/\/$/, "")
+  .replace(/^\/projekte\/handwerker-work\/website-[ab]/, "");
+const v1Href = suffix === "/konzept" ? "/projekte/handwerker-work/website-a" : v1Destination(suffix);
+const v2Href = `/projekte/handwerker-work/website-b${suffix}`;
+---
+
+<div class="draft" role="group" aria-label="Suchio-Entwurf" data-draft>
+  <div class="draft-panel" id="draft-panel" hidden data-draft-panel>
+    <a class="draft-brand" href="/projekte/handwerker-work/website-b/konzept">
+      Entwurf von <b>Suchio</b>
+      <span aria-hidden="true">→</span>
+    </a>
+    <button type="button" class="draft-notes" aria-pressed="false" data-notes-toggle>
+      Hinweise<i aria-hidden="true"></i>
+    </button>
+    <nav class="draft-versions" aria-label="Entwurfsversion">
+      <a href={v1Href} aria-current={version === "v1" ? "page" : undefined}>
+        Website A
+      </a>
+      <a href={v2Href} aria-current={version === "v2" ? "page" : undefined}>
+        Website B
+      </a>
+    </nav>
+  </div>
+  <button
+    type="button"
+    class="draft-toggle"
+    aria-label="Suchio: Entwurfsmenü"
+    aria-expanded="false"
+    aria-controls="draft-panel"
+    data-draft-toggle
+  >
+    <img src="/suchio-favicon.svg" width="40" height="40" alt="" draggable="false" />
+  </button>
+</div>
+
+<script>
+  // Draft menu: one small button that opens the Suchio link, notes and version switch.
+  const draftToggle = document.querySelector<HTMLButtonElement>("[data-draft-toggle]");
+  const draftPanel = document.querySelector<HTMLElement>("[data-draft-panel]");
+  if (draftToggle && draftPanel) {
+    const draft = draftToggle.parentElement!;
+    const set = (open: boolean) => {
+      draftPanel.hidden = !open;
+      draftToggle.setAttribute("aria-expanded", String(open));
+    };
+    draftToggle.addEventListener("click", () => set(draftPanel.hidden));
+    document.addEventListener("click", (event) => {
+      if (!draftPanel.hidden && !draft.contains(event.target as Node)) set(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !draftPanel.hidden) {
+        set(false);
+        draftToggle.focus();
+      }
+    });
+  }
+
+  const notes = document.querySelector<HTMLButtonElement>("[data-notes-toggle]");
+  if (notes) {
+    const setNotes = (on: boolean) => {
+      document.body.classList.toggle("notes", on);
+      notes.setAttribute("aria-pressed", String(on));
+      try {
+        sessionStorage.setItem("hw-notes", on ? "1" : "0");
+      } catch {
+        /* storage unavailable */
+      }
+    };
+    let initial = new URLSearchParams(location.search).has("hinweise");
+    try {
+      initial ||= sessionStorage.getItem("hw-notes") === "1";
+    } catch {
+      /* storage unavailable */
+    }
+    if (initial) setNotes(true);
+    notes.addEventListener("click", () => setNotes(!document.body.classList.contains("notes")));
+  }
+</script>
+
+<style>
+  /* Suchio draft tools in one small menu: concept link, pitch notes, version. */
+  .draft {
+    position: fixed;
+    left: 12px;
+    bottom: 12px;
+    z-index: 60;
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    font:
+      500 0.86rem/1.2 "HW Draft Sans",
+      "HW Draft Sans Fallback",
+      ui-sans-serif,
+      system-ui,
+      sans-serif;
+  }
+  .draft-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    cursor: pointer;
+    outline: 2px solid transparent;
+    outline-offset: 0;
+    transition:
+      outline-color 150ms ease,
+      transform 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .draft-toggle:hover {
+      outline-color: #101010;
+    }
+  }
+  .draft-toggle:active {
+    transform: scale(0.92);
+  }
+  .draft .draft-toggle:focus-visible {
+    outline-color: #101010;
+    outline-offset: 0;
+  }
+  .draft-toggle img {
+    display: block;
+    width: 40px;
+    height: 40px;
+  }
+  .draft-panel {
+    display: grid;
+    min-width: 220px;
+    padding: 6px;
+    border: 1px solid rgb(11 11 12 / 0.1);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 24px 50px -24px rgb(0 0 0 / 0.35);
+    animation: draft-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .draft-panel[hidden] {
+    display: none;
+  }
+  @keyframes draft-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+  .draft-panel > a,
+  .draft-notes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: #0b0b0c;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .draft-panel > a:hover,
+  .draft-notes:hover {
+    background: #f4f4f5;
+  }
+  .draft-notes i {
+    position: relative;
+    width: 30px;
+    height: 18px;
+    border-radius: 999px;
+    background: #e9e9eb;
+    transition: background-color 0.3s;
+  }
+  .draft-notes i::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .draft-notes[aria-pressed="true"] i {
+    background: #0050c8;
+  }
+  .draft-notes[aria-pressed="true"] i::after {
+    transform: translateX(12px);
+  }
+  .draft-versions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    padding: 6px 0 0;
+    margin-top: 4px;
+    border-top: 1px solid rgb(11 11 12 / 0.1);
+  }
+  .draft-versions a {
+    display: grid;
+    place-items: center;
+    min-height: 40px;
+    border-radius: 8px;
+    color: #0b0b0c;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .draft-versions a:hover {
+    background: #f4f4f5;
+  }
+  .draft-versions a[aria-current] {
+    background: #0b0b0c;
+    color: #fff;
+  }
+  @media (max-width: 760px) {
+    :global(.has-action-bar) .draft {
+      left: auto;
+      right: 8px;
+      bottom: calc(70px + env(safe-area-inset-bottom));
+      justify-items: end;
+    }
+  }
+
+  @font-face {
+    font-family: "HW Draft Sans";
+    src: url(/projekte/handwerker-work/website-a/fonts/dm-sans-latin-opsz-normal.woff2) format("woff2");
+    font-weight: 100 1000;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "HW Draft Sans Fallback";
+    src: local("Arial"), local("Helvetica Neue"), local("Helvetica");
+    size-adjust: 101%;
+    ascent-override: 92%;
+    descent-override: 29%;
+    line-gap-override: 0%;
+  }
+  .draft-brand b {
+    font-weight: 600;
+  }
+  .draft :is(a, button):focus-visible {
+    outline: 2px solid #0b0b0c;
+    outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .draft-toggle {
+      transition: none;
+    }
+    .draft-panel {
+      animation: none;
+    }
+  }
+</style>

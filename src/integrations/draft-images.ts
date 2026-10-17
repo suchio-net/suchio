@@ -3,7 +3,7 @@ import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import type { AstroIntegration } from "astro";
-import manifest from "../entwurf/hw/images.json";
+import manifest from "../projekte/handwerker-work/shared/images.json";
 
 const balancedPhotos = new Set(["dusche-led", "bad-wc-fertig", "bad-led"]);
 const heroPhotos = new Set(["bad-wanne-holz", "bad-eckwanne"]);
@@ -15,14 +15,14 @@ export function draftImagesIntegration(): AstroIntegration {
     name: "suchio:draft-images",
     hooks: {
       "astro:config:setup": async ({ config, logger }) => {
-        const destination = new URL("entwurf/hw/img/", config.publicDir);
+        const destination = new URL("projekte/handwerker-work/img/", config.publicDir);
         await mkdir(destination, { recursive: true });
         const entries = Object.entries(manifest);
         // Bound native encoder concurrency to keep dev startup and CI memory predictable.
         for (let offset = 0; offset < entries.length; offset += 2) {
           await Promise.all(
             entries.slice(offset, offset + 2).map(async ([name, entry]) => {
-              const original = new URL(`src/assets/entwurf/hw/${entry.source}`, config.root);
+              const original = new URL(`src/projekte/handwerker-work/photos/${entry.source}`, config.root);
               const bytes = await readFile(original);
               // These three photos received the approved white-balance treatment after
               // the original resize pass; the extra hero widths use a lighter encoding.

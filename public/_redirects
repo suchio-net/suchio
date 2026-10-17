@@ -1,6 +1,6 @@
-# Published draft asset URLs remain valid after sharing their files.
-/entwurf/handwerker-work/img/* /entwurf/hw/img/:splat 301
-/entwurf/hw/v1/img/* /entwurf/hw/img/:splat 301
-/entwurf/handwerker-work/badges/* /entwurf/hw/badges/:splat 301
-/entwurf/hw/v1/badges/* /entwurf/hw/badges/:splat 301
-/entwurf/handwerker-work/fonts/* /entwurf/hw/v2/fonts/:splat 301
+# Published Handwerker assets keep working without enumerating generated files.
+/entwurf/hw/v1/img/* /projekte/handwerker-work/img/:splat 308
+/entwurf/hw/v1/badges/* /projekte/handwerker-work/badges/:splat 308
+/entwurf/hw/v1/fonts/* /projekte/handwerker-work/website-a/fonts/:splat 308
+/entwurf/hw/v2/fonts/* /projekte/handwerker-work/website-b/fonts/:splat 308
+/entwurf/hw/* /projekte/handwerker-work/:splat 308

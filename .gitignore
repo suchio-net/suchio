@@ -7,6 +7,6 @@ node_modules/
 .wrangler/
 /output/
 /tmp/
-# Responsive draft derivatives are generated from src/assets/entwurf/hw.
-/public/entwurf/hw/img/*.avif
-/public/entwurf/hw/img/*.webp
+# Responsive draft derivatives are generated from src/projekte/handwerker-work/photos.
+/public/projekte/handwerker-work/img/*.avif
+/public/projekte/handwerker-work/img/*.webp
