@@ -7,6 +7,7 @@ Astro generates the multilingual public pages and metadata. Cloudflare Workers h
 - Keep localization and audit data out of browser bundles except for the props an interactive component needs.
 - Consult current Astro/Cloudflare documentation and the installed adapter before changing framework or runtime integration. Wrangler configuration is in wrangler.jsonc; generated bindings are in src/worker-configuration.d.ts.
 - Keep test mail credentials local; production secrets are Worker bindings. Use local D1 bindings for verification.
+- While iterating, format only the files you changed (`bunx prettier --write <files>`) and run the narrowest check that covers the change. Run `bun run check` once before handing back instead of chaining the separate checks. Run `bun run build` (about 20 seconds), `check:preview` and `capture` only when the change affects build output, routes, metadata or visuals.
 - Before starting a dev or preview server or taking screenshots, read "Servers and screenshots" in README.md.
 - Review copy, illustration and client-concept (`/projekte/<client>`, Website A/B) changes against CODING_STANDARDS.md before handing them back.
 

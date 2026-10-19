@@ -1,7 +1,4 @@
 #!/bin/sh
 # Runs the fast CI checks before a push; `git push --no-verify` skips them.
 set -e
-bun run format:check
-bun run lint
-bun run typecheck
-bun run test
+bun run check
