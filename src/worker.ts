@@ -1,5 +1,6 @@
 import { handle } from "@astrojs/cloudflare/handler";
 import { defaultLocale, hasLocale, localeCookie, type Locale } from "./i18n/config";
+import { draftRedirect } from "./lib/draft-redirect";
 import { securityHeaders } from "./lib/security-headers";
 import { purgeAdminSessions } from "./server/audit-admin-auth";
 import { purgeAuditVisits } from "./server/audit-measurement";
@@ -71,7 +72,7 @@ export default {
   },
   async fetch(request: Request, env: Env, context: ExecutionContext) {
     const url = new URL(request.url);
-    const response = localeRedirect(request, url) ?? (await handle(request, env, context));
+    const response = draftRedirect(url) ?? localeRedirect(request, url) ?? (await handle(request, env, context));
     const missingPage = response.status === 404 && (request.method === "GET" || request.method === "HEAD");
     return withSecurityHeaders(missingPage ? await localizedNotFound(request, url, env) : response);
   },
