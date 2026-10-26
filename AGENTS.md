@@ -17,4 +17,6 @@ Astro generates the multilingual public pages and metadata. Cloudflare Workers h
 - Client concepts: `src/projekte/<client>/`, with thin routes in `src/pages/projekte/<client>/` and static files in `public/projekte/<client>/`. Handwerker.work uses `website-a/` and `website-b/` for Website A and Website B.
 - Scratch work: `tmp/<task>/`. It is disposable and may be deleted at any time.
 - Repo tools write to `tmp/<tool>/`, for example `tmp/captures` and `tmp/dev.log`.
-- Client work, emails, price lists and research belong in the private sibling repo `../suchio-intern`, under `kunden/<client>/`, never in this public repo.
+- Client work, emails, price lists and research belong in the private repo `C:\Users\Alexios\Workspace\projects\suchio-intern`, under `kunden/<client>/`, never in this public repo. Use this absolute path; `../suchio-intern` does not exist in a T3 worktree.
+- If a task concerns a client (for example handwerker.work), read `kunden/<client>/KONTEXT.md` there first. Its table says which other client files the task needs. Code for the live Handwerker.work site belongs in `C:\Users\Alexios\Workspace\projects\handwerker-work`; start such threads there.
+- `bunx wrangler deployments list` shows what is live; `bun run deploy` writes the commit into the version message.

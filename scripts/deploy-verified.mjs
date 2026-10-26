@@ -50,7 +50,11 @@ if (before !== (await sourceFingerprint()) || revision !== (await output(["git",
 const config = process.argv.includes("--redirects") ? "wrangler.redirects.jsonc" : "dist/server/wrangler.json";
 console.log(`Verified source: ${revision}; worktree SHA-256: ${before}`);
 if (!process.argv.includes("--check-only")) {
-  const deployment = Bun.spawn(["bunx", "wrangler", "deploy", "--config", config], {
+  // The commit in the version message lets `bunx wrangler deployments list` show which source is live.
+  const dirty = (await output(["git", "status", "--porcelain"])).trim() ? " + uncommitted changes" : "";
+  const subject = (await output(["git", "log", "-1", "--format=%s"])).trim().slice(0, 70);
+  const message = `${revision.slice(0, 7)} ${subject}${dirty}`;
+  const deployment = Bun.spawn(["bunx", "wrangler", "deploy", "--config", config, "--message", message], {
     stdout: "inherit",
     stderr: "inherit",
     stdin: "inherit",
