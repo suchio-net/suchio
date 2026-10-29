@@ -5,14 +5,15 @@ import fr from "./fr/references";
 
 /**
  * Lighthouse mobile results for handwerker.work. The old site was measured on 21 October 2026,
- * the new one live on 29 October 2026. The contact and Bad Nauheim pages are the same pages;
+ * the new one live on 29 October 2026 after deployment of a234df0. Each page has one lab run.
+ * The contact and Bad Nauheim pages are the same pages;
  * the old Bad Nauheim address redirects to the new one.
  */
 export const handwerkerWorkMeasurements = {
-  scores: { performance: [65, 93], accessibility: [82, 100], seo: [92, 100] },
-  lcpSeconds: [10.1, 3.0],
-  transferMegabytes: [1.99, 0.33],
-  pages: { home: [65, 93], contact: [71, 93], badNauheim: [86, 97] },
+  scores: { performance: [65, 99], accessibility: [82, 100], seo: [92, 100] },
+  lcpSeconds: [10.1, 2.0],
+  transferMegabytes: [1.99, 0.11],
+  pages: { home: [65, 99], contact: [71, 100], badNauheim: [86, 100] },
 } as const;
 
 type Group = { title: string; copy: string; link?: { label: string; href: string } };
