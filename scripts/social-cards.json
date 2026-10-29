@@ -1,5 +1,5 @@
 {
-  "sources": "99d72b495c50a6e63ad9b5bae0b6bbeddcd1b28a0bffc506db6498f7f5eba463",
+  "sources": "230723a03ad72266447a28085e376cef7eee4b54f462710ac277ef2614489d9e",
   "headlines": {
     "/": "Mehr Anfragen. Weniger Handarbeit.",
     "/about": "Suchio ist ein unabhängiges Studio aus Hattersheim am Main.",
@@ -9,6 +9,7 @@
     "/en/contact": "Tell us what you’re working on.",
     "/en/examples": "Website examples for your industry",
     "/en/examples/hotels": "Websites for hotels",
+    "/en/references": "Case studies",
     "/en/references/handwerker-work": "A new website for Handwerker.work",
     "/en/services/ads": "Google Ads and social ads from click to enquiry.",
     "/en/services/automation": "AI and automation without giving up control.",
@@ -21,11 +22,13 @@
     "/fr/contact": "Parlez-nous de votre projet.",
     "/fr/examples": "Exemples de sites web pour votre secteur",
     "/fr/examples/hotels": "Sites web pour hôtels",
+    "/fr/references": "Références",
     "/fr/references/handwerker-work": "Un nouveau site pour Handwerker.work",
     "/fr/services/ads": "Google Ads et réseaux sociaux, du clic à la demande.",
     "/fr/services/automation": "IA et automatisation, sans perdre le contrôle.",
     "/fr/services/seo": "Le SEO pour être trouvé sur Google et dans les réponses IA.",
     "/fr/services/websites": "Création de site web : un site rapide qui apporte des demandes.",
+    "/references": "Referenzen",
     "/references/handwerker-work": "Neue Website für Handwerker.work",
     "/services/ads": "Google Ads und Social Ads vom Klick bis zur Anfrage.",
     "/services/automation": "KI und Automatisierung, ohne die Kontrolle abzugeben.",

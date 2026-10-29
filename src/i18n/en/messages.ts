@@ -3,6 +3,7 @@ import type { MessageKey } from "../translations";
 const messages: Readonly<Record<MessageKey, string>> = {
   "nav.services": "Services",
   "nav.examples": "Examples",
+  "nav.references": "Case studies",
   "nav.about": "About us",
   "nav.contact": "Contact",
   "nav.brandHome": "Suchio home",

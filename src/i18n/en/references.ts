@@ -3,78 +3,77 @@ import type { ReferencesCopy } from "../references";
 const site = "https://handwerker.work";
 
 const references = {
-  link: "Case study: Handwerker.work",
+  label: "Case studies",
+  overview: {
+    title: "Case studies: websites and SEO with measured results | Suchio",
+    description:
+      "Projects by Suchio with measured results. Handwerker.work from Bad Nauheim: a new website, Lighthouse mobile from 65 to 93, every old URL kept.",
+    h1: "Case studies",
+    intro: "Projects we have delivered, with the figures before and after launch.",
+    kind: "Renovation, bathrooms and building services in Bad Nauheim",
+    summary:
+      "A WordPress website rebuilt as a fast Astro website without losing a single address. Plus SEO based on search data and new service pages.",
+    link: "View the case study",
+  },
+  serviceLink: "View the case study: Handwerker.work",
   handwerkerWork: {
     title: "Case study Handwerker.work: new website and SEO for a trades business | Suchio",
     description:
       "How we rebuilt the WordPress website of Handwerker.work from Bad Nauheim: Lighthouse mobile from 65 to 93, every old URL kept, 32 of 33 pages indexed by Google.",
     h1: "A new website for Handwerker.work",
     intro:
-      "Handwerker.work does renovation, bathroom renovation, electrical and building services work in Bad Nauheim, the Wetterau and Frankfurt. We rebuilt its WordPress website as a fast Astro website and look after SEO and further pages.",
+      "Handwerker.work does renovation, bathroom renovation, electrical and building services work in Bad Nauheim, the Wetterau and Frankfurt. We rebuilt its WordPress website and look after SEO and further pages.",
     name: "Handwerker.work",
     visit: "Visit the website",
-    resultsHeading: "Before and after",
-    beforeLabel: "before",
-    results: [
-      { label: "Lighthouse mobile, home page", before: "65", after: "93" },
-      { label: "Main content loaded (LCP), mobile", before: "10.1 s", after: "3.0 s" },
-      { label: "Accessibility, Lighthouse", before: "82", after: "100" },
-      { label: "Sitemap pages indexed by Google", before: "", after: "32 of 33" },
-    ],
-    resultsNote:
-      "Lighthouse mobile on 21 October 2026 on the old website and on 29 October 2026 on the new one. All six measured pages score 91 to 99 for performance and 100 for accessibility, best practices and SEO. Indexing according to Google Search Console on 28 October 2026.",
-    startHeading: "The old website",
-    startText: "On 21 October 2026 we checked all 64 known URLs and recorded 45 findings. The main ones:",
-    start: [
-      "On phones, the main content of the home page appeared only after 10.1 seconds.",
-      "On phones, the home page was wider than the screen and scrolled sideways.",
-      "A pop-up and a cookie banner covered the first screen on every page we checked.",
-      "One service page returned a 404 error and was linked from the home page and four location pages.",
-      "The service pages had no structured data for Google.",
-    ],
+    beforeShot: {
+      caption: "Before, 8 October 2026",
+      alt: "Home page of the old website. An advertising pop-up covers the left half of the first screen.",
+      findings:
+        "A pop-up covered the first screen. On phones the page was wider than the screen. A linked service page returned a 404 error. Our check of 64 addresses found 45 issues.",
+    },
+    afterShot: {
+      caption: "After, 29 October 2026",
+      alt: "Home page of the new website with the headline, three ways to get in touch and a photo of one of its own bathrooms.",
+      changes:
+        "Headline, services and three ways to get in touch on the first screen. A photo of the client’s own work on the first screen. No pop-up, no cookie banner.",
+    },
+    lighthouse: {
+      heading: "Lighthouse mobile, home page",
+      text: "Google’s measuring tool, run in mobile mode before and after the rebuild.",
+      legend: "Outer ring: new website. Inner ring: old website.",
+      before: "before",
+      performance: "Performance",
+      accessibility: "Accessibility",
+      seo: "SEO",
+      lcp: "Time until the main content shows (LCP)",
+      lcpScale: "Google rates up to 2.5 s as good and 4 s or more as poor.",
+      weight: "Data size of the home page",
+      oldSite: "old",
+      newSite: "new",
+    },
+    pagesHeading: "Three pages compared",
+    pagesText: "Lighthouse mobile performance score, old and new version of the same page.",
+    pages: { home: "Home page", contact: "Contact", badNauheim: "Bathroom renovation Bad Nauheim" },
+    sourceNote:
+      "Measured on 21 October 2026 on the old website and on 29 October 2026 on the new one. All six newly measured pages score 91 to 99 for performance and 100 for accessibility, best practices and SEO. 32 of 33 sitemap pages are indexed according to Google Search Console (28 October 2026).",
     workHeading: "What we did",
     work: [
       {
-        title: "Rebuilt without WordPress",
-        copy: "Static Astro pages on Cloudflare. Since 28 October 2026 the website contains no WordPress code.",
+        title: "Technology",
+        copy: "Static Astro pages on Cloudflare, with no WordPress code since 28 October 2026. Every old URL stayed; pages with a new address redirect with a 301, so links and search results keep working.",
       },
       {
-        title: "No address lost",
-        copy: "Every old URL stayed. Pages with a new address redirect with a 301, so links and search results keep working.",
+        title: "Content",
+        copy: "New pages for heating, heat pumps, drywall, full renovation, tiling, service area and Bad Nauheim. Wording and order follow data from Google Search Console. Name, address and a single phone number are the same everywhere.",
+        link: {
+          label: "Bathroom renovation in Bad Nauheim (German)",
+          href: `${site}/einsatzgebiet/bad-nauheim/badsanierung/`,
+        },
       },
       {
-        title: "New service pages",
-        copy: "Heating, heat pumps, drywall, full renovation, tiling, service area and a separate page for Bad Nauheim.",
-      },
-      {
-        title: "Enquiries with project details",
+        title: "Enquiries",
         copy: "The enquiry form asks about the project first. Cost calculators on the service pages send their answers along. Every enquiry arrives by email, with spam protection.",
-      },
-      {
-        title: "The same business details everywhere",
-        copy: "Name, address and a single phone number are the same on every page.",
-      },
-      {
-        title: "SEO based on search data",
-        copy: "Wording, page list and order follow the data from Google Search Console and a comparison with competitors.",
-      },
-    ],
-    pagesHeading: "Pages to look at",
-    pages: [
-      {
-        label: "Bathroom renovation in Bad Nauheim",
-        href: `${site}/einsatzgebiet/bad-nauheim/badsanierung/`,
-        copy: "Location page with reviews and common questions, in German.",
-      },
-      {
-        label: "Full renovation",
-        href: `${site}/komplettsanierung/`,
-        copy: "One of the new service pages, in German.",
-      },
-      {
-        label: "Enquiry",
-        href: `${site}/kontakt/`,
-        copy: "The form that asks about the project first, in German.",
+        link: { label: "See the enquiry form (German)", href: `${site}/kontakt/` },
       },
     ],
     cta: {

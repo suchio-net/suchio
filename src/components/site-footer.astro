@@ -1,6 +1,5 @@
 ---
 import BrandMark from "@/components/brand-mark.astro";
-import { getReferencesCopy } from "@/i18n/references";
 import { publicContactEmail, publicXProfile } from "@/lib/contact";
 import { localizePath, t, type Locale } from "@/lib/i18n";
 import { getServiceCatalog } from "@/lib/service-catalog";
@@ -33,11 +32,8 @@ const services = getServiceCatalog(locale);
         <a class="text-meta transition-colors duration-150 hover:text-white" href={localizePath("/about", locale)}>
           {t(locale, "nav.about")}
         </a>
-        <a
-          class="text-meta transition-colors duration-150 hover:text-white"
-          href={localizePath("/references/handwerker-work", locale)}
-        >
-          {getReferencesCopy(locale).link}
+        <a class="text-meta transition-colors duration-150 hover:text-white" href={localizePath("/references", locale)}>
+          {t(locale, "nav.references")}
         </a>
         <a class="text-meta transition-colors duration-150 hover:text-white" href={localizePath("/contact", locale)}>
           {t(locale, "nav.contact")}

@@ -3,78 +3,77 @@ import type { ReferencesCopy } from "../references";
 const site = "https://handwerker.work";
 
 const references = {
-  link: "Référence : Handwerker.work",
+  label: "Références",
+  overview: {
+    title: "Références : sites web et SEO aux résultats mesurés | Suchio",
+    description:
+      "Projets de Suchio aux résultats mesurés. Handwerker.work à Bad Nauheim : nouveau site, Lighthouse mobile de 65 à 93, toutes les anciennes URL conservées.",
+    h1: "Références",
+    intro: "Des projets que nous avons réalisés, avec les valeurs avant et après la mise en ligne.",
+    kind: "Rénovation, salles de bains et équipements techniques à Bad Nauheim",
+    summary:
+      "Un site WordPress reconstruit en site Astro rapide, sans perdre une seule adresse. Avec un SEO fondé sur les données de recherche et de nouvelles pages de service.",
+    link: "Voir la référence",
+  },
+  serviceLink: "Voir la référence : Handwerker.work",
   handwerkerWork: {
     title: "Référence Handwerker.work : nouveau site et SEO pour une entreprise artisanale | Suchio",
     description:
       "Comment nous avons reconstruit le site WordPress de Handwerker.work à Bad Nauheim : Lighthouse mobile de 65 à 93, toutes les anciennes URL conservées, 32 pages sur 33 indexées par Google.",
     h1: "Un nouveau site pour Handwerker.work",
     intro:
-      "Handwerker.work réalise rénovations, rénovations de salles de bains, travaux d’électricité et équipements techniques à Bad Nauheim, en Wetterau et à Francfort. Nous avons reconstruit son site WordPress en site Astro rapide et nous nous occupons du SEO et des nouvelles pages.",
+      "Handwerker.work réalise rénovations, rénovations de salles de bains, travaux d’électricité et équipements techniques à Bad Nauheim, en Wetterau et à Francfort. Nous avons reconstruit son site WordPress et nous nous occupons du SEO et des nouvelles pages.",
     name: "Handwerker.work",
     visit: "Voir le site",
-    resultsHeading: "Avant et après",
-    beforeLabel: "avant",
-    results: [
-      { label: "Lighthouse mobile, page d’accueil", before: "65", after: "93" },
-      { label: "Contenu principal chargé (LCP), mobile", before: "10,1 s", after: "3,0 s" },
-      { label: "Accessibilité, Lighthouse", before: "82", after: "100" },
-      { label: "Pages du sitemap indexées par Google", before: "", after: "32 sur 33" },
-    ],
-    resultsNote:
-      "Lighthouse mobile le 21 octobre 2026 sur l’ancien site et le 29 octobre 2026 sur le nouveau. Les six pages mesurées obtiennent 91 à 99 points en performance et 100 en accessibilité, bonnes pratiques et SEO. Indexation selon Google Search Console le 28 octobre 2026.",
-    startHeading: "L’ancien site",
-    startText: "Le 21 octobre 2026, nous avons vérifié les 64 URL connues et noté 45 constats. Les principaux :",
-    start: [
-      "Sur mobile, le contenu principal de la page d’accueil n’apparaissait qu’après 10,1 secondes.",
-      "Sur mobile, la page d’accueil était plus large que l’écran et défilait sur le côté.",
-      "Une fenêtre pop-up et un bandeau de cookies masquaient le premier écran sur toutes les pages vérifiées.",
-      "Une page de service renvoyait une erreur 404 et était liée depuis la page d’accueil et quatre pages locales.",
-      "Les pages de service n’avaient pas de données structurées pour Google.",
-    ],
+    beforeShot: {
+      caption: "Avant, 8 octobre 2026",
+      alt: "Page d’accueil de l’ancien site. Une fenêtre publicitaire masque la moitié gauche du premier écran.",
+      findings:
+        "Une fenêtre pop-up masquait le premier écran. Sur mobile, la page était plus large que l’écran. Une page de service liée renvoyait une erreur 404. Notre vérification de 64 adresses a relevé 45 constats.",
+    },
+    afterShot: {
+      caption: "Après, 29 octobre 2026",
+      alt: "Page d’accueil du nouveau site avec le titre, trois moyens de contact et la photo d’une salle de bains réalisée par l’entreprise.",
+      changes:
+        "Titre, services et trois moyens de contact dès le premier écran. Une photo de ses propres chantiers dès le premier écran. Pas de pop-up, pas de bandeau de cookies.",
+    },
+    lighthouse: {
+      heading: "Lighthouse mobile, page d’accueil",
+      text: "L’outil de mesure de Google, en mode mobile avant et après la reconstruction.",
+      legend: "Anneau extérieur : nouveau site. Anneau intérieur : ancien site.",
+      before: "avant",
+      performance: "Performance",
+      accessibility: "Accessibilité",
+      seo: "SEO",
+      lcp: "Temps jusqu’à l’affichage du contenu principal (LCP)",
+      lcpScale: "Google juge bon jusqu’à 2,5 s et mauvais à partir de 4 s.",
+      weight: "Poids de la page d’accueil",
+      oldSite: "ancien",
+      newSite: "nouveau",
+    },
+    pagesHeading: "Trois pages comparées",
+    pagesText: "Score de performance Lighthouse mobile, ancienne et nouvelle version de la même page.",
+    pages: { home: "Page d’accueil", contact: "Contact", badNauheim: "Salle de bains Bad Nauheim" },
+    sourceNote:
+      "Mesuré le 21 octobre 2026 sur l’ancien site et le 29 octobre 2026 sur le nouveau. Les six pages mesurées sur le nouveau site obtiennent 91 à 99 points en performance et 100 en accessibilité, bonnes pratiques et SEO. 32 pages du sitemap sur 33 sont indexées selon Google Search Console (28 octobre 2026).",
     workHeading: "Ce que nous avons fait",
     work: [
       {
-        title: "Reconstruit sans WordPress",
-        copy: "Des pages Astro statiques sur Cloudflare. Depuis le 28 octobre 2026, le site ne contient plus de code WordPress.",
+        title: "Technique",
+        copy: "Des pages Astro statiques sur Cloudflare, sans code WordPress depuis le 28 octobre 2026. Toutes les anciennes URL sont restées ; les pages à nouvelle adresse redirigent en 301, pour que liens et résultats de recherche continuent de fonctionner.",
       },
       {
-        title: "Aucune adresse perdue",
-        copy: "Toutes les anciennes URL sont restées. Les pages à nouvelle adresse redirigent en 301, pour que liens et résultats de recherche continuent de fonctionner.",
+        title: "Contenus",
+        copy: "De nouvelles pages pour le chauffage, la pompe à chaleur, les cloisons sèches, la rénovation complète, le carrelage, la zone d’intervention et Bad Nauheim. Les mots et l’ordre suivent les données de Google Search Console. Nom, adresse et un seul numéro de téléphone sont identiques partout.",
+        link: {
+          label: "Rénovation de salle de bains à Bad Nauheim (en allemand)",
+          href: `${site}/einsatzgebiet/bad-nauheim/badsanierung/`,
+        },
       },
       {
-        title: "Nouvelles pages de service",
-        copy: "Chauffage, pompe à chaleur, cloisons sèches, rénovation complète, carrelage, zone d’intervention et une page dédiée à Bad Nauheim.",
-      },
-      {
-        title: "Des demandes avec le détail du projet",
+        title: "Demandes",
         copy: "Le formulaire demande d’abord le projet. Les calculateurs de coûts des pages de service envoient leurs réponses avec la demande. Chaque demande arrive par e-mail, avec protection anti-spam.",
-      },
-      {
-        title: "Les mêmes coordonnées partout",
-        copy: "Nom, adresse et un seul numéro de téléphone sont identiques sur chaque page.",
-      },
-      {
-        title: "Un SEO fondé sur les données de recherche",
-        copy: "Les mots, la liste des pages et leur ordre suivent les données de Google Search Console et une comparaison avec les concurrents.",
-      },
-    ],
-    pagesHeading: "Pages à consulter",
-    pages: [
-      {
-        label: "Rénovation de salle de bains à Bad Nauheim",
-        href: `${site}/einsatzgebiet/bad-nauheim/badsanierung/`,
-        copy: "Page locale avec avis et questions fréquentes, en allemand.",
-      },
-      {
-        label: "Rénovation complète",
-        href: `${site}/komplettsanierung/`,
-        copy: "L’une des nouvelles pages de service, en allemand.",
-      },
-      {
-        label: "Demande",
-        href: `${site}/kontakt/`,
-        copy: "Le formulaire qui demande d’abord le projet, en allemand.",
+        link: { label: "Voir le formulaire (en allemand)", href: `${site}/kontakt/` },
       },
     ],
     cta: {

@@ -1,0 +1,79 @@
+---
+import type { GetStaticPaths } from "astro";
+import ConceptPreview from "@/components/concept-preview.astro";
+import CtaButton from "@/components/cta-button.astro";
+import EditorialHero from "@/components/editorial-hero.astro";
+import FinalCta from "@/components/final-cta.astro";
+import LighthouseGauge from "@/components/lighthouse-gauge.astro";
+import SiteLayout from "@/layouts/site-layout.astro";
+import { getReferencesCopy, handwerkerWorkMeasurements as measured } from "@/i18n/references";
+import { localeStaticPaths, localizePath, type Locale } from "@/lib/i18n";
+import { pageNode } from "@/lib/structured-data";
+
+export const getStaticPaths = (() => localeStaticPaths()) satisfies GetStaticPaths;
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const { overview: copy, handwerkerWork } = getReferencesCopy(locale);
+const lh = handwerkerWork.lighthouse;
+const casePath = localizePath("/references/handwerker-work", locale);
+---
+
+<SiteLayout
+  locale={locale}
+  title={copy.title.replace(/ \| Suchio$/, "")}
+  description={copy.description}
+  schema={[pageNode(locale, localizePath("/references", locale), copy.title, "CollectionPage")]}
+>
+  <main id="main-content">
+    <EditorialHero title={copy.h1} copy={copy.intro} />
+    <section class="px-page pb-section">
+      <article class="mx-auto grid max-w-layout grid-cols-[minmax(0,7fr)_minmax(0,5fr)] items-center gap-x-split gap-y-8 max-nav:grid-cols-1">
+        <a href={casePath} tabindex="-1" aria-hidden="true" class="block overflow-hidden rounded-shell shadow-floating">
+          <ConceptPreview
+            base="/references/handwerker-work-preview"
+            sizes="(max-width: 900px) 100vw, 44rem"
+            className=""
+          />
+        </a>
+        <div>
+          <h2 class="m-0 text-heading-lg">{handwerkerWork.name}</h2>
+          <p class="mt-2 text-lg/7 text-muted">{copy.kind}</p>
+          <p class="mt-5 max-w-[28rem] text-base/7 text-muted">{copy.summary}</p>
+          <div class="mt-8 flex flex-wrap gap-6">
+            <LighthouseGauge
+              tone="light"
+              size="sm"
+              score={measured.scores.performance[1]}
+              before={measured.scores.performance[0]}
+              label={lh.performance}
+              beforeLabel={lh.before}
+            />
+            <LighthouseGauge
+              tone="light"
+              size="sm"
+              score={measured.scores.accessibility[1]}
+              before={measured.scores.accessibility[0]}
+              label={lh.accessibility}
+              beforeLabel={lh.before}
+            />
+            <LighthouseGauge
+              tone="light"
+              size="sm"
+              score={measured.scores.seo[1]}
+              before={measured.scores.seo[0]}
+              label={lh.seo}
+              beforeLabel={lh.before}
+            />
+          </div>
+          <CtaButton href={casePath} className="mt-9 [&>span:first-child]:min-w-0">
+            {copy.link}
+          </CtaButton>
+        </div>
+      </article>
+    </section>
+
+    <FinalCta locale={locale} />
+  </main>
+</SiteLayout>

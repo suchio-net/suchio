@@ -1,12 +1,12 @@
 ---
 import type { GetStaticPaths } from "astro";
-import ConceptPreview from "@/components/concept-preview.astro";
 import CtaButton from "@/components/cta-button.astro";
 import EditorialHero from "@/components/editorial-hero.astro";
 import FinalCta from "@/components/final-cta.astro";
+import LighthouseGauge from "@/components/lighthouse-gauge.astro";
 import SectionHeading from "@/components/section-heading.astro";
 import SiteLayout from "@/layouts/site-layout.astro";
-import { getReferencesCopy } from "@/i18n/references";
+import { getReferencesCopy, handwerkerWorkMeasurements as measured } from "@/i18n/references";
 import { localeStaticPaths, localizePath, type Locale } from "@/lib/i18n";
 import { breadcrumbNode, pageNode } from "@/lib/structured-data";
 
@@ -15,9 +15,32 @@ interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
-const { handwerkerWork: copy } = getReferencesCopy(locale);
+const { label, handwerkerWork: copy } = getReferencesCopy(locale);
+const lh = copy.lighthouse;
+const overviewPath = localizePath("/references", locale);
 const path = localizePath("/references/handwerker-work", locale);
 const site = "https://handwerker.work/";
+
+const seconds = new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const megabytes = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const [lcpBefore, lcpAfter] = measured.lcpSeconds;
+const [weightBefore, weightAfter] = measured.transferMegabytes;
+// The LCP scale ends just past the old value; Google's thresholds are 2.5 s and 4 s.
+const lcpMax = 11;
+const lcpAt = (value: number) => `${(value / lcpMax) * 100}%`;
+// The page chart starts at 40 so the differences stay readable; the zones follow Lighthouse.
+const scoreMin = 40;
+const scoreAt = (value: number) => `${((value - scoreMin) / (100 - scoreMin)) * 100}%`;
+const rating = (value: number) => (value >= 90 ? "pass" : value >= 50 ? "average" : "fail");
+const pages = (["home", "contact", "badNauheim"] as const).map((id) => ({
+  name: copy.pages[id],
+  before: measured.pages[id][0],
+  after: measured.pages[id][1],
+}));
+const shots = [
+  { base: "/references/handwerker-work-before", ...copy.beforeShot, text: copy.beforeShot.findings },
+  { base: "/references/handwerker-work-preview", ...copy.afterShot, text: copy.afterShot.changes },
+];
 ---
 
 <SiteLayout
@@ -28,92 +51,196 @@ const site = "https://handwerker.work/";
     pageNode(locale, path, copy.title, "WebPage", {
       about: { "@type": "Organization", name: copy.name, url: site },
     }),
-    breadcrumbNode(locale, [{ name: copy.name, path }]),
+    breadcrumbNode(locale, [
+      { name: label, path: overviewPath },
+      { name: copy.name, path },
+    ]),
   ]}
 >
   <main id="main-content">
     <EditorialHero title={copy.h1} copy={copy.intro}>
+      <ol class="m-0 flex list-none items-center gap-2 p-0 text-sm text-muted">
+        <li>
+          <a class="underline decoration-line-strong underline-offset-4 hover:decoration-ink" href={overviewPath}>
+            {label}
+          </a>
+        </li>
+        <li aria-hidden="true">›</li>
+        <li aria-current="page">{copy.name}</li>
+      </ol>
       <CtaButton href={site} className="mt-4 [&>span:first-child]:min-w-0">
         {copy.visit}
       </CtaButton>
     </EditorialHero>
 
     <section class="px-page pb-section">
-      <div class="mx-auto max-w-layout">
-        <a href={site} tabindex="-1" aria-hidden="true" class="block overflow-hidden rounded-shell shadow-floating">
-          <ConceptPreview
-            base="/references/handwerker-work-preview"
-            sizes="(max-width: 1200px) 100vw, 75rem"
-            className=""
+      <div class="mx-auto grid max-w-layout grid-cols-2 gap-x-8 gap-y-12 max-nav:grid-cols-1">
+        {shots.map((shot) => (
+          <figure class="m-0">
+            <picture class="block overflow-hidden rounded-shell shadow-floating">
+              <source
+                type="image/avif"
+                srcset={`${shot.base}-720.avif 720w, ${shot.base}-1440.avif 1440w`}
+                sizes="(max-width: 900px) 100vw, 37rem"
+              />
+              <img
+                src={`${shot.base}-1440.webp`}
+                srcset={`${shot.base}-720.webp 720w, ${shot.base}-1440.webp 1440w`}
+                sizes="(max-width: 900px) 100vw, 37rem"
+                width="1440"
+                height="900"
+                alt={shot.alt}
+                loading="lazy"
+                decoding="async"
+                class="block h-auto w-full"
+              />
+            </picture>
+            <figcaption class="mt-5">
+              <span class="block text-heading-sm">{shot.caption}</span>
+              <span class="mt-2 block max-w-[34rem] text-base/6 text-muted">{shot.text}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <section class="bg-black px-page py-section text-inverse">
+      <div class="reveal mx-auto max-w-[62rem]" data-reveal>
+        <div class="mx-auto max-w-[40rem] text-center">
+          <h2 class="m-0 text-heading-lg text-white">{lh.heading}</h2>
+          <p class="mt-4 text-lg/7 text-inverse-muted">{lh.text}</p>
+        </div>
+
+        <div class="mt-14 grid grid-cols-3 gap-6 max-narrow:gap-3">
+          <LighthouseGauge
+            score={measured.scores.performance[1]}
+            before={measured.scores.performance[0]}
+            label={lh.performance}
+            beforeLabel={lh.before}
           />
-        </a>
+          <LighthouseGauge
+            score={measured.scores.accessibility[1]}
+            before={measured.scores.accessibility[0]}
+            label={lh.accessibility}
+            beforeLabel={lh.before}
+          />
+          <LighthouseGauge
+            score={measured.scores.seo[1]}
+            before={measured.scores.seo[0]}
+            label={lh.seo}
+            beforeLabel={lh.before}
+          />
+        </div>
+        <p class="mt-6 text-center text-meta text-inverse-muted">{lh.legend}</p>
+
+        <div class="mt-16 grid grid-cols-2 gap-x-14 gap-y-12 max-nav:grid-cols-1">
+          <div>
+            <h3 class="m-0 text-heading-sm text-white">{lh.lcp}</h3>
+            <div class="lcp-meter relative mt-12">
+              <div class="flex h-2.5 overflow-hidden rounded-pill" aria-hidden="true">
+                <span class="lh-zone lh-zone--pass" style={{ width: lcpAt(2.5) }}></span>
+                <span class="lh-zone lh-zone--average" style={{ width: lcpAt(1.5) }}></span>
+                <span class="lh-zone lh-zone--fail grow"></span>
+              </div>
+              {[
+                { value: lcpAfter, name: lh.newSite },
+                { value: lcpBefore, name: lh.oldSite },
+              ].map((mark) => (
+                <span class={`lcp-mark ${mark.value > 4 ? "lcp-mark--poor" : ""}`} style={{ left: lcpAt(mark.value) }}>
+                  <span class="lcp-mark__label">
+                    {mark.name} {seconds.format(mark.value)} s
+                  </span>
+                </span>
+              ))}
+            </div>
+            <p class="mt-5 text-meta text-inverse-muted">{lh.lcpScale}</p>
+          </div>
+
+          <div>
+            <h3 class="m-0 text-heading-sm text-white">{lh.weight}</h3>
+            <dl class="mt-6 grid gap-4">
+              {[
+                { name: lh.oldSite, value: weightBefore, tone: "bg-inverse-muted" },
+                { name: lh.newSite, value: weightAfter, tone: "bg-white" },
+              ].map((bar) => (
+                <div class="grid grid-cols-[4.5rem_minmax(0,1fr)] items-center gap-3">
+                  <dt class="text-meta text-inverse-muted">{bar.name}</dt>
+                  <dd class="m-0 flex items-center gap-3">
+                    <span
+                      class={`block h-2.5 rounded-pill ${bar.tone}`}
+                      style={{ width: `${(bar.value / weightBefore) * 72}%` }}
+                    />
+                    <span class="text-ui whitespace-nowrap tabular-nums">{megabytes.format(bar.value)} MB</span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
       </div>
     </section>
 
     <section class="px-page py-section">
       <div class="mx-auto max-w-layout">
-        <SectionHeading title={copy.resultsHeading} />
-        <dl class="m-0 grid grid-cols-4 gap-4 max-nav:grid-cols-2 max-narrow:grid-cols-1">
-          {copy.results.map((item) => (
-            <div class="flex flex-col rounded-card bg-white p-card-padding shadow-surface">
-              <dt class="order-2 mt-3 text-base/6 text-muted">{item.label}</dt>
-              <dd class="order-1 m-0 text-heading-lg tabular-nums">{item.after}</dd>
-              {item.before && (
-                <dd class="order-3 m-0 mt-1 text-meta text-muted tabular-nums">
-                  {copy.beforeLabel} {item.before}
-                </dd>
-              )}
-            </div>
+        <SectionHeading title={copy.pagesHeading} copy={copy.pagesText} />
+        <ul class="m-0 grid list-none gap-8 p-0">
+          {pages.map((page) => (
+            <li class="grid grid-cols-[minmax(0,14rem)_minmax(0,1fr)] items-center gap-x-8 gap-y-3 max-nav:grid-cols-1">
+              <span class="text-heading-sm">{page.name}</span>
+              <span class="score-track relative block h-12" aria-hidden="true">
+                <span
+                  class="score-line"
+                  style={{
+                    left: scoreAt(page.before),
+                    width: `calc(${scoreAt(page.after)} - ${scoreAt(page.before)})`,
+                  }}
+                />
+                <span
+                  class={`score-dot score-dot--before lh-dot--${rating(page.before)}`}
+                  style={{ left: scoreAt(page.before) }}
+                >
+                  <span>{page.before}</span>
+                </span>
+                <span class={`score-dot lh-dot--${rating(page.after)}`} style={{ left: scoreAt(page.after) }}>
+                  <span>{page.after}</span>
+                </span>
+              </span>
+              <span class="sr-only">
+                {lh.oldSite} {page.before}, {lh.newSite} {page.after}
+              </span>
+            </li>
           ))}
-        </dl>
-        <p class="mt-6 max-w-[45rem] text-meta text-muted">{copy.resultsNote}</p>
+        </ul>
+        <div
+          class="mt-3 ml-[calc(14rem+2rem)] flex justify-between text-meta text-muted tabular-nums max-nav:ml-0"
+          aria-hidden="true"
+        >
+          <span>{scoreMin}</span>
+          <span>100</span>
+        </div>
+        <p class="mt-10 max-w-[45rem] text-meta text-muted">{copy.sourceNote}</p>
       </div>
     </section>
 
     <section class="bg-white px-page py-section">
-      <div class="mx-auto grid max-w-layout grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-x-split gap-y-8 max-nav:grid-cols-1">
-        <div class="reveal" data-reveal>
-          <h2 class="m-0 text-heading-lg">{copy.startHeading}</h2>
-          <p class="mt-4 max-w-[26rem] text-lg/7 text-muted">{copy.startText}</p>
-        </div>
-        <ul class="m-0 list-none border-b border-line p-0">
-          {copy.start.map((item) => (
-            <li class="border-t border-line py-5 text-lg/7">{item}</li>
-          ))}
-        </ul>
-      </div>
-    </section>
-
-    <section class="px-page py-section">
       <div class="mx-auto max-w-layout">
         <SectionHeading title={copy.workHeading} />
-        <ul class="m-0 grid list-none grid-cols-2 gap-x-split p-0 max-nav:grid-cols-1">
-          {copy.work.map((item) => (
-            <li class="border-t border-line py-6">
-              <h3 class="m-0 text-heading-sm">{item.title}</h3>
-              <p class="mt-2 max-w-[30rem] text-base/6 text-muted">{item.copy}</p>
-            </li>
+        <div class="grid grid-cols-3 gap-x-12 gap-y-10 max-nav:grid-cols-1">
+          {copy.work.map((group) => (
+            <div>
+              <h3 class="m-0 text-heading-md">{group.title}</h3>
+              <p class="mt-3 text-base/7 text-muted">{group.copy}</p>
+              {group.link && (
+                <a
+                  class="mt-4 inline-block text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
+                  href={group.link.href}
+                >
+                  {group.link.label}
+                </a>
+              )}
+            </div>
           ))}
-        </ul>
-      </div>
-    </section>
-
-    <section class="px-page pb-section">
-      <div class="mx-auto max-w-layout">
-        <SectionHeading title={copy.pagesHeading} />
-        <ul class="m-0 grid list-none grid-cols-3 gap-4 p-0 max-nav:grid-cols-1">
-          {copy.pages.map((item) => (
-            <li class="rounded-card bg-white p-card-padding shadow-surface">
-              <a
-                class="text-heading-sm text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
-                href={item.href}
-              >
-                {item.label}
-              </a>
-              <p class="mt-2 text-base/6 text-muted">{item.copy}</p>
-            </li>
-          ))}
-        </ul>
+        </div>
       </div>
     </section>
 
@@ -126,3 +253,85 @@ const site = "https://handwerker.work/";
     />
   </main>
 </SiteLayout>
+
+<style>
+  .lh-zone--pass {
+    background: #0cce6b;
+  }
+  .lh-zone--average {
+    background: #ffa400;
+  }
+  .lh-zone--fail {
+    background: #ff4e42;
+  }
+  .lcp-mark {
+    position: absolute;
+    top: 50%;
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 3px solid #000;
+    border-radius: 999px;
+    background: #fff;
+    transform: translate(-50%, -50%);
+  }
+  .lcp-mark__label {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    font-size: var(--text-ui);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    transform: translateX(-50%);
+  }
+  /* The old value sits near the right end, so its label ends at the marker. */
+  .lcp-mark--poor .lcp-mark__label {
+    right: -0.5rem;
+    left: auto;
+    transform: none;
+  }
+  .score-track {
+    /* Lighthouse zones from 40 to 100: red below 50, orange below 90, green from 90. */
+    background: linear-gradient(
+      to right,
+      rgb(255 78 66 / 14%) 0 16.667%,
+      rgb(255 164 0 / 14%) 16.667% 83.333%,
+      rgb(12 206 107 / 16%) 83.333% 100%
+    );
+    border-radius: 0.5rem;
+  }
+  .score-line {
+    position: absolute;
+    top: 50%;
+    height: 2px;
+    background: var(--color-ink);
+    transform: translateY(-50%);
+  }
+  .score-dot {
+    position: absolute;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    color: #000;
+    font-size: var(--text-meta);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    transform: translate(-50%, -50%);
+  }
+  .score-dot--before {
+    width: 1.75rem;
+    height: 1.75rem;
+    opacity: 0.75;
+  }
+  .lh-dot--pass {
+    background: #0cce6b;
+  }
+  .lh-dot--average {
+    background: #ffa400;
+  }
+  .lh-dot--fail {
+    background: #ff4e42;
+  }
+</style>

@@ -17,6 +17,7 @@ const { locale, pathname } = Astro.props;
 const services = getServiceCatalog(locale);
 const navItems = [
   { href: localizePath("/examples", locale), label: t(locale, "nav.examples") },
+  { href: localizePath("/references", locale), label: t(locale, "nav.references") },
   { href: localizePath("/about", locale), label: t(locale, "nav.about") },
   { href: localizePath("/contact", locale), label: t(locale, "nav.contact") },
 ];
