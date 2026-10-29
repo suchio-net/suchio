@@ -30,7 +30,7 @@ Pitch websites for prospective clients. They must read as a clear improvement of
 - Build the navigation from the client's real pages, one real page per item, and move their real content into it. Big changes are fine; invented services, claims or visuals are not, and extras only mirror something the client already offers.
 - Unconfirmed client facts carry a pitch note. Reviews are quoted verbatim. Every project photo opens at full size.
 - Reject the patterns the user called AI slop: an eyebrow label with a line above every heading, the same headline-plus-split layout repeated, glowing pill buttons, diagrams that mean nothing, sticky-left/scrolling-right sections, reveal-on-scroll everywhere, and a navbar that only jumps to sections.
-- Plan palette, type and layout from the client's trade and brand first, and spend boldness in one place; see `.agents/skills/frontend-design/SKILL.md`.
+- Plan palette, type and layout from the client's trade and brand first, and spend boldness in one place; see the user-level `frontend-design` skill.
 - Website A and Website B shown side by side (`/projekte/handwerker-work/website-a`, `/projekte/handwerker-work/website-b`) share routes and content but each has its own layouts and visual language.
 - Draft code stays out of `src/components`. A concept keeps its "Hinweise" pitch-annotation layer and its `/konzept` pitch page.
 - Keep each client's code and photos in `src/projekte/<client>/`, thin routes in `src/pages/projekte/<client>/`, and static files in `public/projekte/<client>/`.
