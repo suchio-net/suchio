@@ -7,7 +7,7 @@ const references = {
   overview: {
     title: "Case studies: websites and SEO with measured results | Suchio",
     description:
-      "Projects by Suchio with measured results. Handwerker.work from Bad Nauheim: a new website, Lighthouse mobile from 65 to 99, every old URL kept.",
+      "Projects by Suchio with measured results. Handwerker.work from Bad Nauheim: a new website, Lighthouse mobile from 65 to 100, every old URL kept.",
     h1: "Case studies",
     intro: "Projects we have delivered, with the figures before and after launch.",
     kind: "Renovation, bathrooms and building services in Bad Nauheim",
@@ -19,7 +19,7 @@ const references = {
   handwerkerWork: {
     title: "Case study Handwerker.work: new website and SEO for a trades business | Suchio",
     description:
-      "How we rebuilt the WordPress website of Handwerker.work from Bad Nauheim: Lighthouse mobile from 65 to 99, every old URL kept, 32 of 33 pages indexed by Google.",
+      "How we rebuilt the WordPress website of Handwerker.work from Bad Nauheim: Lighthouse mobile from 65 to 100, every old URL kept, 32 of 33 pages indexed by Google.",
     h1: "A new website for Handwerker.work",
     intro:
       "Handwerker.work does renovation, bathroom renovation, electrical and building services work in Bad Nauheim, the Wetterau and Frankfurt. We rebuilt its WordPress website and look after SEO and further pages.",
@@ -50,12 +50,16 @@ const references = {
       weight: "Data size of the home page",
       oldSite: "old",
       newSite: "new",
+      desktop: "On desktop",
+      desktopText:
+        "New website, home page, with Lighthouse's desktop settings. The old website was measured on mobile only.",
+      bestPractices: "Best practices",
     },
     pagesHeading: "Three pages compared",
     pagesText: "Lighthouse mobile performance score, old and new version of the same page.",
     pages: { home: "Home page", contact: "Contact", badNauheim: "Bathroom renovation Bad Nauheim" },
     sourceNote:
-      "Lighthouse lab measurements of the live website: the old version on 21 October 2026, the new version after the speed improvements on 29 October 2026. The six new single mobile runs score 99 to 100 for performance and 100 each for accessibility, best practices and SEO. Scores can vary between runs. 32 of 33 sitemap pages are indexed according to Google Search Console (28 October 2026).",
+      "Lighthouse lab measurements of the live website: the old version on 21 October 2026 (mobile only), the new version on 29 October 2026 with three mobile and three desktop runs per page; the charts show the median. On mobile, the home, contact and Bad Nauheim bathroom pages score 100 for performance, accessibility, best practices and SEO in every run. Scores can vary between runs. 32 of 33 sitemap pages are indexed according to Google Search Console (28 October 2026).",
     workHeading: "What we did",
     work: [
       {

@@ -4,16 +4,17 @@ import en from "./en/references";
 import fr from "./fr/references";
 
 /**
- * Lighthouse mobile results for handwerker.work. The old site was measured on 21 October 2026,
- * the new one live on 29 October 2026 after deployment of a234df0. Each page has one lab run.
- * The contact and Bad Nauheim pages are the same pages;
- * the old Bad Nauheim address redirects to the new one.
+ * Lighthouse results for handwerker.work. The old site was measured on 21 October 2026, on mobile
+ * only. The new one was measured live on 29 October 2026 (deployment a234df0), three runs per page
+ * on mobile and three on desktop; the values are the medians. The contact and Bad Nauheim pages
+ * are the same pages; the old Bad Nauheim address redirects to the new one.
  */
 export const handwerkerWorkMeasurements = {
-  scores: { performance: [65, 99], accessibility: [82, 100], seo: [92, 100] },
-  lcpSeconds: [10.1, 2.0],
+  scores: { performance: [65, 100], accessibility: [82, 100], seo: [92, 100] },
+  lcpSeconds: [10.1, 1.8],
   transferMegabytes: [1.99, 0.11],
-  pages: { home: [65, 99], contact: [71, 100], badNauheim: [86, 100] },
+  pages: { home: [65, 100], contact: [71, 100], badNauheim: [86, 100] },
+  desktop: { performance: 100, accessibility: 100, bestPractices: 100, seo: 100, lcpSeconds: 0.5 },
 } as const;
 
 type Group = { title: string; copy: string; link?: { label: string; href: string } };
@@ -53,6 +54,10 @@ export type ReferencesCopy = {
       weight: string;
       oldSite: string;
       newSite: string;
+      /** Heading and note of the desktop figures, which exist only for the new site. */
+      desktop: string;
+      desktopText: string;
+      bestPractices: string;
     };
     pagesHeading: string;
     pagesText: string;

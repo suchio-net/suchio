@@ -7,7 +7,7 @@ const references = {
   overview: {
     title: "Referenzen: Websites und SEO mit gemessenen Ergebnissen | Suchio",
     description:
-      "Projekte von Suchio mit gemessenen Ergebnissen. Handwerker.work aus Bad Nauheim: neue Website, Lighthouse mobil von 65 auf 99, alle alten URLs erhalten.",
+      "Projekte von Suchio mit gemessenen Ergebnissen. Handwerker.work aus Bad Nauheim: neue Website, Lighthouse mobil von 65 auf 100, alle alten URLs erhalten.",
     h1: "Referenzen",
     intro: "Projekte, die wir umgesetzt haben, mit den Werten vor und nach dem Start.",
     kind: "Sanierung, Bad und Haustechnik in Bad Nauheim",
@@ -19,7 +19,7 @@ const references = {
   handwerkerWork: {
     title: "Referenz Handwerker.work: neue Website und SEO für einen Handwerksbetrieb | Suchio",
     description:
-      "Wie wir die WordPress-Website von Handwerker.work aus Bad Nauheim neu gebaut haben: Lighthouse mobil von 65 auf 99, alle alten URLs erhalten, 32 von 33 Seiten bei Google indexiert.",
+      "Wie wir die WordPress-Website von Handwerker.work aus Bad Nauheim neu gebaut haben: Lighthouse mobil von 65 auf 100, alle alten URLs erhalten, 32 von 33 Seiten bei Google indexiert.",
     h1: "Neue Website für Handwerker.work",
     intro:
       "Handwerker.work übernimmt Sanierung, Badsanierung, Elektro und Haustechnik in Bad Nauheim, der Wetterau und Frankfurt. Wir haben die WordPress-Website neu gebaut und kümmern uns um SEO und den weiteren Ausbau.",
@@ -50,12 +50,16 @@ const references = {
       weight: "Datenmenge der Startseite",
       oldSite: "alt",
       newSite: "neu",
+      desktop: "Am Desktop",
+      desktopText:
+        "Neue Website, Startseite, mit den Desktop-Einstellungen von Lighthouse. Die alte Website wurde nur mobil gemessen.",
+      bestPractices: "Best Practices",
     },
     pagesHeading: "Drei Seiten im Vergleich",
     pagesText: "Performance-Wert in Lighthouse mobil, alte und neue Fassung derselben Seite.",
     pages: { home: "Startseite", contact: "Kontakt", badNauheim: "Badsanierung Bad Nauheim" },
     sourceNote:
-      "Lighthouse-Labormessungen der live erreichbaren Website: alte Fassung am 21.10.2026, neue Fassung nach der Ladezeit-Optimierung am 29.10.2026. Die sechs neuen mobilen Einzelmessungen erreichen 99 bis 100 Punkte für Performance und jeweils 100 für Barrierefreiheit, Best Practices und SEO. Die Werte können zwischen Messungen schwanken. 32 von 33 Seiten der Sitemap sind laut Google Search Console indexiert (28.10.2026).",
+      "Lighthouse-Labormessungen der live erreichbaren Website: alte Fassung am 21.10.2026 (nur mobil), neue Fassung am 29.10.2026 mit je drei mobilen und drei Desktop-Messungen pro Seite; gezeigt ist der Median. Mobil erreichen Startseite, Kontakt und Badsanierung Bad Nauheim in jeder Messung 100 Punkte in Performance, Barrierefreiheit, Best Practices und SEO. Die Werte können zwischen Messungen schwanken. 32 von 33 Seiten der Sitemap sind laut Google Search Console indexiert (28.10.2026).",
     workHeading: "Was wir gemacht haben",
     work: [
       {

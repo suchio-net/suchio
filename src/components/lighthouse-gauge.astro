@@ -1,7 +1,8 @@
 ---
 // A Lighthouse score ring in Lighthouse's colours: red below 50, orange below 90, green from 90.
-// With `before`, a thinner inner ring shows the earlier score. The ring fills once when its
-// revealed parent becomes visible; the figures stay readable without the animation.
+// With `before`, a thinner grey inner ring shows the earlier score, so it never looks like the
+// coloured outer ring. The ring fills once when its revealed parent becomes visible; the figures
+// stay readable without the animation.
 interface Props {
   score: number;
   before?: number;
@@ -28,12 +29,12 @@ const rating = (value: number) => (value >= 90 ? "pass" : value >= 50 ? "average
       />
       {before !== undefined && (
         <>
-          <circle class="lh-gauge__track lh-gauge__track--inner" cx="60" cy="60" r="44" />
+          <circle class="lh-gauge__track lh-gauge__track--inner" cx="60" cy="60" r="40" />
           <circle
-            class={`lh-gauge__arc lh-gauge__arc--inner lh-${rating(before)}`}
+            class="lh-gauge__arc lh-gauge__arc--inner"
             cx="60"
             cy="60"
-            r="44"
+            r="40"
             pathLength="100"
             style={{ "--lh-value": before }}
           />
@@ -46,7 +47,7 @@ const rating = (value: number) => (value >= 90 ? "pass" : value >= 50 ? "average
     <span class="lh-gauge__label">{label}</span>
     {before !== undefined && beforeLabel && (
       <span class="lh-gauge__before">
-        <span class={`lh-gauge__dot lh-${rating(before)}`} aria-hidden="true" />
+        <span class="lh-gauge__dot" aria-hidden="true" />
         {beforeLabel} {before}
       </span>
     )}
@@ -69,12 +70,14 @@ const rating = (value: number) => (value >= 90 ? "pass" : value >= 50 ? "average
     --lh-text-average: #c33300;
     --lh-text-fail: #c00;
     --lh-track: rgb(0 0 0 / 8%);
+    --lh-before: rgb(0 0 0 / 38%);
   }
   .lh-gauge--dark {
     --lh-text-pass: var(--lh-pass);
     --lh-text-average: var(--lh-average);
     --lh-text-fail: var(--lh-fail);
     --lh-track: rgb(255 255 255 / 12%);
+    --lh-before: rgb(255 255 255 / 55%);
   }
   .lh-gauge__ring {
     position: relative;
@@ -103,6 +106,9 @@ const rating = (value: number) => (value >= 90 ? "pass" : value >= 50 ? "average
   .lh-gauge__track--inner,
   .lh-gauge__arc--inner {
     stroke-width: 4;
+  }
+  .lh-gauge__arc--inner {
+    stroke: var(--lh-before);
   }
   .lh-gauge__arc {
     stroke-width: 8;
@@ -165,6 +171,7 @@ const rating = (value: number) => (value >= 90 ? "pass" : value >= 50 ? "average
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 999px;
+    background: var(--lh-before);
   }
 
   /* One fill when the band scrolls into view. */

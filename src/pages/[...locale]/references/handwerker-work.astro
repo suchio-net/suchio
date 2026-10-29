@@ -25,12 +25,21 @@ const seconds = new Intl.NumberFormat(locale, { minimumFractionDigits: 1, maximu
 const megabytes = new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const [lcpBefore, lcpAfter] = measured.lcpSeconds;
 const [weightBefore, weightAfter] = measured.transferMegabytes;
+const desktop = [
+  { name: lh.performance, value: measured.desktop.performance },
+  { name: lh.accessibility, value: measured.desktop.accessibility },
+  { name: lh.bestPractices, value: measured.desktop.bestPractices },
+  { name: lh.seo, value: measured.desktop.seo },
+];
 // The LCP scale ends just past the old value; Google's thresholds are 2.5 s and 4 s.
 const lcpMax = 11;
 const lcpAt = (value: number) => `${(value / lcpMax) * 100}%`;
 // The page chart starts at 40 so the differences stay readable; the zones follow Lighthouse.
+// The scale is inset by half a dot, so a dot at 40 or 100 stays inside the track.
 const scoreMin = 40;
-const scoreAt = (value: number) => `${((value - scoreMin) / (100 - scoreMin)) * 100}%`;
+const scoreTicks = [40, 50, 90, 100];
+const scoreAt = (value: number) =>
+  `calc(var(--score-inset) + (100% - 2 * var(--score-inset)) * ${(value - scoreMin) / (100 - scoreMin)})`;
 const rating = (value: number) => (value >= 90 ? "pass" : value >= 50 ? "average" : "fail");
 const pages = (["home", "contact", "badNauheim"] as const).map((id) => ({
   name: copy.pages[id],
@@ -177,6 +186,25 @@ const shots = [
             </dl>
           </div>
         </div>
+
+        <div class="mt-16 border-t border-inverse-line pt-12">
+          <h3 class="m-0 text-heading-sm text-white">{lh.desktop}</h3>
+          <p class="mt-2 max-w-[40rem] text-meta text-inverse-muted">{lh.desktopText}</p>
+          <dl class="mt-8 grid grid-cols-5 gap-6 max-nav:grid-cols-3 max-narrow:grid-cols-2">
+            {desktop.map((item) => (
+              <div class="flex flex-col-reverse gap-1">
+                <dt class="text-meta text-inverse-muted">{item.name}</dt>
+                <dd class={`desktop-figure m-0 tabular-nums lh-figure--${rating(item.value)}`}>{item.value}</dd>
+              </div>
+            ))}
+            <div class="flex flex-col-reverse gap-1">
+              <dt class="text-meta text-inverse-muted">LCP</dt>
+              <dd class="desktop-figure m-0 tabular-nums text-white">
+                {seconds.format(measured.desktop.lcpSeconds)} s
+              </dd>
+            </div>
+          </dl>
+        </div>
       </div>
     </section>
 
@@ -212,11 +240,14 @@ const shots = [
           ))}
         </ul>
         <div
-          class="mt-3 ml-[calc(14rem+2rem)] flex justify-between text-meta text-muted tabular-nums max-nav:ml-0"
+          class="score-axis relative mt-3 ml-[calc(14rem+2rem)] h-5 text-meta text-muted tabular-nums max-nav:ml-0"
           aria-hidden="true"
         >
-          <span>{scoreMin}</span>
-          <span>100</span>
+          {scoreTicks.map((tick) => (
+            <span class="absolute top-0 -translate-x-1/2" style={{ left: scoreAt(tick) }}>
+              {tick}
+            </span>
+          ))}
         </div>
         <p class="mt-10 max-w-[45rem] text-meta text-muted">{copy.sourceNote}</p>
       </div>
@@ -255,6 +286,21 @@ const shots = [
 </SiteLayout>
 
 <style>
+  .desktop-figure {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .lh-figure--pass {
+    color: #0cce6b;
+  }
+  .lh-figure--average {
+    color: #ffa400;
+  }
+  .lh-figure--fail {
+    color: #ff4e42;
+  }
   .lh-zone--pass {
     background: #0cce6b;
   }
@@ -289,13 +335,19 @@ const shots = [
     left: auto;
     transform: none;
   }
+  .score-track,
+  .score-axis {
+    --score-inset: 1.25rem;
+  }
   .score-track {
-    /* Lighthouse zones from 40 to 100: red below 50, orange below 90, green from 90. */
+    /* Lighthouse zones from 40 to 100: red below 50, orange below 90, green from 90.
+       The zone edges sit on the same inset scale as the dots. */
+    --score-span: calc(100% - 2 * var(--score-inset));
     background: linear-gradient(
       to right,
-      rgb(255 78 66 / 14%) 0 16.667%,
-      rgb(255 164 0 / 14%) 16.667% 83.333%,
-      rgb(12 206 107 / 16%) 83.333% 100%
+      rgb(255 78 66 / 14%) 0 calc(var(--score-inset) + var(--score-span) / 6),
+      rgb(255 164 0 / 14%) 0 calc(var(--score-inset) + var(--score-span) * 5 / 6),
+      rgb(12 206 107 / 16%) 0 100%
     );
     border-radius: 0.5rem;
   }
@@ -320,18 +372,24 @@ const shots = [
     font-variant-numeric: tabular-nums;
     transform: translate(-50%, -50%);
   }
-  .score-dot--before {
-    width: 1.75rem;
-    height: 1.75rem;
-    opacity: 0.75;
-  }
   .lh-dot--pass {
-    background: #0cce6b;
+    --dot: #0cce6b;
   }
   .lh-dot--average {
-    background: #ffa400;
+    --dot: #ffa400;
   }
   .lh-dot--fail {
-    background: #ff4e42;
+    --dot: #ff4e42;
+  }
+  .score-dot {
+    background: var(--dot);
+  }
+  /* The old score is an opaque ring in its Lighthouse colour, so the line ends at its edge. */
+  .score-dot--before {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid var(--dot);
+    background: var(--color-canvas);
+    font-weight: 500;
   }
 </style>
