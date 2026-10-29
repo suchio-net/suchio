@@ -15,13 +15,19 @@ interface Props {
 }
 const { locale, pathname } = Astro.props;
 const services = getServiceCatalog(locale);
+// The industry concepts under /examples are part of the references page, so that tab marks them too.
 const navItems = [
-  { href: localizePath("/references", locale), label: t(locale, "nav.references") },
-  { href: localizePath("/examples", locale), label: t(locale, "nav.examples") },
+  {
+    href: localizePath("/references", locale),
+    label: t(locale, "nav.references"),
+    also: [localizePath("/examples", locale)],
+  },
   { href: localizePath("/about", locale), label: t(locale, "nav.about") },
   { href: localizePath("/contact", locale), label: t(locale, "nav.contact") },
 ];
-const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+const within = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+const isActive = (href: string) =>
+  within(href) || (navItems.find((item) => item.href === href)?.also ?? []).some(within);
 const servicesActive = pathname.startsWith(localizePath("/services/", locale));
 const selectLocale = t(locale, "nav.selectLocale");
 const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduce:active:scale-100";

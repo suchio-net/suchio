@@ -9,11 +9,16 @@ const references = {
     description:
       "Projects by Suchio with measured results. Handwerker.work from Bad Nauheim: a new website, Lighthouse mobile from 65 to 100, every old URL kept.",
     h1: "Case studies",
-    intro: "Projects we have delivered, with the figures before and after launch.",
+    intro:
+      "Projects we have delivered, with the figures before and after launch. Below them, concepts that show what a website for an industry can look like.",
     kind: "Renovation, bathrooms and building services in Bad Nauheim",
     summary:
       "A WordPress website rebuilt as a fast Astro website without losing a single address. Plus SEO based on search data and new service pages.",
     link: "View the case study",
+    conceptsHeading: "Concepts by industry",
+    conceptsText:
+      "Examples of what a website for an industry can look like. The businesses are made up; they are not client projects.",
+    conceptsLink: "All concepts",
   },
   serviceLink: "View the case study: Handwerker.work",
   handwerkerWork: {

@@ -28,6 +28,10 @@ export type ReferencesCopy = {
     kind: string;
     summary: string;
     link: string;
+    /** The industry concepts from /examples, shown below the client projects. */
+    conceptsHeading: string;
+    conceptsText: string;
+    conceptsLink: string;
   };
   /** Short link text for the service pages. */
   serviceLink: string;

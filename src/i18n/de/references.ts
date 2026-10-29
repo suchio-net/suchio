@@ -9,11 +9,16 @@ const references = {
     description:
       "Projekte von Suchio mit gemessenen Ergebnissen. Handwerker.work aus Bad Nauheim: neue Website, Lighthouse mobil von 65 auf 100, alle alten URLs erhalten.",
     h1: "Referenzen",
-    intro: "Projekte, die wir umgesetzt haben, mit den Werten vor und nach dem Start.",
+    intro:
+      "Projekte, die wir umgesetzt haben, mit den Werten vor und nach dem Start. Darunter Konzepte, die zeigen, wie eine Website für eine Branche aussehen kann.",
     kind: "Sanierung, Bad und Haustechnik in Bad Nauheim",
     summary:
       "WordPress-Website als schnelle Astro-Website neu gebaut, ohne eine Adresse zu verlieren. Dazu SEO nach Suchdaten und neue Leistungsseiten.",
     link: "Referenz ansehen",
+    conceptsHeading: "Konzepte nach Branche",
+    conceptsText:
+      "Beispiele, wie eine Website für eine Branche aussehen kann. Die Betriebe sind ausgedacht, es sind keine Kundenprojekte.",
+    conceptsLink: "Alle Konzepte",
   },
   serviceLink: "Referenz ansehen: Handwerker.work",
   handwerkerWork: {
