@@ -32,6 +32,7 @@ import SectionHeading from "@/components/section-heading.astro";
 import WhatsAppButton from "@/components/whatsapp-button.astro";
 import type { ServiceId } from "@/i18n/services";
 import { getExamplesCopy } from "@/i18n/examples";
+import { getReferencesCopy } from "@/i18n/references";
 import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
 import { getServiceCatalog } from "@/lib/service-catalog";
 import { serviceOrder, serviceRouteSlugs } from "@/lib/service-routes";
@@ -227,15 +228,23 @@ const related = services.filter((entry) => entry.id !== serviceId);
       </div>
     </section>
 
-    {serviceId === "websites-apps" && (
+    {(serviceId === "websites-apps" || serviceId === "seo-ai-visibility") && (
       <div class="px-page pb-section-compact">
-        <div class="mx-auto max-w-[70rem]">
+        <div class="mx-auto flex max-w-[70rem] flex-wrap gap-x-8 gap-y-3">
           <a
             class="text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
-            href={localizePath("/examples/hotels", locale)}
+            href={localizePath("/references/handwerker-work", locale)}
           >
-            {getExamplesCopy(locale).websitesLink}
+            {getReferencesCopy(locale).link}
           </a>
+          {serviceId === "websites-apps" && (
+            <a
+              class="text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
+              href={localizePath("/examples/hotels", locale)}
+            >
+              {getExamplesCopy(locale).websitesLink}
+            </a>
+          )}
         </div>
       </div>
     )}

@@ -80,7 +80,13 @@ try {
     });
     const visual = { ...data };
     const cta = await capture.$("main .pill-button");
-    if (cta && page.card !== "about" && page.card !== "contact" && !page.card.startsWith("examples")) {
+    if (
+      cta &&
+      page.card !== "about" &&
+      page.card !== "contact" &&
+      !page.card.startsWith("examples") &&
+      !page.card.startsWith("references")
+    ) {
       const box = await cta.boundingBox();
       visual.cta = { src: await shot(cta), width: box.width, height: box.height };
     }
@@ -127,7 +133,8 @@ try {
 
   for (const page of pages) {
     const data = content[`${page.locale}-${page.card}`];
-    const headlineCard = page.card === "examples" || page.card === "examples-hotels";
+    const headlineCard =
+      page.card === "examples" || page.card === "examples-hotels" || page.card === "references-handwerker-work";
     const illustrations = ["websites", "seo", "ads", "automation"].map(
       (slug) => content[`${page.locale}-services-${slug}`].illustration,
     );
