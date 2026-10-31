@@ -3,9 +3,11 @@ import type { GetStaticPaths } from "astro";
 import CtaButton from "@/components/cta-button.astro";
 import EditorialHero from "@/components/editorial-hero.astro";
 import FinalCta from "@/components/final-cta.astro";
+import ImageViewer from "@/components/image-viewer.astro";
 import LighthouseGauge from "@/components/lighthouse-gauge.astro";
 import SectionHeading from "@/components/section-heading.astro";
 import SiteLayout from "@/layouts/site-layout.astro";
+import { Maximize2 } from "@lucide/astro";
 import { getReferencesCopy, handwerkerWorkMeasurements as measured } from "@/i18n/references";
 import { localeStaticPaths, localizePath, type Locale } from "@/lib/i18n";
 import { breadcrumbNode, pageNode } from "@/lib/structured-data";
@@ -46,9 +48,20 @@ const pages = (["home", "contact", "badNauheim"] as const).map((id) => ({
   before: measured.pages[id][0],
   after: measured.pages[id][1],
 }));
+// The viewer opens the largest file: the old site exists only at 1440 px, the new one also at 2880 px.
 const shots = [
-  { base: "/references/handwerker-work-before", ...copy.beforeShot, text: copy.beforeShot.findings },
-  { base: "/references/handwerker-work-preview", ...copy.afterShot, text: copy.afterShot.changes },
+  {
+    base: "/references/handwerker-work-before",
+    full: "/references/handwerker-work-before-1440.webp",
+    ...copy.beforeShot,
+    text: copy.beforeShot.findings,
+  },
+  {
+    base: "/references/handwerker-work-preview",
+    full: "/references/handwerker-work-preview-2880.webp",
+    ...copy.afterShot,
+    text: copy.afterShot.changes,
+  },
 ];
 ---
 
@@ -86,24 +99,39 @@ const shots = [
       <div class="mx-auto grid max-w-layout grid-cols-2 gap-x-8 gap-y-12 max-nav:grid-cols-1">
         {shots.map((shot) => (
           <figure class="m-0">
-            <picture class="block overflow-hidden rounded-shell shadow-floating">
-              <source
-                type="image/avif"
-                srcset={`${shot.base}-720.avif 720w, ${shot.base}-1440.avif 1440w`}
-                sizes="(max-width: 900px) 100vw, 37rem"
-              />
-              <img
-                src={`${shot.base}-1440.webp`}
-                srcset={`${shot.base}-720.webp 720w, ${shot.base}-1440.webp 1440w`}
-                sizes="(max-width: 900px) 100vw, 37rem"
-                width="1440"
-                height="900"
-                alt={shot.alt}
-                loading="lazy"
-                decoding="async"
-                class="block h-auto w-full"
-              />
-            </picture>
+            <button
+              type="button"
+              aria-haspopup="dialog"
+              data-image-viewer
+              data-src={shot.full}
+              data-alt={shot.alt}
+              data-caption={shot.caption}
+              data-ratio="1.6"
+              class="group/shot relative block w-full cursor-zoom-in rounded-shell text-left"
+            >
+              <picture class="block overflow-hidden rounded-shell shadow-floating">
+                <source
+                  type="image/avif"
+                  srcset={`${shot.base}-720.avif 720w, ${shot.base}-1440.avif 1440w`}
+                  sizes="(max-width: 900px) 100vw, 37rem"
+                />
+                <img
+                  src={`${shot.base}-1440.webp`}
+                  srcset={`${shot.base}-720.webp 720w, ${shot.base}-1440.webp 1440w`}
+                  sizes="(max-width: 900px) 100vw, 37rem"
+                  width="1440"
+                  height="900"
+                  alt={shot.alt}
+                  loading="lazy"
+                  decoding="async"
+                  class="block h-auto w-full"
+                />
+              </picture>
+              <span class="absolute right-3 bottom-3 inline-flex size-10 items-center justify-center rounded-pill bg-inverse-surface/80 text-inverse opacity-80 transition-opacity duration-150 group-hover/shot:opacity-100">
+                <Maximize2 aria-hidden="true" class="size-4" stroke-width={1.8} />
+                <span class="sr-only">{copy.viewer.open}</span>
+              </span>
+            </button>
             <figcaption class="mt-5">
               <span class="block text-heading-sm">{shot.caption}</span>
               <span class="mt-2 block max-w-[34rem] text-base/6 text-muted">{shot.text}</span>
@@ -111,6 +139,7 @@ const shots = [
           </figure>
         ))}
       </div>
+      <ImageViewer labels={copy.viewer} />
     </section>
 
     <section class="bg-black px-page py-section text-inverse">

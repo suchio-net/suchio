@@ -45,6 +45,17 @@ export type ReferencesCopy = {
     visit: string;
     beforeShot: { caption: string; alt: string; findings: string };
     afterShot: { caption: string; alt: string; changes: string };
+    /** Labels of the full-screen image viewer; `open` is the hidden text of the enlarge badge. */
+    viewer: {
+      open: string;
+      dialog: string;
+      close: string;
+      zoomIn: string;
+      zoomOut: string;
+      reset: string;
+      previous: string;
+      next: string;
+    };
     lighthouse: {
       heading: string;
       text: string;

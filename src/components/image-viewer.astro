@@ -1,0 +1,266 @@
+---
+// Full-screen viewer for every [data-image-viewer] button on the page. Each button carries the
+// large image in data-src, plus data-alt and data-caption; the viewer steps through them in order.
+import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from "@lucide/astro";
+
+export interface Props {
+  labels: {
+    dialog: string;
+    close: string;
+    zoomIn: string;
+    zoomOut: string;
+    reset: string;
+    previous: string;
+    next: string;
+  };
+}
+const { labels } = Astro.props;
+const control =
+  "inline-flex size-11 items-center justify-center rounded-pill text-inverse transition-colors duration-150 hover:bg-inverse-surface-hover disabled:pointer-events-none disabled:opacity-35";
+// The controls sit on dark pills, so the dimmed page stays visible around them.
+const bar = "rounded-pill bg-inverse-surface/85 shadow-dark-surface";
+---
+
+<dialog
+  aria-label={labels.dialog}
+  data-viewer
+  class="m-0 h-auto max-h-none w-auto max-w-none overflow-hidden border-0 bg-transparent p-0 text-inverse backdrop:bg-black/70 open:grid open:grid-rows-[auto_minmax(0,1fr)_auto]"
+>
+  <div data-viewer-dismiss class="flex items-start justify-between gap-3 p-3">
+    <p
+      data-viewer-caption
+      class="m-0 min-w-0 truncate rounded-pill bg-inverse-surface/85 px-4 py-2.5 text-sm/5 text-inverse"
+    ></p>
+    <button type="button" class={`${control} shrink-0 ${bar}`} data-viewer-close aria-label={labels.close}>
+      <X aria-hidden="true" class="size-5" stroke-width={1.7} />
+    </button>
+  </div>
+  <div data-viewer-stage class="relative cursor-zoom-in touch-none overflow-hidden select-none">
+    <img
+      data-viewer-image
+      alt=""
+      draggable="false"
+      class="absolute top-0 left-0 max-w-none origin-center rounded-inset shadow-floating"
+    />
+  </div>
+  <div data-viewer-dismiss class="flex justify-center p-3">
+    <div class={`flex items-center gap-1 p-1 ${bar}`}>
+      <button type="button" class={control} data-viewer-step="-1" aria-label={labels.previous}>
+        <ChevronLeft aria-hidden="true" class="size-5" stroke-width={1.7} />
+      </button>
+      <span data-viewer-step-divider class="mx-1 h-6 w-px bg-inverse-line" aria-hidden="true"></span>
+      <button type="button" class={control} data-viewer-zoom="out" aria-label={labels.zoomOut}>
+        <ZoomOut aria-hidden="true" class="size-5" stroke-width={1.7} />
+      </button>
+      <button
+        type="button"
+        data-viewer-reset
+        aria-label={labels.reset}
+        class="inline-flex h-11 min-w-16 items-center justify-center rounded-pill px-2 text-sm text-inverse tabular-nums transition-colors duration-150 hover:bg-inverse-surface-hover"
+      >
+        100 %
+      </button>
+      <button type="button" class={control} data-viewer-zoom="in" aria-label={labels.zoomIn}>
+        <ZoomIn aria-hidden="true" class="size-5" stroke-width={1.7} />
+      </button>
+      <span data-viewer-step-divider class="mx-1 h-6 w-px bg-inverse-line" aria-hidden="true"></span>
+      <button type="button" class={control} data-viewer-step="1" aria-label={labels.next}>
+        <ChevronRight aria-hidden="true" class="size-5" stroke-width={1.7} />
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  // Zoom is relative to the fitted size: 1 shows the whole image, 4 is the closest view.
+  const MIN = 1;
+  const MAX = 4;
+  const STEP = 1.5;
+  const GAP = 24;
+
+  const dialog = document.querySelector<HTMLDialogElement>("[data-viewer]");
+  const triggers = [...document.querySelectorAll<HTMLButtonElement>("[data-image-viewer]")];
+  if (dialog && triggers.length) {
+    const stage = dialog.querySelector<HTMLElement>("[data-viewer-stage]")!;
+    const image = dialog.querySelector<HTMLImageElement>("[data-viewer-image]")!;
+    const caption = dialog.querySelector<HTMLElement>("[data-viewer-caption]")!;
+    const reset = dialog.querySelector<HTMLButtonElement>("[data-viewer-reset]")!;
+    const zoomIn = dialog.querySelector<HTMLButtonElement>('[data-viewer-zoom="in"]')!;
+    const zoomOut = dialog.querySelector<HTMLButtonElement>('[data-viewer-zoom="out"]')!;
+    const steps = [...dialog.querySelectorAll<HTMLButtonElement>("[data-viewer-step]")];
+    const motion = matchMedia("(prefers-reduced-motion: reduce)");
+    const percent = new Intl.NumberFormat(document.documentElement.lang, { style: "percent" });
+
+    let index = 0;
+    let scale = 1;
+    let x = 0;
+    let y = 0;
+    let fit = { width: 0, height: 0 };
+    const pointers = new Map<number, { x: number; y: number }>();
+    let pinch = 0;
+    let moved = false;
+    let pressed: EventTarget | null = null;
+
+    function measure() {
+      const box = stage.getBoundingClientRect();
+      const ratio = Number(triggers[index].dataset.ratio) || 1.6;
+      const width = Math.min(box.width - 2 * GAP, (box.height - 2 * GAP) * ratio);
+      fit = { width, height: width / ratio };
+      image.style.width = `${fit.width}px`;
+      image.style.height = `${fit.height}px`;
+      image.style.left = `${(box.width - fit.width) / 2}px`;
+      image.style.top = `${(box.height - fit.height) / 2}px`;
+    }
+    function clamp() {
+      const box = stage.getBoundingClientRect();
+      const limitX = Math.max(0, (fit.width * scale - box.width) / 2 + GAP);
+      const limitY = Math.max(0, (fit.height * scale - box.height) / 2 + GAP);
+      x = Math.min(limitX, Math.max(-limitX, x));
+      y = Math.min(limitY, Math.max(-limitY, y));
+    }
+    function render(animate = false) {
+      clamp();
+      image.style.transition = animate && !motion.matches ? "transform 200ms cubic-bezier(.16,1,.3,1)" : "";
+      image.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+      reset.textContent = percent.format(scale);
+      zoomOut.disabled = scale <= MIN;
+      zoomIn.disabled = scale >= MAX;
+      stage.style.cursor = scale > MIN ? (pointers.size ? "grabbing" : "grab") : "zoom-in";
+    }
+    // Keeps the point under (px, py), measured from the stage centre, in place while zooming.
+    function zoomTo(next: number, px = 0, py = 0, animate = false) {
+      next = Math.min(MAX, Math.max(MIN, next));
+      x = px - (px - x) * (next / scale);
+      y = py - (py - y) * (next / scale);
+      scale = next;
+      render(animate);
+    }
+    function fromCentre(event: { clientX: number; clientY: number }) {
+      const box = stage.getBoundingClientRect();
+      return [event.clientX - box.left - box.width / 2, event.clientY - box.top - box.height / 2];
+    }
+    function show(next: number) {
+      index = (next + triggers.length) % triggers.length;
+      const trigger = triggers[index];
+      image.src = trigger.dataset.src!;
+      image.alt = trigger.dataset.alt ?? "";
+      caption.textContent = trigger.dataset.caption ?? "";
+      scale = 1;
+      x = 0;
+      y = 0;
+      measure();
+      render();
+    }
+
+    triggers.forEach((trigger, i) =>
+      trigger.addEventListener("click", () => {
+        dialog.showModal();
+        show(i);
+      }),
+    );
+    dialog.querySelectorAll<HTMLElement>("[data-viewer-step-divider]").forEach((divider) => {
+      divider.hidden = triggers.length < 2;
+    });
+    steps.forEach((button) => {
+      button.hidden = triggers.length < 2;
+      button.addEventListener("click", () => show(index + Number(button.dataset.viewerStep)));
+    });
+    zoomIn.addEventListener("click", () => zoomTo(scale * STEP, 0, 0, true));
+    zoomOut.addEventListener("click", () => zoomTo(scale / STEP, 0, 0, true));
+    reset.addEventListener("click", () => zoomTo(MIN, 0, 0, true));
+    dialog.querySelector("[data-viewer-close]")!.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("close", () => image.removeAttribute("src"));
+    // The page keeps its scrollbar, so a hidden overflow would leave an empty gutter; the viewer
+    // stops the wheel from scrolling the page instead.
+    dialog.addEventListener("wheel", (event) => event.preventDefault(), { passive: false });
+    addEventListener("resize", () => {
+      if (!dialog.open) return;
+      measure();
+      render();
+    });
+
+    // Listens on the document: after a click on the page, focus can stay on the body.
+    document.addEventListener("keydown", (event) => {
+      if (!dialog.open) return;
+      if (event.target instanceof HTMLButtonElement && (event.key === "Enter" || event.key === " ")) return;
+      const pan = 80;
+      const actions: Record<string, () => void> = {
+        "+": () => zoomTo(scale * STEP, 0, 0, true),
+        "=": () => zoomTo(scale * STEP, 0, 0, true),
+        "-": () => zoomTo(scale / STEP, 0, 0, true),
+        "0": () => zoomTo(MIN, 0, 0, true),
+        ArrowLeft: () => (scale > MIN ? ((x += pan), render(true)) : show(index - 1)),
+        ArrowRight: () => (scale > MIN ? ((x -= pan), render(true)) : show(index + 1)),
+        ArrowUp: () => scale > MIN && ((y += pan), render(true)),
+        ArrowDown: () => scale > MIN && ((y -= pan), render(true)),
+      };
+      const action = actions[event.key];
+      if (!action) return;
+      event.preventDefault();
+      action();
+    });
+
+    stage.addEventListener(
+      "wheel",
+      (event) => {
+        event.preventDefault();
+        const [px, py] = fromCentre(event);
+        zoomTo(scale * Math.exp(-event.deltaY * 0.002), px, py);
+      },
+      { passive: false },
+    );
+    stage.addEventListener("dblclick", (event) => {
+      const [px, py] = fromCentre(event);
+      zoomTo(scale > MIN ? MIN : 2.5, px, py, true);
+    });
+    // A click on the empty area around the image closes the viewer, unless it ended a drag.
+    dialog.addEventListener(
+      "pointerdown",
+      (event) => {
+        pressed = event.target;
+        moved = false;
+      },
+      { capture: true },
+    );
+    dialog.addEventListener("click", () => {
+      if (!moved && (pressed === stage || (pressed as HTMLElement | null)?.hasAttribute?.("data-viewer-dismiss")))
+        dialog.close();
+    });
+    stage.addEventListener("pointerdown", (event) => {
+      if ((event.target as Element).closest("button")) return;
+      stage.setPointerCapture(event.pointerId);
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      if (pointers.size === 2) {
+        const [a, b] = [...pointers.values()];
+        pinch = Math.hypot(a.x - b.x, a.y - b.y);
+      }
+      render();
+    });
+    stage.addEventListener("pointermove", (event) => {
+      const last = pointers.get(event.pointerId);
+      if (!last) return;
+      const dx = event.clientX - last.x;
+      const dy = event.clientY - last.y;
+      pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      if (Math.abs(dx) + Math.abs(dy) > 2) moved = true;
+      if (pointers.size === 2) {
+        const [a, b] = [...pointers.values()];
+        const distance = Math.hypot(a.x - b.x, a.y - b.y);
+        const [px, py] = fromCentre({ clientX: (a.x + b.x) / 2, clientY: (a.y + b.y) / 2 });
+        zoomTo(scale * (distance / pinch), px, py);
+        pinch = distance;
+      } else if (scale > MIN) {
+        x += dx;
+        y += dy;
+        render();
+      }
+    });
+    const release = (event: PointerEvent) => {
+      if (!pointers.delete(event.pointerId)) return false;
+      render();
+      return true;
+    };
+    stage.addEventListener("pointerup", release);
+    stage.addEventListener("pointercancel", release);
+  }
+</script>

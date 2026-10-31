@@ -37,10 +37,20 @@ const references = {
         "Une fenêtre pop-up masquait le premier écran. Sur mobile, la page était plus large que l’écran. Une page de service liée renvoyait une erreur 404. Notre vérification de 64 adresses a relevé 45 constats.",
     },
     afterShot: {
-      caption: "Après, 29 octobre 2026",
+      caption: "Après, 31 octobre 2026",
       alt: "Page d’accueil du nouveau site avec le titre, trois moyens de contact et la photo d’une salle de bains réalisée par l’entreprise.",
       changes:
         "Titre, services et trois moyens de contact dès le premier écran. Une photo de ses propres chantiers dès le premier écran. Pas de pop-up, pas de bandeau de cookies.",
+    },
+    viewer: {
+      open: "Agrandir l’image",
+      dialog: "Visionneuse d’images",
+      close: "Fermer",
+      zoomIn: "Zoom avant",
+      zoomOut: "Zoom arrière",
+      reset: "Ajuster à la fenêtre",
+      previous: "Image précédente",
+      next: "Image suivante",
     },
     lighthouse: {
       heading: "Lighthouse mobile, page d’accueil",

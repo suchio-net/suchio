@@ -37,10 +37,20 @@ const references = {
         "Ein Pop-up verdeckte den Einstieg. Auf dem Handy war die Seite breiter als der Bildschirm. Eine verlinkte Leistungsseite lieferte einen Fehler 404. Bei unserer Prüfung von 64 Adressen kamen 45 Befunde zusammen.",
     },
     afterShot: {
-      caption: "Nachher, 29. Oktober 2026",
+      caption: "Nachher, 31. Oktober 2026",
       alt: "Startseite der neuen Website mit Überschrift, drei Kontaktwegen und einem Foto eines eigenen Bads.",
       changes:
         "Überschrift, Leistungen und drei Kontaktwege im ersten Bild. Ein Foto eines eigenen Projekts im ersten Bild. Kein Pop-up, kein Cookie-Banner.",
+    },
+    viewer: {
+      open: "Bild vergrößern",
+      dialog: "Bildansicht",
+      close: "Schließen",
+      zoomIn: "Vergrößern",
+      zoomOut: "Verkleinern",
+      reset: "Auf Fenstergröße zurücksetzen",
+      previous: "Vorheriges Bild",
+      next: "Nächstes Bild",
     },
     lighthouse: {
       heading: "Lighthouse mobil, Startseite",

@@ -37,10 +37,20 @@ const references = {
         "A pop-up covered the first screen. On phones the page was wider than the screen. A linked service page returned a 404 error. Our check of 64 addresses found 45 issues.",
     },
     afterShot: {
-      caption: "After, 29 October 2026",
+      caption: "After, 31 October 2026",
       alt: "Home page of the new website with the headline, three ways to get in touch and a photo of one of its own bathrooms.",
       changes:
         "Headline, services and three ways to get in touch on the first screen. A photo of the client’s own work on the first screen. No pop-up, no cookie banner.",
+    },
+    viewer: {
+      open: "Enlarge image",
+      dialog: "Image viewer",
+      close: "Close",
+      zoomIn: "Zoom in",
+      zoomOut: "Zoom out",
+      reset: "Fit to window",
+      previous: "Previous image",
+      next: "Next image",
     },
     lighthouse: {
       heading: "Lighthouse mobile, home page",
