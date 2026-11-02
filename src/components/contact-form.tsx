@@ -4,7 +4,6 @@ import {
   ArrowRight,
   ArrowUpRight,
   Check,
-  ChevronDown,
   CircleHelp,
   LoaderCircle,
   MonitorSmartphone,
@@ -12,18 +11,9 @@ import {
   Search,
   Workflow,
 } from "lucide-react";
-import {
-  type SubmitEvent,
-  type ReactNode,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-  useSyncExternalStore,
-} from "react";
+import { type SubmitEvent, type ReactNode, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { Locale } from "@/i18n/config";
 import type { ServiceId } from "@/i18n/services";
-import type { BudgetId } from "@/lib/contact-options";
 import { useContactDraft, type ContactDraft } from "@/components/contact-draft";
 import { emailPattern, isHttpUrl, retryAfterSeconds } from "@/lib/contact-validation";
 import { useHydrated } from "@/components/use-hydrated";
@@ -50,7 +40,6 @@ export type ContactFormCopy = {
   serviceUnsure: string;
   budget: string;
   budgetPlaceholder: string;
-  budgetOptions: readonly { id: BudgetId; label: string }[];
   message: string;
   placeholder: string;
   submit: string;
@@ -109,20 +98,11 @@ export function ContactForm({
   const [retrySeconds, setRetrySeconds] = useState(0);
   const [submittedEmail, setSubmittedEmail] = useState("");
   const [isDirty, setIsDirty] = useState(false);
-  const [budgetOpen, setBudgetOpen] = useState(false);
-  const [budgetSelection, setSelectedBudget] = useState<string>();
-  const selectedBudget = budgetSelection ?? draft?.budget ?? "";
   const [selectedServiceId, setSelectedServiceId] = useState<ServiceChoiceId>();
-  const budgetControlRef = useRef<HTMLDivElement>(null);
-  const budgetButtonRef = useRef<HTMLButtonElement>(null);
-  const budgetMenuRef = useRef<HTMLDivElement>(null);
-  const budgetSearch = useRef({ text: "", time: 0 });
-  const [activeBudgetIndex, setActiveBudgetIndex] = useState(0);
   const serviceOptions: readonly { id: ServiceChoiceId; name: string }[] = [
     ...services,
     { id: "not-sure", name: copy.serviceUnsure },
   ];
-  const selectedBudgetLabel = copy.budgetOptions.find(({ id }) => id === selectedBudget)?.label;
   const locationSearch = useSyncExternalStore(subscribeToLocation, getLocationSearch, getServerLocationSearch);
   const requestedServiceId = new URLSearchParams(locationSearch).get("service");
   const requestedService = services.find(({ id }) => id === requestedServiceId);
@@ -139,8 +119,6 @@ export function ContactForm({
       setStatus("idle");
       setErrors({});
       setIsDirty(false);
-      setBudgetOpen(false);
-      setSelectedBudget(undefined);
       setSelectedServiceId(undefined);
     };
     window.addEventListener("pageshow", restoreFromHistory);
@@ -153,22 +131,6 @@ export function ContactForm({
     return () => window.clearTimeout(timer);
   }, [retrySeconds]);
 
-  function focusBudget(index: number) {
-    setActiveBudgetIndex(index);
-    setBudgetOpen(true);
-  }
-
-  useLayoutEffect(() => {
-    if (budgetOpen)
-      budgetMenuRef.current?.querySelectorAll<HTMLButtonElement>("[role='option']")[activeBudgetIndex]?.focus();
-  }, [budgetOpen, activeBudgetIndex]);
-
-  function openBudget(last = false) {
-    budgetSearch.current = { text: "", time: 0 };
-    const selectedIndex = copy.budgetOptions.findIndex((option) => option.id === selectedBudget);
-    focusBudget(selectedIndex >= 0 ? selectedIndex : last ? copy.budgetOptions.length - 1 : 0);
-  }
-
   function saveDraft(changes: Partial<Pick<ContactDraft, "service" | "budget">> = {}) {
     const form = formRef.current;
     if (!form) return;
@@ -180,30 +142,12 @@ export function ContactForm({
       companyUrl: String(fields.get("companyUrl") ?? ""),
       message: String(fields.get("message") ?? ""),
       service: serviceOptions.find(({ id }) => id === fields.get("service"))?.id,
-      budget: selectedBudget,
+      budget: String(fields.get("budget") ?? ""),
       submission: draft?.submission,
       ...changes,
     });
     setIsDirty(true);
   }
-
-  useEffect(() => {
-    if (!budgetOpen) return;
-    const closeOnPointerDown = (event: PointerEvent) => {
-      if (!budgetControlRef.current?.contains(event.target as Node)) setBudgetOpen(false);
-    };
-    const closeOnEscape = (event: globalThis.KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      setBudgetOpen(false);
-      budgetButtonRef.current?.focus();
-    };
-    document.addEventListener("pointerdown", closeOnPointerDown);
-    document.addEventListener("keydown", closeOnEscape);
-    return () => {
-      document.removeEventListener("pointerdown", closeOnPointerDown);
-      document.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [budgetOpen]);
 
   useEffect(() => {
     if (!isDirty && !draft) return;
@@ -243,14 +187,13 @@ export function ContactForm({
     if (!emailPattern.test(email)) nextErrors.email = copy.emailError;
     if (companyUrl && !isHttpUrl(companyUrl)) nextErrors.companyUrl = copy.companyUrlError;
     if (!service) nextErrors.service = copy.required;
-    if (!budget) nextErrors.budget = copy.required;
+    if (budget.length > 120) nextErrors.budget = copy.error;
     if (message.length < 20) nextErrors.message = copy.messageError;
 
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) {
       const firstInvalidField = Object.keys(nextErrors)[0] as FieldName;
-      if (firstInvalidField === "budget") budgetButtonRef.current?.focus();
-      else form.querySelector<HTMLElement>(`[name="${firstInvalidField}"]`)?.focus();
+      form.querySelector<HTMLElement>(`[name="${firstInvalidField}"]`)?.focus();
       return;
     }
 
@@ -292,7 +235,6 @@ export function ContactForm({
       setSubmittedEmail(email);
       setStatus("success");
       setIsDirty(false);
-      setSelectedBudget("");
       setSelectedServiceId(undefined);
       form.reset();
     } catch {
@@ -480,106 +422,20 @@ export function ContactForm({
         ) : null}
       </fieldset>
 
-      <Field id="contact-budget" label={copy.budget} error={errors.budget} required={copy.requiredLabel}>
-        <div
-          ref={budgetControlRef}
-          className="relative min-w-0"
-          onBlur={(event) => {
-            if (!event.currentTarget.contains(event.relatedTarget)) setBudgetOpen(false);
-          }}
-        >
-          <input name="budget" type="hidden" value={selectedBudget} readOnly />
-          <button
-            ref={budgetButtonRef}
-            id="contact-budget"
-            className={`flex min-h-12 w-full cursor-pointer items-center justify-between gap-4 rounded-control border-0 bg-surface-subtle px-4 text-left text-sm shadow-surface transition-[background-color,box-shadow,scale] duration-150 ease-[var(--ease-out)] hover:bg-white hover:shadow-surface-hover focus-visible:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus active:scale-[.99] data-[invalid=true]:outline-2 data-[invalid=true]:outline-error motion-reduce:transition-none motion-reduce:active:scale-100 ${selectedBudgetLabel ? "text-ink" : "text-muted"}`}
-            type="button"
-            disabled={status === "sending"}
-            aria-haspopup="listbox"
-            aria-expanded={budgetOpen}
-            aria-controls="contact-budget-menu"
-            data-invalid={Boolean(errors.budget)}
-            aria-describedby={errors.budget ? "contact-budget-error" : undefined}
-            onClick={() => (budgetOpen ? setBudgetOpen(false) : openBudget())}
-            onKeyDown={(event) => {
-              if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
-              event.preventDefault();
-              openBudget(event.key === "ArrowUp");
-            }}
-          >
-            <span>{selectedBudgetLabel ?? copy.budgetPlaceholder}</span>
-            <ChevronDown
-              className={`size-4 shrink-0 text-subtle transition-transform duration-200 ease-[var(--ease-out)] motion-reduce:transition-none ${budgetOpen ? "rotate-180" : ""}`}
-              strokeWidth={1.8}
-              aria-hidden="true"
-            />
-          </button>
-          <div
-            ref={budgetMenuRef}
-            id="contact-budget-menu"
-            className={`absolute top-full right-0 left-0 z-20 pt-2 transition-[opacity,translate] duration-200 ease-[var(--ease-out)] motion-reduce:duration-0 ${budgetOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"}`}
-            role="listbox"
-            aria-label={copy.budget}
-            aria-hidden={!budgetOpen}
-            inert={!budgetOpen}
-          >
-            <div className="rounded-control bg-white p-1 shadow-floating">
-              {copy.budgetOptions.map((option, index) => (
-                <button
-                  key={option.id}
-                  className={`flex min-h-9 w-full cursor-pointer items-center justify-between gap-4 rounded-inset px-3 text-left text-sm transition-[background-color,scale] duration-150 hover:bg-interaction focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-focus active:scale-[.98] motion-reduce:transition-none motion-reduce:active:scale-100 ${selectedBudget === option.id ? "bg-interaction text-ink" : "text-muted"}`}
-                  type="button"
-                  role="option"
-                  aria-selected={selectedBudget === option.id}
-                  tabIndex={budgetOpen && activeBudgetIndex === index ? 0 : -1}
-                  onFocus={() => setActiveBudgetIndex(index)}
-                  onClick={() => {
-                    setSelectedBudget(option.id);
-                    saveDraft({ budget: option.id });
-                    clearError("budget");
-                    setBudgetOpen(false);
-                    budgetButtonRef.current?.focus();
-                  }}
-                  onKeyDown={(event) => {
-                    if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
-                      event.preventDefault();
-                      focusBudget(
-                        event.key === "Home"
-                          ? 0
-                          : event.key === "End"
-                            ? copy.budgetOptions.length - 1
-                            : (index + (event.key === "ArrowDown" ? 1 : -1) + copy.budgetOptions.length) %
-                              copy.budgetOptions.length,
-                      );
-                    } else if (
-                      event.key.length === 1 &&
-                      event.key !== " " &&
-                      !event.ctrlKey &&
-                      !event.metaKey &&
-                      !event.altKey
-                    ) {
-                      event.preventDefault();
-                      const now = performance.now();
-                      const text =
-                        (now - budgetSearch.current.time < 700 ? budgetSearch.current.text : "") +
-                        event.key.toLocaleLowerCase(locale);
-                      budgetSearch.current = { text, time: now };
-                      const match = copy.budgetOptions.findIndex((option) =>
-                        option.label.toLocaleLowerCase(locale).startsWith(text),
-                      );
-                      if (match >= 0) focusBudget(match);
-                    }
-                  }}
-                >
-                  <span>{option.label}</span>
-                  {selectedBudget === option.id ? (
-                    <Check className="size-4" strokeWidth={1.8} aria-hidden="true" />
-                  ) : null}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
+      <Field id="contact-budget" label={copy.budget} hint={copy.companyOptional} error={errors.budget}>
+        <input
+          disabled={status === "sending"}
+          id="contact-budget"
+          className={`min-h-12 ${fieldControlClass}`}
+          type="text"
+          name="budget"
+          value={draft?.budget ?? ""}
+          placeholder={copy.budgetPlaceholder}
+          maxLength={120}
+          aria-invalid={Boolean(errors.budget)}
+          aria-describedby={errors.budget ? "contact-budget-error" : undefined}
+          onChange={() => changeField("budget")}
+        />
       </Field>
 
       <Field id="contact-message" label={copy.message} error={errors.message} required={copy.requiredLabel}>

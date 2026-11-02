@@ -1,5 +1,4 @@
 import type { ServiceId } from "@/i18n/services";
-import { isBudgetId } from "@/lib/contact-options";
 import { isServiceId } from "@/lib/service-routes";
 
 export type ContactDraft = {
@@ -22,7 +21,7 @@ function isContactDraft(value: unknown): value is ContactDraft {
   const limits = { name: 100, email: 254, company: 120, companyUrl: 2048, message: 5000 };
   if (Object.entries(limits).some(([field, limit]) => typeof draft[field] !== "string" || draft[field].length > limit))
     return false;
-  if (typeof draft.budget !== "string" || (draft.budget !== "" && !isBudgetId(draft.budget))) return false;
+  if (typeof draft.budget !== "string" || draft.budget.length > 120) return false;
   if (
     draft.service !== undefined &&
     draft.service !== "not-sure" &&
@@ -48,7 +47,10 @@ export function readContactDraft(storage: DraftStorage): ContactDraft | undefine
   if (!stored) return undefined;
   try {
     const draft: unknown = JSON.parse(stored);
-    if (isContactDraft(draft)) return draft;
+    if (isContactDraft(draft)) {
+      if (/^budget-[1-5]$/.test(draft.budget)) return { ...draft, budget: "", submission: undefined };
+      return draft;
+    }
   } catch {
     /* Discard malformed data from an interrupted or older session. */
   }

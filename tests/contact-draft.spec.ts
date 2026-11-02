@@ -8,7 +8,7 @@ const draft: ContactDraft = {
   companyUrl: "https://example.com",
   message: "A draft that survives a language change.",
   service: "seo-ai-visibility",
-  budget: "budget-2",
+  budget: "150 € im Monat",
   submission: { payload: '{"message":"retry"}', id: "one-submission" },
 };
 function storage() {
@@ -39,12 +39,28 @@ test("malformed, oversized, and obsolete contact drafts are discarded", () => {
     "{",
     "null",
     JSON.stringify({ ...draft, service: "obsolete" }),
-    JSON.stringify({ ...draft, budget: "obsolete" }),
+    JSON.stringify({ ...draft, budget: "x".repeat(121) }),
     JSON.stringify({ ...draft, message: "x".repeat(5001) }),
     JSON.stringify({ ...draft, submission: { payload: 42, id: "retry" } }),
   ]) {
     tab.setItem(contactDraftKey, value);
     expect(readContactDraft(tab)).toBeUndefined();
     expect(tab.getItem(contactDraftKey)).toBeNull();
+  }
+});
+
+test("old budget IDs are cleared without losing the other draft fields", () => {
+  const tab = storage();
+  for (let index = 1; index <= 5; index++) {
+    writeContactDraft(tab, { ...draft, budget: `budget-${index}` });
+    expect(readContactDraft(tab)).toEqual({ ...draft, budget: "", submission: undefined });
+  }
+});
+
+test("empty budgets and 120-character budgets survive page changes", () => {
+  const tab = storage();
+  for (const budget of ["", "x".repeat(120)]) {
+    writeContactDraft(tab, { ...draft, budget });
+    expect(readContactDraft(tab)).toEqual({ ...draft, budget });
   }
 });

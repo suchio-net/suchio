@@ -6,7 +6,6 @@ import EditorialHero from "@/components/editorial-hero.astro";
 import WhatsAppButton from "@/components/whatsapp-button.astro";
 import { getServiceCopy } from "@/i18n/services";
 import { publicContactEmail, publicWhatsAppNumber } from "@/lib/contact";
-import { budgetOptions } from "@/lib/contact-options";
 import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
 import { breadcrumbNode, organizationReference, pageNode } from "@/lib/structured-data";
 import { serviceOrder } from "@/lib/service-routes";
@@ -32,7 +31,6 @@ const formCopy = {
   serviceUnsure: t(locale, "contact.formServiceUnsure"),
   budget: t(locale, "contact.formBudget"),
   budgetPlaceholder: t(locale, "contact.formBudgetPlaceholder"),
-  budgetOptions: budgetOptions.map(({ id, messageKey }) => ({ id, label: t(locale, messageKey) })),
   message: t(locale, "contact.formMessage"),
   placeholder: t(locale, "contact.formPlaceholder"),
   submit: t(locale, "contact.formSubmit"),

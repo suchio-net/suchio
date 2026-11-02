@@ -8,7 +8,7 @@ const validEnquiry = {
   company: "",
   companyUrl: "",
   service: "not-sure",
-  budget: "budget-5",
+  budget: "",
   message: "A synthetic enquiry for automated verification.",
   locale: "en",
   website: "",
@@ -50,7 +50,8 @@ test("rejects malformed JSON, spoofed forwarded hosts, and invalid fields before
   ).toBe(403);
   for (const changes of [
     { service: "" },
-    { budget: "invalid" },
+    { budget: "x".repeat(121) },
+    { budget: 150 },
     { locale: "xx" },
     { submissionId: "invalid" },
     { companyUrl: "javascript:alert(1)" },
@@ -78,6 +79,23 @@ test("sends the same provider idempotency key on retries", async () => {
     expect(response.status).toBe(200);
   }
   expect(keys).toEqual([`contact/${validEnquiry.submissionId}`, `contact/${validEnquiry.submissionId}`]);
+});
+
+test("accepts optional budgets, trims text, and preserves 120 characters in delivery", async () => {
+  for (const budget of [undefined, "", "   ", "  150 € im Monat  ", "x".repeat(120)]) {
+    const response = await handleContactRequest(
+      enquiryRequest({ ...validEnquiry, budget }),
+      { apiKey: "test", from: "test@example.com", to: "test@example.com" },
+      async (_url, init) => {
+        const email = JSON.parse(String(init.body));
+        const expected = budget?.trim() || "Nicht angegeben";
+        expect(email.text).toContain(`Budget oder Rahmen: ${expected}`);
+        expect(email.html).toContain(expected);
+        return Response.json({ id: "test-email" });
+      },
+    );
+    expect(response.status).toBe(200);
+  }
 });
 
 test("logs operational events without enquiry contents or credentials", async () => {
@@ -144,7 +162,7 @@ test("formats every contact email in German and states the visitor language", ()
     company: "Example Ltd.",
     companyUrl: "https://example.com",
     serviceId: "seo-ai-visibility",
-    budgetId: "budget-2",
+    budget: "150 € im Monat",
     message: "We need more visibility in search.",
     locale: "en",
   });
@@ -153,7 +171,7 @@ test("formats every contact email in German and states the visitor language", ()
   expect(email.text).toContain("Sprache: Englisch (en)");
   expect(email.text).toContain("Unternehmensname: Example Ltd.");
   expect(email.text).toContain("Wobei können wir helfen?: SEO & KI-Sichtbarkeit");
-  expect(email.text).toContain("Geplanter Projektrahmen: 5.000 € bis 15.000 €");
+  expect(email.text).toContain("Budget oder Rahmen: 150 € im Monat");
   expect(email.text).toContain("Projekt und Ziel:\nWe need more visibility in search.");
   expect(email.text).not.toContain("Project inquiry");
   expect(email.text).not.toContain("Company name");
@@ -171,7 +189,7 @@ test("escapes submitted values in the HTML contact email", () => {
     company: "Example & Partners",
     companyUrl: "https://example.com/?a=1&b=2",
     serviceId: "not-sure",
-    budgetId: "budget-5",
+    budget: "<img src=x>",
     message: "First line\n<img src=x onerror=alert(1)>",
     locale: "de",
   });

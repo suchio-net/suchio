@@ -5,7 +5,6 @@ import { hasLocale, type Locale } from "@/i18n/config";
 import messages from "@/i18n/de/messages";
 import services from "@/i18n/de/services";
 import { isServiceId } from "@/lib/service-routes";
-import { budgetOptions, isBudgetId, type BudgetId } from "@/lib/contact-options";
 import { emailPattern, isHttpUrl } from "@/lib/contact-validation";
 
 const languageLabels = {
@@ -43,7 +42,7 @@ export async function handleContactRequest(
   const message = cleanString(body.message);
   const locale = typeof body.locale === "string" && hasLocale(body.locale) ? body.locale : null;
   const serviceId = typeof body.service === "string" ? body.service : "";
-  const budgetId = typeof body.budget === "string" ? body.budget : "";
+  const budget = cleanString(body.budget);
   const submissionId = cleanString(body.submissionId);
 
   if (
@@ -59,7 +58,8 @@ export async function handleContactRequest(
     message.length < 20 ||
     message.length > 5000 ||
     (!isServiceId(serviceId) && serviceId !== "not-sure") ||
-    !isBudgetId(budgetId) ||
+    (body.budget !== undefined && typeof body.budget !== "string") ||
+    (typeof body.budget === "string" && body.budget.length > 120) ||
     !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(submissionId)
   ) {
     return contactError("invalid_fields");
@@ -77,7 +77,7 @@ export async function handleContactRequest(
     company,
     companyUrl,
     serviceId,
-    budgetId,
+    budget,
     message,
     locale,
   });
@@ -121,7 +121,7 @@ export function buildContactEmail({
   company,
   companyUrl,
   serviceId,
-  budgetId,
+  budget,
   message,
   locale,
 }: {
@@ -130,14 +130,13 @@ export function buildContactEmail({
   company: string;
   companyUrl: string;
   serviceId: string;
-  budgetId: BudgetId;
+  budget: string;
   message: string;
   locale: Locale;
 }) {
   const service = isServiceId(serviceId)
     ? (services.services.find((entry) => entry.id === serviceId)?.name ?? serviceId)
     : messages["contact.formServiceUnsure"];
-  const budget = budgetLabel(budgetId);
   const notProvided = messages["contact.formNotProvided"];
   const text = [
     `${messages["contact.formBodyName"]}: ${name}`,
@@ -146,7 +145,7 @@ export function buildContactEmail({
     `${messages["contact.formCompany"]}: ${company || notProvided}`,
     `${messages["contact.formCompanyUrl"]}: ${companyUrl || notProvided}`,
     `${messages["contact.formService"]}: ${service}`,
-    `${messages["contact.formBudget"]}: ${budget}`,
+    `${messages["contact.formBudget"]}: ${budget || notProvided}`,
     "",
     `${messages["contact.formBodyMessage"]}:`,
     message,
@@ -162,7 +161,7 @@ export function buildContactEmail({
       href: companyUrl || undefined,
     },
     { label: messages["contact.formService"], value: service },
-    { label: messages["contact.formBudget"], value: budget },
+    { label: messages["contact.formBudget"], value: budget || notProvided },
   ];
   const html = `<!doctype html>
 <html lang="de">
@@ -239,10 +238,4 @@ function escapeHtml(value: string): string {
 
 function cleanString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
-}
-
-function budgetLabel(budgetId: BudgetId): string {
-  const option = budgetOptions.find(({ id }) => id === budgetId);
-  if (!option) throw new Error(`Missing contact budget option ${budgetId}.`);
-  return messages[option.messageKey];
 }
