@@ -1,0 +1,159 @@
+---
+import ConceptBanner from "@/examples/trades/shared/ConceptBanner.astro";
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import Icon from "./Icon.astro";
+import Lightbox from "./Lightbox.astro";
+import { base, company } from "./data";
+import { imageSources } from "@/examples/trades/shared/images";
+import "./styles.css";
+
+interface Props {
+  title: string;
+  description: string;
+  current?: string;
+  /** Image key of the largest above-the-fold image, preloaded for LCP. */
+  lcpImage?: string;
+  lcpSizes?: string;
+  actionBar?: boolean;
+}
+
+const {
+  title,
+  description,
+  current,
+  lcpImage,
+  lcpSizes = "100vw",
+  actionBar = true,
+} = Astro.props;
+const lcp = lcpImage ? imageSources(lcpImage) : undefined;
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#252c33" />
+    <link rel="preload" href={`${base}/fonts/d-din.woff2`} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={`${base}/fonts/d-din-condensed-bold.woff2`} as="font" type="font/woff2" crossorigin />
+    {lcp && (
+      <link
+        rel="preload"
+        as="image"
+        type="image/avif"
+        imagesrcset={lcp.avif}
+        imagesizes={lcpSizes}
+        fetchpriority="high"
+      />
+    )}
+    <style is:inline>
+      @font-face {
+        font-family: "D-DIN";
+        src: url(/examples/trades/wendmark-sanierung/fonts/d-din.woff2) format("woff2");
+        font-weight: 400;
+        font-display: optional;
+      }
+      @font-face {
+        font-family: "D-DIN";
+        src: url(/examples/trades/wendmark-sanierung/fonts/d-din-bold.woff2) format("woff2");
+        font-weight: 700;
+        font-display: optional;
+      }
+      @font-face {
+        font-family: "D-DIN Condensed";
+        src: url(/examples/trades/wendmark-sanierung/fonts/d-din-condensed-bold.woff2) format("woff2");
+        font-weight: 700;
+        font-display: optional;
+      }
+    </style>
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+  </head>
+  <body class:list={{ "has-action-bar": actionBar }}>
+    <ConceptBanner />
+    <a class="skip" href="#main">
+      Zum Inhalt springen
+    </a>
+    <Header current={current} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <Lightbox />
+
+    {actionBar && (
+      <nav class="action-bar" aria-label="Schnellkontakt">
+        <a href={company.phone.href}>
+          <Icon name="phone" />
+          Anrufen
+        </a>
+        <a href={company.whatsapp.href}>
+          <Icon name="message-circle" />
+          WhatsApp
+        </a>
+        <a class="primary" href={`${base}/kontakt#anfrage`}>
+          Anfrage stellen
+        </a>
+      </nav>
+    )}
+
+    <script>
+      import "./client";
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .action-bar {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .action-bar {
+      position: fixed;
+      inset: auto 0 0;
+      z-index: 45;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.4fr;
+      border-top: 1px solid var(--slate);
+      background: var(--board);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .action-bar a {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 56px;
+      color: var(--slate);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .action-bar a + a {
+      border-left: 1px solid var(--grout-line);
+    }
+    .action-bar a .icon {
+      width: 18px;
+      height: 18px;
+      color: var(--accent);
+    }
+    .action-bar a.primary {
+      background: var(--accent);
+      color: #fff;
+      border-left: 0;
+    }
+    .action-bar.hidden {
+      display: none;
+    }
+    .has-action-bar .site-footer {
+      padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    }
+  }
+</style>

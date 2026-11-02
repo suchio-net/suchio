@@ -1,0 +1,135 @@
+{
+  "bad-doppelwaschtisch": {
+    "width": 2000,
+    "height": 1333,
+    "widths": [480, 800, 1200, 1600, 2000],
+    "color": "#c8c8c8",
+    "source": "bad-doppelwaschtisch.jpg"
+  },
+  "bad-fenster": {
+    "width": 2000,
+    "height": 1921,
+    "widths": [480, 800, 1200, 1600, 2000],
+    "color": "#b8b8b8",
+    "source": "bad-fenster.jpg"
+  },
+  "bad-hell": {
+    "width": 2000,
+    "height": 1415,
+    "widths": [480, 640, 800, 1000, 1200, 1600, 2000],
+    "color": "#b8b8b8",
+    "source": "bad-hell.jpg"
+  },
+  "bad-holz": {
+    "width": 2000,
+    "height": 1333,
+    "widths": [480, 800, 1200, 1600, 2000],
+    "color": "#584838",
+    "source": "bad-holz.jpg"
+  },
+  "bad-wanne": {
+    "width": 2000,
+    "height": 1333,
+    "widths": [480, 640, 800, 1000, 1200, 1600, 2000],
+    "color": "#685848",
+    "source": "bad-wanne.jpg"
+  },
+  "bad-waschtisch": {
+    "width": 2000,
+    "height": 1333,
+    "widths": [480, 800, 1200, 1600, 2000],
+    "color": "#a89888",
+    "source": "bad-waschtisch.jpg"
+  },
+  "dusche-armatur": {
+    "width": 2000,
+    "height": 2667,
+    "widths": [480, 800, 1200],
+    "color": "#282828",
+    "source": "dusche-armatur.jpg"
+  },
+  "dusche-brause": {
+    "width": 2000,
+    "height": 1334,
+    "widths": [480, 800, 1200, 1600, 2000],
+    "color": "#b8b8a8",
+    "source": "dusche-brause.jpg"
+  },
+  "dusche-nische": {
+    "width": 2000,
+    "height": 3554,
+    "widths": [480, 800, 1200],
+    "color": "#f8e8d8",
+    "source": "dusche-nische.jpg"
+  },
+  "elektro-verteiler": {
+    "width": 2000,
+    "height": 1333,
+    "widths": [480, 800, 1200, 1600, 2000],
+    "color": "#f8f8f8",
+    "source": "elektro-verteiler.jpg"
+  },
+  "fassade": {
+    "width": 2000,
+    "height": 3000,
+    "widths": [480, 800, 1200],
+    "color": "#484848",
+    "source": "fassade.jpg"
+  },
+  "fliesen-mosaik": {
+    "width": 2000,
+    "height": 2723,
+    "widths": [480, 800, 1200],
+    "color": "#080808",
+    "source": "fliesen-mosaik.jpg"
+  },
+  "fliesen-verlegung": {
+    "width": 2000,
+    "height": 3000,
+    "widths": [480, 800, 1200],
+    "color": "#d8d8c8",
+    "source": "fliesen-verlegung.jpg"
+  },
+  "heizkreisverteiler": {
+    "width": 2000,
+    "height": 1333,
+    "widths": [480, 800, 1200, 1600, 2000],
+    "color": "#e8e8e8",
+    "source": "heizkreisverteiler.jpg"
+  },
+  "heizungsraum": {
+    "width": 2000,
+    "height": 1330,
+    "widths": [480, 800, 1200, 1600, 2000],
+    "color": "#b89858",
+    "source": "heizungsraum.jpg"
+  },
+  "renovierung-raum": {
+    "width": 2000,
+    "height": 1500,
+    "widths": [480, 800, 1200, 1600, 2000],
+    "color": "#884808",
+    "source": "renovierung-raum.jpg"
+  },
+  "rueckbau": {
+    "width": 2000,
+    "height": 1333,
+    "widths": [480, 800, 1200, 1600, 2000],
+    "color": "#989888",
+    "source": "rueckbau.jpg"
+  },
+  "trockenbau": {
+    "width": 2000,
+    "height": 2667,
+    "widths": [480, 800, 1200],
+    "color": "#080808",
+    "source": "trockenbau.jpg"
+  },
+  "vorwand-rohbau": {
+    "width": 2000,
+    "height": 2667,
+    "widths": [480, 800, 1200],
+    "color": "#382818",
+    "source": "vorwand-rohbau.jpg"
+  }
+}

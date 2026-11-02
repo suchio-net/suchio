@@ -1,0 +1,215 @@
+---
+// Project photos on a horizontal rail. On wide screens the section pins and
+// vertical scrolling moves the rail sideways; elsewhere it is a swipeable row.
+import Photo from "./Photo.astro";
+import Split from "./Split.astro";
+import { referenceTopics, type ReferenceTopic } from "./data";
+
+interface Item {
+  name: string;
+  alt: string;
+  topic: ReferenceTopic;
+}
+interface Props {
+  id: string;
+  index: string;
+  title: string;
+  items: Item[];
+  link?: { href: string; label: string };
+}
+const { id, index, title, items, link } = Astro.props;
+const topic = (key: ReferenceTopic) => referenceTopics.find((item) => item.key === key)!.label;
+const pad = (n: number) => String(n).padStart(2, "0");
+const shapes = ["tall", "wide", "square", "tall", "wide", "tall", "square", "wide", "tall"];
+---
+
+<section class="rail-section" aria-labelledby={id} data-rail>
+  <div class="rail-pin">
+    <div class="wrap rail-head">
+      <p class="index mono">{index}</p>
+      <Split as="h2" id={id} text={title} />
+      <div class="rail-meta">
+        <span class="mono mute">
+          <span data-rail-pos>01</span> / {pad(items.length)}
+        </span>
+        {link && (
+          <a class="link" href={link.href}>
+            {link.label}
+            <span class="arrow" aria-hidden="true"></span>
+          </a>
+        )}
+      </div>
+    </div>
+    <ul class="track" data-rail-track>
+      {items.map((item, i) => (
+        <li class:list={["card", shapes[i % shapes.length]]} data-rail-card>
+          <Photo name={item.name} alt={item.alt} group="rail" sizes="(min-width: 960px) 40vw, 80vw" />
+          <p class="mono">
+            <span>{pad(i + 1)}</span>
+            {topic(item.topic)}
+          </p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .rail-section {
+    position: relative;
+  }
+  .rail-pin {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(32px, 4vw, 56px);
+    padding-block: clamp(96px, 12vw, 160px) 24px;
+    overflow: hidden;
+  }
+  .rail-head {
+    display: grid;
+    gap: 20px;
+  }
+  @media (min-width: 960px) {
+    .rail-head {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+    .rail-head .index {
+      grid-column: 1 / -1;
+    }
+  }
+  .rail-head :global(h2) {
+    max-width: 14ch;
+  }
+  .rail-meta {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .rail-meta [data-rail-pos] {
+    color: var(--ink);
+  }
+  .track {
+    display: flex;
+    align-items: flex-end;
+    gap: clamp(12px, 1.6vw, 24px);
+    padding-inline: max(var(--gutter), calc((100vw - var(--max)) / 2));
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .track::-webkit-scrollbar {
+    display: none;
+  }
+  .card {
+    flex: none;
+    display: grid;
+    gap: 12px;
+    scroll-snap-align: start;
+  }
+  .card :global(.photo) {
+    height: var(--h);
+    width: var(--w);
+  }
+  .tall {
+    --w: clamp(220px, 24vw, 380px);
+    --h: clamp(300px, 36vw, 540px);
+  }
+  .wide {
+    --w: clamp(280px, 40vw, 640px);
+    --h: clamp(220px, 28vw, 420px);
+  }
+  .square {
+    --w: clamp(240px, 28vw, 440px);
+    --h: clamp(240px, 28vw, 440px);
+  }
+  .card p {
+    display: flex;
+    gap: 14px;
+    color: var(--mute);
+  }
+  .card p span {
+    color: var(--ink);
+  }
+
+  /* Pinned mode, set by the script on wide screens. */
+  .rail-section:global(.pinned) {
+    height: calc(100svh + var(--distance, 0px));
+  }
+  .rail-section:global(.pinned) .rail-pin {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    align-content: center;
+    padding-block: calc(var(--header-h) + 16px) 32px;
+  }
+  .rail-section:global(.pinned) .track {
+    overflow: visible;
+    scroll-snap-type: none;
+    will-change: transform;
+  }
+</style>
+
+<script>
+  const section = document.querySelector<HTMLElement>("[data-rail]");
+  if (section) {
+    const track = section.querySelector<HTMLElement>("[data-rail-track]")!;
+    const cards = [...section.querySelectorAll<HTMLElement>("[data-rail-card]")];
+    const pos = section.querySelector<HTMLElement>("[data-rail-pos]")!;
+    const wide = matchMedia("(min-width: 960px) and (prefers-reduced-motion: no-preference)");
+    let distance = 0,
+      ticking = false;
+
+    const position = () => {
+      const centre = innerWidth / 2;
+      let nearest = 0,
+        best = Infinity;
+      cards.forEach((card, i) => {
+        const r = card.getBoundingClientRect();
+        const d = Math.abs(r.left + r.width / 2 - centre);
+        if (d < best) {
+          best = d;
+          nearest = i;
+        }
+      });
+      pos.textContent = String(nearest + 1).padStart(2, "0");
+    };
+    const sync = () => {
+      ticking = false;
+      if (section.classList.contains("pinned")) {
+        const r = section.getBoundingClientRect();
+        const p = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height - innerHeight)));
+        track.style.transform = `translate3d(${(-p * distance).toFixed(1)}px, 0, 0)`;
+      }
+      position();
+    };
+    const measure = () => {
+      section.classList.toggle("pinned", wide.matches);
+      track.style.transform = "";
+      distance = wide.matches ? Math.max(0, track.scrollWidth - innerWidth) : 0;
+      section.style.setProperty("--distance", `${distance}px`);
+      sync();
+    };
+    // Keyboard focus on a photo off to the side scrolls the page to bring it in.
+    track.addEventListener("focusin", (event) => {
+      if (!section.classList.contains("pinned") || !distance) return;
+      const card = (event.target as Element).closest<HTMLElement>("[data-rail-card]");
+      if (!card) return;
+      section.querySelector<HTMLElement>(".rail-pin")!.scrollLeft = 0;
+      const p = Math.min(1, Math.max(0, (card.offsetLeft + card.offsetWidth / 2 - innerWidth / 2) / distance));
+      scrollTo({ top: section.offsetTop + p * (section.offsetHeight - innerHeight) });
+    });
+    const request = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(sync);
+      }
+    };
+    addEventListener("scroll", request, { passive: true });
+    track.addEventListener("scroll", request, { passive: true });
+    addEventListener("resize", measure);
+    wide.addEventListener("change", measure);
+    measure();
+  }
+</script>
