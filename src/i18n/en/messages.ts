@@ -36,31 +36,10 @@ const messages: Readonly<Record<MessageKey, string>> = {
   "home.ctaContact": "Enquire about a project",
   "home.ctaWhatsApp": "Message us on WhatsApp",
   "home.section1Title": "Services",
-  "home.whatsappLink": "Or via WhatsApp",
-  "home.guaranteesTitle": "What you can count on",
-  "home.inquiryTitle": "After your enquiry",
-  "home.guarantees1Title": "You own everything.",
-  "home.guarantees1Copy":
-    "Source code, designs, content, and all account access. You are free to work without us afterwards.",
-  "home.guarantees2Title": "Measurements before and after launch.",
-  "home.guarantees2Copy":
-    "We measure the old website before we change anything, then show you the same measurements afterwards.",
-  "home.guarantees3Title": "No address is lost.",
-  "home.guarantees3Copy":
-    "When we rebuild a website, old URLs stay accessible or redirect, so links and search results keep working.",
-  "home.guarantees4Title": "Multilingual from the start.",
-  "home.guarantees4Copy": "This website runs in German, English, and French. Yours can too.",
-  "home.inquiry1Title": "By the next working day",
-  "home.inquiry1Copy": "we reply with follow-up questions or a suggested meeting time.",
-  "home.inquiry2Title": "In the first call",
-  "home.inquiry2Copy": "we spend 30 minutes by video or phone to discuss your goal, starting point, and timeframe.",
-  "home.inquiry3Title": "Afterwards",
-  "home.inquiry3Copy":
-    "you receive a written proposal with the scope, schedule, and all costs. We only start once you have agreed.",
   "home.faqHeading": "FAQs",
   "finalCta.title": "Tell us what needs to change.",
   "finalCta.copy":
-    "Briefly describe the goal and when you need it done. We will tell you whether we can help and where we would start.",
+    "Briefly describe the goal and when you need it done. We will tell you whether we can help and where we would start. We reply by the next working day.",
   "contact.title": "Tell us what you’re working on.",
   "contact.copy": "What are you building, where is it stuck, and what would a good result look like?",
   "contact.whatsapp": "Prefer WhatsApp?",

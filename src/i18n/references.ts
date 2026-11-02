@@ -36,16 +36,9 @@ export type ReferencesCopy = {
   /** Short link text for the service pages. */
   serviceLink: string;
   teaser: {
-    eyebrow: string;
     heading: string;
     text: string;
-    performance: string;
-    urlsFigure: string;
-    urlsLabel: string;
-    indexedFigure: string;
-    indexedLabel: string;
     link: string;
-    heroLabel: string;
   };
   handwerkerWork: {
     title: string;

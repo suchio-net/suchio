@@ -37,32 +37,10 @@ const messages: Readonly<Record<MessageKey, string>> = {
   "home.ctaContact": "Demander un projet",
   "home.ctaWhatsApp": "Nous écrire sur WhatsApp",
   "home.section1Title": "Services",
-  "home.whatsappLink": "Ou par WhatsApp",
-  "home.guaranteesTitle": "Ce sur quoi vous pouvez compter",
-  "home.inquiryTitle": "Après votre demande",
-  "home.guarantees1Title": "Tout vous appartient.",
-  "home.guarantees1Copy":
-    "Code source, maquettes, contenus et tous les accès. Vous êtes ensuite libre de continuer sans nous.",
-  "home.guarantees2Title": "Des mesures avant et après le lancement.",
-  "home.guarantees2Copy":
-    "Nous mesurons l’ancien site avant toute modification, puis vous présentons les mêmes mesures après le lancement.",
-  "home.guarantees3Title": "Aucune adresse perdue.",
-  "home.guarantees3Copy":
-    "Lors d’une refonte, les anciennes URL restent accessibles ou sont redirigées pour que les liens et les résultats de recherche fonctionnent.",
-  "home.guarantees4Title": "Plusieurs langues dès le départ.",
-  "home.guarantees4Copy": "Ce site existe en allemand, en anglais et en français. Le vôtre peut aussi.",
-  "home.inquiry1Title": "Au plus tard le jour ouvré suivant",
-  "home.inquiry1Copy": "nous répondons avec des questions ou une proposition de rendez-vous.",
-  "home.inquiry2Title": "Lors du premier échange",
-  "home.inquiry2Copy":
-    "nous prenons 30 minutes en visioconférence ou par téléphone pour préciser votre objectif, la situation actuelle et le délai.",
-  "home.inquiry3Title": "Ensuite",
-  "home.inquiry3Copy":
-    "vous recevez une proposition écrite avec le périmètre, le calendrier et tous les coûts. Nous commençons seulement après votre accord.",
   "home.faqHeading": "Questions fréquentes",
   "finalCta.title": "Dites-nous ce qui doit changer.",
   "finalCta.copy":
-    "Décrivez brièvement l’objectif et pour quand vous en avez besoin. Nous vous dirons si nous pouvons aider et par quoi nous commencerions.",
+    "Décrivez brièvement l’objectif et pour quand vous en avez besoin. Nous vous dirons si nous pouvons aider et par quoi nous commencerions. Nous répondons au plus tard le jour ouvré suivant.",
   "contact.title": "Parlez-nous de votre projet.",
   "contact.copy": "Que construisez-vous, où cela bloque-t-il, et à quoi ressemblerait un bon résultat ?",
   "contact.whatsapp": "Plutôt WhatsApp ?",

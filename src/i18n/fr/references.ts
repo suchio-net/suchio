@@ -21,16 +21,9 @@ const references = {
     conceptsLink: "Tous les concepts",
   },
   teaser: {
-    eyebrow: "Référence",
     heading: "Handwerker.work : un nouveau site, aucune adresse perdue",
     text: "Une entreprise de rénovation à Bad Nauheim. Nous avons refait son site WordPress et assurons depuis le SEO et les évolutions du site.",
-    performance: "Lighthouse Performance, mobile, accueil",
-    urlsFigure: "Toutes les anciennes URL",
-    urlsLabel: "accessibles ou redirigées en 301",
-    indexedFigure: "32 sur 33",
-    indexedLabel: "pages indexées par Google",
     link: "Voir la référence complète",
-    heroLabel: "Lighthouse mobile : de {before} à {after}",
   },
   serviceLink: "Voir la référence : Handwerker.work",
   handwerkerWork: {
