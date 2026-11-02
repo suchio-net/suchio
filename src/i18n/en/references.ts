@@ -20,6 +20,18 @@ const references = {
       "Examples of what a website for an industry can look like. The businesses are made up; they are not client projects.",
     conceptsLink: "All concepts",
   },
+  teaser: {
+    eyebrow: "Case study",
+    heading: "Handwerker.work: a new website, every address kept",
+    text: "A renovation business in Bad Nauheim. We rebuilt its WordPress website and have since managed SEO and further development.",
+    performance: "Lighthouse Performance, mobile, homepage",
+    urlsFigure: "All old URLs",
+    urlsLabel: "accessible or redirected with a 301",
+    indexedFigure: "32 of 33",
+    indexedLabel: "pages indexed by Google",
+    link: "Read the full case study",
+    heroLabel: "Mobile Lighthouse: from {before} to {after}",
+  },
   serviceLink: "View the case study: Handwerker.work",
   handwerkerWork: {
     title: "Case study Handwerker.work: new website and SEO for a trades business | Suchio",

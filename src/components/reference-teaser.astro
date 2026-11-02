@@ -1,0 +1,51 @@
+---
+import { ArrowUpRight } from "@lucide/astro";
+import LighthouseGauge from "@/components/lighthouse-gauge.astro";
+import Reveal from "@/components/reveal.astro";
+import { getReferencesCopy, handwerkerWorkMeasurements as measured } from "@/i18n/references";
+import { localizePath, type Locale } from "@/lib/i18n";
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const { teaser: copy, handwerkerWork } = getReferencesCopy(locale);
+const [before, after] = measured.pages.home;
+---
+
+<section class="px-page py-section" aria-labelledby="reference-teaser-heading">
+  <Reveal className="mx-auto grid max-w-[70rem] items-center gap-12 lg:grid-cols-[minmax(0,1fr)_auto]">
+    <div class="min-w-0">
+      <p class="mt-0 mb-4 text-meta text-muted">{copy.eyebrow}</p>
+      <h2 id="reference-teaser-heading" class="m-0 max-w-[28ch] text-heading-lg">
+        {copy.heading}
+      </h2>
+      <p class="mt-6 max-w-narrow text-lg/7 text-muted">{copy.text}</p>
+      <dl class="my-8 grid gap-6 sm:grid-cols-3">
+        {[
+          [`${before} → ${after}`, copy.performance],
+          [copy.urlsFigure, copy.urlsLabel],
+          [copy.indexedFigure, copy.indexedLabel],
+        ].map(([figure, label]) => (
+          <div class="min-w-0">
+            <dt class="text-heading-sm font-semibold">{figure}</dt>
+            <dd class="m-0 mt-2 text-sm text-muted">{label}</dd>
+          </div>
+        ))}
+      </dl>
+      <a
+        href={localizePath("/references/handwerker-work", locale)}
+        class="inline-flex items-center gap-2 font-medium underline underline-offset-4 hover:text-muted"
+      >
+        {copy.link}
+        <ArrowUpRight class="size-5 shrink-0" aria-hidden="true" />
+      </a>
+    </div>
+    <LighthouseGauge
+      score={after}
+      before={before}
+      label={handwerkerWork.lighthouse.performance}
+      beforeLabel={handwerkerWork.lighthouse.before}
+      tone="light"
+    />
+  </Reveal>
+</section>

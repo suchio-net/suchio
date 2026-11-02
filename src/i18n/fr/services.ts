@@ -6,6 +6,7 @@ const services: ServicesCopy = {
       id: "websites-apps",
       name: "Sites web & applications",
       navDescription: "Faire créer un site web, une boutique en ligne ou une application.",
+      homeDescription: "Des sites d’entreprise, boutiques et portails rapides, accessibles et qui vous appartiennent.",
       headline: "Des sites web qui apportent des demandes.",
       summary:
         "Nous créons des sites web, des boutiques en ligne et des applications qui se chargent vite sur mobile et amènent les visiteurs à vous contacter. Ensuite, vous modifiez textes et images vous-même.",
@@ -167,6 +168,7 @@ const services: ServicesCopy = {
       id: "seo-ai-visibility",
       name: "SEO & visibilité IA",
       navDescription: "Être trouvé sur Google et dans les réponses IA.",
+      homeDescription: "La technique et les contenus pour apparaître sur Google et dans les réponses des IA.",
       headline: "Être trouvé là où vos clients cherchent.",
       summary:
         "Nous corrigeons les problèmes techniques, rédigeons des textes sur les questions de vos clients et entretenons votre fiche d’établissement Google. On vous trouve ainsi sur Google, dans Maps et dans ChatGPT.",
@@ -337,6 +339,8 @@ const services: ServicesCopy = {
       id: "paid-campaigns",
       name: "Campagnes payantes",
       navDescription: "Google Ads et publicités sur les réseaux sociaux qui apportent des demandes.",
+      homeDescription:
+        "Google Ads et publicités sur les réseaux sociaux avec un suivi fiable, évalués au coût par demande.",
       headline: "Une publicité dont vous voyez les résultats.",
       summary:
         "Nous planifions vos campagnes Google Ads et vos publicités sur les réseaux sociaux, testons plusieurs annonces et optimisons la page vers laquelle elles mènent. Le suivi vous montre quels clics deviennent des demandes.",
@@ -506,6 +510,7 @@ const services: ServicesCopy = {
       id: "ai-automation",
       name: "IA & automatisation",
       navDescription: "Relier vos outils et automatiser le travail manuel.",
+      homeDescription: "Relier formulaires, CRM, e-mails et documents pour éviter les ressaisies.",
       headline: "Automatisez le travail de routine.",
       summary:
         "Nous relions vos outils pour que personne n’ait plus à ressaisir demandes, factures ou e-mails. Nous utilisons l’IA là où elle fait gagner un temps mesurable.",

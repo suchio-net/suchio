@@ -33,29 +33,33 @@ const messages: Readonly<Record<MessageKey, string>> = {
   "home.heroAccent": "demandes",
   "home.heroLine2": "Moins de travail manuel.",
   "home.heroDescription":
-    "Nous créons des sites web, vous rendons visible sur Google, gérons vos Google Ads et automatisons le travail manuel. Pour les entreprises de la région Rhin-Main et de toute l’Allemagne.",
-  "home.ctaContact": "Parler de votre projet",
+    "Nous créons des sites web rapides, vous rendons visible sur Google et dans les réponses des IA, gérons vos campagnes publicitaires et automatisons vos tâches. Depuis Hattersheim am Main, pour les entreprises de toute l’Allemagne et au-delà.",
+  "home.ctaContact": "Demander un projet",
   "home.ctaWhatsApp": "Nous écrire sur WhatsApp",
-  "home.section1Title": "Nos services",
-  "home.whyTitle": "Pourquoi Suchio",
-  "home.processTitle": "Comment se déroule un projet",
-  "home.processCopy": "La même méthode pour chacun de nos services.",
+  "home.section1Title": "Services",
+  "home.whatsappLink": "Ou par WhatsApp",
+  "home.guaranteesTitle": "Ce sur quoi vous pouvez compter",
+  "home.inquiryTitle": "Après votre demande",
+  "home.guarantees1Title": "Tout vous appartient.",
+  "home.guarantees1Copy":
+    "Code source, maquettes, contenus et tous les accès. Vous êtes ensuite libre de continuer sans nous.",
+  "home.guarantees2Title": "Des mesures avant et après le lancement.",
+  "home.guarantees2Copy":
+    "Nous mesurons l’ancien site avant toute modification, puis vous présentons les mêmes mesures après le lancement.",
+  "home.guarantees3Title": "Aucune adresse perdue.",
+  "home.guarantees3Copy":
+    "Lors d’une refonte, les anciennes URL restent accessibles ou sont redirigées pour que les liens et les résultats de recherche fonctionnent.",
+  "home.guarantees4Title": "Plusieurs langues dès le départ.",
+  "home.guarantees4Copy": "Ce site existe en allemand, en anglais et en français. Le vôtre peut aussi.",
+  "home.inquiry1Title": "Au plus tard le jour ouvré suivant",
+  "home.inquiry1Copy": "nous répondons avec des questions ou une proposition de rendez-vous.",
+  "home.inquiry2Title": "Lors du premier échange",
+  "home.inquiry2Copy":
+    "nous prenons 30 minutes en visioconférence ou par téléphone pour préciser votre objectif, la situation actuelle et le délai.",
+  "home.inquiry3Title": "Ensuite",
+  "home.inquiry3Copy":
+    "vous recevez une proposition écrite avec le périmètre, le calendrier et tous les coûts. Nous commençons seulement après votre accord.",
   "home.faqHeading": "Questions fréquentes",
-  "home.benefit1Title": "Pas d’intermédiaire",
-  "home.benefit1Copy":
-    "Les personnes avec qui vous échangez sont celles qui font le travail. Votre projet n’est pas transmis à quelqu’un d’autre après le premier appel.",
-  "home.benefit2Title": "Tout par écrit avant de commencer",
-  "home.benefit2Copy":
-    "La proposition indique le périmètre, le calendrier, les honoraires et les frais de tiers comme les licences ou le budget publicitaire, avant le début du travail.",
-  "home.benefit3Title": "Vous voyez où en est le projet",
-  "home.benefit3Copy":
-    "Nous vous montrons les étapes intermédiaires dès qu’il y a quelque chose à voir, et vous disons ce qui vient ensuite.",
-  "home.step1Title": "Définir",
-  "home.step1Copy": "Nous fixons ce que le projet doit accomplir et comment nous saurons qu’il fonctionne.",
-  "home.step2Title": "Prioriser",
-  "home.step2Copy": "Ce qui rapporte beaucoup pour peu d’effort passe en premier.",
-  "home.step3Title": "Réaliser",
-  "home.step3Copy": "Nous livrons par courtes étapes et vérifions après chacune ce qu’elle a apporté.",
   "finalCta.title": "Dites-nous ce qui doit changer.",
   "finalCta.copy":
     "Décrivez brièvement l’objectif et pour quand vous en avez besoin. Nous vous dirons si nous pouvons aider et par quoi nous commencerions.",

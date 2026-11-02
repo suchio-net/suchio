@@ -6,6 +6,7 @@ const services: ServicesCopy = {
       id: "websites-apps",
       name: "Websites & Apps",
       navDescription: "Websites, online shops, and apps built for you.",
+      homeDescription: "Business websites, shops, and portals that load fast, are accessible, and belong to you.",
       headline: "Websites that bring in enquiries.",
       summary:
         "We build websites, online shops, and apps that load fast on a phone and lead visitors to get in touch. Afterwards, you edit text and images yourself.",
@@ -167,6 +168,7 @@ const services: ServicesCopy = {
       id: "seo-ai-visibility",
       name: "SEO & AI Visibility",
       navDescription: "Get found on Google and in AI answers.",
+      homeDescription: "Technical work and content to help you appear on Google and in AI answers.",
       headline: "Get found where customers search.",
       summary:
         "We fix technical problems, write content for your customers’ questions, and maintain your Google Business Profile. That way people find you on Google, in Maps, and in ChatGPT.",
@@ -335,6 +337,7 @@ const services: ServicesCopy = {
       id: "paid-campaigns",
       name: "Paid Campaigns",
       navDescription: "Google Ads and social ads that bring in enquiries.",
+      homeDescription: "Google Ads and social ads with reliable tracking, measured by the cost per enquiry.",
       headline: "Advertising that shows what it brings in.",
       summary:
         "We plan Google Ads and social ads, test several ad variants, and optimize the page behind them. Tracking shows you which clicks turn into enquiries.",
@@ -499,6 +502,7 @@ const services: ServicesCopy = {
       id: "ai-automation",
       name: "AI & Automation",
       navDescription: "Connect your software and automate manual work.",
+      homeDescription: "Connect forms, CRM, emails, and documents so nobody has to retype information.",
       headline: "Automate routine work.",
       summary:
         "We connect your software so nobody has to retype enquiries, invoices, or emails. We use AI where it saves measurable time.",

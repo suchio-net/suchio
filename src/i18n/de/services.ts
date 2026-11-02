@@ -6,6 +6,7 @@ const services: ServicesCopy = {
       id: "websites-apps",
       name: "Websites & Apps",
       navDescription: "Websites, Onlineshops und Apps erstellen lassen.",
+      homeDescription: "Unternehmenswebsites, Shops und Portale, die schnell laden, barrierefrei sind und dir gehören.",
       headline: "Websites, die Anfragen bringen.",
       summary:
         "Wir erstellen Websites, Onlineshops und Apps, die auf dem Handy schnell laden und Besucher zur Anfrage führen. Texte und Bilder pflegst du danach selbst.",
@@ -168,6 +169,7 @@ const services: ServicesCopy = {
       id: "seo-ai-visibility",
       name: "SEO & KI-Sichtbarkeit",
       navDescription: "Bei Google und in KI-Antworten gefunden werden.",
+      homeDescription: "Technik und Inhalte, damit du bei Google und in KI-Antworten auftauchst.",
       headline: "Gefunden werden, wo Kunden suchen.",
       summary:
         "Wir beheben technische Fehler, schreiben Texte zu den Fragen deiner Kunden und pflegen dein Google-Unternehmensprofil. So findet man dich bei Google, in Maps und in ChatGPT.",
@@ -336,6 +338,7 @@ const services: ServicesCopy = {
       id: "paid-campaigns",
       name: "Werbekampagnen",
       navDescription: "Google Ads und Social Ads, die Anfragen bringen.",
+      homeDescription: "Google Ads und Social Ads mit sauberem Tracking, gemessen an den Kosten pro Anfrage.",
       headline: "Werbung, bei der du siehst, was sie bringt.",
       summary:
         "Wir planen Google Ads und Social Ads, testen mehrere Anzeigen und optimieren die Seite dahinter. Das Tracking zeigt dir, welche Klicks zu Anfragen werden.",
@@ -506,6 +509,7 @@ const services: ServicesCopy = {
       id: "ai-automation",
       name: "KI & Automatisierung",
       navDescription: "Programme verbinden und Handarbeit automatisieren.",
+      homeDescription: "Formulare, CRM, E-Mails und Dokumente verbinden, damit niemand mehr abtippt.",
       headline: "Routinearbeit automatisieren.",
       summary:
         "Wir verbinden deine Programme, damit Anfragen, Rechnungen und E-Mails nicht mehr abgetippt werden müssen. KI setzen wir dort ein, wo sie messbar Zeit spart.",

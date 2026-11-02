@@ -32,29 +32,32 @@ const messages: Readonly<Record<MessageKey, string>> = {
   "home.heroAccent": "enquiries",
   "home.heroLine2": "Less busywork.",
   "home.heroDescription":
-    "We build websites, get you found on Google, manage your Google Ads, and automate manual work. For businesses in the Frankfurt Rhine-Main area and across Germany.",
-  "home.ctaContact": "Discuss your project",
+    "We build fast websites, get you found on Google and in AI answers, manage your ad campaigns, and automate workflows. Based in Hattersheim am Main, we work with businesses across Germany and beyond.",
+  "home.ctaContact": "Enquire about a project",
   "home.ctaWhatsApp": "Message us on WhatsApp",
-  "home.section1Title": "Our services",
-  "home.whyTitle": "Why Suchio",
-  "home.processTitle": "How projects run",
-  "home.processCopy": "The same for every service we offer.",
+  "home.section1Title": "Services",
+  "home.whatsappLink": "Or via WhatsApp",
+  "home.guaranteesTitle": "What you can count on",
+  "home.inquiryTitle": "After your enquiry",
+  "home.guarantees1Title": "You own everything.",
+  "home.guarantees1Copy":
+    "Source code, designs, content, and all account access. You are free to work without us afterwards.",
+  "home.guarantees2Title": "Measurements before and after launch.",
+  "home.guarantees2Copy":
+    "We measure the old website before we change anything, then show you the same measurements afterwards.",
+  "home.guarantees3Title": "No address is lost.",
+  "home.guarantees3Copy":
+    "When we rebuild a website, old URLs stay accessible or redirect, so links and search results keep working.",
+  "home.guarantees4Title": "Multilingual from the start.",
+  "home.guarantees4Copy": "This website runs in German, English, and French. Yours can too.",
+  "home.inquiry1Title": "By the next working day",
+  "home.inquiry1Copy": "we reply with follow-up questions or a suggested meeting time.",
+  "home.inquiry2Title": "In the first call",
+  "home.inquiry2Copy": "we spend 30 minutes by video or phone to discuss your goal, starting point, and timeframe.",
+  "home.inquiry3Title": "Afterwards",
+  "home.inquiry3Copy":
+    "you receive a written proposal with the scope, schedule, and all costs. We only start once you have agreed.",
   "home.faqHeading": "FAQs",
-  "home.benefit1Title": "No handoffs",
-  "home.benefit1Copy":
-    "The people you talk to are the people doing the work. Your project isn’t passed on after the first call.",
-  "home.benefit2Title": "Everything in writing first",
-  "home.benefit2Copy":
-    "The proposal lists the scope, schedule, fee, and third-party costs such as licences or ad spend before work starts.",
-  "home.benefit3Title": "You see where things stand",
-  "home.benefit3Copy":
-    "We show you work in progress as soon as there is something to see, and tell you what comes next.",
-  "home.step1Title": "Define",
-  "home.step1Copy": "We agree on what the project should achieve and how we will know it worked.",
-  "home.step2Title": "Prioritize",
-  "home.step2Copy": "Whatever brings a lot for little effort goes first.",
-  "home.step3Title": "Deliver",
-  "home.step3Copy": "We deliver in short stages and check after each one what it achieved.",
   "finalCta.title": "Tell us what needs to change.",
   "finalCta.copy":
     "Briefly describe the goal and when you need it done. We will tell you whether we can help and where we would start.",

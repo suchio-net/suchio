@@ -20,6 +20,18 @@ const references = {
       "Beispiele, wie eine Website für eine Branche aussehen kann. Die Betriebe sind ausgedacht, es sind keine Kundenprojekte.",
     conceptsLink: "Alle Konzepte",
   },
+  teaser: {
+    eyebrow: "Referenz",
+    heading: "Handwerker.work: neue Website, keine Adresse verloren",
+    text: "Ein Sanierungsbetrieb aus Bad Nauheim. Wir haben die WordPress-Website neu gebaut und betreuen seitdem SEO und den weiteren Ausbau.",
+    performance: "Lighthouse Performance, mobil, Startseite",
+    urlsFigure: "Alle alten URLs",
+    urlsLabel: "erreichbar oder per 301 weitergeleitet",
+    indexedFigure: "32 von 33",
+    indexedLabel: "Seiten bei Google indexiert",
+    link: "Ganze Referenz ansehen",
+    heroLabel: "Lighthouse mobil: von {before} auf {after}",
+  },
   serviceLink: "Referenz ansehen: Handwerker.work",
   handwerkerWork: {
     title: "Referenz Handwerker.work: neue Website und SEO für einen Handwerksbetrieb | Suchio",

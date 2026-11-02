@@ -53,6 +53,7 @@ export type ServiceCopy = {
   id: ServiceId;
   name: string;
   navDescription: string;
+  homeDescription: string;
   /** Home card: a short claim, a two-sentence explanation and a visible checklist. */
   headline: string;
   summary: string;
