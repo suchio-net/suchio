@@ -1,0 +1,268 @@
+---
+import Layout from "@/examples/trades/wendmark-sanierung/Layout.astro";
+import Icon from "@/examples/trades/wendmark-sanierung/Icon.astro";
+import PageHead from "@/examples/trades/wendmark-sanierung/PageHead.astro";
+import ContactBand from "@/examples/trades/wendmark-sanierung/ContactBand.astro";
+import { base, company, tfm } from "@/examples/trades/wendmark-sanierung/data";
+
+const title = `Technische Gebäudebetreuung in ${company.city} | ${company.name}`;
+const description =
+  "Wartung, Kleinreparaturen, Notdienst und Prüfpflichten aus einer Hand für Hausverwaltungen, Wohnanlagen und Gewerbe.";
+const blocks = [
+  {
+    title: "Wartung und Begehung",
+    text: "Wir gehen Ihre Häuser in festen Abständen ab und prüfen Heizung, Wasser und Elektrik.",
+    items: ["Schäden früh erkennen", "Weniger Ausfälle", "Anlagen halten länger"],
+  },
+  {
+    title: "Kleinreparaturen",
+    text: "Kleine Defekte beheben wir bis zu einem vereinbarten Betrag sofort, ohne eigenen Auftrag.",
+    items: ["Planbare Kosten", "Schnelle Hilfe", "Weniger Verwaltungsaufwand"],
+  },
+  {
+    title: "Notdienst",
+    text: "Bei Störungen, die nicht warten können, sind wir schnell vor Ort.",
+    items: ["Heizungsausfall", "Wasserschaden", "Stromausfall im Haus"],
+  },
+  {
+    title: "Prüfpflichten",
+    text: "Wir helfen Eigentümern, gesetzliche Prüfungen und Nachweise rechtzeitig zu erledigen.",
+    items: ["Elektroprüfungen", "Wartungsnachweise", "Dokumentation für die Verwaltung"],
+  },
+];
+const audience = [
+  "Hausverwaltungen",
+  "Wohnanlagen",
+  "Gewerbeimmobilien",
+  "Immobiliengesellschaften",
+  "Investoren und Family Offices",
+];
+---
+
+<Layout title={title} description={description} current="gebaeudebetreuung">
+  <PageHead
+    crumbs={[{ name: tfm.name }]}
+    title={`Technische Gebäudebetreuung in ${company.city}`}
+    intro={[
+      "Wir betreuen die Technik Ihrer Häuser: Wartung, kleine Reparaturen und Notdienst. Sie haben eine Ansprechpartnerin, die Ihre Objekte kennt.",
+    ]}
+  >
+    <div class="actions">
+      <a class="btn" href={`${base}/kontakt?vorhaben=gebaeude#anfrage`}>
+        Erstbegehung anfragen
+      </a>
+      <a class="btn btn-line" href={company.phone.href}>
+        <Icon name="phone" />
+        {company.phone.display}
+      </a>
+    </div>
+    <div class="sheet" slot="aside">
+      <p class="sheet-head">Gebäudebetreuung</p>
+      <dl>
+        <div class="sheet-row">
+          <dt>Leistungen</dt>
+          <dd>
+            <ul class="items">
+              {blocks.map((block) => (
+                <li>{block.title}</li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+        <div class="sheet-row">
+          <dt>Für</dt>
+          <dd>
+            {audience.slice(0, -1).join(", ")} und {audience.at(-1)}
+          </dd>
+        </div>
+        <div class="sheet-row">
+          <dt>Ansprechpartnerin</dt>
+          <dd>
+            {company.owner}, <a href={company.phone.href}>{company.phone.display}</a>
+          </dd>
+        </div>
+        <div class="sheet-row">
+          <dt>Gewerke</dt>
+          <dd>Elektro, Sanitär und Heizung</dd>
+        </div>
+      </dl>
+    </div>
+  </PageHead>
+
+  <section class="band" aria-labelledby="blocks-title">
+    <div class="wrap rel">
+      <h2 id="blocks-title" class="section-title">
+        Vier Leistungen für Ihre Häuser
+      </h2>
+      <div class="blocks">
+        {blocks.map((block) => (
+          <div class="block">
+            <h3>{block.title}</h3>
+            <p class="soft">{block.text}</p>
+            <ul class="items">
+              {block.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-grout" aria-labelledby="why-title">
+    <div class="wrap why">
+      <div class="why-copy">
+        <h2 id="why-title" class="why-title">
+          Eine Ansprechpartnerin je Haus
+        </h2>
+        <p class="lead">
+          Wir betreuen eine feste Zahl von Häusern in {company.city} und Umgebung. Für jedes Haus gibt es eine Person,
+          die es kennt und Sie anruft, wenn etwas ansteht.
+        </p>
+        <blockquote class="statement">
+          <p>Ein tropfender Hahn kostet wenig. Ein Wasserschaden, den niemand bemerkt, kostet viel.</p>
+        </blockquote>
+      </div>
+      <div class="compare rel">
+        <div>
+          <h3>Ohne feste Betreuung</h3>
+          <ul class="plain">
+            <li>Jede Reparatur ein neuer Auftrag</li>
+            <li>Wechselnde Handwerker ohne Hauskenntnis</li>
+            <li>Prüftermine fallen durch</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Bei {company.name}</h3>
+          <ul class="items">
+            <li>Eine Ansprechpartnerin mit Meistertitel</li>
+            <li>Kleine Reparaturen ohne neuen Auftrag</li>
+            <li>Prüftermine im Kalender, Berichte per E-Mail</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ContactBand title="Erstbegehung anfragen" vorhaben="gebaeude" />
+</Layout>
+
+<style>
+  .sheet {
+    align-self: stretch;
+    margin: 0;
+    background: var(--board);
+    border: 3px solid var(--slate);
+  }
+  .sheet-head {
+    max-width: none;
+    padding: 10px 20px;
+    background: var(--slate);
+    color: #fff;
+    font-weight: 700;
+  }
+  .sheet-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 16px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--grout-line);
+  }
+  .sheet-row:first-child {
+    border-top: 0;
+  }
+  .sheet dl {
+    margin: 0;
+  }
+  .sheet-row dt {
+    color: var(--slate-soft);
+  }
+  .sheet-row dd {
+    margin: 0;
+    font-weight: 700;
+  }
+  .sheet-row a {
+    color: var(--slate);
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.18em;
+  }
+  @media (max-width: 560px) {
+    .sheet-row {
+      grid-template-columns: 1fr;
+      gap: 4px;
+      padding: 12px 16px;
+    }
+  }
+  .blocks {
+    display: grid;
+    gap: 40px 48px;
+  }
+  @media (min-width: 760px) {
+    .blocks {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .block {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+    padding-top: 16px;
+    border-top: 2px solid var(--slate);
+  }
+  .why {
+    display: grid;
+    gap: 40px 64px;
+    align-items: start;
+  }
+  @media (min-width: 1060px) {
+    .why {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    }
+  }
+  .why-copy {
+    display: grid;
+    gap: 20px;
+  }
+  .why-title {
+    font-size: var(--step-3);
+    max-width: 16ch;
+  }
+  .statement {
+    margin: 8px 0 0;
+    padding-left: 20px;
+    border-left: 4px solid var(--accent);
+  }
+  .statement p {
+    font-size: var(--step-1);
+    line-height: 1.45;
+    color: var(--slate-soft);
+  }
+  .compare {
+    display: grid;
+    gap: var(--joint);
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    align-self: stretch;
+    background: var(--grout);
+  }
+  .compare > div {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    padding: 28px;
+    background: var(--board);
+  }
+  .compare > div:last-of-type {
+    background: var(--slate);
+    color: #fff;
+  }
+  .compare > div:last-of-type .items li::before {
+    background: var(--accent-on-dark);
+  }
+  .plain {
+    display: grid;
+    gap: 8px;
+    color: var(--slate-soft);
+  }
+</style>

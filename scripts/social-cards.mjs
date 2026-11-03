@@ -133,8 +133,7 @@ try {
 
   for (const page of pages) {
     const data = content[`${page.locale}-${page.card}`];
-    const headlineCard =
-      page.card === "examples" || page.card === "examples-hotels" || page.card.startsWith("references");
+    const headlineCard = page.card.startsWith("examples") || page.card.startsWith("references");
     const illustrations = ["websites", "seo", "ads", "automation"].map(
       (slug) => content[`${page.locale}-services-${slug}`].illustration,
     );

@@ -1,0 +1,10 @@
+---
+import type { GetStaticPaths } from "astro";
+import Page from "@/examples/trades/wendmark-sanierung/Service.astro";
+import { services } from "@/examples/trades/wendmark-sanierung/data";
+
+export const getStaticPaths = (() =>
+  services.map((service) => ({ params: { slug: service.slug }, props: { service } }))) satisfies GetStaticPaths;
+---
+
+<Page {...Astro.props} />

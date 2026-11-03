@@ -7,25 +7,34 @@ type PageCopy = { title: string; description: string; h1: string; intro: string 
 type Item = { title: string; copy: string };
 /** One concept of an industry, shown as a tile on the industry page that opens the concept. */
 export type ConceptCopy = { slug: string; name: string; kind: string; summary: string; link: string };
+/**
+ * One industry page under /examples. `label` is its short name for breadcrumbs and cards;
+ * `cardText` and `cardLink` fill its card on the examples overview and the references page.
+ */
+export type IndustryCopy = PageCopy & {
+  label: string;
+  cardText: string;
+  cardLink: string;
+  conceptsHeading: string;
+  conceptsText: string;
+  conceptLabel: string;
+  concepts: ConceptCopy[];
+  requirementsHeading: string;
+  requirements: Item[];
+  costsHeading: string;
+  costs: string[];
+  costsAfter: string;
+  processHeading: string;
+  process: Item[];
+  faqHeading: string;
+  faqs: { question: string; answer: string; linkText?: string }[];
+  cta: { heading: string; text: string; button: string };
+};
 export type ExamplesCopy = {
   /** `label` is the short name breadcrumbs use. */
-  overview: PageCopy & { label: string; cardTitle: string; cardText: string; cardLink: string };
-  hotels: PageCopy & {
-    conceptsHeading: string;
-    conceptsText: string;
-    conceptLabel: string;
-    concepts: ConceptCopy[];
-    requirementsHeading: string;
-    requirements: Item[];
-    costsHeading: string;
-    costs: string[];
-    costsAfter: string;
-    processHeading: string;
-    process: Item[];
-    faqHeading: string;
-    faqs: { question: string; answer: string; linkText?: string }[];
-    cta: { heading: string; text: string; button: string };
-  };
+  overview: PageCopy & { label: string };
+  hotels: IndustryCopy;
+  trades: IndustryCopy;
   websitesLink: string;
 };
 

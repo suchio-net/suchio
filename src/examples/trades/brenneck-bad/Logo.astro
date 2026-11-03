@@ -1,0 +1,44 @@
+---
+// The water-drop mark of the fictional Brenneck in one colour, so it follows the text colour around it.
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<span class:list={["logo", className]}>
+  <svg viewBox="0 0 64 64" width="28" height="28" aria-hidden="true" focusable="false">
+    <path
+      d="M32 7C32 7 13 29 13 41a19 19 0 0 0 38 0C51 29 32 7 32 7Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="5"
+    />
+    <path d="M21 43h22" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M26 51h12" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" />
+  </svg>
+  <span class="logo-word">
+    Brenneck <span>Bad</span>
+  </span>
+</span>
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo svg {
+    width: 28px;
+    height: 28px;
+    flex: none;
+  }
+  .logo-word {
+    font-weight: 600;
+    font-size: 1.02rem;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+  .logo-word span {
+    opacity: 0.45;
+  }
+</style>

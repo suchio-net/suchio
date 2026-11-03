@@ -1,0 +1,63 @@
+---
+// The "Konzept" banner of every industry concept, as on the hotel concept: always on top, so no
+// visitor takes the fictional business for a real one. It sets --kbar to its own height; the
+// concept's fixed header and page start below it.
+---
+
+<div class="kbanner" data-kbanner>
+  <span>Konzept von Suchio – fiktiver Betrieb, keine Kundenseite</span>
+  <span class="kbanner-sep" aria-hidden="true">
+    ·
+  </span>
+  <a href="/examples/trades">Zurück zum Beispiel</a>
+</div>
+
+<style is:global>
+  :root {
+    --kbar: 36px;
+  }
+  .kbanner {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 70;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2px 12px;
+    padding: 8px 16px;
+    background: #0b0b0c;
+    color: #d6d6d6;
+    font:
+      500 0.85rem/1.35 system-ui,
+      sans-serif;
+    letter-spacing: 0;
+    text-align: center;
+    text-transform: none;
+  }
+  .kbanner a {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+  .kbanner-sep {
+    opacity: 0.6;
+  }
+  @media (max-width: 760px) {
+    .kbanner-sep {
+      display: none;
+    }
+  }
+  body {
+    padding-top: var(--kbar);
+  }
+</style>
+
+<script>
+  const banner = document.querySelector<HTMLElement>("[data-kbanner]");
+  if (banner) {
+    const set = () => document.documentElement.style.setProperty("--kbar", `${banner.offsetHeight}px`);
+    new ResizeObserver(set).observe(banner);
+    set();
+  }
+</script>
