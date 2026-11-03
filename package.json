@@ -17,6 +17,7 @@
     "typecheck": "astro check",
     "deploy": "bun scripts/deploy-verified.mjs",
     "deploy:redirects": "bun scripts/deploy-verified.mjs --redirects",
+    "indexnow": "bun scripts/indexnow.mjs",
     "types:workers": "wrangler types src/worker-configuration.d.ts --env-interface CloudflareBindings --env-file .env.example",
     "format": "prettier --write . --cache --cache-location node_modules/.cache/prettier",
     "format:check": "prettier --check . --cache --cache-location node_modules/.cache/prettier",

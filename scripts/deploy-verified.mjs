@@ -60,4 +60,12 @@ if (!process.argv.includes("--check-only")) {
     stdin: "inherit",
   });
   process.exitCode = await deployment.exited;
+  if (process.exitCode === 0 && !process.argv.includes("--redirects")) {
+    try {
+      const indexnow = Bun.spawn(["bun", "scripts/indexnow.mjs"], { stdout: "inherit", stderr: "inherit" });
+      if ((await indexnow.exited) !== 0) console.warn("Warning: IndexNow submission failed. Deployment succeeded.");
+    } catch (error) {
+      console.warn("Warning: IndexNow submission failed. Deployment succeeded.", error);
+    }
+  }
 }

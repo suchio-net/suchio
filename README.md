@@ -43,6 +43,8 @@ bun run deploy
 
 Use `bun run deploy:redirects` for the separate domain-redirect Worker. Both commands run the CI verification sequence first and stop if checks fail or the source changes during verification. Configuration lives in [wrangler.jsonc](wrangler.jsonc) and [wrangler.redirects.jsonc](wrangler.redirects.jsonc). Deployments use the generated `dist/server/wrangler.json`; the source configuration identifies the custom Worker entrypoint used by Astro in development and builds.
 
+After a successful `bun run deploy`, the script submits all Suchio sitemap URLs to IndexNow; submission failures produce a warning. The key file is `public/0a001c5ee491f6f1902786635dd04184.txt`; use `bun run indexnow` to submit manually.
+
 For the existing Cloudflare Git integration, set **Settings → Builds → Build command** to `bun run deploy --check-only` and **Deploy command** to `bunx wrangler deploy --config dist/server/wrangler.json`. Use Bun 1.4.0 and Node 24 in that build environment. This runs the same verification sequence before Cloudflare can deploy; GitHub CI alone does not gate a separate Cloudflare build. The [build and deploy commands are separate Cloudflare trigger settings](https://developers.cloudflare.com/workers/ci-cd/builds/api-reference/). Remove any old `build:vinext` or `deploy:vinext` commands. Dashboard settings have to be applied to the account; editing this README does not change them.
 
 To verify the release without publishing:
