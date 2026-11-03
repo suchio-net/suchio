@@ -293,7 +293,7 @@ const shots = [
     <section class="bg-white px-page py-section">
       <div class="mx-auto max-w-layout">
         <SectionHeading title={copy.findingsHeading} copy={copy.findingsText} />
-        <div class="reveal overflow-hidden rounded-card border border-line-strong" data-reveal>
+        <div class="findings-wrap reveal rounded-card border border-line-strong" data-reveal>
           <table class="findings-table w-full border-collapse text-left">
             <thead>
               <tr>
@@ -384,7 +384,17 @@ const shots = [
 </SiteLayout>
 
 <style>
-  /* The findings table: the old state on a light red column, the current state on a light green one. */
+  /* The findings table: the old state on a light red column. The new state sits on a raised green
+     panel that reaches past the table edges, drawn behind the third column. */
+  .findings-wrap {
+    position: relative;
+    isolation: isolate;
+  }
+  .findings-table {
+    position: relative;
+    z-index: 1;
+    table-layout: fixed;
+  }
   .findings-table th,
   .findings-table td {
     padding: 1.25rem 1.5rem;
@@ -394,7 +404,6 @@ const shots = [
   }
   .findings-table thead th {
     padding-block: 0.875rem;
-    background: var(--color-canvas);
     color: var(--color-muted);
     font-size: var(--text-meta);
     font-weight: 600;
@@ -402,9 +411,18 @@ const shots = [
   }
   .findings-table thead th:first-child {
     width: 13rem;
+    border-top-left-radius: calc(var(--radius-card) - 1px);
+    background: var(--color-canvas);
   }
-  .findings-table tbody tr {
+  .findings-table thead th:last-child {
+    color: var(--color-ink);
+  }
+  .findings-table tbody th,
+  .findings-table tbody td:nth-of-type(1) {
     border-top: 1px solid var(--color-line-strong);
+  }
+  .findings-table tbody td:last-child {
+    border-top: 1px solid rgb(12 206 107 / 22%);
   }
   .findings-table tbody th {
     color: var(--color-ink);
@@ -417,11 +435,33 @@ const shots = [
   .findings-table thead th:nth-child(2) {
     background: rgb(255 78 66 / 6%);
   }
-  .findings-table td:last-child,
-  .findings-table thead th:last-child {
-    background: rgb(12 206 107 / 6%);
+  @media (min-width: 56.3rem) {
+    .findings-wrap::before {
+      content: "";
+      position: absolute;
+      top: -0.75rem;
+      right: -0.5rem;
+      bottom: -0.75rem;
+      left: calc(13rem + (100% - 13rem) / 2 - 0.5rem);
+      z-index: 0;
+      border-radius: var(--radius-card);
+      background: rgb(236 250 242);
+      box-shadow:
+        0 0 0 1px rgb(12 206 107 / 28%),
+        var(--shadow-floating);
+    }
   }
   @media (max-width: 56.25rem) {
+    .findings-wrap {
+      overflow: hidden;
+    }
+    .findings-table td:last-child {
+      background: rgb(12 206 107 / 6%);
+    }
+    .findings-table tbody td:last-child,
+    .findings-table tbody td:nth-of-type(1) {
+      border-top: 0;
+    }
     .findings-table thead {
       position: absolute;
       width: 1px;
@@ -435,7 +475,7 @@ const shots = [
     .findings-table td {
       display: block;
     }
-    .findings-table tbody tr:first-child {
+    .findings-table tbody tr:first-child th {
       border-top: 0;
     }
     .findings-table tbody th {

@@ -85,7 +85,7 @@ const references = {
       "Vor dem Neubau haben wir alle 64 Adressen der alten Website geprüft und 45 Befunde notiert. Sechs davon im Vergleich mit dem heutigen Stand.",
     topicLabel: "Bereich",
     beforeLabel: "Vorher",
-    afterLabel: "Jetzt",
+    afterLabel: "Nachher",
     findings: [
       {
         title: "Anfragen",

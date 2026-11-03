@@ -85,7 +85,7 @@ const references = {
       "Avant la refonte, nous avons vérifié les 64 adresses de l’ancien site et noté 45 constats. En voici six, à côté de l’état actuel.",
     topicLabel: "Domaine",
     beforeLabel: "Avant",
-    afterLabel: "Maintenant",
+    afterLabel: "Après",
     findings: [
       {
         title: "Demandes",
