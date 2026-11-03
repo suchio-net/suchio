@@ -384,7 +384,7 @@ const shots = [
 </SiteLayout>
 
 <style>
-  /* The findings table: old state in muted text, current state in ink on a light green column. */
+  /* The findings table: the old state on a light red column, the current state on a light green one. */
   .findings-table th,
   .findings-table td {
     padding: 1.25rem 1.5rem;
@@ -411,14 +411,15 @@ const shots = [
     font-weight: 600;
   }
   .findings-table td {
-    color: var(--color-muted);
+    color: var(--color-ink);
+  }
+  .findings-table td:nth-of-type(1),
+  .findings-table thead th:nth-child(2) {
+    background: rgb(255 78 66 / 6%);
   }
   .findings-table td:last-child,
   .findings-table thead th:last-child {
     background: rgb(12 206 107 / 6%);
-  }
-  .findings-table td:last-child {
-    color: var(--color-ink);
   }
   @media (max-width: 56.25rem) {
     .findings-table thead {
