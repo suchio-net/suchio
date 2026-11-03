@@ -37,6 +37,8 @@ const messages: Readonly<Record<MessageKey, string>> = {
   "home.ctaContact": "Demander un projet",
   "home.ctaWhatsApp": "Nous écrire sur WhatsApp",
   "home.section1Title": "Services",
+  "home.servicesCopy":
+    "Webdesign, SEO, Google Ads et automatisation sont liés. Un site rapide et bien structuré aide sur Google, une bonne page d’atterrissage réduit le coût par demande, et les demandes enregistrées automatiquement ne se perdent pas.",
   "home.faqHeading": "Questions fréquentes",
   "finalCta.title": "Dites-nous ce qui doit changer.",
   "finalCta.copy":

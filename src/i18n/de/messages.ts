@@ -35,6 +35,8 @@ const messages = {
   "home.ctaContact": "Projekt anfragen",
   "home.ctaWhatsApp": "Auf WhatsApp schreiben",
   "home.section1Title": "Leistungen",
+  "home.servicesCopy":
+    "Webdesign, SEO, Google Ads und Automatisierung hängen zusammen. Eine schnelle, klar aufgebaute Website hilft bei Google, eine gute Landingpage senkt die Kosten pro Anfrage, und automatisch erfasste Anfragen gehen nicht verloren.",
   "home.faqHeading": "Häufige Fragen",
   "finalCta.title": "Sag uns, was sich ändern soll.",
   "finalCta.copy":

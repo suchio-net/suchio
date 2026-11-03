@@ -93,17 +93,17 @@ function StaticOfferVisual({ type, failed = false }: { type: ServiceAnimationDef
     >
       {type === "campaign" ? (
         <>
-          <path className="text-line-strong" d="M32 32v176h256" />
-          <path d="m40 184 46-18 48 8 48-64 48 12 50-70" />
-          <circle cx="280" cy="52" r="5" />
+          <rect className="text-line-strong" x="16" y="32" width="176" height="176" rx="14" />
+          <path d="M36 196v-12m14 12v-16m14 16v-20m14 20v-28m14 28v-34m14 34v-40m14 40v-50m14 50v-60" />
+          <rect className="text-line-strong" x="204" y="32" width="100" height="100" rx="14" />
+          <rect className="text-line-strong" x="204" y="144" width="100" height="64" rx="14" />
         </>
       ) : type === "automation" ? (
         <>
-          <path d="M76 120h40m88 0h40" />
-          <rect x="24" y="94" width="52" height="52" rx="12" />
-          <rect x="116" y="76" width="88" height="88" rx="16" />
-          <rect x="244" y="94" width="52" height="52" rx="12" />
-          <path d="m144 120 12 12 24-24" />
+          <rect className="text-line-strong" x="16" y="40" width="148" height="140" rx="14" />
+          <path d="M32 92h96M32 112h116M32 132h72" />
+          <rect className="text-line-strong" x="176" y="40" width="128" height="160" rx="14" />
+          <path d="M192 76h64M192 104h80M192 132h56" />
         </>
       ) : type === "optimization" ? (
         <>

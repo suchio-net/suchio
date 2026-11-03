@@ -26,23 +26,30 @@ export type OptimizationAnimationCopy = {
 };
 
 export type CampaignAnimationCopy = {
+  period: string;
   metricLabel: string;
-  events: readonly [string, string, string];
+  week: string;
+  channels: string;
+  active: string;
+  cost: string;
+  costNote: string;
 };
 
+export type AutomationField = { label: string; value: string };
+
 export type AutomationAnimationCopy = {
-  trigger: string;
-  agent: string;
-  extract: string;
-  condition: string;
-  success: string;
-  notify: string;
-  fallback: string;
-  model: string;
-  context: string;
-  research: string;
-  yes: string;
-  review: string;
+  inbox: string;
+  crm: string;
+  sender: string;
+  time: string;
+  subject: string;
+  // Square brackets mark the phrases the agent picks out; they fill `fields` after the name, in order.
+  body: string;
+  attachment: string;
+  lead: string;
+  fields: readonly [AutomationField, AutomationField, AutomationField, AutomationField];
+  followUp: string;
+  followUpTime: string;
 };
 
 type ContentItem = { id: string; title: string; copy: string };
