@@ -44,13 +44,13 @@ const about = {
       ],
     },
     {
-      heading: "Fast websites with Astro and Cloudflare",
+      heading: "Technology that fits your project",
       paragraphs: [
         [
-          "This website and the Handwerker.work website are built with Astro. Astro delivers finished HTML pages and only loads JavaScript where a page needs it. The pages run on Cloudflare and are served from a data centre close to the visitor.",
+          "We don’t commit to one system. A landing page needs different technology than an online shop with payment and shipping, a customer portal, or an app. We choose the technology by what your project has to do and who will maintain the content later.",
         ],
         [
-          "You can measure the result. On mobile, the new Handwerker.work home page scores 100 instead of 65 in Lighthouse, and its largest element appears after 1.8 instead of 10.1 seconds.",
+          "For Handwerker.work, that was an Astro website on Cloudflare. On mobile, the new home page scores 100 instead of 65 in Lighthouse, and its largest element appears after 1.8 instead of 10.1 seconds.",
         ],
         [
           "Where possible, we measure enquiries without cookies and without a banner. Since 31 October, the Handwerker.work website counts calls, WhatsApp clicks, and sent forms.",
