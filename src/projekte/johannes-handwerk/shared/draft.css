@@ -1,0 +1,48 @@
+/* Suchio draft annotations, the same in both drafts: blue marks what the client still supplies
+   or confirms. They stay visible on purpose and are removed before launch. */
+.jh-note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  max-width: 62ch;
+  padding: 10px 14px 11px;
+  border-radius: 6px;
+  background: #0050c8;
+  color: #fff;
+  font:
+    500 0.86rem/1.4 ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.jh-note::before {
+  content: "Entwurf";
+  flex: none;
+  padding: 1px 6px 2px;
+  border-radius: 3px;
+  background: #fff;
+  color: #0050c8;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+/* An empty field for a fact the client fills in. */
+.jh-field {
+  display: inline-block;
+  padding: 0 6px;
+  border: 1px dashed #0050c8;
+  border-radius: 3px;
+  color: #0047b3;
+  font:
+    500 0.82rem/1.5 ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}

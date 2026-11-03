@@ -1,0 +1,42 @@
+---
+import type { Faq } from "../shared/faqs";
+
+interface Props {
+  items: Faq[];
+  /** Groups the details elements so that only one answer is open at a time. */
+  name: string;
+  title?: string;
+}
+const { items, name, title = "Häufige Fragen" } = Astro.props;
+---
+
+<section class="band" aria-labelledby={`${name}-title`}>
+  <div class="wrap faq-grid">
+    <h2 class="section-title" id={`${name}-title`}>
+      {title}
+    </h2>
+    <div class="faq">
+      {items.map((item) => (
+        <details name={name}>
+          <summary>{item.q}</summary>
+          <div class="answer">
+            <p>{item.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-grid {
+    display: grid;
+    gap: 8px 64px;
+  }
+  @media (min-width: 960px) {
+    .faq-grid {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      align-items: start;
+    }
+  }
+</style>

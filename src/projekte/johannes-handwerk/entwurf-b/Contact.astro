@@ -1,0 +1,480 @@
+---
+import Layout from "./Layout.astro";
+import Icon from "./Icon.astro";
+import PageHead from "./PageHead.astro";
+import { company, serviceGroups } from "../shared/content";
+import { otherKeys, services } from "./data";
+
+const choices = [
+  ...services.map((service) => ({ value: service.slug, label: service.short })),
+  ...serviceGroups
+    .filter((group) => otherKeys.includes(group.key))
+    .map((group) => ({ value: group.key, label: group.name })),
+  { value: "sonstiges", label: "Etwas anderes" },
+];
+const areas = ["unter 20 m²", "20 bis 50 m²", "50 bis 100 m²", "über 100 m²", "Weiß ich nicht genau"];
+const dates = ["So bald wie möglich", "In 1 bis 3 Monaten", "Später im Jahr", "Noch offen"];
+const steps = ["Leistung", "Ort", "Fläche", "Wunsch", "Termin", "Fotos", "Kontakt"];
+---
+
+<Layout
+  title="Kontakt und Anfrage | Johannes-Handwerk München"
+  description="Stellen Sie Ihre Anfrage in sieben kurzen Schritten oder rufen Sie an: 0176 81318236."
+  path="/kontakt"
+  current="kontakt"
+>
+  <PageHead
+    title="Anfrage stellen"
+    intro="Sieben kurze Schritte, dann haben wir alles für eine erste Einschätzung. Lieber direkt sprechen? Rufen Sie an."
+    crumbs={[{ label: "Kontakt" }]}
+  />
+
+  <section class="band" id="anfrage" aria-label="Anfrage-Assistent">
+    <div class="wrap contact-grid">
+      <div class="wizard-col">
+        <p class="jh-note">Dieser Assistent zeigt den Ablauf. Im Entwurf sendet er nichts ab.</p>
+
+        <form class="wizard" novalidate data-wizard>
+          <div class="progress" aria-hidden="true">
+            <p class="progress-label">
+              Schritt <span data-step-number>1</span> von {steps.length}: <span data-step-name>{steps[0]}</span>
+            </p>
+            <ol class="progress-bar">
+              {steps.map((step, index) => (
+                <li class:list={{ done: index === 0 }}>{step}</li>
+              ))}
+            </ol>
+          </div>
+
+          <fieldset class="step" data-step>
+            <legend>Was dürfen wir für Sie tun?</legend>
+            <div class="choices">
+              {choices.map((choice) => (
+                <label class="choice">
+                  <input type="radio" name="leistung" value={choice.value} required />
+                  <span>{choice.label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset class="step" data-step>
+            <legend>Wo liegt das Projekt?</legend>
+            <label class="field">
+              <span>Ort oder Postleitzahl</span>
+              <input
+                type="text"
+                name="ort"
+                autocomplete="address-level2"
+                required
+                placeholder="zum Beispiel 81379 München"
+              />
+            </label>
+          </fieldset>
+
+          <fieldset class="step" data-step>
+            <legend>Wie groß ist die Fläche ungefähr?</legend>
+            <div class="choices">
+              {areas.map((area) => (
+                <label class="choice">
+                  <input type="radio" name="flaeche" value={area} required />
+                  <span>{area}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset class="step" data-step>
+            <legend>Welches Material oder welchen Wunsch haben Sie?</legend>
+            <label class="field">
+              <span>
+                Ihr Wunsch <small>(optional)</small>
+              </span>
+              <textarea
+                name="wunsch"
+                rows="5"
+                placeholder="zum Beispiel: Einfahrt mit grauem Betonpflaster, alte Platten müssen raus"
+              ></textarea>
+            </label>
+          </fieldset>
+
+          <fieldset class="step" data-step>
+            <legend>Wann soll es losgehen?</legend>
+            <div class="choices">
+              {dates.map((date) => (
+                <label class="choice">
+                  <input type="radio" name="termin" value={date} required />
+                  <span>{date}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <fieldset class="step" data-step>
+            <legend>Haben Sie Fotos?</legend>
+            <p class="soft">
+              Fotos der Fläche oder des Raums helfen uns bei der Einschätzung. Dieser Schritt ist optional.
+            </p>
+            <label class="upload">
+              <input type="file" name="fotos" accept="image/*" multiple data-photos />
+              <Icon name="camera" size={28} />
+              <span>
+                <strong>Fotos auswählen</strong> oder mit dem Handy aufnehmen
+              </span>
+            </label>
+            <ul class="previews" data-previews></ul>
+          </fieldset>
+
+          <fieldset class="step" data-step>
+            <legend>Wie erreichen wir Sie?</legend>
+            <label class="field">
+              <span>Name</span>
+              <input type="text" name="name" autocomplete="name" required />
+            </label>
+            <label class="field">
+              <span>Telefon</span>
+              <input type="tel" name="telefon" autocomplete="tel" required />
+            </label>
+            <label class="field">
+              <span>
+                E-Mail <small>(optional)</small>
+              </span>
+              <input type="email" name="email" autocomplete="email" />
+            </label>
+            <p class="privacy soft">
+              Wir verwenden Ihre Angaben nur für diese Anfrage. Mehr dazu in der{" "}
+              <a href={company.privacy} rel="noopener">
+                Datenschutzerklärung
+              </a>
+              .
+            </p>
+          </fieldset>
+
+          <div class="wizard-nav" hidden data-nav>
+            <button type="button" class="btn btn-line" data-back>
+              <Icon name="chevron-left" />
+              Zurück
+            </button>
+            <button type="button" class="btn" data-next>
+              Weiter
+              <Icon name="chevron-right" />
+            </button>
+            <button type="submit" class="btn" data-submit>
+              Anfrage absenden
+            </button>
+          </div>
+        </form>
+        <script is:inline>
+          // Runs before paint, so the page never shows all seven steps at once.
+          document.querySelector("[data-wizard]").classList.add("is-wizard");
+          document.querySelector("[data-step]").classList.add("current");
+        </script>
+        <div class="done" hidden tabindex="-1" data-done>
+          <Icon name="circle-check" size={40} />
+          <h2>So käme Ihre Anfrage an</h2>
+          <p class="jh-note">
+            Im Entwurf wurde nichts gesendet. Im fertigen Auftritt geht die Anfrage mit Fotos per E-Mail an{" "}
+            {company.email}.
+          </p>
+          <dl data-summary></dl>
+          <button type="button" class="btn btn-line" data-restart>
+            Neue Anfrage
+          </button>
+        </div>
+      </div>
+
+      <aside class="direct" aria-labelledby="direct-title">
+        <h2 id="direct-title">Direkt erreichen</h2>
+        <ul>
+          <li>
+            <Icon name="phone" />
+            <span>
+              <span class="soft">Mobil</span>
+              <a href={company.mobile.href}>{company.mobile.display}</a>
+            </span>
+          </li>
+          <li>
+            <Icon name="phone" />
+            <span>
+              <span class="soft">Festnetz</span>
+              <a href={company.landline.href}>{company.landline.display}</a>
+            </span>
+          </li>
+          <li>
+            <Icon name="mail" />
+            <span>
+              <span class="soft">E-Mail</span>
+              <a href={`mailto:${company.email}`}>{company.email}</a>
+            </span>
+          </li>
+          <li>
+            <Icon name="map-pin" />
+            <span>
+              <span class="soft">Adresse</span>
+              {`${company.street}, ${company.postalCode} ${company.city}`}
+            </span>
+          </li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import "./wizard";
+</script>
+
+<style>
+  .contact-grid {
+    display: grid;
+    gap: 48px 64px;
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .contact-grid {
+      grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+    }
+  }
+  .wizard-col {
+    display: grid;
+    gap: 24px;
+  }
+  .wizard-col [hidden] {
+    display: none !important;
+  }
+  .wizard {
+    display: grid;
+    gap: 32px;
+    scroll-margin-top: calc(var(--header-h) + 16px);
+  }
+  .progress {
+    display: none;
+  }
+  .step {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  legend {
+    float: left;
+    width: 100%;
+    margin-bottom: 4px;
+    font-family: var(--display);
+    font-size: var(--step-3);
+    font-weight: 700;
+    line-height: 1.05;
+  }
+  .choices {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  }
+  .choice {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 60px;
+    padding: 12px 16px;
+    border: 2px solid var(--grout-line);
+    border-radius: 2px;
+    font-weight: 700;
+    line-height: 1.25;
+    cursor: pointer;
+  }
+  .choice:hover {
+    border-color: var(--ink);
+  }
+  .choice:has(input:checked) {
+    border-color: var(--red);
+    background: #fbf1f1;
+  }
+  .choice:has(input:focus-visible) {
+    outline: 3px solid var(--red);
+    outline-offset: 2px;
+  }
+  .choice input {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    flex: none;
+    accent-color: var(--red);
+  }
+  .field {
+    display: grid;
+    gap: 6px;
+    font-weight: 700;
+  }
+  .field small {
+    font-weight: 400;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .field input,
+  .field textarea {
+    width: 100%;
+    min-height: 52px;
+    padding: 12px 14px;
+    border: 2px solid var(--grout-line);
+    border-radius: 2px;
+    background: var(--board);
+    font-weight: 400;
+  }
+  .field input:focus,
+  .field textarea:focus {
+    border-color: var(--ink);
+    outline: none;
+  }
+  .field input[aria-invalid="true"] {
+    border-color: var(--red);
+  }
+  .upload {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: 32px 20px;
+    border: 2px dashed var(--grout-line);
+    background: var(--grout);
+    text-align: center;
+    cursor: pointer;
+  }
+  .upload:hover,
+  .upload:has(input:focus-visible) {
+    border-color: var(--ink);
+  }
+  .upload input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .upload :global(.icon) {
+    color: var(--red);
+  }
+  .previews {
+    display: grid;
+    gap: var(--joint);
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  }
+  .previews :global(img) {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  .privacy {
+    font-size: 0.95rem;
+  }
+  .privacy a {
+    color: var(--ink);
+  }
+  .wizard-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .wizard-nav [data-next],
+  .wizard-nav [data-submit] {
+    margin-left: auto;
+  }
+
+  /* Script on: one step at a time. Without script, all steps stay visible as one form. */
+  .wizard:global(.is-wizard) .progress {
+    display: grid;
+    gap: 10px;
+  }
+  .wizard:global(.is-wizard) .step:not(.current) {
+    display: none;
+  }
+  .progress-label {
+    font-weight: 700;
+  }
+  .progress-bar {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 4px;
+  }
+  .progress-bar li {
+    padding-top: 8px;
+    border-top: 4px solid var(--grout-line);
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .progress-bar li:global(.done) {
+    border-color: var(--red);
+    color: var(--ink);
+  }
+  @media (max-width: 600px) {
+    .progress-bar li {
+      font-size: 0;
+    }
+  }
+
+  .done {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+  }
+  .done > :global(.icon) {
+    color: var(--red);
+  }
+  .done h2 {
+    font-size: var(--step-3);
+  }
+  .done :global(dl) {
+    display: grid;
+    width: 100%;
+    border-top: 2px solid var(--ink);
+  }
+  .done :global(dl div) {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--grout-line);
+  }
+  .done :global(dt) {
+    color: var(--ink-soft);
+  }
+
+  .direct {
+    display: grid;
+    gap: 20px;
+    padding: clamp(24px, 3vw, 32px);
+    background: var(--grout);
+  }
+  .direct h2 {
+    font-size: var(--step-2);
+  }
+  .direct ul {
+    display: grid;
+    gap: 16px;
+  }
+  .direct li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .direct li > span {
+    display: grid;
+  }
+  .direct :global(.icon) {
+    flex: none;
+    margin-top: 4px;
+    color: var(--red);
+  }
+  .direct a {
+    font-weight: 700;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .direct a:hover {
+    text-decoration: underline;
+  }
+</style>

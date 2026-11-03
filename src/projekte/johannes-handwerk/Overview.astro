@@ -1,0 +1,173 @@
+---
+// Entry page for Johannes Ciubotaru: both drafts side by side. The preview images are
+// screenshots of the drafts at 1440 px width, scaled to 960 px (public/projekte/johannes-handwerk/vorschau-*.webp).
+import Logo from "./shared/Logo.astro";
+import { assetBase, project } from "./shared/content";
+
+const drafts = [
+  {
+    href: `${project}/entwurf-a`,
+    label: "Entwurf A",
+    title: "Redaktionell, mit 3D-Aufbau einer Einfahrt",
+    text: "Eine lange Startseite. Oben baut sich eine Einfahrt Schicht für Schicht auf. Darunter Leistungen, Projekte, Ablauf, Bewertungen und Kontakt.",
+    image: `${assetBase}/vorschau-a`,
+  },
+  {
+    href: `${project}/entwurf-b`,
+    label: "Entwurf B",
+    title: "Klassisch, mit Seiten je Leistung",
+    text: "Eigene Seiten für Pflaster, Terrassen, Einfahrten, Zäune und Innenausbau. Dazu ein Anfrage-Assistent in sieben Schritten.",
+    image: `${assetBase}/vorschau-b`,
+  },
+];
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Johannes-Handwerk, Entwürfe | Suchio</title>
+    <link rel="icon" href="/suchio-favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <main>
+      <Logo height={56} />
+      <h1>Zwei Entwürfe für Ihren neuen Auftritt, erstellt von Suchio</h1>
+      <p class="intro">
+        Beide Entwürfe nutzen Ihre Leistungen, Ihre Bewertungen und Ihre Kontaktdaten. Die Fotos sind Platzhalter und
+        blau markiert. Vor dem Livegang ersetzen wir sie durch Ihre Projektfotos.
+      </p>
+      <ul>
+        {drafts.map((draft, index) => (
+          <li>
+            <a href={draft.href}>
+              <picture>
+                <source type="image/webp" srcset={`${draft.image}.webp`} />
+                <img
+                  src={`${draft.image}.jpg`}
+                  alt={`Vorschau ${draft.label}`}
+                  width="960"
+                  height="600"
+                  loading={index === 0 ? "eager" : "lazy"}
+                />
+              </picture>
+              <span class="label">{draft.label}</span>
+              <span class="title">{draft.title}</span>
+              <span class="text">{draft.text}</span>
+              <span class="open">Entwurf öffnen</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="foot">
+        Suchio · <a href="https://suchio.net">suchio.net</a>
+      </p>
+    </main>
+  </body>
+</html>
+
+<style>
+  body {
+    margin: 0;
+    background: #f4f3f1;
+    color: #1d1f22;
+    font-family:
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      "Segoe UI",
+      Arial,
+      sans-serif;
+    line-height: 1.5;
+  }
+  main {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: clamp(32px, 6vw, 72px) 20px 48px;
+  }
+  h1 {
+    max-width: 22ch;
+    margin: 32px 0 12px;
+    font-size: clamp(1.8rem, 1.2rem + 2.6vw, 3rem);
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  .intro {
+    max-width: 62ch;
+    margin: 0 0 40px;
+    color: #4a4f55;
+  }
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  a {
+    color: inherit;
+  }
+  li a {
+    display: grid;
+    gap: 6px;
+    height: 100%;
+    padding: 12px 12px 22px;
+    border: 1px solid #d6d3ce;
+    border-radius: 8px;
+    background: #fff;
+    text-decoration: none;
+  }
+  li a:hover {
+    border-color: #1d1f22;
+  }
+  li a:focus-visible {
+    outline: 3px solid #0050c8;
+    outline-offset: 4px;
+  }
+  picture {
+    display: block;
+    margin-bottom: 12px;
+    overflow: hidden;
+    border: 1px solid #e4e1dc;
+    border-radius: 4px;
+  }
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .label,
+  .title,
+  .text,
+  .open {
+    padding-inline: 8px;
+  }
+  .label {
+    color: #0050c8;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .text {
+    color: #4a4f55;
+  }
+  .open {
+    margin-top: 8px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .foot {
+    margin-top: 48px;
+    color: #4a4f55;
+    font-size: 0.9rem;
+  }
+</style>

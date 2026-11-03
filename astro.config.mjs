@@ -7,6 +7,7 @@ import { redirects as draftRedirects, legacyRedirects } from "./src/projekte/han
 import { auditReportsIntegration } from "./src/integrations/audit-reports";
 import { securityHeadersIntegration } from "./src/integrations/security-headers";
 import { draftImagesIntegration } from "./src/integrations/draft-images";
+import { johannesImagesIntegration } from "./src/projekte/johannes-handwerk/shared/image-integration";
 import { legacyServiceRoutes } from "./src/lib/public-routes";
 
 export default defineConfig({
@@ -33,7 +34,13 @@ export default defineConfig({
   // Hovered links load ahead of the click, as the former client router did.
   prefetch: { prefetchAll: true, defaultStrategy: "hover" },
   adapter: cloudflare({ imageService: "passthrough" }),
-  integrations: [draftImagesIntegration(), react(), auditReportsIntegration(), securityHeadersIntegration()],
+  integrations: [
+    draftImagesIntegration(),
+    johannesImagesIntegration(),
+    react(),
+    auditReportsIntegration(),
+    securityHeadersIntegration(),
+  ],
   session: false,
   server: { host: "127.0.0.1", port: 3000 },
   vite: {

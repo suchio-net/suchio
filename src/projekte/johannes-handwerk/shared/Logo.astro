@@ -1,0 +1,31 @@
+---
+// His own logo, unchanged, scaled down from logo.png on johannes-handwerk.de (2215 × 721).
+import { assetBase } from "./content";
+
+interface Props {
+  height?: number;
+  class?: string;
+}
+const { height = 40, class: className } = Astro.props;
+const width = Math.round((height * 2215) / 721);
+---
+
+<picture class:list={["jh-logo", className]} style={`--logo-h:${height}px`}>
+  <source
+    type="image/webp"
+    srcset={`${assetBase}/logo-240.webp 240w, ${assetBase}/logo-360.webp 360w, ${assetBase}/logo-480.webp 480w`}
+    sizes={`${width}px`}
+  />
+  <img src={`${assetBase}/logo-360.png`} alt="Johannes-Handwerk" width={width} height={height} decoding="async" />
+</picture>
+
+<style>
+  .jh-logo,
+  .jh-logo img {
+    display: block;
+  }
+  .jh-logo img {
+    width: auto;
+    height: var(--logo-h, 40px);
+  }
+</style>

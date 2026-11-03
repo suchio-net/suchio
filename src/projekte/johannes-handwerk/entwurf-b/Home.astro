@@ -1,0 +1,380 @@
+---
+import Layout from "./Layout.astro";
+import Icon from "./Icon.astro";
+import Faq from "./Faq.astro";
+import Reviews from "./Reviews.astro";
+import ContactBand from "./ContactBand.astro";
+import Photo from "../shared/Photo.astro";
+import { company, exampleProjects, figures, places, process, ratings, serviceGroups } from "../shared/content";
+import { faqs } from "../shared/faqs";
+import { base, requestHref, services } from "./data";
+
+const others = serviceGroups.filter((group) => group.key === "maler" || group.key === "abriss");
+const heroImage = "einfahrt-haus";
+const heroSizes = "(min-width: 960px) 50vw, 100vw";
+---
+
+<Layout
+  title="Pflaster, Terrassen und Innenausbau in München | Johannes-Handwerk"
+  description="Einfahrten, Wege, Terrassen und Zäune in München und Umgebung. Dazu Boden, Fliesen, Bad und Küche. Google 5,0 aus 53 Rezensionen."
+  path="/"
+  lcpImage={heroImage}
+  lcpSizes={heroSizes}
+>
+  <section class="hero band-grout">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <p class="kicker">
+          {company.name} · {company.area}
+        </p>
+        <h1>Pflaster, Terrassen und Innenausbau in München</h1>
+        <p class="lead">
+          {`Einfahrten, Wege, Terrassen und Zäune, vom Unterbau bis zum letzten Stein. Dazu Boden, Fliesen, Bad und Küche. ${company.owner} und sein Team: ${company.slogan}`}
+        </p>
+        <div class="actions">
+          <a class="btn" href={requestHref()}>
+            Anfrage stellen
+          </a>
+          <a class="btn btn-line" href={company.mobile.href}>
+            <Icon name="phone" />
+            {company.mobile.display}
+          </a>
+        </div>
+        <ul class="hero-ratings" aria-label="Bewertungen">
+          {[ratings.google, ratings.myhammer].map((platform) => (
+            <li>
+              <a href={platform.href} rel="noopener">
+                <Icon name="star" size={18} />
+                <strong>{platform.value}</strong> {platform.platform} · {platform.count} {platform.unit}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <Photo name={heroImage} sizes={heroSizes} eager class="hero-photo" />
+    </div>
+  </section>
+
+  <section class="proof" aria-label="Kennzahlen">
+    <ul class="wrap proof-grid">
+      {figures.map((figure) => (
+        <li>
+          <strong>{figure.value}</strong>
+          <span>{figure.label}</span>
+        </li>
+      ))}
+      <li>
+        <strong>München</strong>
+        <span>und Umgebung, zum Beispiel {places.slice(2).join(", ")}</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="band" aria-labelledby="services-title">
+    <div class="wrap">
+      <div class="title-row">
+        <h2 class="section-title" id="services-title">
+          Unsere Leistungen
+        </h2>
+        <a class="text-link" href={`${base}/leistungen`}>
+          Alle Leistungen
+        </a>
+      </div>
+      <ul class="service-tiles">
+        {services.map((service, index) => (
+          <li class:list={{ wide: index < 2 }}>
+            <a href={`${base}/leistungen/${service.slug}`}>
+              <Photo
+                name={service.image}
+                sizes={index < 2 ? "(min-width: 960px) 50vw, 100vw" : "(min-width: 960px) 33vw, 100vw"}
+                class="tile"
+              />
+              <span class="tile-text">
+                <span class="tile-name">{service.name}</span>
+                <span class="tile-summary">{service.summary}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+        {others.map((group) => (
+          <li class="plain">
+            <a href={`${base}/leistungen#${group.key}`}>
+              <span class="tile-text">
+                <span class="tile-name">{group.name}</span>
+                <span class="tile-summary">{group.summary}</span>
+              </span>
+              <Icon name="arrow-right" size={22} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="band dark" aria-labelledby="process-title">
+    <div class="wrap">
+      <h2 class="section-title" id="process-title">
+        So läuft Ihr Projekt ab
+      </h2>
+      <ol class="steps">
+        {process.map((step, index) => (
+          <li>
+            <span class="step-number">{String(index + 1).padStart(2, "0")}</span>
+            <h3>{step.title}</h3>
+            <p class="soft">{step.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="projects-title">
+    <div class="wrap">
+      <div class="title-row">
+        <h2 class="section-title" id="projects-title">
+          Projekte aus der Region
+        </h2>
+        <a class="text-link" href={`${base}/projekte`}>
+          Alle Projekte
+        </a>
+      </div>
+      <p class="jh-note">
+        Beispiele mit Titel und Ort aus Ihren Bewertungen. Die Fotos sind Platzhalter. Vor dem Livegang ersetzen wir sie
+        durch Ihre Projektfotos.
+      </p>
+      <ul class="mosaic">
+        {exampleProjects.slice(0, 5).map((item, index) => (
+          <li class:list={{ big: index === 0 }}>
+            <Photo
+              name={item.photo}
+              sizes={index === 0 ? "(min-width: 960px) 50vw, 100vw" : "(min-width: 960px) 25vw, 50vw"}
+              class="tile"
+            />
+            <p class="mosaic-caption">
+              <strong>{item.title}</strong>
+              {item.place && <span>{item.place}</span>}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <Reviews />
+
+  <Faq items={faqs.home} name="faq-home" />
+
+  <ContactBand />
+</Layout>
+
+<style>
+  .hero {
+    padding-block: clamp(32px, 5vw, 64px);
+  }
+  .hero-grid {
+    display: grid;
+    gap: 32px 56px;
+    align-items: center;
+  }
+  .hero-text {
+    display: grid;
+    gap: 22px;
+  }
+  .kicker {
+    font-weight: 700;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.95rem;
+  }
+  .hero-ratings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+  }
+  .hero-ratings a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    text-decoration: none;
+  }
+  .hero-ratings a:hover {
+    text-decoration: underline;
+  }
+  .hero-ratings :global(.icon) {
+    color: var(--red);
+    fill: var(--red);
+  }
+  .hero-grid :global(.hero-photo) {
+    aspect-ratio: 4 / 3;
+  }
+  @media (min-width: 960px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+    }
+    .hero-grid :global(.hero-photo) {
+      aspect-ratio: 5 / 6;
+      max-height: calc(100svh - var(--header-h) - 80px);
+      width: 100%;
+    }
+  }
+
+  .proof {
+    border-block: 1px solid var(--grout-line);
+  }
+  .proof-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+    gap: 0 24px;
+  }
+  @media (max-width: 600px) {
+    .proof-grid li:last-child {
+      grid-column: 1 / -1;
+      padding-top: 0;
+    }
+  }
+  .proof-grid li {
+    display: grid;
+    gap: 2px;
+    padding: 22px 0;
+  }
+  .proof-grid strong {
+    font-family: var(--display);
+    font-size: 2.4rem;
+    line-height: 1;
+  }
+  .proof-grid span {
+    color: var(--ink-soft);
+  }
+
+  .title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 24px;
+  }
+  .title-row .text-link {
+    margin-bottom: clamp(28px, 4vw, 48px);
+  }
+
+  .service-tiles {
+    display: grid;
+    gap: var(--joint);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  }
+  .service-tiles a {
+    display: grid;
+    height: 100%;
+    background: var(--grout);
+    text-decoration: none;
+  }
+  .service-tiles :global(.tile) {
+    aspect-ratio: 3 / 2;
+  }
+  .tile-text {
+    display: grid;
+    gap: 6px;
+    padding: 20px 22px 24px;
+  }
+  .tile-name {
+    font-family: var(--display);
+    font-size: var(--step-2);
+    font-weight: 700;
+    line-height: 1.05;
+  }
+  .tile-summary {
+    color: var(--ink-soft);
+  }
+  .service-tiles a:hover .tile-name {
+    color: var(--red);
+  }
+  .service-tiles .plain a {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    padding-right: 22px;
+    background: var(--board);
+    border: 1px solid var(--grout-line);
+  }
+  .plain :global(.icon) {
+    color: var(--red);
+  }
+  /* Two wide tiles, three narrow tiles, then the two areas without their own page. */
+  @media (min-width: 960px) {
+    .service-tiles {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .service-tiles > li {
+      grid-column: span 2;
+    }
+    .service-tiles > .wide,
+    .service-tiles > .plain {
+      grid-column: span 3;
+    }
+    .service-tiles .wide :global(.tile) {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  .steps {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    counter-reset: step;
+  }
+  .steps li {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    padding-top: 20px;
+    border-top: 2px solid var(--red-on-dark);
+  }
+  .step-number {
+    font-family: var(--display);
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--red-on-dark);
+  }
+
+  .mosaic {
+    display: grid;
+    gap: var(--joint);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 24px;
+  }
+  .mosaic li {
+    position: relative;
+  }
+  .mosaic :global(.tile) {
+    aspect-ratio: 1;
+  }
+  .mosaic .big {
+    grid-column: 1 / -1;
+  }
+  .mosaic .big :global(.tile) {
+    aspect-ratio: 3 / 2;
+  }
+  .mosaic-caption {
+    display: grid;
+    padding: 12px 2px 4px;
+    line-height: 1.3;
+  }
+  .mosaic-caption span {
+    color: var(--ink-soft);
+  }
+  @media (min-width: 960px) {
+    .mosaic {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+    .mosaic .big {
+      grid-column: auto;
+      grid-row: span 2;
+    }
+    .mosaic .big :global(.tile) {
+      aspect-ratio: auto;
+      height: calc(100% - 52px);
+    }
+  }
+</style>

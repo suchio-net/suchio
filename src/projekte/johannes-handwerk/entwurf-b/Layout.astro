@@ -1,0 +1,147 @@
+---
+import DraftBar from "../shared/DraftBar.astro";
+import { assetBase, company } from "../shared/content";
+import { imageSources } from "../shared/images";
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import Icon from "./Icon.astro";
+import { base, requestHref } from "./data";
+import "./styles.css";
+import "../shared/draft.css";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Page path within this draft, used for the canonical URL. */
+  path: string;
+  current?: string;
+  /** Largest image above the fold, preloaded for LCP. */
+  lcpImage?: string;
+  lcpSizes?: string;
+}
+const { title, description, path, current, lcpImage, lcpSizes = "100vw" } = Astro.props;
+const lcp = lcpImage ? imageSources(lcpImage) : undefined;
+const canonical = new URL(`${base}${path === "/" ? "" : path}`, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={`${assetBase}/favicon.png`} type="image/png" />
+    <link rel="preload" href={`${assetBase}/fonts/d-din.woff2`} as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      href={`${assetBase}/fonts/d-din-condensed-bold.woff2`}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    {lcp && (
+      <link
+        rel="preload"
+        as="image"
+        type="image/avif"
+        imagesrcset={lcp.avif}
+        imagesizes={lcpSizes}
+        fetchpriority="high"
+      />
+    )}
+    <style is:inline>
+      @font-face {
+        font-family: "D-DIN";
+        src: url(/projekte/johannes-handwerk/fonts/d-din.woff2) format("woff2");
+        font-weight: 400;
+        font-display: optional;
+      }
+      @font-face {
+        font-family: "D-DIN";
+        src: url(/projekte/johannes-handwerk/fonts/d-din-bold.woff2) format("woff2");
+        font-weight: 700;
+        font-display: optional;
+      }
+      @font-face {
+        font-family: "D-DIN Condensed";
+        src: url(/projekte/johannes-handwerk/fonts/d-din-condensed-bold.woff2) format("woff2");
+        font-weight: 700;
+        font-display: optional;
+      }
+    </style>
+  </head>
+  <body class="has-action-bar">
+    <a class="skip" href="#main">
+      Zum Inhalt springen
+    </a>
+    <Header current={current} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <nav class="action-bar" aria-label="Schnellkontakt">
+      <a href={company.mobile.href}>
+        <Icon name="phone" />
+        Anrufen
+      </a>
+      <a class="primary" href={requestHref()}>
+        Anfrage stellen
+      </a>
+    </nav>
+
+    <DraftBar version="b" />
+
+    <script>
+      import "./client";
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .action-bar {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .action-bar {
+      position: fixed;
+      inset: auto 0 0;
+      z-index: 45;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      border-top: 1px solid var(--ink);
+      background: var(--board);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .action-bar a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 56px;
+      color: var(--ink);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .action-bar a .icon {
+      width: 18px;
+      height: 18px;
+      color: var(--red);
+    }
+    .action-bar a.primary {
+      background: var(--red);
+      color: #fff;
+    }
+    .action-bar.hidden {
+      display: none;
+    }
+    .has-action-bar .site-footer {
+      padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    }
+  }
+</style>

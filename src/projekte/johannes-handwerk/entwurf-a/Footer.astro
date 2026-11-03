@@ -1,0 +1,220 @@
+---
+// Dark closing section: contact call, business facts and his slogan as an oversized line.
+import { company, places, serviceGroups } from "../shared/content";
+import { sections } from "./routes";
+
+const mail = `mailto:${company.email}?subject=${encodeURIComponent("Anfrage über die Website")}`;
+---
+
+<footer class="site-footer dark">
+  <section class="wrap cta" id="kontakt" aria-labelledby="cta-title">
+    <p class="index mono">Kontakt</p>
+    <h2 id="cta-title" class="cta-title">
+      Projekt besprechen.
+    </h2>
+    <div class="cta-row">
+      <a class="phone" href={company.mobile.href}>
+        <span class="mono mute">Mobil</span>
+        {company.mobile.display}
+      </a>
+      <div class="cta-side">
+        <p class="mute">
+          Schicken Sie uns Ort, ungefähre Fläche und ein paar Fotos. Wir antworten in der Regel innerhalb von 24
+          Stunden.
+        </p>
+        <div class="actions">
+          <a class="btn" href={mail}>
+            Anfrage per E-Mail
+            <span class="arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+          <a class="btn btn-line" href={company.landline.href}>
+            {company.landline.display}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap grid">
+    <div class="col">
+      <p class="mono mute">Adresse</p>
+      <address>
+        {company.name}
+        <br />
+        {company.street}
+        <br />
+        {company.postalCode} {company.city}
+      </address>
+    </div>
+    <div class="col">
+      <p class="mono mute">Telefon und E-Mail</p>
+      <ul class="links">
+        <li>
+          <a href={company.mobile.href}>{company.mobile.display}</a>
+        </li>
+        <li>
+          <a href={company.landline.href}>{company.landline.display}</a>
+        </li>
+        <li>
+          <a href={`mailto:${company.email}`}>{company.email}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col">
+      <p class="mono mute">Leistungen</p>
+      <ul class="links">
+        {serviceGroups.map((group) => (
+          <li>
+            <a href={sections.leistungen}>{group.name}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="col">
+      <p class="mono mute">Einsatzgebiet</p>
+      <p class="area">
+        {company.area}: {places.slice(1).join(", ")}
+      </p>
+    </div>
+  </div>
+
+  <div class="wrap bottom mono">
+    <span>
+      © 2026 {company.name} · {company.owner}
+    </span>
+    <a href={company.imprint} rel="noopener">
+      Impressum
+    </a>
+    <a href={company.privacy} rel="noopener">
+      Datenschutz
+    </a>
+  </div>
+  <!-- Decoration only: CSS draws the slogan, so contrast checks do not treat it as text. -->
+  <div class="mark" aria-hidden="true" data-text={company.slogan}></div>
+</footer>
+
+<style>
+  .site-footer {
+    overflow: hidden;
+    padding-top: clamp(88px, 12vw, 180px);
+  }
+  .cta {
+    display: grid;
+    gap: clamp(28px, 4vw, 48px);
+    padding-bottom: clamp(72px, 9vw, 128px);
+  }
+  .cta-title {
+    font-size: clamp(2.8rem, 1.2rem + 7vw, 8.5rem);
+    letter-spacing: -0.065em;
+    line-height: 0.92;
+  }
+  .cta-row {
+    display: grid;
+    gap: 40px;
+    align-items: end;
+  }
+  @media (min-width: 960px) {
+    .cta-row {
+      grid-template-columns: 1.3fr 1fr;
+    }
+  }
+  .phone {
+    display: grid;
+    gap: 10px;
+    justify-self: start;
+    padding-bottom: 10px;
+    font-size: clamp(1.9rem, 1rem + 3vw, 3.4rem);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size 0.8s var(--ease);
+  }
+  .phone:hover {
+    background-size: 100% 1px;
+  }
+  .cta-side {
+    display: grid;
+    gap: 20px;
+  }
+  .grid {
+    display: grid;
+    gap: 40px 32px;
+    padding-block: 48px;
+    border-top: 1px solid var(--line-night);
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  }
+  .col {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    font-size: 0.94rem;
+  }
+  .col a {
+    text-decoration: none;
+  }
+  .col a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  address {
+    font-style: normal;
+  }
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+  }
+  .area {
+    line-height: 1.75;
+    color: var(--mute-night);
+  }
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 28px;
+    padding-block: 12px;
+    border-top: 1px solid var(--line-night);
+    color: var(--mute-night);
+  }
+  .bottom span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-right: auto;
+  }
+  .bottom a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    text-decoration: none;
+  }
+  .bottom a:hover {
+    color: var(--on-night);
+  }
+  .mark {
+    max-width: none;
+    margin: 0 auto -0.18em;
+    padding-inline: 1vw;
+    font-size: 16.5vw;
+    font-weight: 600;
+    letter-spacing: -0.075em;
+    line-height: 0.85;
+    text-align: center;
+    white-space: nowrap;
+    color: #2b2c2e;
+    user-select: none;
+  }
+  .mark::before {
+    content: attr(data-text);
+  }
+  @media (max-width: 760px) {
+    .site-footer {
+      padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    }
+  }
+</style>

@@ -1,0 +1,571 @@
+---
+import Layout from "./Layout.astro";
+import Stage from "./Stage.astro";
+import Photo from "../shared/Photo.astro";
+import {
+  company,
+  exampleProjects,
+  figures,
+  googleReviews,
+  myhammerReviews,
+  places,
+  process,
+  ratings,
+  serviceGroups,
+} from "../shared/content";
+import { faqs } from "../shared/faqs";
+import { sections } from "./routes";
+
+const title = "Pflaster, Terrassen und Außenanlagen in München | Johannes-Handwerk";
+const description =
+  "Einfahrten, Wege, Terrassen und Zäune in München und Umgebung, vom Unterbau bis zum letzten Stein. Dazu Boden, Fliesen, Bad und Küche. Festpreis-Angebot nach dem Vor-Ort-Termin.";
+const facts = [
+  ...figures,
+  { value: ratings.google.value, label: `Google-Bewertung aus ${ratings.google.count} Rezensionen` },
+];
+const [focus, ...more] = serviceGroups;
+const pad = (n: number) => String(n).padStart(2, "0");
+const reviews = [...googleReviews, ...myhammerReviews];
+---
+
+<Layout title={title} description={description}>
+  <Stage />
+
+  <section class="facts wrap" aria-labelledby="facts-title">
+    <h2 id="facts-title" class="index mono">
+      Auf einen Blick
+    </h2>
+    <div class="rule"></div>
+    <dl class="facts-grid">
+      {facts.map((fact) => (
+        <div class="fact">
+          <dt class="mono mute">{fact.label}</dt>
+          <dd class="fact-value">{fact.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <div class="ticker mono">
+    <p class="sr-only">Einsatzorte: {places.join(", ")} und Umgebung</p>
+    <div class="ticker-track" aria-hidden="true">
+      {[0, 1].map(() => (
+        <span>
+          {places.map((place) => (
+            <Fragment>
+              {place}
+              <i></i>
+            </Fragment>
+          ))}
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <section class="services wrap" id="leistungen" aria-labelledby="services-title">
+    <p class="index mono">Leistungen</p>
+    <h2 id="services-title">
+      Schwerpunkt Außenanlagen.
+      <br />
+      Dazu Innenausbau.
+    </h2>
+
+    <article class="focus" aria-labelledby="focus-title">
+      <div class="focus-copy">
+        <span class="mono mute">01 · Schwerpunkt</span>
+        <h3 id="focus-title">{focus.name}</h3>
+        <p class="mute">{focus.summary}</p>
+        <ul class="items">
+          {focus.items.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+        <a class="link" href={sections.kontakt}>
+          Außenanlage anfragen
+          <span class="arrow" aria-hidden="true">
+            →
+          </span>
+        </a>
+      </div>
+      <Photo name="einfahrt-garage" class="focus-photo" sizes="(min-width: 960px) 50vw, 100vw" />
+    </article>
+
+    <ol class="more">
+      {more.map((group, index) => (
+        <li>
+          <span class="mono mute">{pad(index + 2)}</span>
+          <div>
+            <h3>{group.name}</h3>
+            <p class="mute">{group.summary}</p>
+          </div>
+          <ul class="items">
+            {group.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="rail-section" id="projekte" aria-labelledby="projects-title">
+    <div class="wrap rail-head">
+      <p class="index mono">Projekte</p>
+      <h2 id="projects-title">Projekte aus München und Umgebung.</h2>
+      <p class="jh-note">
+        Beispiel: Leistung und Ort stammen aus Ihren Kundenbewertungen. Fotos, Fläche und Material ergänzen wir mit
+        Ihren Projekten.
+      </p>
+    </div>
+    <ul class="track">
+      {exampleProjects.map((item, index) => (
+        <li class="card">
+          <Photo name={item.photo} sizes="(min-width: 960px) 30vw, 78vw" />
+          <div class="card-body">
+            <p class="mono mute">{pad(index + 1)} · Beispiel</p>
+            <h3>{item.title}</h3>
+            <dl class="card-facts">
+              <div>
+                <dt class="mono mute">Ort</dt>
+                <dd>{item.place ?? <span class="jh-field">Ihre Angabe</span>}</dd>
+              </div>
+              <div>
+                <dt class="mono mute">Fläche</dt>
+                <dd>
+                  <span class="jh-field">m² eintragen</span>
+                </dd>
+              </div>
+              <div>
+                <dt class="mono mute">Material</dt>
+                <dd>
+                  <span class="jh-field">Ihre Angabe</span>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="process wrap" id="ablauf" aria-labelledby="process-title">
+    <p class="index mono">Ablauf</p>
+    <h2 id="process-title">Vier Schritte bis zum fertigen Projekt.</h2>
+    <ol class="process-grid">
+      {process.map((step, index) => (
+        <li class="process-step">
+          <div class="rule"></div>
+          <span class="mono mute">{pad(index + 1)}</span>
+          <h3>{step.title}</h3>
+          <p class="mute">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="reviews" id="bewertungen" aria-labelledby="reviews-title">
+    <div class="wrap">
+      <p class="index mono">Bewertungen</p>
+      <h2 id="reviews-title">Was Kunden über uns schreiben.</h2>
+      <ul class="platforms">
+        {[ratings.google, ratings.myhammer].map((rating) => (
+          <li>
+            <a href={rating.href} rel="noopener">
+              <span class="mono mute">{rating.platform}</span>
+              <span class="score">
+                {rating.value}
+                <small>von 5</small>
+              </span>
+              <span class="stars" aria-hidden="true">
+                ★★★★★
+              </span>
+              <span>
+                {rating.count} {rating.unit} ansehen
+                <span class="arrow" aria-hidden="true">
+                  →
+                </span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="mono mute as-of">{ratings.asOf}</p>
+      <ul class="quotes">
+        {reviews.map((review) => (
+          <li>
+            <blockquote>
+              <p>„{review.quote}“</p>
+            </blockquote>
+            <p class="mono mute who">
+              {review.name ? [review.name, review.place].filter(Boolean).join(", ") : "Google-Rezension"}
+              {review.service && <span> · {review.service}</span>}
+              <span> · {review.platform}</span>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="faq-section wrap" aria-labelledby="faq-title">
+    <div class="faq-head">
+      <p class="index mono">Fragen</p>
+      <h2 id="faq-title">Häufige Fragen.</h2>
+      <p class="mute">
+        Noch etwas offen?{" "}
+        <a class="link" href={company.mobile.href}>
+          {company.mobile.display}
+        </a>
+      </p>
+    </div>
+    <div class="faq">
+      {faqs.home.map((faq) => (
+        <details name="faq-home">
+          <summary>{faq.q}</summary>
+          <p class="answer">{faq.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  section h2 {
+    margin-top: 20px;
+  }
+
+  .facts {
+    display: grid;
+    gap: 24px;
+    padding-block: clamp(56px, 7vw, 104px) clamp(48px, 6vw, 80px);
+  }
+  .facts h2 {
+    margin: 0;
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    line-height: 1.4;
+  }
+  .facts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 24px;
+  }
+  @media (min-width: 960px) {
+    .facts-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .fact {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  .fact-value {
+    font-size: clamp(3rem, 1.8rem + 4.4vw, 6.4rem);
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: -0.065em;
+    font-variant-numeric: tabular-nums;
+  }
+  .fact dt {
+    max-width: 22ch;
+  }
+
+  .ticker {
+    overflow: hidden;
+    padding-block: 18px;
+    border-block: 1px solid var(--line);
+    color: var(--mute);
+    white-space: nowrap;
+  }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker 50s linear infinite;
+  }
+  .ticker span {
+    display: flex;
+    align-items: center;
+  }
+  .ticker i {
+    width: 4px;
+    height: 4px;
+    margin-inline: 28px;
+    background: var(--red);
+  }
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+      animation: none;
+    }
+  }
+
+  .services {
+    padding-block: clamp(88px, 11vw, 168px) clamp(48px, 6vw, 96px);
+  }
+  .focus {
+    display: grid;
+    gap: 32px 56px;
+    margin-top: clamp(40px, 5vw, 72px);
+    padding-top: 28px;
+    border-top: 1px solid var(--ink);
+  }
+  @media (min-width: 960px) {
+    .focus {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    }
+  }
+  .focus-copy {
+    display: grid;
+    gap: 18px;
+    align-content: start;
+  }
+  .focus h3 {
+    font-size: clamp(2rem, 1.3rem + 2.4vw, 3.4rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+  :global(.focus-photo) {
+    aspect-ratio: 4 / 3;
+  }
+  .items {
+    display: grid;
+    gap: 0 28px;
+  }
+  .focus .items {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  }
+  .items li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding-block: 9px;
+    border-bottom: 1px solid var(--line);
+  }
+  .items li::before {
+    content: "";
+    flex: none;
+    width: 5px;
+    height: 5px;
+    transform: translateY(-2px);
+    background: var(--ink);
+  }
+  .more {
+    display: grid;
+    margin-top: clamp(48px, 6vw, 88px);
+  }
+  .more > li {
+    display: grid;
+    gap: 16px 40px;
+    padding-block: 28px 32px;
+    border-top: 1px solid var(--line-2);
+  }
+  @media (min-width: 960px) {
+    .more > li {
+      grid-template-columns: 64px minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+  .more h3 {
+    font-size: clamp(1.4rem, 1.1rem + 1vw, 2rem);
+    letter-spacing: -0.04em;
+    margin-bottom: 8px;
+  }
+  .more .items {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .rail-section {
+    padding-block: clamp(72px, 9vw, 140px) 24px;
+    background: var(--mist);
+  }
+  .rail-head {
+    display: grid;
+    gap: 20px;
+  }
+  .rail-head h2 {
+    max-width: 16ch;
+  }
+  .track {
+    display: flex;
+    gap: clamp(12px, 1.6vw, 24px);
+    margin-top: clamp(32px, 4vw, 56px);
+    padding: 0 max(var(--gutter), calc((100vw - var(--max)) / 2)) 48px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+  }
+  .card {
+    flex: none;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    width: clamp(270px, 28vw, 420px);
+    background: var(--white);
+    scroll-snap-align: start;
+  }
+  .card :global(.jh-photo) {
+    aspect-ratio: 4 / 3;
+  }
+  .card-body {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    padding: 18px 20px 22px;
+  }
+  .card h3 {
+    font-size: 1.35rem;
+  }
+  .card-facts {
+    display: grid;
+    margin-top: 6px;
+  }
+  .card-facts div {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    align-items: baseline;
+    padding-block: 7px;
+    border-top: 1px solid var(--line);
+  }
+
+  .process {
+    display: grid;
+    gap: 24px;
+    padding-block: clamp(88px, 11vw, 168px) clamp(64px, 8vw, 112px);
+  }
+  .process h2 {
+    max-width: 14ch;
+    margin-bottom: clamp(16px, 3vw, 40px);
+  }
+  .process-grid {
+    display: grid;
+    gap: 40px 32px;
+  }
+  @media (min-width: 700px) {
+    .process-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1100px) {
+    .process-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .process-step {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+  }
+  .process-step .rule {
+    margin-bottom: 12px;
+    background: var(--ink);
+  }
+  .process-step h3 {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem);
+    letter-spacing: -0.045em;
+  }
+  .process-step p {
+    max-width: 30ch;
+  }
+
+  .reviews {
+    padding-block: clamp(72px, 9vw, 140px);
+    border-top: 1px solid var(--line);
+  }
+  .reviews h2 {
+    max-width: 14ch;
+  }
+  .platforms {
+    display: grid;
+    gap: 12px;
+    margin-top: clamp(32px, 4vw, 56px);
+  }
+  @media (min-width: 760px) {
+    .platforms {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .platforms a {
+    display: grid;
+    gap: 10px;
+    padding: 24px 26px;
+    border: 1px solid var(--line-2);
+    text-decoration: none;
+    transition: border-color 0.4s var(--ease);
+  }
+  .platforms a:hover {
+    border-color: var(--ink);
+  }
+  .score {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: clamp(3rem, 2rem + 3vw, 5rem);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+  }
+  .score small {
+    font-size: 1rem;
+    letter-spacing: 0;
+    color: var(--mute);
+  }
+  .stars {
+    letter-spacing: 3px;
+  }
+  .as-of {
+    margin-top: 14px;
+  }
+  .quotes {
+    columns: 1;
+    column-gap: 40px;
+    margin-top: clamp(40px, 5vw, 72px);
+  }
+  @media (min-width: 760px) {
+    .quotes {
+      columns: 2;
+    }
+  }
+  @media (min-width: 1100px) {
+    .quotes {
+      columns: 3;
+    }
+  }
+  .quotes li {
+    display: grid;
+    gap: 12px;
+    break-inside: avoid;
+    padding-block: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .quotes blockquote p {
+    font-size: 1.12rem;
+    line-height: 1.45;
+    letter-spacing: -0.015em;
+  }
+
+  .faq-section {
+    display: grid;
+    gap: 40px 64px;
+    padding-block: clamp(64px, 8vw, 120px) clamp(88px, 11vw, 150px);
+  }
+  @media (min-width: 960px) {
+    .faq-section {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      align-items: start;
+    }
+    .faq-head {
+      position: sticky;
+      top: calc(var(--header-h) + 32px);
+    }
+  }
+  .faq-head {
+    display: grid;
+    gap: 20px;
+  }
+  .faq-head h2 {
+    margin-top: 0;
+  }
+</style>

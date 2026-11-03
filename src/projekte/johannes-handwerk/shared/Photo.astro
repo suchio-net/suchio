@@ -1,0 +1,72 @@
+---
+// Placeholder photo with its visible "Platzhalter" label. AVIF and WebP for current browsers,
+// JPEG for the rest. The wrapper takes its size from the surrounding layout.
+import { imageSources } from "./images";
+import { placeholderNote } from "./content";
+
+interface Props {
+  name: string;
+  alt?: string;
+  sizes?: string;
+  eager?: boolean;
+  class?: string;
+  /** Hides the placeholder label where a larger label already marks the group. */
+  label?: boolean;
+}
+const { name, alt, sizes = "100vw", eager = false, class: className, label = true } = Astro.props;
+const source = imageSources(name);
+---
+
+<figure class:list={["jh-photo", className]} style={`background-color:${source.color}`}>
+  <picture>
+    <source type="image/avif" srcset={source.avif} sizes={sizes} />
+    <source type="image/webp" srcset={source.webp} sizes={sizes} />
+    <img
+      srcset={source.jpg}
+      sizes={sizes}
+      src={source.src}
+      alt={alt ?? source.alt}
+      width={source.width}
+      height={source.height}
+      loading={eager ? "eager" : "lazy"}
+      decoding={eager ? "sync" : "async"}
+      fetchpriority={eager ? "high" : undefined}
+    />
+  </picture>
+  {label && <figcaption class="jh-placeholder">{placeholderNote}</figcaption>}
+</figure>
+
+<style>
+  .jh-photo {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+  }
+  .jh-photo picture,
+  .jh-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* Suchio blue marks everything that the client still has to supply. */
+  .jh-placeholder {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    max-width: calc(100% - 20px);
+    padding: 5px 9px 6px;
+    border-radius: 4px;
+    background: #0050c8;
+    color: #fff;
+    font:
+      600 12px/1.2 ui-sans-serif,
+      system-ui,
+      -apple-system,
+      "Segoe UI",
+      Arial,
+      sans-serif;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+</style>
