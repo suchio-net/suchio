@@ -1,0 +1,703 @@
+---
+import { Mail, Search } from "@lucide/astro";
+import { serviceIcons } from "@/components/service-icons";
+import { serviceStyles } from "@/components/service-styles";
+import type { ServiceId } from "@/i18n/services";
+import type { MessageKey } from "@/i18n/translations";
+import { t, type Locale } from "@/lib/i18n";
+import { getServiceCatalog } from "@/lib/service-catalog";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const services = new Map(getServiceCatalog(locale).map((service) => [service.id, service]));
+
+// One made-up enquiry, three places it gets lost. Each problem sits between two services, which the
+// caption names and links; the UI fragment above it shows the cause and what it costs.
+const scenes: {
+  id: "search" | "ad" | "form";
+  label: MessageKey;
+  title: MessageKey;
+  services: [ServiceId, ServiceId];
+}[] = [
+  {
+    id: "search",
+    label: "home.sceneSearchLabel",
+    title: "home.sceneSearchTitle",
+    services: ["websites-apps", "seo-ai-visibility"],
+  },
+  { id: "ad", label: "home.sceneAdLabel", title: "home.sceneAdTitle", services: ["paid-campaigns", "websites-apps"] },
+  {
+    id: "form",
+    label: "home.sceneFormLabel",
+    title: "home.sceneFormTitle",
+    services: ["websites-apps", "ai-automation"],
+  },
+];
+const business = "Mustermann Bäder";
+const domain = "mustermann-baeder.de";
+const customer = "Anna Schmidt";
+// Retyped by hand, the name ends up with a typo.
+const typed = [..."Anna Schmitd"];
+
+// Slow page, so the business slides from first to fourth place while the competitors move up.
+const ranking = [
+  { name: business, from: 0, to: 3, mine: true },
+  { name: "Bad & Mehr", from: 1, to: 0, mine: false },
+  { name: "Fliesen Krämer", from: 2, to: 1, mine: false },
+  { name: "Sanitär Roth", from: 3, to: 2, mine: false },
+];
+const drop = ranking[0]!.to - ranking[0]!.from;
+
+// The counters animate integers in CSS, so locale formatting is split around them at build time.
+const decimal = new Intl.NumberFormat(locale).formatToParts(4.8).find((part) => part.type === "decimal")?.value;
+const costParts = new Intl.NumberFormat(locale, {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 0,
+}).formatToParts(115);
+const costAt = costParts.findIndex((part) => part.type === "integer");
+const costPrefix = costParts
+  .slice(0, costAt)
+  .map((part) => part.value)
+  .join("");
+const costSuffix = costParts
+  .slice(costAt + 1)
+  .map((part) => part.value)
+  .join("");
+---
+
+<ul class="m-0 grid list-none grid-cols-3 gap-6 p-0 max-nav:grid-cols-1 max-nav:gap-12">
+  {scenes.map((scene, index) => (
+    <li class="enquiry-scene min-w-0" style={{ "--scene": index }} data-reveal data-reveal-threshold="half">
+      <div class="scene-stage" aria-hidden="true">
+        {scene.id === "search" && (
+          <div class="fragment">
+            <div class="ui load">
+              <div class="load-head">
+                <span class="text-subtle">{t(locale, "home.sceneLoadTime")}</span>
+                <span class="load-value">
+                  <span class="count-sec" />
+                  {decimal}
+                  <span class="count-tenth" /> s
+                </span>
+              </div>
+              <span class="load-bar">
+                <span class="load-mask" />
+              </span>
+              <span class="load-slow">{t(locale, "home.sceneLoadSlow")}</span>
+            </div>
+            <div class="ui results">
+              <span class="results-query">
+                <Search class="size-3 shrink-0" stroke-width={2.2} />
+                <span class="truncate">{t(locale, "home.sceneSearchQuery")}</span>
+              </span>
+              <ol class="ranking">
+                {ranking.map((_, rank) => (
+                  <span class="rank" style={{ "--slot": rank }}>
+                    {rank + 1}
+                  </span>
+                ))}
+                {ranking.map((row) => (
+                  <li
+                    class:list={["ranked", row.mine && "ranked--mine"]}
+                    style={{ "--from": row.from, "--to": row.to }}
+                  >
+                    <span class="truncate">{row.name}</span>
+                    {row.mine && <span class="drop">↓{drop}</span>}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        )}
+        {scene.id === "ad" && (
+          <div class="fragment">
+            <div class="ui ad">
+              <span class="ad-label">{t(locale, "home.sceneAdSponsored")}</span>
+              <span class="ad-title">{t(locale, "home.sceneAdHeadline")}</span>
+              <span class="ad-url">{domain}</span>
+            </div>
+            <span class="ad-click" />
+            <div class="ui browser">
+              <div class="browser-bar">
+                <i />
+                <i />
+                <i />
+                <span>{domain}</span>
+              </div>
+              <div class="browser-page">
+                <span class="page-title">{t(locale, "home.sceneAdPage")}</span>
+                <i class="page-line" />
+              </div>
+            </div>
+            <div class="ui stats">
+              <span class="stat">
+                <small>{t(locale, "home.sceneClicks")}</small>
+                <b class="count-clicks" />
+              </span>
+              <span class="stat">
+                <small>{t(locale, "home.sceneCost")}</small>
+                <b>
+                  {costPrefix}
+                  <span class="count-cost" />
+                  {costSuffix}
+                </b>
+              </span>
+              <span class="stat stat--none">
+                <small>{t(locale, "home.sceneEnquiries")}</small>
+                <b>0</b>
+              </span>
+            </div>
+          </div>
+        )}
+        {scene.id === "form" && (
+          <div class="fragment">
+            <div class="ui mail">
+              <span class="mail-icon">
+                <Mail class="size-3.5" stroke-width={2} />
+              </span>
+              <span class="min-w-0 flex-1">
+                <b>{t(locale, "home.sceneFormMail")}</b>
+                <small>{customer}</small>
+              </span>
+              <span class="mail-age">{t(locale, "home.sceneMailAge")}</span>
+            </div>
+            <div class="ui crm">
+              <div class="crm-row crm-head">
+                <span>{t(locale, "home.sceneCrmName")}</span>
+                <span>{t(locale, "home.sceneCrmSource")}</span>
+                <span>{t(locale, "home.sceneCrmStatus")}</span>
+              </div>
+              <div class="crm-row">
+                <span>T. Wagner</span>
+                <span>{t(locale, "home.sceneCrmPhone")}</span>
+                <span class="crm-won">{t(locale, "home.sceneCrmWon")}</span>
+              </div>
+              <div class="crm-row crm-typing">
+                <span class="whitespace-pre">
+                  <span class="typo">
+                    {typed.map((character, position) => (
+                      <span class="typed" style={{ "--char": position }}>
+                        {character}
+                      </span>
+                    ))}
+                  </span>
+                  <span class="caret" />
+                </span>
+                <span class="crm-empty" />
+                <span />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <p class="mt-5 mb-0 text-meta text-subtle">{t(locale, scene.label)}</p>
+      <h3 class="mt-1.5 mb-0 text-heading-sm text-balance">{t(locale, scene.title)}</h3>
+      <p class="mt-3 mb-0 flex flex-wrap items-center gap-x-2 gap-y-1.5 text-meta text-muted">
+        {scene.services.map((id, position) => {
+          const service = services.get(id)!;
+          const Icon = serviceIcons[id];
+          // The "+" stays with the link after it, so a wrapped pair never ends a line on it.
+          return (
+            <span class="inline-flex items-center gap-2">
+              {position > 0 && (
+                <span class="text-subtle" aria-hidden="true">
+                  +
+                </span>
+              )}
+              <a
+                class="inline-flex items-center gap-1.5 text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
+                href={service.href}
+              >
+                <span class={`grid size-5 shrink-0 place-items-center rounded-[5px] ${serviceStyles[id].icon}`}>
+                  <Icon class="size-3" stroke-width={2} aria-hidden="true" />
+                </span>
+                {service.copy.name}
+              </a>
+            </span>
+          );
+        })}
+      </p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  /* Integer custom properties let CSS count the numbers up; without support they show their end values. */
+  @property --load {
+    syntax: "<integer>";
+    inherits: true;
+    initial-value: 0;
+  }
+  @property --clicks {
+    syntax: "<integer>";
+    inherits: true;
+    initial-value: 0;
+  }
+  @property --cost {
+    syntax: "<integer>";
+    inherits: true;
+    initial-value: 0;
+  }
+
+  .scene-stage {
+    display: grid;
+    place-items: center;
+    height: 16rem;
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background: color-mix(in oklab, var(--color-canvas), black 4%);
+    padding: 1.25rem;
+  }
+  .fragment {
+    display: grid;
+    gap: 0.625rem;
+    width: min(100%, 17rem);
+    font-size: 12px;
+    line-height: 1.35;
+    color: var(--color-ink);
+  }
+  .ui {
+    display: block;
+    border-radius: 14px;
+    background: var(--color-surface);
+    box-shadow:
+      0 0 0 1px rgb(0 0 0 / 6%),
+      0 12px 26px -16px rgb(0 0 0 / 28%);
+  }
+  .fragment b {
+    display: block;
+    font-weight: 600;
+  }
+  .fragment small {
+    display: block;
+    font-size: 11px;
+    color: var(--color-subtle);
+  }
+  .fragment i {
+    display: block;
+    border-radius: 3px;
+    background: var(--color-neutral-200);
+  }
+
+  /* Search: the page takes 4.8 s to load, and the business drops behind three competitors. */
+  .load {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 6px 0.75rem;
+    padding: 0.625rem 0.75rem;
+  }
+  .load-head {
+    grid-area: 1 / 1;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .load-value {
+    --load: 48;
+    counter-reset: sec 4 tenth 8;
+    font-size: 15px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  @supports (width: calc(mod(5px, 2px))) {
+    .load-value {
+      counter-reset: sec round(down, var(--load) / 10, 1) tenth mod(var(--load), 10);
+    }
+  }
+  .count-sec::after {
+    content: counter(sec);
+  }
+  .count-tenth::after {
+    content: counter(tenth);
+  }
+  .load-slow {
+    grid-area: 1 / 2;
+    border-radius: 999px;
+    background: #fdecec;
+    padding: 3px 7px;
+    color: #c4322f;
+    font-size: 10.5px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .load-bar {
+    position: relative;
+    grid-column: 1 / -1;
+    display: block;
+    height: 4px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #3fb27f, #e8a33a 50%, #e5484d);
+  }
+  .load-mask {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 6%;
+    background: var(--color-neutral-100);
+  }
+  .results {
+    padding: 0.5rem 0.75rem 0.375rem;
+  }
+  .results-query {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--color-subtle);
+    font-size: 11px;
+  }
+  .ranking {
+    --row: 28px;
+    position: relative;
+    height: calc(var(--row) * 4);
+    margin: 0.25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .rank {
+    position: absolute;
+    top: calc(var(--slot) * var(--row) + (var(--row) - 18px) / 2);
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-neutral-100);
+    color: var(--color-subtle);
+    font-size: 10px;
+  }
+  .ranked {
+    position: absolute;
+    inset: 0 0 auto 28px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: var(--row);
+    color: var(--color-muted);
+    transform: translateY(calc(var(--to) * var(--row)));
+  }
+  .ranked--mine {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .drop {
+    flex: none;
+    border-radius: 999px;
+    background: #fdecec;
+    padding: 2px 6px;
+    color: #c4322f;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  /* Ad: a fixed-price promise lands on the generic home page; clicks and spend rise, enquiries do not. */
+  .ad {
+    padding: 0.625rem 0.875rem;
+  }
+  .ad-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .ad-title {
+    display: block;
+    margin-top: 2px;
+    color: #1a0dab;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .ad-url {
+    display: block;
+    margin-top: 1px;
+    color: var(--color-service-search-fg);
+    font-size: 10.5px;
+  }
+  .ad-click {
+    display: block;
+    width: 2px;
+    height: 0.625rem;
+    margin: -0.625rem auto;
+    background: var(--color-neutral-300);
+    transform-origin: top;
+  }
+  .browser {
+    overflow: hidden;
+  }
+  .browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-bottom: 1px solid rgb(0 0 0 / 6%);
+    padding: 6px 10px;
+  }
+  .browser-bar i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+  .browser-bar span {
+    margin-left: 6px;
+    overflow: hidden;
+    border-radius: 5px;
+    background: var(--color-neutral-100);
+    padding: 1px 8px;
+    color: var(--color-subtle);
+    font-size: 9.5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .browser-page {
+    padding: 0.5rem 0.75rem 0.625rem;
+  }
+  .page-title {
+    display: block;
+    overflow: hidden;
+    color: var(--color-muted);
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .fragment .page-line {
+    width: 70%;
+    height: 5px;
+    margin-top: 6px;
+    background: var(--color-neutral-100);
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 0.5rem 0;
+  }
+  .stat {
+    min-width: 0;
+    padding-inline: 0.75rem;
+  }
+  .stat + .stat {
+    border-left: 1px solid rgb(0 0 0 / 6%);
+  }
+  .stat small {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .stat b {
+    margin-top: 1px;
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+  .stat--none b {
+    color: #c4322f;
+  }
+  .count-clicks {
+    --clicks: 48;
+    counter-reset: clicks var(--clicks);
+  }
+  .count-clicks::after {
+    content: counter(clicks);
+  }
+  .count-cost {
+    --cost: 115;
+    counter-reset: cost var(--cost);
+  }
+  .count-cost::after {
+    content: counter(cost);
+  }
+
+  /* Form: the enquiry waits two days in the inbox, then someone types it into the CRM with a typo. */
+  .mail {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 0.75rem;
+  }
+  .mail-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--color-neutral-100);
+    color: var(--color-subtle);
+  }
+  .mail-age {
+    flex: none;
+    align-self: start;
+    border-radius: 999px;
+    background: #fdf1d8;
+    padding: 2px 6px;
+    color: #9a5b00;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .crm {
+    overflow: hidden;
+  }
+  .crm-row {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr 0.8fr;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2rem;
+    padding: 0.3rem 0.75rem;
+  }
+  .crm-row > span {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .crm-row + .crm-row {
+    border-top: 1px solid rgb(0 0 0 / 6%);
+  }
+  .crm-head {
+    min-height: 1.75rem;
+    background: var(--color-neutral-50);
+    color: var(--color-subtle);
+    font-size: 10px;
+  }
+  .crm-won {
+    justify-self: start;
+    border-radius: 5px;
+    background: var(--color-service-search-bg);
+    padding: 1px 6px;
+    color: var(--color-service-search-fg);
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .crm-typing {
+    background: #fffcf0;
+  }
+  /* Room below the name, so the cell's overflow clipping keeps the wavy underline. */
+  .crm-typing > span:first-child {
+    padding-bottom: 4px;
+    margin-bottom: -4px;
+  }
+  .typo {
+    text-decoration: underline wavy #e5484d;
+    text-decoration-skip-ink: none;
+    text-underline-offset: 2px;
+  }
+  .caret {
+    display: inline-block;
+    width: 1.5px;
+    height: 12px;
+    margin-left: 1px;
+    background: var(--color-ink);
+    vertical-align: -2px;
+  }
+  .crm-empty {
+    height: 6px;
+    width: 70%;
+    border-radius: 3px;
+    background: var(--color-neutral-100);
+  }
+
+  /*
+   * Each scene plays once when it scrolls into view. On desktop the three start one after another.
+   * The rules above are the end state, which also shows without JavaScript or with reduced motion.
+   */
+  .enquiry-scene {
+    --start: calc(var(--scene) * 250ms + 250ms);
+  }
+  @media (width < 56.25rem) {
+    .enquiry-scene {
+      --start: 250ms;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .load-value {
+      --load: 0;
+    }
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .load-mask {
+      width: 100%;
+    }
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .load-slow,
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .drop,
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .page-title {
+      opacity: 0;
+    }
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .ranked {
+      transform: translateY(calc(var(--from) * var(--row)));
+    }
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .ad-click {
+      transform: scaleY(0);
+    }
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .browser,
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .stats {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .count-clicks {
+      --clicks: 0;
+    }
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .count-cost {
+      --cost: 0;
+    }
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .stat--none b {
+      color: var(--color-ink);
+    }
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .typed {
+      opacity: 0;
+    }
+    :global(.reveal-ready) .enquiry-scene:not(.is-visible) .typo {
+      text-decoration-color: transparent;
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .load-value {
+      transition: --load 1.4s cubic-bezier(0.3, 0, 0.6, 1) var(--start);
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .load-mask {
+      transition: width 1.4s cubic-bezier(0.3, 0, 0.6, 1) var(--start);
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .load-slow {
+      transition: opacity 300ms var(--ease-out) calc(var(--start) + 1.3s);
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .ranked {
+      transition: transform 650ms var(--ease-out) calc(var(--start) + 1.5s);
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .drop {
+      transition: opacity 300ms var(--ease-out) calc(var(--start) + 2s);
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .ad-click {
+      transition: transform 240ms var(--ease-out) var(--start);
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .browser {
+      transition:
+        opacity 420ms var(--ease-out) calc(var(--start) + 220ms),
+        transform 420ms var(--ease-out) calc(var(--start) + 220ms);
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .page-title {
+      transition: opacity 360ms var(--ease-out) calc(var(--start) + 600ms);
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .stats {
+      transition:
+        opacity 420ms var(--ease-out) calc(var(--start) + 700ms),
+        transform 420ms var(--ease-out) calc(var(--start) + 700ms);
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .count-clicks,
+    :global(.reveal-ready) .enquiry-scene.is-visible .count-cost {
+      transition:
+        --clicks 1.6s cubic-bezier(0.3, 0, 0.6, 1) calc(var(--start) + 900ms),
+        --cost 1.6s cubic-bezier(0.3, 0, 0.6, 1) calc(var(--start) + 900ms);
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .stat--none b {
+      transition: color 300ms var(--ease-out) calc(var(--start) + 2.5s);
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .typed {
+      transition: opacity 0s linear calc(var(--start) + 400ms + var(--char) * 110ms);
+    }
+    :global(.reveal-ready) .enquiry-scene.is-visible .typo {
+      transition: text-decoration-color 300ms var(--ease-out) calc(var(--start) + 2s);
+    }
+  }
+</style>

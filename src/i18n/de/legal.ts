@@ -72,9 +72,9 @@ const legal: LegalContent = {
         id: "3-contact-form-and-email-communication",
         title: "3. Kontaktformular und E-Mail-Kommunikation",
         paragraphs: [
-          "Während du das Formular ausfüllst, wird dein Entwurf im Sitzungsspeicher dieses Browser-Tabs gesichert, damit er bei Seiten- und Sprachwechseln erhalten bleibt. Er wird erst beim Absenden an uns übertragen. Nach erfolgreichem Versand oder am Ende der Tab-Sitzung wird der Entwurf gelöscht. Ist der Browserspeicher deaktiviert, bleibt er nur im Arbeitsspeicher der aktuellen Seite.",
-          "Bei einer Anfrage verarbeiten wir die von dir eingegebenen Daten. Dazu können Name, E-Mail-Adresse, Unternehmen, Unternehmenswebsite, gewünschte Leistung, Budgetrahmen, Nachricht und Sprache gehören. Ein unsichtbares Honeypot-Feld dient ausschließlich der Spam-Abwehr. Die Angaben werden nicht in einer eigenen Website-Datenbank gespeichert.",
-          "Die Verarbeitung erfolgt zur Bearbeitung deiner Anfrage und zur Kommunikation. Geht es um einen Vertrag oder vorvertragliche Maßnahmen, ist Art. 6 Abs. 1 lit. b DSGVO die Rechtsgrundlage. In anderen Fällen beruht sie auf Art. 6 Abs. 1 lit. f DSGVO; unser berechtigtes Interesse ist die sachgerechte Beantwortung geschäftlicher Anfragen.",
+          "Während Sie das Formular ausfüllen, wird Ihr Entwurf im Sitzungsspeicher dieses Browser-Tabs gesichert, damit er bei Seiten- und Sprachwechseln erhalten bleibt. Er wird erst beim Absenden an uns übertragen. Nach erfolgreichem Versand oder am Ende der Tab-Sitzung wird der Entwurf gelöscht. Ist der Browserspeicher deaktiviert, bleibt er nur im Arbeitsspeicher der aktuellen Seite.",
+          "Bei einer Anfrage verarbeiten wir die von Ihnen eingegebenen Daten. Dazu können Name, E-Mail-Adresse, Unternehmen, Unternehmenswebsite, gewünschte Leistung, Budgetrahmen, Nachricht und Sprache gehören. Ein unsichtbares Honeypot-Feld dient ausschließlich der Spam-Abwehr. Die Angaben werden nicht in einer eigenen Website-Datenbank gespeichert.",
+          "Die Verarbeitung erfolgt zur Bearbeitung Ihrer Anfrage und zur Kommunikation. Geht es um einen Vertrag oder vorvertragliche Maßnahmen, ist Art. 6 Abs. 1 lit. b DSGVO die Rechtsgrundlage. In anderen Fällen beruht sie auf Art. 6 Abs. 1 lit. f DSGVO; unser berechtigtes Interesse ist die sachgerechte Beantwortung geschäftlicher Anfragen.",
           "Für den Versand nutzen wir Resend, einen Dienst der Plus Five Five, Inc., 2261 Market Street #5039, San Francisco, CA 94114, USA. Resend verarbeitet mindestens Absender- und Empfängeradresse, Nachrichteninhalt und Versandmetadaten und hält E-Mail-Daten nach eigener Dokumentation grundsätzlich 30 Tage vor. Übermittlungen in die USA werden über das EU-U.S. Data Privacy Framework und EU-Standardvertragsklauseln abgesichert.",
           "Die Anfrage verbleibt außerdem im E-Mail-Postfach des Verantwortlichen. Wir löschen Korrespondenz, sobald die Anfrage abschließend bearbeitet ist und keine gesetzlichen Aufbewahrungspflichten oder berechtigten Nachweisinteressen entgegenstehen. Bitte übermittle über das Formular keine besonderen Kategorien personenbezogener Daten im Sinne von Art. 9 DSGVO.",
         ],
@@ -99,17 +99,17 @@ const legal: LegalContent = {
         id: "6-encryption",
         title: "6. Verschlüsselung",
         paragraphs: [
-          "Die Übertragung zwischen deinem Browser und der Website erfolgt verschlüsselt über HTTPS/TLS. Eine verschlüsselte Verbindung ist am Schloss-Symbol und an „https://“ in der Adresszeile erkennbar.",
+          "Die Übertragung zwischen Ihrem Browser und der Website erfolgt verschlüsselt über HTTPS/TLS. Eine verschlüsselte Verbindung ist am Schloss-Symbol und an „https://“ in der Adresszeile erkennbar.",
         ],
       },
       {
         id: "7-your-rights",
-        title: "7. Deine Rechte",
+        title: "7. Ihre Rechte",
         paragraphs: [
-          "Soweit die gesetzlichen Voraussetzungen erfüllt sind, hast du gegenüber dem Verantwortlichen folgende Rechte:",
+          "Soweit die gesetzlichen Voraussetzungen erfüllt sind, haben Sie gegenüber dem Verantwortlichen folgende Rechte:",
         ],
         items: [
-          "Auskunft über deine personenbezogenen Daten (Art. 15 DSGVO)",
+          "Auskunft über Ihre personenbezogenen Daten (Art. 15 DSGVO)",
           "Berichtigung unrichtiger Daten (Art. 16 DSGVO)",
           "Löschung (Art. 17 DSGVO)",
           "Einschränkung der Verarbeitung (Art. 18 DSGVO)",
@@ -121,14 +121,14 @@ const legal: LegalContent = {
         id: "8-right-to-object",
         title: "8. Widerspruchsrecht",
         paragraphs: [
-          "Du kannst einer Verarbeitung, die auf Art. 6 Abs. 1 lit. f DSGVO beruht, aus Gründen widersprechen, die sich aus deiner besonderen Situation ergeben. Wir verarbeiten die betroffenen Daten dann nicht weiter, sofern keine zwingenden schutzwürdigen Gründe oder Gründe zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen überwiegen.",
+          "Sie können einer Verarbeitung, die auf Art. 6 Abs. 1 lit. f DSGVO beruht, aus Gründen widersprechen, die sich aus Ihrer besonderen Situation ergeben. Wir verarbeiten die betroffenen Daten dann nicht weiter, sofern keine zwingenden schutzwürdigen Gründe oder Gründe zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen überwiegen.",
         ],
       },
       {
         id: "9-right-to-complain",
         title: "9. Beschwerderecht",
         paragraphs: [
-          "Du kannst dich bei einer Datenschutzaufsichtsbehörde beschweren. Die für den Sitz von Suchio zuständige Behörde ist der Hessische Beauftragte für Datenschutz und Informationsfreiheit, Gustav-Stresemann-Ring 1, 65189 Wiesbaden, Deutschland.",
+          "Sie können sich bei einer Datenschutzaufsichtsbehörde beschweren. Die für den Sitz von Suchio zuständige Behörde ist der Hessische Beauftragte für Datenschutz und Informationsfreiheit, Gustav-Stresemann-Ring 1, 65189 Wiesbaden, Deutschland.",
         ],
         links: [{ href: "https://datenschutz.hessen.de/", label: "Datenschutzaufsicht Hessen" }],
       },

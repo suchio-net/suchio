@@ -172,8 +172,8 @@ const references = {
       "Vor dem Neubau zählte die Website keine Anfragen. Seit dem 31. Oktober zählt sie Anrufe, WhatsApp-Klicks und abgeschickte Anfragen, ohne Cookies und ohne Banner. So sehen wir in den nächsten Monaten, welche Seiten Anfragen bringen. SEO und den weiteren Ausbau betreuen wir weiter.",
     servicesLabel: "Leistungen in diesem Projekt",
     cta: {
-      heading: "Eine Website wie diese für deinen Betrieb?",
-      text: "Erzähl uns, was deine Website heute nicht leistet.",
+      heading: "Eine Website wie diese für Ihren Betrieb?",
+      text: "Erzählen Sie uns, was Ihre Website heute nicht leistet.",
       button: "Anfrage senden",
     },
   },

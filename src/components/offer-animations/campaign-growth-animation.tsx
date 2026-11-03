@@ -71,7 +71,9 @@ export function CampaignGrowthAnimation({ locale, copy }: { locale: Locale; copy
   return (
     <div ref={containerRef} data-campaign-chart className="relative size-full min-h-0 select-none">
       <div className="absolute top-1/2 left-1/2 flex items-center" style={stageStyle(stage, scale * FLAT_FILL)}>
-        <div className={`grid w-full ${narrow ? "grid-cols-2 gap-x-3 gap-y-3.5" : "grid-cols-[276px_1fr] gap-4"}`}>
+        <div
+          className={`grid w-full ${narrow ? "grid-cols-[1.2fr_1fr] gap-x-3 gap-y-3.5" : "grid-cols-[276px_1fr] gap-4"}`}
+        >
           <Widget
             label={copy.period}
             className={narrow ? "p-4" : "p-5"}
@@ -140,15 +142,15 @@ export function CampaignGrowthAnimation({ locale, copy }: { locale: Locale; copy
                 {CHANNELS.map((channel, index) => (
                   <motion.li
                     key={channel.name}
-                    className={`flex items-center ${narrow ? "gap-2" : "gap-2.5"}`}
+                    className={`flex items-center ${narrow ? "gap-1.5" : "gap-2.5"}`}
                     initial={false}
                     animate={{ opacity: visible ? 1 : 0, x: visible ? 0 : -6 }}
                     transition={{ duration: noMotion ? 0 : 0.35, delay: noMotion ? 0 : 0.5 + index * 0.1 }}
                   >
                     <span
-                      className={`grid shrink-0 place-items-center bg-white shadow-[inset_0_0_0_1px_rgb(0_0_0/8%)] ${narrow ? "size-6 rounded-[7px]" : "size-8 rounded-[9px]"}`}
+                      className={`grid shrink-0 place-items-center bg-white shadow-[inset_0_0_0_1px_rgb(0_0_0/8%)] ${narrow ? "size-5 rounded-[6px]" : "size-8 rounded-[9px]"}`}
                     >
-                      <channel.Logo className={narrow ? "size-3.5" : "size-[18px]"} />
+                      <channel.Logo className={narrow ? "size-3" : "size-[18px]"} />
                     </span>
                     <span className="min-w-0 flex-1 leading-tight">
                       <span

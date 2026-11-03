@@ -1,9 +1,9 @@
 {
-  "sources": "1ec2d1fc0bc5505655fe40afa878eece5c0cd644b102ec2f239b3c549667a67f",
+  "sources": "c1403041e20a5b7a73b1f76dc0488afd6e4c119d977d5d293b61bf4337c5c22d",
   "headlines": {
     "/": "Mehr Anfragen. Weniger Handarbeit.",
     "/about": "Suchio ist ein unabhängiges Studio aus Hattersheim am Main.",
-    "/contact": "Erzähl uns von deinem Vorhaben.",
+    "/contact": "Erzählen Sie uns von Ihrem Vorhaben.",
     "/en": "More enquiries. Less busywork.",
     "/en/about": "Suchio is an independent studio in Hattersheim am Main.",
     "/en/contact": "Tell us what you’re working on.",
@@ -16,7 +16,7 @@
     "/en/services/automation": "AI and automation without giving up control.",
     "/en/services/seo": "SEO that gets you found on Google and in AI answers.",
     "/en/services/websites": "Get a website built that loads fast and brings in enquiries.",
-    "/examples": "Website-Beispiele für deine Branche",
+    "/examples": "Website-Beispiele für Ihre Branche",
     "/examples/hotels": "Website für Hotels",
     "/examples/trades": "Website für Handwerksbetriebe",
     "/fr": "Plus de demandes. Moins de travail manuel.",
@@ -35,7 +35,7 @@
     "/references/handwerker-work": "Neue Website für Handwerker.work",
     "/services/ads": "Google Ads und Social Ads vom Klick bis zur Anfrage.",
     "/services/automation": "KI und Automatisierung, ohne die Kontrolle abzugeben.",
-    "/services/seo": "SEO, damit du bei Google und in KI-Antworten gefunden wirst.",
+    "/services/seo": "SEO, damit Sie bei Google und in KI-Antworten gefunden werden.",
     "/services/websites": "Website erstellen lassen, die schnell lädt und Anfragen bringt."
   }
 }

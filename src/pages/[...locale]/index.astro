@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from "astro";
 import { ArrowRight, ArrowUpRight } from "@lucide/astro";
 import CtaButton from "@/components/cta-button.astro";
+import EnquiryScenes from "@/components/enquiry-scenes.astro";
 import Faq from "@/components/faq.astro";
 import FinalCta from "@/components/final-cta.astro";
 import OfferVisual from "@/components/offer-visual.astro";
@@ -58,7 +59,7 @@ const faqs = await getFaqs(locale);
     </section>
     <ReferenceTeaser locale={locale} />
     <section id="services" class="px-page py-section">
-      <SectionHeading title={t(locale, "home.section1Title")} copy={t(locale, "home.servicesCopy")} align="center" />
+      <SectionHeading title={t(locale, "home.section1Title")} align="center" />
       <div class="mx-auto grid max-w-[70rem] grid-cols-2 gap-4 max-nav:grid-cols-1">
         {getServiceCatalog(locale).map((service, index) => (
           <Reveal className="min-w-0" delay={index * 50}>
@@ -91,6 +92,13 @@ const faqs = await getFaqs(locale);
             </a>
           </Reveal>
         ))}
+      </div>
+    </section>
+    <section class="px-page pb-section">
+      <div class="mx-auto max-w-[70rem]">
+        <SectionHeading title={t(locale, "home.lostTitle")} copy={t(locale, "home.lostCopy")} align="center" />
+        <EnquiryScenes locale={locale} />
+        <p class="mx-auto mt-12 mb-0 max-w-[38rem] text-center text-lg/7 text-ink">{t(locale, "home.lostClosing")}</p>
       </div>
     </section>
     <section id="faq" class="bg-canvas px-page py-section">

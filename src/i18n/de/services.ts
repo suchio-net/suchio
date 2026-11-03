@@ -6,10 +6,11 @@ const services: ServicesCopy = {
       id: "websites-apps",
       name: "Websites & Apps",
       navDescription: "Websites, Onlineshops und Apps erstellen lassen.",
-      homeDescription: "Unternehmenswebsites, Shops und Portale, die schnell laden, barrierefrei sind und dir gehören.",
+      homeDescription:
+        "Unternehmenswebsites, Shops und Portale, die schnell laden, barrierefrei sind und Ihnen gehören.",
       headline: "Websites, die Anfragen bringen.",
       summary:
-        "Wir erstellen Websites, Onlineshops und Apps, die auf dem Handy schnell laden und Besucher zur Anfrage führen. Texte und Bilder pflegst du danach selbst.",
+        "Wir erstellen Websites, Onlineshops und Apps, die auf dem Handy schnell laden und Besucher zur Anfrage führen. Texte und Bilder pflegen Sie danach selbst.",
       highlights: [
         "Unternehmenswebsites und Landingpages",
         "Onlineshops mit Zahlung und Versand",
@@ -23,7 +24,7 @@ const services: ServicesCopy = {
           "Website erstellen lassen in Hattersheim, Frankfurt und dem Rhein-Main-Gebiet. Suchio plant, gestaltet und entwickelt schnelle Websites, Onlineshops und Apps.",
         title: "Website erstellen lassen, die schnell lädt und Anfragen bringt.",
         intro:
-          "Wir erstellen Websites, Onlineshops und Apps für Betriebe im Rhein-Main-Gebiet und in ganz Deutschland. Vom ersten Entwurf bis zum Launch arbeitest du mit denselben Leuten.",
+          "Wir erstellen Websites, Onlineshops und Apps für Betriebe im Rhein-Main-Gebiet und in ganz Deutschland. Vom ersten Entwurf bis zum Launch arbeiten Sie mit denselben Ansprechpartnern.",
         outcomesHeading: "Was die fertige Website leisten muss",
         outcomesIntro: "Daran messen wir jede Entscheidung zu Inhalt, Design und Technik.",
         outcomes: [
@@ -40,16 +41,16 @@ const services: ServicesCopy = {
           {
             id: "ready-to-evolve",
             title: "Leicht zu ändern",
-            copy: "Du pflegst Texte und Bilder selbst im CMS. Neue Seiten und Funktionen lassen sich später ergänzen, ohne von vorn anzufangen.",
+            copy: "Sie pflegen Texte und Bilder selbst im CMS. Neue Seiten und Funktionen lassen sich später ergänzen, ohne von vorn anzufangen.",
           },
         ],
         scopeHeading: "Was wir bauen",
-        scopeIntro: "Typische Projekte. Wenn deins nicht dabei ist, frag uns trotzdem.",
+        scopeIntro: "Typische Projekte. Wenn Ihres nicht dabei ist, fragen Sie uns trotzdem.",
         scopeGroups: [
           {
             id: "marketing-websites",
             title: "Unternehmenswebsites",
-            copy: "Websites mit mehreren Seiten, die erklären, was du anbietest, und Besucher zur Anfrage führen.",
+            copy: "Websites mit mehreren Seiten, die erklären, was Sie anbieten, und Besucher zur Anfrage führen.",
             items: [
               "Seitenstruktur und Nutzerwege",
               "Webdesign für Handy und Desktop",
@@ -71,7 +72,7 @@ const services: ServicesCopy = {
           {
             id: "e-commerce-experiences",
             title: "Onlineshops",
-            copy: "Shops für Produkte, Abos oder digitale Angebote, abgestimmt auf dein Sortiment, deine Zahlungsarten und deinen Versand.",
+            copy: "Shops für Produkte, Abos oder digitale Angebote, abgestimmt auf Ihr Sortiment, Ihre Zahlungsarten und Ihren Versand.",
             items: [
               "Shop- und Produktseiten",
               "Warenkorb und Checkout",
@@ -82,7 +83,7 @@ const services: ServicesCopy = {
           {
             id: "applications-customer-portals",
             title: "Apps & Kundenportale",
-            copy: "Web- und native Apps, in denen Kunden selbst etwas erledigen oder dein Team intern arbeitet, verbunden mit den Programmen, die du schon nutzt.",
+            copy: "Web- und native Apps, in denen Kunden selbst etwas erledigen oder Ihr Team intern arbeitet, verbunden mit den Programmen, die Sie schon nutzen.",
             items: [
               "Konzept und klickbare Prototypen",
               "Web-, Cross-Platform- und native Apps",
@@ -114,7 +115,8 @@ const services: ServicesCopy = {
           },
         ],
         processHeading: "Von der Idee bis zum Launch",
-        processIntro: "Du siehst in jeder Phase etwas Konkretes und gibst es frei, bevor wir weitermachen.",
+        processIntro:
+          "Sie sehen in jeder Phase ein konkretes Zwischenergebnis und geben es frei, bevor wir weitermachen.",
         process: [
           {
             id: "understand",
@@ -124,12 +126,12 @@ const services: ServicesCopy = {
           {
             id: "design",
             title: "Gestalten",
-            copy: "Wir entwerfen Struktur und Design in Schritten, die du einzeln prüfen und freigeben kannst.",
+            copy: "Wir entwerfen Struktur und Design in Schritten, die Sie einzeln prüfen und freigeben können.",
           },
           {
             id: "build-and-launch",
             title: "Bauen und starten",
-            copy: "Wir entwickeln, testen auf Handy und Desktop, gehen live und zeigen dir, wie du Inhalte selbst pflegst.",
+            copy: "Wir entwickeln, testen auf Handy und Desktop, gehen live und zeigen Ihnen, wie Sie Inhalte selbst pflegen.",
           },
         ],
         faqHeading: "Häufige Fragen zu Websites & Apps",
@@ -144,7 +146,7 @@ const services: ServicesCopy = {
             id: "can-we-edit-the-website-ourselves",
             question: "Können wir die Website danach selbst bearbeiten?",
             answer:
-              "Ja. Texte, Bilder, Leistungen und neue Seiten pflegst du selbst im CMS. Nach dem Launch zeigen wir dir, wie das geht.",
+              "Ja. Texte, Bilder, Leistungen und neue Seiten pflegen Sie selbst im CMS. Nach dem Launch zeigen wir Ihnen, wie das geht.",
           },
           {
             id: "is-the-website-optimized-for-google-and-mobile",
@@ -159,7 +161,7 @@ const services: ServicesCopy = {
               "Ja. Wir prüfen zuerst, was funktioniert. Oft reicht es, Struktur, Texte und Ladezeit zu verbessern. Einen Neubau schlagen wir nur vor, wenn die alte Technik dem Ziel im Weg steht.",
           },
         ],
-        finalTitle: "Erzähl uns, was du bauen willst.",
+        finalTitle: "Erzählen Sie uns, was Sie bauen möchten.",
         finalCopy:
           "Eine kurze Beschreibung reicht. Wir melden uns mit einer Einschätzung und einem Vorschlag für den ersten Schritt.",
         finalCta: "Projekt besprechen",
@@ -169,10 +171,10 @@ const services: ServicesCopy = {
       id: "seo-ai-visibility",
       name: "SEO & KI-Sichtbarkeit",
       navDescription: "Bei Google und in KI-Antworten gefunden werden.",
-      homeDescription: "Technik und Inhalte, damit du bei Google und in KI-Antworten auftauchst.",
+      homeDescription: "Technik und Inhalte, damit Sie bei Google und in KI-Antworten erscheinen.",
       headline: "Gefunden werden, wo Kunden suchen.",
       summary:
-        "Wir beheben technische Fehler, schreiben Texte zu den Fragen deiner Kunden und pflegen dein Google-Unternehmensprofil. So findet man dich bei Google, in Maps und in ChatGPT.",
+        "Wir beheben technische Fehler, schreiben Texte zu den Fragen Ihrer Kunden und pflegen Ihr Google-Unternehmensprofil. So findet man Sie bei Google, in Maps und in ChatGPT.",
       highlights: [
         "Technischer SEO-Audit mit Prioritätenliste",
         "Google-Unternehmensprofil und lokale Seiten",
@@ -184,9 +186,9 @@ const services: ServicesCopy = {
         metaTitle: "SEO Frankfurt: Google- & KI-Sichtbarkeit",
         metaDescription:
           "SEO für Betriebe in Frankfurt und dem Rhein-Main-Gebiet: technisches SEO, Google-Unternehmensprofil, Inhalte und Sichtbarkeit in ChatGPT und KI-Antworten.",
-        title: "SEO, damit du bei Google und in KI-Antworten gefunden wirst.",
+        title: "SEO, damit Sie bei Google und in KI-Antworten gefunden werden.",
         intro:
-          "Wir beheben technische Fehler, schreiben Inhalte zu echten Suchanfragen und pflegen dein Google-Unternehmensprofil. So finden dich Kunden in der normalen Suche, in Google Maps und in KI-Antworten.",
+          "Wir beheben technische Fehler, schreiben Inhalte zu echten Suchanfragen und pflegen Ihr Google-Unternehmensprofil. So finden Kunden Sie in der normalen Suche, in Google Maps und in KI-Antworten.",
         outcomesHeading: "Was bessere Sichtbarkeit braucht",
         outcomesIntro: "Fehlt eins davon, bringen die anderen wenig.",
         outcomes: [
@@ -198,15 +200,15 @@ const services: ServicesCopy = {
           {
             id: "content-for-real-search-intent",
             title: "Inhalte zu echten Fragen",
-            copy: "Deine Seiten beantworten die Fragen, die Kunden vor einer Entscheidung stellen, in den Worten, die sie selbst verwenden.",
+            copy: "Ihre Seiten beantworten die Fragen, die Kunden vor einer Entscheidung stellen, in den Worten, die sie selbst verwenden.",
           },
           {
             id: "clear-signals-not-geo-hacks",
             title: "Belegbare Informationen",
-            copy: "Eindeutige Angaben zu Leistungen und Standort und Erwähnungen auf anderen Seiten machen dich für Google und KI-Antworten zitierbar.",
+            copy: "Eindeutige Angaben zu Leistungen und Standort und Erwähnungen auf anderen Seiten machen Ihren Betrieb für Google und KI-Antworten zitierbar.",
           },
         ],
-        scopeHeading: "Was wir für deine Sichtbarkeit tun",
+        scopeHeading: "Was wir für Ihre Sichtbarkeit tun",
         scopeIntro:
           "Wir fangen mit dem an, was am meisten bringt. Oft ist das die Technik, manchmal fehlen schlicht die passenden Seiten.",
         scopeGroups: [
@@ -224,7 +226,7 @@ const services: ServicesCopy = {
           {
             id: "search-intent-topics",
             title: "Keywords & Themen",
-            copy: "Wir finden heraus, wonach deine Kunden suchen und welche Seiten dafür auf deiner Website fehlen.",
+            copy: "Wir finden heraus, wonach Ihre Kunden suchen und welche Seiten dafür auf Ihrer Website fehlen.",
             items: [
               "Keyword- und Suchintentionsanalyse",
               "Vergleich mit Wettbewerbern",
@@ -257,9 +259,9 @@ const services: ServicesCopy = {
           {
             id: "ai-search-geo",
             title: "KI-Suche & GEO",
-            copy: "Wir prüfen, was ChatGPT, Perplexity und Googles KI-Übersichten über dich und deine Branche sagen, und machen deine Informationen leichter zitierbar.",
+            copy: "Wir prüfen, was ChatGPT, Perplexity und Googles KI-Übersichten über Sie und Ihre Branche sagen, und machen Ihre Informationen leichter zitierbar.",
             items: [
-              "Analyse von KI-Antworten in deiner Branche",
+              "Analyse von KI-Antworten in Ihrer Branche",
               "Signale zu Marke, Themen und Entitäten",
               "Zitierfähige Inhalte und Quellen",
               "Strukturierte Daten und Erwähnungen auf anderen Seiten",
@@ -283,12 +285,12 @@ const services: ServicesCopy = {
           {
             id: "analyze",
             title: "Analysieren",
-            copy: "Wir prüfen Technik, Inhalte, Suchnachfrage, Wettbewerber und wo du heute schon gefunden wirst.",
+            copy: "Wir prüfen Technik, Inhalte, Suchnachfrage, Wettbewerber und wo Sie heute schon gefunden werden.",
           },
           {
             id: "prioritize",
             title: "Priorisieren",
-            copy: "Du bekommst eine Liste der Maßnahmen, sortiert nach Wirkung und Aufwand.",
+            copy: "Sie erhalten eine Liste der Maßnahmen, sortiert nach Wirkung und Aufwand.",
           },
           {
             id: "improve-and-measure",
@@ -302,13 +304,13 @@ const services: ServicesCopy = {
             id: "seo-vs-google-ads",
             question: "Was ist der Unterschied zwischen SEO und Google Ads?",
             answer:
-              "Google Ads sind bezahlte Anzeigen. Sie erscheinen sofort und verschwinden, sobald du nicht mehr zahlst. SEO verbessert deine Platzierung in den normalen Suchergebnissen. Das dauert länger, kostet dafür aber nichts pro Klick.",
+              "Google Ads sind bezahlte Anzeigen. Sie erscheinen sofort und verschwinden, sobald Sie nicht mehr zahlen. SEO verbessert Ihre Platzierung in den normalen Suchergebnissen. Das dauert länger, kostet dafür aber nichts pro Klick.",
           },
           {
             id: "when-will-we-see-results",
             question: "Wie lange dauert es, bis SEO wirkt?",
             answer:
-              "Technische Fehler sind oft schnell behoben. Bis neue Seiten bei Google ranken, dauert es meist Monate, je nach Wettbewerb in deiner Branche und Region. Nach der Analyse sagen wir dir, womit du rechnen kannst.",
+              "Technische Fehler sind oft schnell behoben. Bis neue Seiten bei Google ranken, dauert es meist Monate, je nach Wettbewerb in Ihrer Branche und Region. Nach der Analyse sagen wir Ihnen, womit Sie rechnen können.",
           },
           {
             id: "can-you-improve-local-search-visibility",
@@ -320,17 +322,18 @@ const services: ServicesCopy = {
             id: "what-does-geo-mean",
             question: "Was bedeutet GEO oder KI-Sichtbarkeit?",
             answer:
-              "GEO steht für Generative Engine Optimization. Ziel ist, dass ChatGPT, Perplexity oder Googles KI-Übersicht deinen Betrieb nennen, wenn jemand nach deiner Leistung fragt. GEO baut auf denselben Grundlagen auf wie SEO.",
+              "GEO steht für Generative Engine Optimization. Ziel ist, dass ChatGPT, Perplexity oder Googles KI-Übersicht Ihren Betrieb nennen, wenn jemand nach Ihrer Leistung fragt. GEO baut auf denselben Grundlagen auf wie SEO.",
           },
           {
             id: "can-you-create-the-content-too",
             question: "Schreibt ihr auch die Texte?",
             answer:
-              "Ja. Wir schreiben neue Seiten und überarbeiten bestehende. Fachliche Details, etwa zu deinen Leistungen, stimmen wir mit dir ab.",
+              "Ja. Wir schreiben neue Seiten und überarbeiten bestehende. Fachliche Details, etwa zu Ihren Leistungen, stimmen wir mit Ihnen ab.",
           },
         ],
-        finalTitle: "Machen wir dein Angebot leichter auffindbar.",
-        finalCopy: "Wir zeigen dir, was deine Sichtbarkeit bremst, was du zuerst beheben solltest und was warten kann.",
+        finalTitle: "Machen wir Ihr Angebot leichter auffindbar.",
+        finalCopy:
+          "Wir zeigen Ihnen, was Ihre Sichtbarkeit bremst, was Sie zuerst beheben sollten und was warten kann.",
         finalCta: "SEO-Projekt besprechen",
       },
     },
@@ -339,11 +342,11 @@ const services: ServicesCopy = {
       name: "Werbekampagnen",
       navDescription: "Google Ads und Social Ads, die Anfragen bringen.",
       homeDescription: "Google Ads und Social Ads mit sauberem Tracking, gemessen an den Kosten pro Anfrage.",
-      headline: "Werbung, bei der du siehst, was sie bringt.",
+      headline: "Werbung, bei der Sie sehen, was sie bringt.",
       summary:
-        "Wir planen Google Ads und Social Ads, testen mehrere Anzeigen und optimieren die Seite dahinter. Das Tracking zeigt dir, welche Klicks zu Anfragen werden.",
+        "Wir planen Google Ads und Social Ads, testen mehrere Anzeigen und optimieren die Seite dahinter. Das Tracking zeigt Ihnen, welche Klicks zu Anfragen werden.",
       highlights: [
-        "Anzeigen gezielt für deine Region und Zielgruppe",
+        "Anzeigen gezielt für Ihre Region und Zielgruppe",
         "Mehrere Anzeigenvarianten im direkten Vergleich",
         "Landingpages, die halten, was die Anzeige verspricht",
         "Kosten pro Anfrage im Reporting",
@@ -355,7 +358,7 @@ const services: ServicesCopy = {
           "Google Ads und Social Ads für Betriebe im Rhein-Main-Gebiet: Kampagnenaufbau, Anzeigen, Landingpages und Tracking, damit aus Klicks Anfragen werden.",
         title: "Google Ads und Social Ads vom Klick bis zur Anfrage.",
         intro:
-          "Wir planen deine Kampagnen, texten und gestalten die Anzeigen, optimieren die Seite dahinter und messen, welche Klicks zu Anfragen werden.",
+          "Wir planen Ihre Kampagnen, texten und gestalten die Anzeigen, optimieren die Seite dahinter und messen, welche Klicks zu Anfragen werden.",
         outcomesHeading: "Die ganze Kampagne im Blick",
         outcomesIntro:
           "Ein gut eingerichtetes Anzeigenkonto hilft wenig, wenn Angebot oder Landingpage nicht überzeugen. Wir arbeiten an allen drei.",
@@ -368,12 +371,12 @@ const services: ServicesCopy = {
           {
             id: "faster-learning-cycles",
             title: "Tests mit klarer Frage",
-            copy: "Jeder Test prüft eine Annahme zu Zielgruppe, Anzeige oder Landingpage. So siehst du, welche Kombination funktioniert.",
+            copy: "Jeder Test prüft eine Annahme zu Zielgruppe, Anzeige oder Landingpage. So sehen Sie, welche Kombination funktioniert.",
           },
           {
             id: "measurable-demand",
             title: "Kosten pro Anfrage",
-            copy: "Tracking verbindet Werbeausgaben mit echten Anfragen. Du siehst, was eine Anfrage kostet und über welchen Kanal sie kam.",
+            copy: "Tracking verbindet Werbeausgaben mit echten Anfragen. Sie sehen, was eine Anfrage kostet und über welchen Kanal sie kam.",
           },
         ],
         scopeHeading: "Was wir für Kampagnen übernehmen",
@@ -393,7 +396,7 @@ const services: ServicesCopy = {
           {
             id: "google-search-shopping",
             title: "Google Ads: Suche & Shopping",
-            copy: "Suchanzeigen erreichen Menschen, die gerade nach deinem Angebot suchen, auch gezielt in deiner Region. Shopping-Kampagnen kommen dazu, wenn du Produkte online verkaufst.",
+            copy: "Suchanzeigen erreichen Menschen, die gerade nach Ihrem Angebot suchen, auch gezielt in Ihrer Region. Shopping-Kampagnen kommen dazu, wenn Sie Produkte online verkaufen.",
             items: [
               "Keyword- und Nachfrageanalyse",
               "Such- und Shopping-Kampagnen",
@@ -426,7 +429,7 @@ const services: ServicesCopy = {
           {
             id: "campaign-journeys-cro",
             title: "Landingpages & Conversion",
-            copy: "Nach dem Klick muss die Seite halten, was die Anzeige verspricht. Wir optimieren Botschaft, Formular und Rückfragen auf deinen bestehenden Seiten.",
+            copy: "Nach dem Klick muss die Seite halten, was die Anzeige verspricht. Wir optimieren Botschaft, Formular und Rückfragen auf Ihren bestehenden Seiten.",
             items: [
               "Übergang von Anzeige zu Seite",
               "Qualifizierung im Formular",
@@ -472,19 +475,19 @@ const services: ServicesCopy = {
             id: "how-much-ad-budget-do-we-need",
             question: "Wie viel Werbebudget brauchen wir?",
             answer:
-              "Das hängt davon ab, wie teuer Klicks in deiner Branche und Region sind. Vor dem Start schätzen wir die Klickpreise und sagen dir, mit welchem Budget ein aussagekräftiger Test möglich ist.",
+              "Das hängt davon ab, wie teuer Klicks in Ihrer Branche und Region sind. Vor dem Start schätzen wir die Klickpreise und sagen Ihnen, mit welchem Budget ein aussagekräftiger Test möglich ist.",
           },
           {
             id: "is-advertising-spend-included-in-your-fee",
             question: "Ist das Werbebudget im Honorar enthalten?",
             answer:
-              "Nein. Werbebudget, Honorar und andere Fremdkosten stehen getrennt im Angebot. So siehst du genau, was in Anzeigen fließt und was an uns geht.",
+              "Nein. Werbebudget, Honorar und andere Fremdkosten stehen getrennt im Angebot. So sehen Sie genau, was in Anzeigen fließt und was an uns geht.",
           },
           {
             id: "how-do-we-know-the-ads-work",
             question: "Woran sehen wir, ob die Werbung funktioniert?",
             answer:
-              "Am Preis pro Anfrage. Wir richten Conversion-Tracking ein, damit du siehst, wie viele Anfragen aus den Anzeigen kommen und was jede gekostet hat.",
+              "Am Preis pro Anfrage. Wir richten Conversion-Tracking ein, damit Sie sehen, wie viele Anfragen aus den Anzeigen kommen und was jede gekostet hat.",
           },
           {
             id: "which-platforms-do-you-manage",
@@ -499,9 +502,9 @@ const services: ServicesCopy = {
               "Ja. Wir prüfen Struktur, Tracking, bisherige Daten und Zugänge und entscheiden dann, was bleibt, was wir aufräumen und was wir neu aufbauen.",
           },
         ],
-        finalTitle: "Planen wir deine nächste Kampagne.",
+        finalTitle: "Planen wir Ihre nächste Kampagne.",
         finalCopy:
-          "Erzähl uns, was du anbietest, wen du erreichen willst und was du bisher versucht hast. Wir sagen dir, womit wir anfangen würden.",
+          "Erzählen Sie uns, was Sie anbieten, wen Sie erreichen möchten und was Sie bisher versucht haben. Wir sagen Ihnen, womit wir anfangen würden.",
         finalCta: "Kampagne besprechen",
       },
     },
@@ -512,12 +515,12 @@ const services: ServicesCopy = {
       homeDescription: "Formulare, CRM, E-Mails und Dokumente verbinden, damit niemand mehr abtippt.",
       headline: "Routinearbeit automatisieren.",
       summary:
-        "Wir verbinden deine Programme, damit Anfragen, Rechnungen und E-Mails nicht mehr abgetippt werden müssen. KI setzen wir dort ein, wo sie messbar Zeit spart.",
+        "Wir verbinden Ihre Programme, damit Anfragen, Rechnungen und E-Mails nicht mehr abgetippt werden müssen. KI setzen wir dort ein, wo sie messbar Zeit spart.",
       highlights: [
         "Anfragen landen automatisch im CRM oder Kalender",
         "Daten aus Rechnungen und Dokumenten automatisch auslesen",
         "Antwortentwürfe für häufige E-Mails",
-        "Dein Team behält die letzte Entscheidung",
+        "Ihr Team behält die letzte Entscheidung",
       ],
       cta: "Mehr zu KI & Automatisierung",
       page: {
@@ -526,7 +529,7 @@ const services: ServicesCopy = {
           "KI und Automatisierung für Betriebe im Rhein-Main-Gebiet: Anfragen, E-Mails und Dokumente automatisch verarbeiten, Programme verbinden und Handarbeit sparen.",
         title: "KI und Automatisierung, ohne die Kontrolle abzugeben.",
         intro:
-          "Wir verbinden deine Programme, automatisieren wiederkehrende Aufgaben und setzen KI dort ein, wo sie deinem Team Arbeit abnimmt, etwa bei Anfragen, E-Mails und Dokumenten.",
+          "Wir verbinden Ihre Programme, automatisieren wiederkehrende Aufgaben und setzen KI dort ein, wo sie Ihrem Team Arbeit abnimmt, etwa bei Anfragen, E-Mails und Dokumenten.",
         outcomesHeading: "Erst der Ablauf, dann das Werkzeug",
         outcomesIntro:
           "Bevor wir etwas bauen, schreiben wir auf, wie die Aufgabe heute läuft, wo es Ausnahmen gibt und welche Entscheidungen ein Mensch treffen muss.",
@@ -539,7 +542,7 @@ const services: ServicesCopy = {
           {
             id: "faster-handling",
             title: "Schnellere Bearbeitung",
-            copy: "Die Automatisierung erledigt Routinefälle oder bereitet sie vor. Entscheidungen, die ein Mensch treffen muss, bleiben bei deinem Team.",
+            copy: "Die Automatisierung erledigt Routinefälle oder bereitet sie vor. Entscheidungen, die ein Mensch treffen muss, bleiben bei Ihrem Team.",
           },
           {
             id: "ai-where-it-helps",
@@ -576,7 +579,7 @@ const services: ServicesCopy = {
           {
             id: "documents-communication",
             title: "E-Mails & Dokumente",
-            copy: "KI liest E-Mails, Rechnungen und andere Dokumente, zieht die wichtigen Daten heraus und bereitet sie für dein Team vor.",
+            copy: "KI liest E-Mails, Rechnungen und andere Dokumente, zieht die wichtigen Daten heraus und bereitet sie für Ihr Team vor.",
             items: [
               "Postfach automatisch sortieren",
               "Dokumente klassifizieren",
@@ -587,7 +590,7 @@ const services: ServicesCopy = {
           {
             id: "internal-ai-assistants",
             title: "Interne KI-Assistenten",
-            copy: "Dein Team fragt einen Assistenten nach internem Wissen und bekommt Antworten mit Quelle. Die Antworten berücksichtigen, wer was sehen darf.",
+            copy: "Ihr Team fragt einen Assistenten nach internem Wissen und bekommt Antworten mit Quelle. Die Antworten berücksichtigen, wer was sehen darf.",
             items: [
               "Wissenssuche und Frage-Antwort-Systeme",
               "Quellenangaben und Berechtigungen",
@@ -598,7 +601,7 @@ const services: ServicesCopy = {
           {
             id: "ai-features-in-websites-apps",
             title: "KI-Funktionen in Websites & Apps",
-            copy: "KI-Funktionen für deine Kunden, zum Beispiel eine Produktberatung oder eine Suche, die Fragen versteht. Wir bauen die KI-Logik und binden das Modell an.",
+            copy: "KI-Funktionen für Ihre Kunden, zum Beispiel eine Produktberatung oder eine Suche, die Fragen versteht. Wir bauen die KI-Logik und binden das Modell an.",
             items: [
               "Aufgabe und Qualitätskriterien",
               "Prototypen und Machbarkeitstests",
@@ -609,7 +612,7 @@ const services: ServicesCopy = {
           {
             id: "integration-dependable-operation",
             title: "Integrationen & sicherer Betrieb",
-            copy: "Wir verbinden Programme mit passenden Zugriffsrechten, Warnungen bei Fehlern und einer Dokumentation für dein Team.",
+            copy: "Wir verbinden Programme mit passenden Zugriffsrechten, Warnungen bei Fehlern und einer Dokumentation für Ihr Team.",
             items: [
               "API- und Systemintegrationen",
               "Datenzugriff und Berechtigungen",
@@ -634,7 +637,7 @@ const services: ServicesCopy = {
           {
             id: "integrate-and-safeguard",
             title: "Integrieren und absichern",
-            copy: "Wir verbinden die Lösung mit deinen Programmen, richten Warnungen bei Fehlern ein und dokumentieren alles für dein Team.",
+            copy: "Wir verbinden die Lösung mit Ihren Programmen, richten Warnungen bei Fehlern ein und dokumentieren alles für Ihr Team.",
           },
         ],
         faqHeading: "Häufige Fragen zu KI & Automatisierung",
@@ -643,7 +646,7 @@ const services: ServicesCopy = {
             id: "what-can-we-automate",
             question: "Was lässt sich in unserem Betrieb automatisieren?",
             answer:
-              "Typisch sind Anfragen aus dem Website-Formular, die automatisch im CRM oder Kalender landen, Rechnungen, die ausgelesen und abgelegt werden, und Antwortentwürfe für häufige E-Mails. Wir schauen uns deine Abläufe an und sagen dir, was sich lohnt.",
+              "Typisch sind Anfragen aus dem Website-Formular, die automatisch im CRM oder Kalender landen, Rechnungen, die ausgelesen und abgelegt werden, und Antwortentwürfe für häufige E-Mails. Wir schauen uns Ihre Abläufe an und sagen Ihnen, was sich lohnt.",
           },
           {
             id: "when-is-ai-genuinely-useful",
@@ -655,13 +658,13 @@ const services: ServicesCopy = {
             id: "do-we-need-to-replace-our-existing-systems",
             question: "Müssen wir unsere bestehenden Programme ersetzen?",
             answer:
-              "Meistens nicht. Wir verbinden zuerst die Programme, die du schon nutzt. Einen Neubau schlagen wir nur vor, wenn er stabiler und günstiger ist.",
+              "Meistens nicht. Wir verbinden zuerst die Programme, die Sie schon nutzen. Einen Neubau schlagen wir nur vor, wenn er stabiler und günstiger ist.",
           },
           {
             id: "how-do-you-handle-sensitive-data",
             question: "Wie geht ihr mit sensiblen Daten um?",
             answer:
-              "Bevor wir etwas bauen, klären wir mit dir, wer auf welche Daten zugreift, wo sie gespeichert werden und welche Anbieter beteiligt sind. Den technischen Ansatz wählen wir nach Risiko und rechtlichen Vorgaben.",
+              "Bevor wir etwas bauen, klären wir mit Ihnen, wer auf welche Daten zugreift, wo sie gespeichert werden und welche Anbieter beteiligt sind. Den technischen Ansatz wählen wir nach Risiko und rechtlichen Vorgaben.",
           },
           {
             id: "can-you-add-an-ai-feature-to-our-website-or-app",
@@ -670,8 +673,9 @@ const services: ServicesCopy = {
               "Ja. Wir bauen die KI-Logik, binden das Modell an und messen die Qualität. Die Oberfläche dazu entwerfen und bauen wir bei Bedarf mit.",
           },
         ],
-        finalTitle: "Welche Aufgabe kostet dich am meisten Zeit?",
-        finalCopy: "Beschreib sie uns. Wir sagen dir, ob sich eine Automatisierung lohnt und wie sie aussehen würde.",
+        finalTitle: "Welche Aufgabe kostet Sie am meisten Zeit?",
+        finalCopy:
+          "Beschreiben Sie sie uns. Wir sagen Ihnen, ob sich eine Automatisierung lohnt und wie sie aussehen würde.",
         finalCta: "Automation besprechen",
       },
     },

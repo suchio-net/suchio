@@ -5,10 +5,10 @@ const examples = {
     label: "Beispiele",
     title: "Website-Beispiele nach Branche | Suchio",
     description:
-      "Konzepte von Suchio, die zeigen, wie eine Website für deine Branche aussehen kann. Die Betriebe sind ausgedacht, deine Website gestalten wir für deinen Betrieb.",
-    h1: "Website-Beispiele für deine Branche",
+      "Konzepte von Suchio, die zeigen, wie eine Website für Ihre Branche aussehen kann. Die Betriebe sind ausgedacht, Ihre Website gestalten wir für Ihren Betrieb.",
+    h1: "Website-Beispiele für Ihre Branche",
     intro:
-      "Konzepte, die zeigen, wie eine Website für deine Branche aussehen kann. Die Betriebe sind ausgedacht, deine Website gestalten wir für deinen Betrieb.",
+      "Konzepte, die zeigen, wie eine Website für Ihre Branche aussehen kann. Die Betriebe sind ausgedacht, Ihre Website gestalten wir für Ihren Betrieb.",
   },
   hotels: {
     label: "Hotels",
@@ -19,9 +19,9 @@ const examples = {
       "Hotel-Websites, die Zimmer, Preise und Buchung sofort zeigen, auf dem Handy schnell laden und bei Google und in KI-Antworten gefunden werden. Mit Konzeptbeispiel.",
     h1: "Website für Hotels",
     intro:
-      "Eine Hotel-Website hat eine Aufgabe: Gäste sollen direkt bei dir buchen statt über ein Portal, das an jeder Buchung mitverdient. Wir bauen Hotel-Websites, die Zimmer, Preise und Buchung sofort zeigen, auf dem Handy schnell laden und bei Google und in KI-Antworten gefunden werden.",
+      "Eine Hotel-Website hat eine Aufgabe: Gäste sollen direkt bei Ihnen buchen statt über ein Portal, das an jeder Buchung mitverdient. Wir bauen Hotel-Websites, die Zimmer, Preise und Buchung sofort zeigen, auf dem Handy schnell laden und bei Google und in KI-Antworten gefunden werden.",
     conceptsHeading: "Konzepte für Hotels",
-    conceptsText: "Ausgedachte Hotels, die zeigen, was möglich ist. Deine Website gestalten wir für dein Haus.",
+    conceptsText: "Ausgedachte Hotels, die zeigen, was möglich ist. Ihre Website gestalten wir für Ihr Haus.",
     conceptLabel: "Konzept",
     concepts: [
       {
@@ -36,15 +36,15 @@ const examples = {
     requirementsHeading: "Was eine Hotel-Website leisten muss",
     requirements: [
       {
-        title: "In den Sprachen deiner Gäste",
-        copy: "Jede Sprache mit eigener Seite, damit Gäste aus dem Ausland dich auch in ihrer Sprache finden.",
+        title: "In den Sprachen Ihrer Gäste",
+        copy: "Jede Sprache mit eigener Seite, damit Gäste aus dem Ausland Ihr Haus auch in ihrer Sprache finden.",
       },
       {
         title: "Buchung im ersten Bild",
-        copy: "Anreise, Abreise und Verfügbarkeit, bevor jemand scrollt. Dein Buchungssystem ist eingebunden, statt Gäste auf eine fremde Seite zu schicken.",
+        copy: "Anreise, Abreise und Verfügbarkeit, bevor jemand scrollt. Ihr Buchungssystem ist eingebunden, statt Gäste auf eine fremde Seite zu schicken.",
       },
       {
-        title: "Was nur du anbietest",
+        title: "Was nur Sie anbieten",
         copy: "Pauschalen wie Park & Fly, Tagungen oder Messezimmer gut sichtbar statt in einem Pop-up.",
       },
       {
@@ -53,7 +53,7 @@ const examples = {
       },
       {
         title: "Echte Bewertungen",
-        copy: "Deine Google-Bewertungen direkt auf der Seite, damit Gäste nicht woanders nachsehen müssen.",
+        copy: "Ihre Google-Bewertungen direkt auf der Seite, damit Gäste nicht woanders nachsehen müssen.",
       },
       {
         title: "Anfahrt, die stimmt",
@@ -71,25 +71,25 @@ const examples = {
     costsHeading: "Wovon die Kosten abhängen",
     costs: [
       "Anzahl der Seiten und Sprachen",
-      "Anbindung deines Buchungssystems",
+      "Anbindung Ihres Buchungssystems",
       "Fotos: vorhanden oder neu",
-      "Texte: von dir oder von uns geschrieben",
+      "Texte: von Ihnen oder von uns geschrieben",
       "Betreuung nach dem Start: Hosting, Updates, Änderungen",
     ],
-    costsAfter: "Nach einem kurzen Gespräch bekommst du ein Angebot.",
+    costsAfter: "Nach einem kurzen Gespräch erhalten Sie ein Angebot.",
     processHeading: "So arbeiten wir",
     process: [
       {
         title: "Gespräch und Prüfung",
-        copy: "Wir sehen uns deine aktuelle Website an und klären, was sie leisten soll.",
+        copy: "Wir sehen uns Ihre aktuelle Website an und klären, was sie leisten soll.",
       },
       {
         title: "Konzept",
-        copy: "Mit deinen Zimmern, Fotos und Angeboten.",
+        copy: "Mit Ihren Zimmern, Fotos und Angeboten.",
       },
       {
         title: "Umsetzung und Umzug",
-        copy: "Dein Buchungssystem bleibt.",
+        copy: "Ihr Buchungssystem bleibt.",
       },
       {
         title: "Betreuung",
@@ -100,12 +100,12 @@ const examples = {
     faqs: [
       {
         question: "Können wir unser Buchungssystem behalten?",
-        answer: "Ja. Wir binden dein bestehendes Buchungssystem ein; du musst nichts umstellen.",
+        answer: "Ja. Wir binden Ihr bestehendes Buchungssystem ein; Sie müssen nichts umstellen.",
       },
       {
         question: "Was kostet eine Hotel-Website?",
         answer:
-          "Das hängt vor allem von der Anzahl der Seiten und Sprachen, der Anbindung deines Buchungssystems und davon ab, ob Fotos und Texte schon vorhanden sind. Nach einem kurzen Gespräch bekommst du ein Angebot.",
+          "Das hängt vor allem von der Anzahl der Seiten und Sprachen, der Anbindung Ihres Buchungssystems und davon ab, ob Fotos und Texte schon vorhanden sind. Nach einem kurzen Gespräch erhalten Sie ein Angebot.",
       },
       {
         question: "Wie lange dauert es?",
@@ -115,12 +115,12 @@ const examples = {
       {
         question: "Wem gehört die Website?",
         answer:
-          "Dir. Domain, Texte und Fotos bleiben dein Eigentum, die Website gehört dir nach vollständiger Bezahlung.",
+          "Ihnen. Domain, Texte und Fotos bleiben Ihr Eigentum, die Website gehört Ihnen nach vollständiger Bezahlung.",
       },
       {
         question: "Werden wir bei Google und in KI-Antworten gefunden?",
         answer:
-          "Die Website bringt die technischen Grundlagen mit. Platzierungen kann niemand zusagen; wie du dauerhaft sichtbar wirst, gehört zu unserer Leistung SEO und KI-Sichtbarkeit.",
+          "Die Website bringt die technischen Grundlagen mit. Platzierungen kann niemand zusagen; wie Sie dauerhaft sichtbar werden, gehört zu unserer Leistung SEO und KI-Sichtbarkeit.",
         linkText: "SEO und KI-Sichtbarkeit",
       },
       {
@@ -129,8 +129,8 @@ const examples = {
       },
     ],
     cta: {
-      heading: "Diese Website für dein Hotel?",
-      text: "Erzähl uns von deinem Haus.",
+      heading: "Diese Website für Ihr Hotel?",
+      text: "Erzählen Sie uns von Ihrem Haus.",
       button: "Anfrage senden",
     },
   },
@@ -144,9 +144,9 @@ const examples = {
       "Websites für Handwerksbetriebe, die Leistungen, Einsatzgebiet und Kontakt sofort zeigen, auf dem Handy schnell laden und bei Google und in KI-Antworten gefunden werden. Mit zwei Konzeptbeispielen.",
     h1: "Website für Handwerksbetriebe",
     intro:
-      "Eine Handwerker-Website hat eine Aufgabe: Wer ein neues Bad oder eine Reparatur braucht, soll dich finden und direkt bei dir anfragen, statt über ein Portal, das an jeder Anfrage mitverdient. Wir bauen Websites für Handwerksbetriebe, die Leistungen, Einsatzgebiet und Kontakt sofort zeigen, auf dem Handy schnell laden und bei Google und in KI-Antworten gefunden werden.",
+      "Eine Handwerker-Website hat eine Aufgabe: Wer ein neues Bad oder eine Reparatur braucht, soll Sie finden und direkt bei Ihnen anfragen, statt über ein Portal, das an jeder Anfrage mitverdient. Wir bauen Websites für Handwerksbetriebe, die Leistungen, Einsatzgebiet und Kontakt sofort zeigen, auf dem Handy schnell laden und bei Google und in KI-Antworten gefunden werden.",
     conceptsHeading: "Konzepte für Handwerksbetriebe",
-    conceptsText: "Ausgedachte Betriebe, die zeigen, was möglich ist. Deine Website gestalten wir für deinen Betrieb.",
+    conceptsText: "Ausgedachte Betriebe, die zeigen, was möglich ist. Ihre Website gestalten wir für Ihren Betrieb.",
     conceptLabel: "Konzept",
     concepts: [
       {
@@ -178,19 +178,19 @@ const examples = {
       },
       {
         title: "Das Einsatzgebiet",
-        copy: "Die Orte, in denen du arbeitest, damit Kunden sofort sehen, ob du zu ihnen kommst.",
+        copy: "Die Orte, in denen Sie arbeiten, damit Kunden sofort sehen, ob Sie zu ihnen kommen.",
       },
       {
         title: "Eine Anfrage, die zum Termin führt",
-        copy: "Ein Formular fragt nach Vorhaben, Ort und Fotos. So weißt du vor dem Rückruf, worum es geht.",
+        copy: "Ein Formular fragt nach Vorhaben, Ort und Fotos. So wissen Sie vor dem Rückruf, worum es geht.",
       },
       {
         title: "Arbeiten, die man sieht",
-        copy: "Fotos deiner Baustellen und fertigen Projekte statt Bildern aus dem Katalog.",
+        copy: "Fotos Ihrer Baustellen und fertigen Projekte statt Bildern aus dem Katalog.",
       },
       {
         title: "Echte Bewertungen",
-        copy: "Deine Google-Bewertungen direkt auf der Seite, damit Kunden nicht woanders nachsehen müssen.",
+        copy: "Ihre Google-Bewertungen direkt auf der Seite, damit Kunden nicht woanders nachsehen müssen.",
       },
       {
         title: "Nachweise",
@@ -206,19 +206,19 @@ const examples = {
       "Anzahl der Seiten und Leistungen",
       "Funktionen wie Anfrageformular, Kostenrechner oder Badplaner",
       "Fotos: vorhanden oder neu",
-      "Texte: von dir oder von uns geschrieben",
+      "Texte: von Ihnen oder von uns geschrieben",
       "Betreuung nach dem Start: Hosting, Updates, Änderungen",
     ],
-    costsAfter: "Nach einem kurzen Gespräch bekommst du ein Angebot.",
+    costsAfter: "Nach einem kurzen Gespräch erhalten Sie ein Angebot.",
     processHeading: "So arbeiten wir",
     process: [
       {
         title: "Gespräch und Prüfung",
-        copy: "Wir sehen uns deine aktuelle Website an und klären, welche Aufträge über sie kommen sollen.",
+        copy: "Wir sehen uns Ihre aktuelle Website an und klären, welche Aufträge über sie kommen sollen.",
       },
       {
         title: "Konzept",
-        copy: "Mit deinen Leistungen, deinem Einsatzgebiet und Fotos deiner Arbeit.",
+        copy: "Mit Ihren Leistungen, Ihrem Einsatzgebiet und Fotos Ihrer Arbeit.",
       },
       {
         title: "Umsetzung und Umzug",
@@ -234,7 +234,7 @@ const examples = {
       {
         question: "Was kostet eine Website für einen Handwerksbetrieb?",
         answer:
-          "Das hängt vor allem von der Anzahl der Seiten und Leistungen, von Funktionen wie einem Anfrageformular und davon ab, ob Fotos und Texte schon vorhanden sind. Nach einem kurzen Gespräch bekommst du ein Angebot.",
+          "Das hängt vor allem von der Anzahl der Seiten und Leistungen, von Funktionen wie einem Anfrageformular und davon ab, ob Fotos und Texte schon vorhanden sind. Nach einem kurzen Gespräch erhalten Sie ein Angebot.",
       },
       {
         question: "Wie lange dauert es?",
@@ -244,17 +244,17 @@ const examples = {
       {
         question: "Wem gehört die Website?",
         answer:
-          "Dir. Domain, Texte und Fotos bleiben dein Eigentum, die Website gehört dir nach vollständiger Bezahlung.",
+          "Ihnen. Domain, Texte und Fotos bleiben Ihr Eigentum, die Website gehört Ihnen nach vollständiger Bezahlung.",
       },
       {
         question: "Brauche ich eigene Fotos?",
         answer:
-          "Fotos deiner eigenen Arbeit überzeugen am meisten. Wenn noch keine da sind, klären wir im ersten Gespräch, woher die Bilder kommen.",
+          "Fotos Ihrer eigenen Arbeit überzeugen am meisten. Wenn noch keine da sind, klären wir im ersten Gespräch, woher die Bilder kommen.",
       },
       {
         question: "Werden wir bei Google und in KI-Antworten gefunden?",
         answer:
-          "Die Website bringt die technischen Grundlagen mit. Platzierungen kann niemand zusagen; wie du dauerhaft sichtbar wirst, gehört zu unserer Leistung SEO und KI-Sichtbarkeit.",
+          "Die Website bringt die technischen Grundlagen mit. Platzierungen kann niemand zusagen; wie Sie dauerhaft sichtbar werden, gehört zu unserer Leistung SEO und KI-Sichtbarkeit.",
         linkText: "SEO und KI-Sichtbarkeit",
       },
       {
@@ -264,8 +264,8 @@ const examples = {
       },
     ],
     cta: {
-      heading: "Diese Website für deinen Betrieb?",
-      text: "Erzähl uns, was du anbietest und wo du arbeitest.",
+      heading: "Diese Website für Ihren Betrieb?",
+      text: "Erzählen Sie uns, was Sie anbieten und wo Sie arbeiten.",
       button: "Anfrage senden",
     },
   },
