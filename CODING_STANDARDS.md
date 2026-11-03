@@ -5,6 +5,8 @@ Judgement calls for reviewing a change before it is handed back. Mechanical rule
 ## Suchio copy
 
 - Keep team size out of it. No "small team", "kleines Studio", "weil wir wenige sind", and no inflation either ("Spezialisten", "Kernteam"); Suchio is more than one person. Sell the direct contact: "you talk directly to the people who do the work".
+- Address German readers as „Sie“, English readers as “you” and French readers as “vous”.
+- Do not present one framework or tool as Suchio's standard stack. Suchio chooses the technology per project; name a tool only as what a specific project used.
 - Keep services as broad as they are. Ads covers Google and social ads, search covers Google and AI answers; a heading must not narrow a service to one platform.
 - Write specific, plain sentences instead of agency filler or template slots ("Ideal für / Das Ergebnis / Was dazugehört", eyebrow labels over every heading).
 - No invented proof: no figures, timelines, guarantees or quotes nobody confirmed. Ask before stating how long a service takes to work.
