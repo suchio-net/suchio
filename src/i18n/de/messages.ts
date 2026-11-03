@@ -108,20 +108,6 @@ const messages = {
   "home.sceneMailAge": "vor 2 Tagen",
   "home.lostClosing":
     "Deshalb planen wir diese Teile zusammen. Ins Angebot kommt trotzdem nur, was Ihr Projekt braucht.",
-  "about.howTitle": "Wie wir arbeiten",
-  "about.howCopy": "Vier Regeln, an die wir uns in jedem Projekt halten.",
-  "about.principle1Title": "Was wir bauen, gehört Ihnen",
-  "about.principle1Copy":
-    "Sie erhalten Quellcode, Designs, Inhalte und alle Zugänge. Danach sind Sie nicht an uns gebunden.",
-  "about.principle2Title": "Daten vor Geschmack",
-  "about.principle2Copy":
-    "Suchdaten, Analytics und Rückmeldungen Ihrer Kunden entscheiden. Wenn es um Gestaltung geht, begründen wir unsere Vorschläge.",
-  "about.principle3Title": "Nur was das Projekt braucht",
-  "about.principle3Copy":
-    "Wir schlagen keine Leistung vor, nur weil wir sie anbieten. Wenn Sie eine Website brauchen, erhalten Sie ein Angebot für eine Website.",
-  "about.principle4Title": "Neue Tools nur mit Grund",
-  "about.principle4Copy":
-    "Wir setzen ein neues Werkzeug ein, wenn es ein konkretes Problem löst und wir es vorher getestet haben.",
   "imprint.title": "Impressum",
   "privacy.title": "Datenschutz",
 } as const;

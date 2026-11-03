@@ -110,20 +110,6 @@ const messages: Readonly<Record<MessageKey, string>> = {
   "home.sceneMailAge": "il y a 2 jours",
   "home.lostClosing":
     "C’est pourquoi nous planifions ces éléments ensemble. La proposition ne contient pourtant que ce dont votre projet a besoin.",
-  "about.howTitle": "Notre façon de travailler",
-  "about.howCopy": "Quatre règles que nous suivons sur chaque projet.",
-  "about.principle1Title": "Ce que nous créons vous appartient",
-  "about.principle1Copy":
-    "Vous recevez le code source, les maquettes, les contenus et tous les accès. Vous n’êtes ensuite pas lié à nous.",
-  "about.principle2Title": "Les données avant le goût",
-  "about.principle2Copy":
-    "Les données de recherche, les statistiques et les retours de vos clients décident. Pour le design, nous expliquons nos propositions.",
-  "about.principle3Title": "Seulement ce dont le projet a besoin",
-  "about.principle3Copy":
-    "Nous ne proposons pas un service simplement parce que nous l’offrons. Si vous avez besoin d’un site web, vous recevez une proposition pour un site web.",
-  "about.principle4Title": "Un nouvel outil a besoin d’une raison",
-  "about.principle4Copy":
-    "Nous utilisons un nouvel outil lorsqu’il résout un problème concret et que nous l’avons testé au préalable.",
   "imprint.title": "Mentions légales",
   "privacy.title": "Politique de confidentialité",
 };

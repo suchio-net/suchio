@@ -105,19 +105,6 @@ const messages: Readonly<Record<MessageKey, string>> = {
   "home.sceneEnquiries": "Enquiries",
   "home.sceneMailAge": "2 days ago",
   "home.lostClosing": "So we plan these parts together. The proposal still only includes what your project needs.",
-  "about.howTitle": "How we work",
-  "about.howCopy": "Four rules we follow on every project.",
-  "about.principle1Title": "What we build belongs to you",
-  "about.principle1Copy":
-    "You get the source code, designs, content, and every login. You are not tied to us afterwards.",
-  "about.principle2Title": "Data before taste",
-  "about.principle2Copy":
-    "Search data, analytics, and feedback from your customers decide. When it comes to design, we explain our suggestions.",
-  "about.principle3Title": "Only what the project needs",
-  "about.principle3Copy":
-    "We don’t suggest a service just because we offer it. If you need a website, you get a proposal for a website.",
-  "about.principle4Title": "New tools need a reason",
-  "about.principle4Copy": "We use a new tool when it solves a specific problem and we have tested it first.",
   "imprint.title": "Legal notice",
   "privacy.title": "Privacy policy",
 };

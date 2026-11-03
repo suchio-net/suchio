@@ -3,8 +3,9 @@ import type { GetStaticPaths } from "astro";
 import SiteLayout from "@/layouts/site-layout.astro";
 import FinalCta from "@/components/final-cta.astro";
 import Reveal from "@/components/reveal.astro";
-import SectionHeading from "@/components/section-heading.astro";
+import { getAboutCopy, type AboutLinkTarget } from "@/i18n/about";
 import { localeStaticPaths, localizePath, t, type Locale } from "@/lib/i18n";
+import { getServicePath } from "@/lib/service-routes";
 import { breadcrumbNode, organizationReference, pageNode } from "@/lib/structured-data";
 export const getStaticPaths = (() => localeStaticPaths()) satisfies GetStaticPaths;
 
@@ -12,12 +13,12 @@ interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
-const principles = [
-  ["about.principle1Title", "about.principle1Copy"],
-  ["about.principle2Title", "about.principle2Copy"],
-  ["about.principle3Title", "about.principle3Copy"],
-  ["about.principle4Title", "about.principle4Copy"],
-] as const;
+const { sections } = getAboutCopy(locale);
+const linkHref = (target: AboutLinkTarget) => {
+  if (target === "reference") return localizePath("/references/handwerker-work", locale);
+  if (target === "contact") return localizePath("/contact", locale);
+  return getServicePath(target, locale);
+};
 ---
 
 <SiteLayout
@@ -40,19 +41,34 @@ const principles = [
       </Reveal>
     </section>
 
-    <section class="px-page pb-section">
+    <!-- Plain heading-and-text sections, read top to bottom like an article. -->
+    <div class="px-page pb-section">
       <div class="mx-auto max-w-[70rem]">
-        <SectionHeading title={t(locale, "about.howTitle")} copy={t(locale, "about.howCopy")} />
-        <div class="grid grid-cols-2 gap-x-grid max-compact:grid-cols-1">
-          {principles.map(([headingKey, copyKey]) => (
-            <div class="border-t border-line-strong pt-6 pb-9">
-              <h3 class="m-0 text-heading-sm">{t(locale, headingKey)}</h3>
-              <p class="mt-2 mb-0 max-w-[38rem] text-base/6 text-muted">{t(locale, copyKey)}</p>
-            </div>
+        <div class="max-w-[44rem]">
+          {sections.map((section) => (
+            <section class="mt-16 first:mt-0">
+              <h2 class="m-0 text-heading-md text-balance">{section.heading}</h2>
+              {section.paragraphs.map((paragraph) => (
+                <p class="mt-4 mb-0 text-lg/8 text-muted">
+                  {paragraph.map((span) =>
+                    typeof span === "string" ? (
+                      span
+                    ) : (
+                      <a
+                        class="text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
+                        href={linkHref(span.to)}
+                      >
+                        {span.text}
+                      </a>
+                    ),
+                  )}
+                </p>
+              ))}
+            </section>
           ))}
         </div>
       </div>
-    </section>
+    </div>
 
     <FinalCta locale={locale} />
   </main>
