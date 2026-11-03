@@ -80,7 +80,9 @@ const href = `mailto:${company.email}?subject=${encodeURIComponent(vorhaben ? `A
     </div>
     <div class="col">
       <p class="mono mute">Einsatzgebiet</p>
-      <p class="area">{company.city}: {places.map((place) => place.name).join(" · ")}</p>
+      <p class="area">
+        {company.city}: {places.map((place) => place.name).join(" · ")}
+      </p>
     </div>
   </div>
 

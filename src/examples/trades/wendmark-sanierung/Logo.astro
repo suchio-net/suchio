@@ -50,4 +50,17 @@ const { class: className, tone = "dark" } = Astro.props;
   .logo-accent {
     color: var(--logo-accent);
   }
+  /* The two-word wordmark is wider than the old one; on phones it has to share the bar with call and menu. */
+  @media (max-width: 440px) {
+    .logo {
+      gap: 8px;
+    }
+    .logo svg {
+      width: 32px;
+      height: 32px;
+    }
+    .logo-word {
+      font-size: 1.15rem;
+    }
+  }
 </style>

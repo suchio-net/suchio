@@ -11,7 +11,7 @@ import { base, company, faqsHome, references, services, tfm } from "@/examples/t
 import type { IconName } from "@/examples/trades/wendmark-sanierung/icons";
 
 const title = `Sanierung, Bad und Haustechnik in ${company.city} | ${company.name}`;
-const description = `Meisterbetrieb aus ${company.city}: Badsanierung, Sanitär, Heizung, Elektro, Fliesen und Renovierung mit einem Ansprechpartner. Kostenlose Besichtigung.`;
+const description = `Meisterbetrieb aus ${company.city}: Badsanierung, Sanitär, Heizung, Elektro, Fliesen und Renovierung mit einer Ansprechpartnerin. Kostenlose Besichtigung.`;
 // One photo per trade, so the first view shows the whole range, not only bathrooms.
 const heroPhotos = [
   { name: "bad-holz", alt: "Saniertes Bad mit Holzwand, beleuchteter Ablage und bodengleicher Dusche" },
@@ -25,8 +25,8 @@ const tfmBlocks: { icon: IconName; title: string }[] = [
   { icon: "siren", title: "Express-Notfallservice" },
   { icon: "clipboard-check", title: "Betreiberpflichten und Prüfungen" },
 ];
-const previews = ["bad-wanne", "dusche-nische", "trockenbau", "fliesen-mosaik", "bad-doppelwaschtisch"].map(
-  (name) => references.find((item) => item.name === name)!,
+const previews = ["bad-wanne", "dusche-nische", "trockenbau", "fliesen-mosaik", "bad-doppelwaschtisch"].map((name) =>
+  references.find((item) => item.name === name)!,
 );
 const steps = [
   {
@@ -44,12 +44,7 @@ const steps = [
 ];
 ---
 
-<Layout
-  title={title}
-  description={description}
-  lcpImage="bad-holz"
-  lcpSizes="(min-width: 960px) 40vw, 100vw"
->
+<Layout title={title} description={description} lcpImage="bad-holz" lcpSizes="(min-width: 960px) 40vw, 100vw">
   <section class="hero">
     <div class="wrap hero-grid">
       <div class="sign rel" data-sign>
@@ -73,7 +68,7 @@ const steps = [
             <dd>Eingetragener Meisterbetrieb für {company.credentials}</dd>
           </div>
           <div class="row row-contact">
-            <dt>Ansprechpartner</dt>
+            <dt>Ansprechpartnerin</dt>
             <dd>
               {company.owner}, <a href={company.phone.href}>{company.phone.display}</a>
             </dd>
@@ -161,7 +156,7 @@ const steps = [
   <section class="band band-grout" aria-labelledby="steps-title">
     <div class="wrap">
       <h2 id="steps-title" class="section-title">
-        Ein Ansprechpartner für alle Gewerke
+        Eine Ansprechpartnerin für alle Gewerke
       </h2>
       <ol class="steps">
         {steps.map((step, index) => (

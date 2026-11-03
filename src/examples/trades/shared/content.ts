@@ -318,7 +318,9 @@ export const services: Service[] = [
     faqs: [
       {
         q: "Was kostet das Fliesenlegen?",
-        a: ["Das hängt vom Material, vom Format und vom Untergrund ab. Wir sehen uns die Fläche an und nennen dann einen Preis."],
+        a: [
+          "Das hängt vom Material, vom Format und vom Untergrund ab. Wir sehen uns die Fläche an und nennen dann einen Preis.",
+        ],
       },
       {
         q: "Kann man neue Fliesen auf alte legen?",

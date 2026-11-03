@@ -18,14 +18,7 @@ interface Props {
   actionBar?: boolean;
 }
 
-const {
-  title,
-  description,
-  current,
-  lcpImage,
-  lcpSizes = "100vw",
-  actionBar = true,
-} = Astro.props;
+const { title, description, current, lcpImage, lcpSizes = "100vw", actionBar = true } = Astro.props;
 const lcp = lcpImage ? imageSources(lcpImage) : undefined;
 ---
 

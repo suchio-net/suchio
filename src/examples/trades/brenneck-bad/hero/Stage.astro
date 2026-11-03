@@ -74,7 +74,9 @@ const total = pad(steps.length);
         <h1 id="hero-title">
           <Split as="span" text={"Ihr neues Bad.\nAus einer Hand."} class="hero-split" />
         </h1>
-        <p class="hero-lead mute">Meisterbetrieb für {company.credentials} in {company.city}.</p>
+        <p class="hero-lead mute">
+          Meisterbetrieb für {company.credentials} in {company.city}.
+        </p>
         <div class="actions hero-actions">
           <a class="btn" href={sections.kontakt}>
             Kostenlose Besichtigung<span class="arrow" aria-hidden="true"></span>
@@ -156,10 +158,11 @@ const total = pad(steps.length);
   .stage {
     position: relative;
   }
+  /* Sticky parts start below the concept banner, so the first state is the page top. */
   .stage-sticky {
     position: sticky;
-    top: 0;
-    height: 100svh;
+    top: var(--kbar);
+    height: calc(100svh - var(--kbar));
     overflow: hidden;
   }
   /* A faint measuring grid behind the model, fading out towards the edges. */
@@ -260,7 +263,7 @@ const total = pad(steps.length);
   .stage-content {
     position: relative;
     z-index: 2;
-    margin-top: -100svh;
+    margin-top: calc(var(--kbar) - 100svh);
     pointer-events: none;
   }
   .stage-content :is(a, button, h1, h2, h3, p, .step-card) {
@@ -271,7 +274,7 @@ const total = pad(steps.length);
   .hero {
     display: grid;
     grid-template-rows: auto 1fr auto;
-    min-height: 100svh;
+    min-height: calc(100svh - var(--kbar));
     padding-top: calc(var(--header-h) + 12px);
     padding-bottom: 64px;
   }
@@ -552,8 +555,8 @@ const total = pad(steps.length);
     }
     .stage-content {
       position: sticky;
-      top: 0;
-      height: 100svh;
+      top: var(--kbar);
+      height: calc(100svh - var(--kbar));
       overflow: hidden;
     }
     .stage-track {
@@ -727,7 +730,8 @@ const total = pad(steps.length);
     const last = steps.length;
     let stateY: number[] = [];
     const measureStates = () => {
-      const top = stage.getBoundingClientRect().top + scrollY;
+      const kbar = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--kbar")) || 0;
+      const top = stage.getBoundingClientRect().top + scrollY - kbar;
       if (split.matches) {
         const unit = Math.max(1, snaps[1].offsetTop - snaps[0].offsetTop);
         stateY = snaps.map((_, k) => top + k * unit);

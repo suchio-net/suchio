@@ -82,6 +82,12 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
     })),
     { path: "/examples/hotels/flughotel-nordtor", status: 200, draft: true },
     ...[
+      "/examples/trades/brenneck-bad",
+      "/examples/trades/wendmark-sanierung",
+      "/examples/trades/wendmark-sanierung/leistungen/badsanierung",
+      "/examples/trades/wendmark-sanierung/kontakt",
+    ].map((path) => ({ path, status: 200, draft: true })),
+    ...[
       project,
       `${project}/analyse`,
       `${project}/website-a`,
@@ -205,7 +211,7 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
               }
               if (check.indexable && /\bname="robots"[^>]*content="noindex/.test(body))
                 throw new Error("public page unexpectedly marked noindex");
-              if (/\/examples\/hotels$/.test(check.canonical)) {
+              if (/\/examples\/(hotels|trades)$/.test(check.canonical)) {
                 const graph =
                   JSON.parse(
                     body.match(/<script\b[^>]*type="application\/ld\+json"[^>]*>(.*?)<\/script>/s)?.[1] ?? "{}",
@@ -213,11 +219,11 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
                 for (const type of ["WebPage", "FAQPage", "BreadcrumbList"])
                   if (!graph.some((node) => node["@type"] === type)) throw new Error(`missing ${type} schema`);
                 const faq = graph.find((node) => node["@type"] === "FAQPage");
-                if (faq.mainEntity?.length !== 6) throw new Error("incorrect hotel FAQ schema");
+                if (faq.mainEntity?.length !== 6) throw new Error("incorrect industry FAQ schema");
                 const prefix = check.locale === defaultLocale ? "" : `/${check.locale}`;
                 if (!body.includes(`href="${prefix}/contact?service=websites-apps"`))
-                  throw new Error("missing hotel contact service preselection");
-                if (!body.includes(`href="${prefix}/services/seo"`)) throw new Error("missing hotel SEO link");
+                  throw new Error("missing industry contact service preselection");
+                if (!body.includes(`href="${prefix}/services/seo"`)) throw new Error("missing industry SEO link");
               }
             }
             if (check.path === "/robots.txt" && !body.includes(`Sitemap: ${siteOrigin}/sitemap.xml`))
@@ -225,10 +231,14 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
             if (check.path === "/sitemap.xml" && !body.includes(`<loc>${siteOrigin}/fr/contact</loc>`))
               throw new Error("missing localized sitemap entry");
             if (check.path === "/sitemap.xml") {
-              if (["/projekte/", "/entwurf/", "/examples/hotels/flughotel-nordtor"].some((path) => body.includes(path)))
+              if (
+                ["/projekte/", "/entwurf/", "/examples/hotels/flughotel-nordtor", "/examples/trades/"].some((path) =>
+                  body.includes(path),
+                )
+              )
                 throw new Error("concept leaked into sitemap");
               for (const prefix of ["", "/en", "/fr"])
-                for (const path of ["/examples", "/examples/hotels"])
+                for (const path of ["/examples", "/examples/hotels", "/examples/trades"])
                   if (!body.includes(`<loc>${siteOrigin}${prefix}${path}</loc>`))
                     throw new Error("missing examples sitemap entry");
             }

@@ -58,7 +58,8 @@ export const testimonials: Review[] = [
   },
   {
     author: "Hausverwaltung Ruland",
-    quote: "Wartung und kleine Reparaturen in vier Häusern laufen über einen Ansprechpartner. Die Berichte kommen pünktlich.",
+    quote:
+      "Wartung und kleine Reparaturen in vier Häusern laufen über eine Ansprechpartnerin. Die Berichte kommen pünktlich.",
     topic: "Gebäudebetreuung",
     stars: 5,
   },
@@ -85,11 +86,13 @@ export const testimonials: Review[] = [
 export const faqsHome: Faq[] = [
   {
     q: `Übernimmt ${company.name} die komplette Badsanierung?`,
-    a: ["Ja. Vom Rückbau über Leitungen und Elektrik bis zu den Fliesen machen wir das ganze Bad und stimmen alle Gewerke ab."],
+    a: [
+      "Ja. Vom Rückbau über Leitungen und Elektrik bis zu den Fliesen machen wir das ganze Bad und stimmen alle Gewerke ab.",
+    ],
   },
   {
     q: "Übernehmen Sie auch Sanierungen ganzer Wohnungen?",
-    a: ["Ja. Wir sanieren Wohnungen und Häuser, mit einem Ansprechpartner für alle Arbeiten."],
+    a: ["Ja. Wir sanieren Wohnungen und Häuser, mit einer Ansprechpartnerin für alle Arbeiten."],
   },
   {
     q: "Wo sind Sie im Einsatz?",
@@ -101,6 +104,8 @@ export const faqsHome: Faq[] = [
   },
   {
     q: "Wie frage ich ein Projekt an?",
-    a: ["Über das Anfrageformular, per Telefon, WhatsApp oder E-Mail. Mit ein paar Fotos können wir den Aufwand schneller einschätzen."],
+    a: [
+      "Über das Anfrageformular, per Telefon, WhatsApp oder E-Mail. Mit ein paar Fotos können wir den Aufwand schneller einschätzen.",
+    ],
   },
 ];

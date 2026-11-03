@@ -56,7 +56,8 @@ export const places = [
 export const testimonials: Review[] = [
   {
     author: "Katrin M.",
-    quote: "Unser Bad war nach drei Wochen fertig, so wie im Plan. Jeden Freitag gab es ein kurzes Update, wie weit alles ist.",
+    quote:
+      "Unser Bad war nach drei Wochen fertig, so wie im Plan. Jeden Freitag gab es ein kurzes Update, wie weit alles ist.",
     topic: "Komplettbad",
     stars: 5,
   },
@@ -95,7 +96,9 @@ export const testimonials: Review[] = [
 export const faqsHome: Faq[] = [
   {
     q: "Übernehmen Sie die komplette Badsanierung?",
-    a: ["Ja. Vom Rückbau über Leitungen und Elektrik bis zu den Fliesen machen wir das ganze Bad und stimmen alle Gewerke ab."],
+    a: [
+      "Ja. Vom Rückbau über Leitungen und Elektrik bis zu den Fliesen machen wir das ganze Bad und stimmen alle Gewerke ab.",
+    ],
   },
   {
     q: "Wo sind Sie im Einsatz?",

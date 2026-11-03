@@ -69,7 +69,7 @@ const steps = ["Vorhaben", "Details", "Ort", "Kontakt"];
           </dd>
         </div>
         <div class="row">
-          <dt>Ansprechpartner</dt>
+          <dt>Ansprechpartnerin</dt>
           <dd>
             {company.owner}, {company.ownerRole}
           </dd>
@@ -1022,7 +1022,6 @@ const steps = ["Vorhaben", "Details", "Ort", "Kontakt"];
   const storageKey = "wendmark-anfrage";
   let current = 0;
 
-
   const value = (name: string) =>
     (form.elements.namedItem(name) as RadioNodeList | HTMLInputElement | null)?.value ?? "";
   const checked = (name: string) =>
@@ -1145,11 +1144,7 @@ const steps = ["Vorhaben", "Details", "Ort", "Kontakt"];
     if (type) rows.push(["Start", value("zeitraum")]);
     const plz = value("plz"),
       ort = value("ort");
-    if (plz || ort)
-      rows.push([
-        "Ort",
-        `${plz} ${ort}`.trim(),
-      ]);
+    if (plz || ort) rows.push(["Ort", `${plz} ${ort}`.trim()]);
     if (files.length) rows.push(["Fotos", `${files.length} angehängt`]);
     return rows;
   };

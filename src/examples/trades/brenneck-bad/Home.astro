@@ -27,7 +27,12 @@ const facts = [
     label: "Bewertung",
     sub: `aus ${company.rating.count} Rezensionen (Beispiel)`,
   },
-  { value: String(new Date().getFullYear() - company.since), decimals: 0, label: "Jahre im Handwerk", sub: `seit ${company.since}` },
+  {
+    value: String(new Date().getFullYear() - company.since),
+    decimals: 0,
+    label: "Jahre im Handwerk",
+    sub: `seit ${company.since}`,
+  },
   { value: String(places.length), decimals: 0, label: "Stadtteile", sub: `ganz ${company.city}` },
   { value: "0", decimals: 0, unit: "€", label: "Besichtigung", sub: "und Angebot, unverbindlich" },
 ];
