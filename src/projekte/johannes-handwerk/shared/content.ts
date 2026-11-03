@@ -41,7 +41,7 @@ export const ratings = {
 
 /** Figures from his current website. Confirm before launch. */
 export const figures = [
-  { value: "15+", label: "Jahre Handwerkserfahrung" },
+  { value: "15+", label: "Jahre Handwerks­erfahrung" },
   { value: "2420+", label: "abgeschlossene Projekte" },
   { value: "24 h", label: "Antwortzeit auf Anfragen" },
 ];
@@ -106,11 +106,27 @@ export const myhammerReviews: Review[] = [
   },
 ];
 
+/** Verbatim excerpts from three named reviews on his Google profile, read on 3 November 2026.
+ *  Google shows no place; Freimann comes from the review text. */
 export const googleReviews: Review[] = [
-  { quote: "Kompetente Beratung, pünktlich, gute und saubere Ausführung, Faire Preise.", platform: "Google" },
-  { quote: "Gerade beim Boden wurde sehr sauber, präzise und ordentlich gearbeitet.", platform: "Google" },
   {
-    quote: "Besonders positiv: Aufkommende Probleme wurden schnell und unkompliziert gelöst.",
+    quote:
+      "Trotz wirklich grausigem Wetter wurde Alles pünktlich im Dezember vor unserem Einzugstermin innerhalb von zwei Tagen fertig!",
+    name: "Jakob A.",
+    place: "München-Freimann",
+    service: "Pflasterarbeiten",
+    platform: "Google",
+  },
+  {
+    quote: "Der Auftrag wurde mit viel Tatkraft, in sehr kurzer Zeit und absolut zuverlässig umgesetzt.",
+    name: "Reinhold K.",
+    service: "Kellerabdichtung",
+    platform: "Google",
+  },
+  {
+    quote: "Johannes hat uns bei der Planung kompetent beraten. … Der Preis ist äußerst fair.",
+    name: "Andreas K.",
+    service: "Gartengestaltung",
     platform: "Google",
   },
 ];

@@ -1,7 +1,7 @@
 /* Johannes-Handwerk, Entwurf A: editorial and calm, after Website A of the earlier
    client drafts. White page and ink text, so the red lettering and the coloured hexagons of his logo
    stay the only colour. DM Sans for words, JetBrains Mono for labels and numbers. All content
-   is visible in the HTML; nothing fades in. */
+   is visible in the HTML. With script, blocks rise in once on scroll (client.ts). */
 :root {
   --white: #ffffff;
   --mist: #f5f4f2;
@@ -295,6 +295,7 @@ b {
 /* Text link with an underline that withdraws on hover. */
 .link {
   display: inline-flex;
+  justify-self: start;
   align-items: center;
   gap: 10px;
   min-height: 44px;
@@ -335,6 +336,7 @@ b {
   font-weight: 500;
   letter-spacing: -0.015em;
   line-height: 1.35;
+  transition: padding 0.5s var(--ease);
 }
 .faq summary::-webkit-details-marker {
   display: none;
@@ -351,9 +353,30 @@ b {
 .faq details[open] summary::after {
   transform: rotate(135deg);
 }
+@media (hover: hover) {
+  .faq summary:hover {
+    padding-left: 12px;
+  }
+}
 .faq .answer {
   padding: 0 48px 26px 0;
   color: var(--mute);
+}
+/* The answer slides open and closed, as in the Brenneck example. */
+@supports (interpolate-size: allow-keywords) {
+  .faq {
+    interpolate-size: allow-keywords;
+  }
+  .faq details::details-content {
+    height: 0;
+    overflow: clip;
+    transition:
+      height 0.6s var(--ease),
+      content-visibility 0.6s allow-discrete;
+  }
+  .faq details[open]::details-content {
+    height: auto;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -363,5 +386,59 @@ b {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Scroll reveals, started by client.ts. Without script or with reduced motion all stays visible. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js
+    :is(
+      .facts .fact,
+      .services > h2,
+      .focus-copy,
+      .focus-photo,
+      .more > li,
+      .projects-head,
+      .slides,
+      .process > h2,
+      .process-step,
+      .reviews h2,
+      .platforms > li,
+      .faq-head,
+      .faq details,
+      .cta-title,
+      .cta-row
+    ) {
+    transition:
+      opacity 1s var(--ease) var(--delay, 0s),
+      transform 1.2s var(--ease) var(--delay, 0s);
+  }
+  html.js
+    :is(
+      .facts .fact,
+      .services > h2,
+      .focus-copy,
+      .focus-photo,
+      .more > li,
+      .projects-head,
+      .slides,
+      .process > h2,
+      .process-step,
+      .reviews h2,
+      .platforms > li,
+      .faq-head,
+      .faq details,
+      .cta-title,
+      .cta-row
+    ):not(.in) {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  /* The focus photo settles from a slight zoom while it rises. */
+  html.js .focus-photo img {
+    transition: transform 1.8s var(--ease);
+  }
+  html.js .focus-photo:not(.in) img {
+    transform: scale(1.1);
   }
 }

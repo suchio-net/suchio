@@ -1,5 +1,6 @@
 ---
 import Icon from "./Icon.astro";
+import PlatformLogo from "./PlatformLogo.astro";
 import { googleReviews, myhammerReviews, ratings } from "../shared/content";
 
 const platforms = [ratings.google, ratings.myhammer];
@@ -15,39 +16,70 @@ const reviews = [...myhammerReviews, ...googleReviews];
       <div class="platforms">
         {platforms.map((platform) => (
           <a class="platform" href={platform.href} rel="noopener">
-            <span class="platform-name">{platform.platform}</span>
-            <span class="platform-value">
-              <Icon name="star" size={22} />
-              {platform.value}
-            </span>
-            <span class="soft">
-              {platform.count} {platform.unit}
+            <PlatformLogo platform={platform.platform} />
+            <span class="platform-score">
+              <span class="platform-value">
+                <Icon name="star" size={22} />
+                {platform.value}
+              </span>
+              <span class="soft">
+                {platform.count} {platform.unit}
+              </span>
             </span>
           </a>
         ))}
-        <p class="as-of soft">{ratings.asOf}</p>
       </div>
     </div>
-    <ul class="quotes">
+    <ul class="quotes" data-quotes>
       {reviews.map((review) => (
         <li>
           <blockquote>
             <p>„{review.quote}“</p>
           </blockquote>
           <p class="who soft">
-            {[review.name, review.place, review.service, review.platform].filter(Boolean).join(" · ")}
+            <PlatformLogo platform={review.platform} mark />
+            <span>
+              {[review.name, review.place, review.service].filter(Boolean).join(" · ") ||
+                `${review.platform}-Rezension`}
+            </span>
           </p>
         </li>
       ))}
     </ul>
+    <div class="swipe-meta" aria-hidden="true">
+      <span class="swipe-bar">
+        <i data-swipe-bar></i>
+      </span>
+      <span class="soft">
+        <span data-swipe-current>1</span> / {reviews.length}
+      </span>
+    </div>
   </div>
 </section>
+
+<script>
+  // Phones: the progress bar under the swipe row follows the scroll position.
+  for (const list of document.querySelectorAll<HTMLElement>("[data-quotes]")) {
+    const meta = list.nextElementSibling as HTMLElement;
+    const bar = meta.querySelector<HTMLElement>("[data-swipe-bar]")!;
+    const current = meta.querySelector<HTMLElement>("[data-swipe-current]")!;
+    const count = list.children.length;
+    const update = () => {
+      const max = list.scrollWidth - list.clientWidth;
+      const ratio = max > 0 ? list.scrollLeft / max : 0;
+      bar.style.transform = `scaleX(${(1 + ratio * (count - 1)) / count})`;
+      current.textContent = String(Math.round(ratio * (count - 1)) + 1);
+    };
+    list.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+</script>
 
 <style>
   .reviews-head {
     display: grid;
-    gap: 8px 48px;
-    margin-bottom: clamp(28px, 4vw, 48px);
+    gap: 12px;
+    margin-bottom: var(--joint);
   }
   .reviews-head .section-title {
     margin-bottom: 0;
@@ -58,18 +90,24 @@ const reviews = [...myhammerReviews, ...googleReviews];
     gap: var(--joint);
     align-content: end;
   }
+  /* One box per platform, together as wide as the review grid: logo left, score right. */
   .platform {
-    display: grid;
-    gap: 2px;
-    padding: 18px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 24px;
+    padding: 20px 24px;
     background: var(--board);
     text-decoration: none;
   }
-  .platform:hover .platform-name {
-    text-decoration: underline;
+  .platform-score {
+    display: grid;
+    justify-items: end;
+    gap: 2px;
   }
-  .platform-name {
-    font-weight: 700;
+  .platform:hover .platform-score .soft {
+    text-decoration: underline;
   }
   .platform-value {
     display: flex;
@@ -84,19 +122,27 @@ const reviews = [...myhammerReviews, ...googleReviews];
     color: var(--red);
     fill: var(--red);
   }
-  .as-of {
-    grid-column: 1 / -1;
-    font-size: 0.95rem;
+  .reviews-head .section-title {
+    margin-bottom: 12px;
   }
+  @media (max-width: 600px) {
+    .platform {
+      padding: 16px;
+    }
+    .platform-score {
+      justify-items: start;
+    }
+  }
+  /* A regular grid: the cards in one row share a height and the names sit on one line. */
   .quotes {
-    columns: 3 300px;
-    column-gap: var(--joint);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: var(--joint);
   }
   .quotes li {
     display: grid;
+    align-content: space-between;
     gap: 14px;
-    break-inside: avoid;
-    margin-bottom: var(--joint);
     padding: 24px;
     background: var(--board);
   }
@@ -105,12 +151,76 @@ const reviews = [...myhammerReviews, ...googleReviews];
     line-height: 1.45;
   }
   .who {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 0.95rem;
   }
-  @media (min-width: 960px) {
-    .reviews-head {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      align-items: end;
+  .who :global(.platform-logo) {
+    flex: none;
+  }
+  .swipe-meta {
+    display: none;
+  }
+  /* Phones: one card at a time in a swipe row, the next card peeks in at the edge. */
+  @media (max-width: 700px) {
+    .quotes {
+      display: flex;
+      gap: 12px;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .quotes::-webkit-scrollbar {
+      display: none;
+    }
+    .quotes li {
+      flex: 0 0 86%;
+      scroll-snap-align: start;
+    }
+    .swipe-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 20px;
+      font-size: 0.95rem;
+    }
+    .swipe-bar {
+      flex: 1;
+      height: 2px;
+      background: var(--grout-line);
+    }
+    .swipe-bar i {
+      display: block;
+      height: 100%;
+      background: var(--red);
+      transform-origin: left;
+      transition: transform 0.2s ease-out;
+    }
+    /* Cards off to the side sit slightly smaller and lighter. */
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .quotes li {
+          animation: card-focus linear both;
+          animation-timeline: view(inline);
+        }
+        @keyframes card-focus {
+          0%,
+          100% {
+            opacity: 0.55;
+            transform: scale(0.94);
+          }
+          35%,
+          65% {
+            opacity: 1;
+            transform: none;
+          }
+        }
+      }
     }
   }
 </style>

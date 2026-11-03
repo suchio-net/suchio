@@ -20,6 +20,9 @@ const canonical = new URL(base, Astro.site).href;
 <html lang="de">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />

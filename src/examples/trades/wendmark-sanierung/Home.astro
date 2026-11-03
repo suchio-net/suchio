@@ -12,10 +12,9 @@ import type { IconName } from "@/examples/trades/wendmark-sanierung/icons";
 
 const title = `Sanierung, Bad und Haustechnik in ${company.city} | ${company.name}`;
 const description = `Meisterbetrieb aus ${company.city}: Badsanierung, Sanitär, Heizung, Elektro, Fliesen und Renovierung mit einer Ansprechpartnerin. Kostenlose Besichtigung.`;
-// One photo per trade, so the first view shows the whole range, not only bathrooms.
+// A finished bath and a trade at work. The sign sets the hero height; the photos fill it.
 const heroPhotos = [
   { name: "bad-holz", alt: "Saniertes Bad mit Holzwand, beleuchteter Ablage und bodengleicher Dusche" },
-  { name: "vorwand-rohbau", alt: "Neue Wasser- und Abwasserleitungen in einer offenen Wand" },
   { name: "fliesen-verlegung", alt: "Fliesenleger setzt Wandfliesen mit Fliesenkreuzen" },
 ];
 // The four services of the Gebäudebetreuung page, so the card without a photo still shows what is offered.
@@ -87,7 +86,7 @@ const steps = [
               alt={photo.alt}
               group="hero"
               eager={index === 0}
-              sizes={index === 0 ? "(min-width: 960px) 40vw, 100vw" : "(min-width: 960px) 20vw, 50vw"}
+              sizes="(min-width: 960px) 40vw, 100vw"
             />
           </figure>
         ))}
@@ -155,7 +154,7 @@ const steps = [
 
   <section class="band band-grout" aria-labelledby="steps-title">
     <div class="wrap">
-      <h2 id="steps-title" class="section-title">
+      <h2 id="steps-title" class="section-title steps-title">
         Eine Ansprechpartnerin für alle Gewerke
       </h2>
       <ol class="steps">
@@ -232,12 +231,13 @@ const steps = [
     }
   }
   .hero-photos {
-    grid-template-columns: 1fr 1fr;
     grid-template-rows: 3fr 2fr;
     min-height: 360px;
   }
-  .hero-photos .h1 {
-    grid-column: 1 / -1;
+  /* Out of the flow, so the photos take the sign's height instead of stretching the sign. */
+  .hero-photos :global(.zoom) {
+    position: absolute;
+    inset: 0;
   }
   @media (max-width: 959px) {
     .hero-photos {
@@ -411,7 +411,8 @@ const steps = [
   .intro-row .lead {
     max-width: 52ch;
   }
-  .projects-intro .section-title {
+  .projects-intro .section-title,
+  .steps-title {
     max-width: none;
   }
   @media (min-width: 700px) {

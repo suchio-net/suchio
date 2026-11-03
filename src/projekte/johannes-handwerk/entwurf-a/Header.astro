@@ -50,7 +50,7 @@ import { base, nav, sections } from "./routes";
   <nav class="wrap" aria-label="Mobile Navigation">
     <ul class="mm-main">
       {nav.map((item, index) => (
-        <li>
+        <li style={`--i:${index}`}>
           <a href={item.href}>
             <span class="mono">{String(index + 1).padStart(2, "0")}</span>
             {item.label}
@@ -207,18 +207,28 @@ import { base, nav, sections } from "./routes";
     display: none;
     flex-direction: column;
   }
+  /* Opening animation as in the Brenneck example: the sheet unrolls from the top, then the
+     items rise in one after another. */
   .mobile-menu[open] {
     display: flex;
+    animation: menu-in 0.7s var(--ease) both;
   }
   .mobile-menu::backdrop {
     background: rgb(0 0 0 / 0.2);
+  }
+  @keyframes menu-in {
+    from {
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      clip-path: inset(0);
+    }
   }
   .mm-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
     min-height: var(--header-h);
-    border-bottom: 1px solid var(--line);
   }
   .mm-close {
     display: inline-flex;
@@ -246,7 +256,6 @@ import { base, nav, sections } from "./routes";
     gap: 14px;
     min-height: 56px;
     padding-block: 8px;
-    border-bottom: 1px solid var(--line);
     font-size: clamp(1.8rem, 8vw, 2.3rem);
     font-weight: 500;
     letter-spacing: -0.045em;
@@ -256,6 +265,26 @@ import { base, nav, sections } from "./routes";
   .mm-main .mono {
     color: var(--mute);
     letter-spacing: 0.06em;
+  }
+  .mobile-menu[open] nav li {
+    animation: item-in 0.8s var(--ease) both;
+    animation-delay: calc(0.12s + var(--i) * 0.04s);
+  }
+  .mobile-menu[open] .mm-foot {
+    animation: item-in 0.8s var(--ease) 0.4s both;
+  }
+  @keyframes item-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu[open],
+    .mobile-menu[open] nav li,
+    .mobile-menu[open] .mm-foot {
+      animation: none;
+    }
   }
   .mm-foot {
     display: grid;

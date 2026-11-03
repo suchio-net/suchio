@@ -1,410 +1,256 @@
 ---
-// Hero: copy on the left, a driveway built layer by layer on the right. The model is CSS 3D:
-// each layer is a slab with a top, a front and a side face that drops into place, in site
-// order, like the bathroom assembly in Website A. It needs no script and no WebGL, so the copy
-// and the LCP never wait for it. Without motion the finished driveway shows at once.
+// Home stage: the hero and the six layer steps share one pinned three.js model (drive/scene.ts),
+// like the bathroom of the Brenneck example. The hero shows the finished drive in its garden;
+// scrolling into the steps lifts the layers off and lowers each one in again with its note.
+// Copy stays HTML, the canvas is decoration and loads after the page.
+import Photo from "../shared/Photo.astro";
 import { company, ratings } from "../shared/content";
 import { sections } from "./routes";
 
-interface Slab {
-  name: string;
-  /** Thickness in container units; drawn only, never labelled with real measurements. */
-  h: number;
-  kind: string;
-}
-const slabs: Slab[] = [
-  { name: "Untergrund", h: 7, kind: "earth" },
-  { name: "Frostschutzschicht", h: 5.4, kind: "frost" },
-  { name: "Tragschicht", h: 4.4, kind: "base" },
-  { name: "Bettung aus Splitt", h: 1.8, kind: "grit" },
+const steps = [
+  { name: "Untergrund", text: "Wir heben aus, verdichten den Boden und legen das Gefälle an, damit Wasser abläuft." },
+  {
+    name: "Frostschutzschicht",
+    text: "Grobes Material, lagenweise verdichtet. Es leitet Wasser ab und schützt die Fläche vor Frostschäden.",
+  },
+  { name: "Tragschicht", text: "Schotter, verdichtet und eben abgezogen. Er trägt das Gewicht von Auto und Anhänger." },
+  {
+    name: "Bettung aus Splitt",
+    text: "Eine dünne Lage Splitt, genau auf Höhe abgezogen. Darin liegen die Steine fest.",
+  },
+  { name: "Pflaster", text: "Naturstein, Beton oder Verbundpflaster, im Verband verlegt und am Rand eingefasst." },
+  { name: "Fugen", text: "Fugensand einkehren und abrütteln. Dann ist die Fläche fertig und belastbar." },
 ];
-const paveHeight = 2.6;
-const rows = 6;
-const names = [...slabs.map((slab) => slab.name), "Pflaster", "Fugen"];
-const start = 0.35,
-  gap = 0.6;
-// Landing time of each step: four slabs, the paving rows, the joints, then the finished drive.
-const at = [0, 1, 2, 3].map((i) => start + i * gap);
-const paveAt = start + 4 * gap;
-const jointsAt = paveAt + rows * 0.12 + 0.75;
-const doneAt = jointsAt + 0.9;
-const times = [...at, paveAt, jointsAt, doneAt];
-let z = 0;
-const placed = slabs.map((slab) => {
-  const slabZ = z;
-  z += slab.h;
-  return { ...slab, z: slabZ };
-});
-const paveZ = z;
 const pad = (n: number) => String(n).padStart(2, "0");
-const s = (value: number) => `${value.toFixed(2)}s`;
+const total = pad(steps.length);
 ---
 
-<section class="hero" aria-labelledby="hero-title" style={`--done:${s(doneAt)}`}>
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <p class="mono kicker">
-        {company.name} · {company.area}
-      </p>
-      <h1 id="hero-title">Pflaster, Terrassen und Außenanlagen in München</h1>
-      <p class="slogan">{company.slogan}</p>
-      <p class="lead mute">
-        Einfahrten, Wege, Terrassen und Zäune, vom Unterbau bis zum letzten Stein. Dazu Innenausbau mit Boden, Fliesen,
-        Bad und Küche.
-      </p>
-      <div class="actions">
-        <a class="btn" href={sections.kontakt}>
-          Projekt anfragen
-          <span class="arrow" aria-hidden="true">
-            →
+<section class="stage" aria-labelledby="hero-title" data-stage>
+  <div class="stage-sticky" aria-hidden="true">
+    <canvas class="stage-canvas" data-stage-canvas></canvas>
+    <div class="labels">
+      {steps.map((step, index) => (
+        <span class="label mono" data-stage-label>
+          <i></i>
+          <b></b>
+          <span>
+            {pad(index + 1)} {step.name}
           </span>
-        </a>
-        <a class="btn btn-line" href={company.mobile.href}>
-          {company.mobile.display}
-        </a>
+        </span>
+      ))}
+    </div>
+    <div class="fallback">
+      <Photo name="einfahrt-haus" alt="" label={false} sizes="(min-width: 960px) 55vw, 100vw" />
+    </div>
+  </div>
+
+  <div class="stage-content">
+    <div class="hero wrap" data-hero>
+      <div class="hero-copy" data-copy>
+        <h1 id="hero-title">Pflaster, Terrassen und Außenanlagen in München</h1>
+        <p class="lead mute">
+          Einfahrten, Wege, Terrassen und Zäune, vom Unterbau bis zum letzten Stein. Dazu Innenausbau mit Boden,
+          Fliesen, Bad und Küche.
+        </p>
+        <div class="actions">
+          <a class="btn" href={sections.kontakt}>
+            Projekt anfragen
+            <span class="arrow" aria-hidden="true">
+              →
+            </span>
+          </a>
+          <a class="btn btn-line" href={company.mobile.href}>
+            {company.mobile.display}
+          </a>
+        </div>
+        <ul class="ratings mono">
+          {[ratings.google, ratings.myhammer].map((rating) => (
+            <li>
+              <a href={rating.href} rel="noopener">
+                <b>{rating.value}</b>
+                <span class="stars" aria-hidden="true">
+                  ★★★★★
+                </span>
+                {rating.platform}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
 
-    <div class="drive" aria-hidden="true">
-      <div class="scene">
-        <div class="block">
-          <i class="ground"></i>
-          {placed.map((slab, index) => (
-            <div class:list={["slab", slab.kind]} style={`--z:${slab.z}cqw;--h:${slab.h}cqw;--d:${s(times[index])}`}>
-              <i class="face top"></i>
-              <i class="face front"></i>
-              <i class="face side"></i>
+    <div class="layers wrap" aria-labelledby="layers-title">
+      <h2 id="layers-title" class="sr-only">
+        Aufbau einer Einfahrt in {steps.length} Schichten
+      </h2>
+      <ol class="steps">
+        {steps.map((step, index) => (
+          <li class="step" data-step>
+            <div class="step-card" data-copy>
+              <p class="mono mute">
+                {pad(index + 1)} / {total}
+              </p>
+              <h3>{step.name}</h3>
+              <p class="step-text mute">{step.text}</p>
+              {index === steps.length - 1 && (
+                <a class="link" href={sections.kontakt}>
+                  Einfahrt anfragen
+                  <span class="arrow" aria-hidden="true">
+                    →
+                  </span>
+                </a>
+              )}
             </div>
-          ))}
-          <div class="pave" style={`--z:${paveZ}cqw;--h:${paveHeight}cqw`}>
-            {Array.from({ length: rows }, (_, r) => (
-              <div class="row" style={`--r:${r};--d:${s(paveAt + r * 0.12)}`}>
-                <i class="face top"></i>
-                <i class="face front"></i>
-                <i class="face side"></i>
-              </div>
-            ))}
-            <i class="joints" style={`--d:${s(jointsAt)}`}></i>
-          </div>
-        </div>
-      </div>
-      <ol class="legend mono">
-        {names
-          .map((name, index) => (
-            <li style={`--d:${s(times[index])}`}>
-              <i class={`swatch s${index}`}></i>
-              <span>{pad(index + 1)}</span>
-              {name}
-            </li>
-          ))
-          .reverse()}
+          </li>
+        ))}
       </ol>
     </div>
   </div>
-
-  <div class="wrap hero-bottom mono">
-    <p class="hud" aria-hidden="true">
-      <span class="hud-label">Aufbau</span>
-      <span class="hud-bar">
-        {names.map((_, index) => (
-          <i style={`--d:${s(times[index])}`}></i>
-        ))}
-      </span>
-      <span class="hud-names">
-        {names.map((name, index) => (
-          <span style={`--from:${s(times[index])};--for:${s(times[index + 1] - times[index])}`}>
-            {pad(index + 1)}/{pad(names.length)} {name}
-          </span>
-        ))}
-        <span class="hud-done">Einfahrt ✓</span>
-      </span>
-    </p>
-    <ul class="ratings">
-      {[ratings.google, ratings.myhammer].map((rating) => (
-        <li>
-          <a href={rating.href} rel="noopener">
-            <b>{rating.value}</b>
-            <span class="stars" aria-hidden="true">
-              ★★★★★
-            </span>
-            {rating.platform}, {rating.count} {rating.unit}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
+  <div class="stage-track" aria-hidden="true" data-track></div>
 </section>
 
 <style>
-  .hero {
-    padding-top: clamp(28px, 5vw, 64px);
-  }
-  .hero-grid {
-    display: grid;
-    gap: 28px 48px;
-    align-items: center;
-  }
-  @media (min-width: 960px) {
-    .hero-grid {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-      min-height: calc(100svh - var(--header-h) - 150px);
-    }
-  }
-  .hero-copy {
-    display: grid;
-    gap: 22px;
-    align-content: center;
-  }
-  .kicker {
-    color: var(--mute);
-  }
-  h1 {
-    max-width: 13ch;
-  }
-  .slogan {
-    font-family: var(--mono);
-    font-size: 0.95rem;
-    letter-spacing: 0.02em;
-  }
-  .slogan::before {
-    content: "";
-    display: inline-block;
-    width: 28px;
-    height: 1px;
-    margin-right: 12px;
-    vertical-align: middle;
-    background: var(--red);
-  }
-  .lead {
-    max-width: 40ch;
-    font-size: 1.05rem;
-  }
-
-  /* The model. Units are container widths, so it scales with its column. */
-  .drive {
+  .stage {
     position: relative;
-    container-type: inline-size;
-    aspect-ratio: 10 / 7.4;
-    width: 100%;
   }
-  /* A faint measuring grid behind the model, fading out towards the edges. */
-  .drive::before {
+  /* The model stays pinned below the header while the hero and the steps scroll over it. */
+  .stage-sticky {
+    position: sticky;
+    top: var(--header-h);
+    height: calc(100svh - var(--header-h));
+    overflow: hidden;
+  }
+  .stage-sticky::before {
     content: "";
     position: absolute;
     inset: 0;
     background-image:
       linear-gradient(rgb(17 18 19 / 0.05) 1px, transparent 1px),
       linear-gradient(90deg, rgb(17 18 19 / 0.05) 1px, transparent 1px);
-    background-size: 6.4cqw 6.4cqw;
+    background-size: 56px 56px;
     background-position: center;
-    mask-image: radial-gradient(ellipse 60% 60% at 42% 52%, #000 10%, transparent 75%);
+    mask-image: radial-gradient(ellipse 55% 60% at 70% 50%, #000 10%, transparent 75%);
   }
-  .scene {
-    position: absolute;
-    inset: 0;
-    perspective: 260cqw;
-    perspective-origin: 32% 30%;
-  }
-  .block {
-    --w: 42cqw;
-    --dp: 35cqw;
-    position: absolute;
-    left: calc(32% - var(--w) / 2);
-    top: calc(56% - var(--dp) / 2);
-    width: var(--w);
-    height: var(--dp);
-    transform-style: preserve-3d;
-    transform: rotateX(57deg) rotateZ(33deg);
-  }
-  .block * {
-    transform-style: preserve-3d;
-  }
-  .ground {
-    position: absolute;
-    inset: -8cqw;
-    background: radial-gradient(closest-side, rgb(17 18 19 / 0.16), transparent);
-    transform: translate(3cqw, 4cqw);
-  }
-  .slab,
-  .pave,
-  .row {
-    position: absolute;
-    inset: 0;
-  }
-  .slab,
-  .pave {
-    transform: translateZ(var(--z));
-  }
-  .face {
-    position: absolute;
-    display: block;
-    backface-visibility: hidden;
-  }
-  .top {
-    inset: 0;
-    transform: translateZ(var(--h));
-  }
-  .front {
-    left: 0;
-    top: 100%;
+  .stage-canvas {
+    position: relative;
     width: 100%;
-    height: var(--h);
-    transform-origin: top;
-    transform: translateZ(var(--h)) rotateX(-90deg);
-    filter: brightness(0.86);
-  }
-  .side {
-    left: 100%;
-    top: 0;
-    width: var(--h);
     height: 100%;
-    transform-origin: left;
-    transform: translateZ(var(--h)) rotateY(90deg);
-    filter: brightness(0.72);
+    opacity: 0;
+    transition: opacity 0.6s var(--ease);
+  }
+  .stage:global(.ready) .stage-canvas {
+    opacity: 1;
+  }
+  .fallback {
+    display: none;
+  }
+  .stage:global(.no-webgl) .fallback {
+    position: absolute;
+    display: block;
+    inset: 10% var(--gutter) 14% 48%;
+  }
+  .fallback :global(.jh-photo) {
+    height: 100%;
   }
 
-  /* Materials: the textures are dots and joints drawn with gradients. */
-  .earth .face {
-    background:
-      radial-gradient(circle, rgb(0 0 0 / 0.16) 0 0.35cqw, transparent 0.45cqw) 0 0 / 2.2cqw 1.9cqw,
-      radial-gradient(circle, rgb(255 255 255 / 0.1) 0 0.3cqw, transparent 0.4cqw) 1.1cqw 0.9cqw / 2.6cqw 2.1cqw,
-      #7b5c41;
-  }
-  .frost .face {
-    background:
-      radial-gradient(circle, #8a847a 0 0.75cqw, transparent 0.85cqw) 0 0 / 2.6cqw 2.2cqw,
-      radial-gradient(circle, #c9c3b8 0 0.55cqw, transparent 0.65cqw) 1.3cqw 1.1cqw / 2.6cqw 2.2cqw,
-      #aaa59c;
-  }
-  .base .face {
-    background:
-      radial-gradient(circle, #64615d 0 0.45cqw, transparent 0.55cqw) 0 0 / 1.6cqw 1.4cqw,
-      radial-gradient(circle, #aba7a1 0 0.35cqw, transparent 0.45cqw) 0.8cqw 0.7cqw / 1.6cqw 1.4cqw,
-      #8a8782;
-  }
-  .grit .face {
-    background:
-      radial-gradient(circle, #b3ab9d 0 0.18cqw, transparent 0.26cqw) 0 0 / 0.8cqw 0.7cqw,
-      #d3ccbf;
-  }
-  /* Concrete pavers in running bond. The joints start empty and dark; sand fills them last. */
-  .row {
-    top: calc(var(--r) * var(--dp) / 6);
-    bottom: auto;
-    height: calc(var(--dp) / 6);
-    transform: none;
-  }
-  .row .top {
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20'%3E%3Crect width='40' height='20' fill='%23514c46'/%3E%3Crect x='.7' y='.7' width='18.6' height='8.6' fill='%23a49d93'/%3E%3Crect x='20.7' y='.7' width='18.6' height='8.6' fill='%239a938a'/%3E%3Crect x='-9.3' y='10.7' width='18.6' height='8.6' fill='%23aba499'/%3E%3Crect x='10.7' y='10.7' width='18.6' height='8.6' fill='%23a0998f'/%3E%3Crect x='30.7' y='10.7' width='18.6' height='8.6' fill='%23aba499'/%3E%3C/svg%3E")
-      0 calc(var(--r) * var(--dp) / -6) / 7cqw 3.5cqw;
-  }
-  .row .front,
-  .row .side {
-    background: repeating-linear-gradient(90deg, #514c46 0 0.18cqw, #a29b91 0.18cqw 3.5cqw);
-  }
-  .row .side {
-    background: repeating-linear-gradient(180deg, #514c46 0 0.18cqw, #a29b91 0.18cqw 3.5cqw);
-  }
-  .joints {
+  .labels {
     position: absolute;
     inset: 0;
-    display: block;
-    transform: translateZ(calc(var(--h) + 0.02cqw));
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20'%3E%3Crect width='40' height='20' fill='%23d6c49a'/%3E%3Crect x='.7' y='.7' width='18.6' height='8.6' fill='%23a49d93'/%3E%3Crect x='20.7' y='.7' width='18.6' height='8.6' fill='%239a938a'/%3E%3Crect x='-9.3' y='10.7' width='18.6' height='8.6' fill='%23aba499'/%3E%3Crect x='10.7' y='10.7' width='18.6' height='8.6' fill='%23a0998f'/%3E%3Crect x='30.7' y='10.7' width='18.6' height='8.6' fill='%23aba499'/%3E%3C/svg%3E")
-      0 0 / 7cqw 3.5cqw;
+    pointer-events: none;
   }
-
-  /* Legend: one line per layer, top layer first like the section itself. */
-  .legend {
+  .label {
     position: absolute;
-    right: 0;
-    top: 50%;
-    display: grid;
-    gap: 6px;
-    transform: translateY(-50%);
-    color: var(--ink);
-  }
-  .legend li {
+    left: 0;
+    top: 0;
     display: flex;
     align-items: center;
-    gap: 8px;
+    height: 0;
     white-space: nowrap;
+    color: var(--ink);
+    visibility: hidden;
+    will-change: transform, opacity;
   }
-  .legend span {
-    color: var(--mute);
-  }
-  .swatch {
-    width: 10px;
-    height: 10px;
+  .label i {
+    width: 7px;
+    height: 7px;
+    margin-left: -3.5px;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    background: var(--white);
     flex: none;
   }
-  .s0 {
-    background: #7b5c41;
+  .label b {
+    width: var(--len, 34px);
+    height: 1px;
+    background: var(--ink);
+    opacity: 0.6;
   }
-  .s1 {
-    background: #aaa59c;
+  .label span {
+    padding: 4px 8px;
+    margin-left: 6px;
+    background: var(--ink);
+    color: var(--white);
+    font-size: 0.66rem;
   }
-  .s2 {
-    background: #8a8782;
+  .label:global(.flip) {
+    flex-direction: row-reverse;
   }
-  .s3 {
-    background: #d3ccbf;
+  .label:global(.flip) i {
+    margin: 0 -3.5px 0 0;
   }
-  .s4 {
-    background: #a49d93;
+  .label:global(.flip) span {
+    margin: 0 6px 0 0;
   }
-  .s5 {
-    background: #d6c49a;
+  @media (max-width: 600px) {
+    .label span {
+      padding: 3px 6px;
+      font-size: 0.6rem;
+    }
   }
 
-  .hero-bottom {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px 40px;
-    margin-top: clamp(20px, 3vw, 32px);
-    padding-block: 16px 20px;
-    border-top: 1px solid var(--line);
+  .stage-content {
+    position: relative;
+    z-index: 2;
+    margin-top: calc(var(--header-h) - 100svh);
+    pointer-events: none;
   }
-  .hud {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    max-width: none;
-    color: var(--mute);
+  .stage-content :is(a, button, h1, h2, h3, p) {
+    pointer-events: auto;
   }
-  .hud-bar {
-    display: flex;
-    gap: 3px;
-  }
-  .hud-bar i {
-    width: 18px;
-    height: 3px;
-    background: var(--ink);
-  }
-  .hud-names {
+
+  .hero {
     display: grid;
-    min-width: 24ch;
-    color: var(--ink);
+    min-height: calc(100svh - var(--header-h));
   }
-  .hud-names > span {
-    grid-area: 1 / 1;
-    opacity: 0;
+  .hero-copy {
+    display: grid;
+    gap: 22px;
+    align-content: center;
+    padding-block: clamp(24px, 5vh, 64px);
   }
-  .hud-names > .hud-done {
-    opacity: 1;
+  @media (min-width: 960px) {
+    .hero-copy {
+      max-width: min(600px, 44vw);
+    }
+  }
+  h1 {
+    max-width: 13ch;
+  }
+  .lead {
+    max-width: 40ch;
+    font-size: 1.05rem;
   }
   .ratings {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px 28px;
+    gap: 0 24px;
+    margin-top: -8px;
   }
   .ratings a {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    min-height: 44px;
+    min-height: 36px;
     color: var(--mute);
     text-decoration: none;
   }
@@ -421,121 +267,233 @@ const s = (value: number) => `${value.toFixed(2)}s`;
     text-underline-offset: 4px;
   }
 
-  /* Assembly. The finished state is the default; the animations start each step from above. */
-  @media (prefers-reduced-motion: no-preference) {
-    .slab,
-    .row {
-      animation: drop 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d) backwards;
-    }
-    .row {
-      animation-name: drop-row;
-      animation-duration: 0.7s;
-    }
-    .slab .face,
-    .row .face {
-      animation: appear 0.4s ease var(--d) backwards;
-    }
-    .joints {
-      animation: sweep 0.8s cubic-bezier(0.65, 0, 0.35, 1) var(--d) backwards;
-    }
-    .legend li {
-      animation: pending var(--d) step-end;
-    }
-    .hud-bar i {
-      animation: tick-off var(--d) step-end;
-    }
-    .hud-names > span {
-      animation: shown var(--for) step-end var(--from);
-    }
-    .hud-names > .hud-done {
-      animation: hidden var(--done) step-end;
-    }
+  /* Wide screens: one screen per layer, the card left of the model. */
+  .step {
+    display: grid;
+    align-items: center;
+    min-height: 92svh;
   }
-  @keyframes drop {
-    from {
-      transform: translateZ(calc(var(--z) + 26cqw));
-    }
+  .step-card {
+    display: grid;
+    gap: 14px;
+    max-width: min(420px, 36vw);
   }
-  @keyframes drop-row {
-    from {
-      transform: translateZ(12cqw);
-    }
+  .step h3 {
+    font-size: clamp(2.2rem, 1.4rem + 2.6vw, 3.8rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
   }
-  @keyframes appear {
-    from {
-      opacity: 0;
-    }
+  .step-text {
+    max-width: 34ch;
+    font-size: 1.05rem;
   }
-  @keyframes sweep {
-    from {
-      clip-path: inset(0 100% 0 0);
-    }
+  .step-card .link {
+    justify-self: start;
   }
-  @keyframes pending {
-    from,
-    to {
-      opacity: 0.3;
-    }
-  }
-  @keyframes tick-off {
-    from,
-    to {
-      background: var(--fog);
-    }
-  }
-  @keyframes shown {
-    from,
-    to {
-      opacity: 1;
-    }
-  }
-  @keyframes hidden {
-    from,
-    to {
-      opacity: 0;
-    }
+  .stage-track {
+    display: none;
   }
 
-  @media (max-width: 959px) {
-    .drive {
-      aspect-ratio: 10 / 8.4;
+  /* Phones and portrait tablets, like the Brenneck example: one pinned screen. The copy sits at
+     the top, the model below it. Scrolling swaps the copy in place (hero, then each layer) while
+     the model stays where it is; .stage-track provides the scroll distance, 55svh per state. */
+  @media (max-width: 959px) and (orientation: portrait) {
+    .stage-sticky::before {
+      mask-image: radial-gradient(ellipse 75% 32% at 50% 70%, #000 10%, transparent 75%);
     }
-    .block {
-      left: calc(50% - var(--w) / 2);
-      top: calc(44% - var(--dp) / 2);
-      --w: 54cqw;
-      --dp: 44cqw;
+    .stage:global(.no-webgl) .fallback {
+      inset: 52% var(--gutter) 96px;
     }
-    .drive::before {
-      mask-image: radial-gradient(ellipse 60% 50% at 50% 42%, #000 10%, transparent 75%);
+    .stage-content {
+      position: sticky;
+      top: var(--header-h);
+      height: calc(100svh - var(--header-h));
+      overflow: hidden;
     }
-    .legend {
-      top: auto;
-      bottom: 0;
-      left: 0;
-      grid-template-columns: repeat(2, auto);
-      justify-content: space-between;
-      gap: 6px 14px;
-      transform: none;
-      font-size: 0.66rem;
-      letter-spacing: 0.03em;
+    .stage-track {
+      display: block;
+      height: calc(6.5 * 55svh);
     }
-    .legend li {
-      gap: 6px;
+    .hero,
+    .step {
+      position: absolute;
+      inset: 0;
+      padding-top: 20px;
+      transition:
+        opacity 0.6s var(--ease),
+        transform 0.8s var(--ease),
+        visibility 0s;
     }
-  }
-  @media (max-width: 600px) {
-    .hud-label {
+    .hero:not(:global(.on)),
+    .step:not(:global(.on)) {
+      opacity: 0;
+      transform: translateY(-14px);
+      visibility: hidden;
+      transition:
+        opacity 0.3s var(--ease),
+        transform 0.5s var(--ease),
+        visibility 0s 0.5s;
+    }
+    :global(html:not(.js)) .step {
       display: none;
     }
-    .hud-bar i {
-      width: 10px;
+    :global(html:not(.js)) .hero {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
     }
-    .hero-bottom {
-      gap: 4px;
+    .hero {
+      display: block;
+      min-height: 0;
+      padding-top: clamp(40px, 7svh, 64px);
+    }
+    .hero-copy {
+      gap: 14px;
+      padding: 0;
+    }
+    /* The fixed action bar carries the call and the request on phones. */
+    .ratings,
+    .actions {
+      display: none;
+    }
+    h1 {
+      font-size: clamp(2.1rem, 9.2vw, 3.6rem);
+    }
+    .lead {
+      font-size: 0.95rem;
     }
     .actions .btn {
-      flex: 1 1 auto;
+      flex: 0 1 auto;
+    }
+    .layers {
+      position: static;
+      padding: 0;
+    }
+    .steps {
+      display: block;
+    }
+    .step {
+      display: block;
+      min-height: 0;
+      padding-inline: var(--gutter);
+    }
+    .step-card {
+      gap: 12px;
+      max-width: none;
+    }
+    .step h3 {
+      font-size: clamp(2.4rem, 11vw, 4rem);
+    }
+    .step-text {
+      font-size: 0.95rem;
     }
   }
 </style>
+
+<script>
+  import type { DriveScene, Region } from "./drive/scene";
+
+  const stage = document.querySelector<HTMLElement>("[data-stage]");
+  const canvas = stage?.querySelector<HTMLCanvasElement>("[data-stage-canvas]");
+  if (stage && canvas) {
+    const sticky = canvas.parentElement!;
+    const labels = [...stage.querySelectorAll<HTMLElement>("[data-stage-label]")];
+    const hero = stage.querySelector<HTMLElement>("[data-hero]")!;
+    const panels = [hero, ...stage.querySelectorAll<HTMLElement>("[data-step]")];
+    const copies = [...stage.querySelectorAll<HTMLElement>("[data-copy]")];
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const track = stage.querySelector<HTMLElement>("[data-track]")!;
+    const steps = panels.slice(1);
+    const split = matchMedia("(max-width: 959px) and (orientation: portrait)");
+    const action = document.querySelector<HTMLElement>(".action-bar");
+
+    // Continuous state at the current scroll: -1 hero, 0..5 the steps. On wide screens a panel is
+    // in its state when its centre crosses the middle of the pinned area; on phones the screen is
+    // pinned and every 55svh along the track is one state.
+    const progress = () => {
+      if (split.matches) {
+        const unit = track.offsetHeight / 6.5;
+        const moved = sticky.getBoundingClientRect().top - stage.getBoundingClientRect().top;
+        return Math.min(steps.length, moved / unit) - 1;
+      }
+      const box = sticky.getBoundingClientRect();
+      const middle = box.top + box.height / 2;
+      const centres = panels.map((panel) => {
+        const r = panel.getBoundingClientRect();
+        return r.top + r.height / 2;
+      });
+      if (middle <= centres[0]) return -1;
+      for (let i = 1; i < centres.length; i++)
+        if (middle <= centres[i]) return i - 2 + (middle - centres[i - 1]) / (centres[i] - centres[i - 1]);
+      return panels.length - 2;
+    };
+
+    // On phones only the panel of the current state shows.
+    let current = -2;
+    const showPanel = (p: number) => {
+      const active = p < -0.5 ? -1 : Math.min(steps.length - 1, Math.round(p));
+      if (active === current) return;
+      current = active;
+      panels.forEach((panel, i) => panel.classList.toggle("on", i === active + 1));
+    };
+
+    // The model fills the space the copy leaves free: right of it on wide screens; on phones
+    // between the tallest copy panel and the action bar, so it never moves between states.
+    const region = (): Region => {
+      const w = sticky.clientWidth,
+        h = sticky.clientHeight;
+      if (!split.matches) return { left: w * 0.46, right: w - 24, top: 24, bottom: h - 24 };
+      const top = sticky.getBoundingClientRect().top;
+      const text = Math.max(...copies.map((copy) => copy.getBoundingClientRect().bottom - top));
+      // The action bar is fixed, so measure it against the pinned position of the screen. Measured
+      // against the moving top it would push the floor below the screen when the stage scrolls out.
+      const pinned = parseFloat(getComputedStyle(sticky).top) || 0;
+      const floor =
+        action && getComputedStyle(action).display !== "none"
+          ? Math.min(h, action.getBoundingClientRect().top - pinned)
+          : h;
+      return { left: 8, right: w - 8, top: text + 16, bottom: floor - 16 };
+    };
+
+    let scene: DriveScene | undefined;
+    const loop = () => {
+      const p = progress();
+      showPanel(p);
+      if (scene) {
+        scene.setRegion(region());
+        scene.setProgress(p);
+        scene.tick();
+      }
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+    import("./drive/scene")
+      .then(({ createDrive }) => {
+        try {
+          scene = createDrive({ canvas, labels, reduceMotion });
+        } catch {
+          stage.classList.add("no-webgl");
+          return;
+        }
+        scene.ready.then(() => stage.classList.add("ready"));
+        if (matchMedia("(hover: hover) and (pointer: fine)").matches)
+          addEventListener(
+            "pointermove",
+            (event: PointerEvent) =>
+              scene?.setPointer((event.clientX / innerWidth) * 2 - 1, (event.clientY / innerHeight) * 2 - 1),
+            { passive: true },
+          );
+      })
+      .catch(() => stage.classList.add("no-webgl"));
+  }
+</script>
+<noscript>
+  <style is:inline>
+    [data-stage] .fallback {
+      position: absolute;
+      display: block !important;
+      inset: 10% 4vw 14% 48%;
+    }
+  </style>
+</noscript>
