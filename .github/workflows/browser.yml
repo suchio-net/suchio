@@ -27,5 +27,21 @@ jobs:
         with:
           bun-version: 1.4.0
       - run: bun ci
+      - id: astro-images
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            .astro/draft-images
+            .astro/johannes-images
+          key: astro-images-${{ runner.os }}-${{ hashFiles('src/projekte/handwerker-work/photos/**', 'src/examples/trades/photos/**', 'src/projekte/johannes-handwerk/photos/**', 'src/projekte/handwerker-work/shared/images.json', 'src/examples/trades/shared/images.json', 'src/projekte/johannes-handwerk/shared/images.ts', 'src/integrations/draft-images.ts', 'src/projekte/johannes-handwerk/shared/image-integration.ts', 'bun.lock') }}
+          restore-keys: astro-images-${{ runner.os }}-
       - run: bun run build
+      # Save right after the build: a cold encode can exceed the CI timeout before the job ends.
+      - uses: actions/cache/save@v4
+        if: steps.astro-images.outputs.cache-hit != 'true'
+        with:
+          path: |
+            .astro/draft-images
+            .astro/johannes-images
+          key: astro-images-${{ runner.os }}-${{ hashFiles('src/projekte/handwerker-work/photos/**', 'src/examples/trades/photos/**', 'src/projekte/johannes-handwerk/photos/**', 'src/projekte/handwerker-work/shared/images.json', 'src/examples/trades/shared/images.json', 'src/projekte/johannes-handwerk/shared/images.ts', 'src/integrations/draft-images.ts', 'src/projekte/johannes-handwerk/shared/image-integration.ts', 'bun.lock') }}
       - run: bun run check:overflow

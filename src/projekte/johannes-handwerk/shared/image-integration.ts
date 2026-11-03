@@ -13,7 +13,9 @@ export function johannesImagesIntegration(): AstroIntegration {
   return {
     name: "suchio:johannes-images",
     hooks: {
-      "astro:config:setup": async ({ config, logger }) => {
+      "astro:config:setup": async ({ config, logger, command }) => {
+        // `astro check` and `astro sync` only generate types and do not need the image outputs.
+        if (command === "sync") return;
         const destination = new URL("projekte/johannes-handwerk/img/", config.publicDir);
         await mkdir(destination, { recursive: true });
         for (let offset = 0; offset < imageNames.length; offset += 2) {

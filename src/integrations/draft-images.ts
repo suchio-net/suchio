@@ -22,7 +22,9 @@ export function draftImagesIntegration(): AstroIntegration {
   return {
     name: "suchio:draft-images",
     hooks: {
-      "astro:config:setup": async ({ config, logger }) => {
+      "astro:config:setup": async ({ config, logger, command }) => {
+        // `astro check` and `astro sync` only generate types and do not need the image outputs.
+        if (command === "sync") return;
         let count = 0;
         for (const { manifest, photos, output } of photoSets) {
           const destination = new URL(output, config.publicDir);
