@@ -385,19 +385,17 @@ const shots = [
 
 <style>
   /* The findings table. On wide screens, area and old state form one bordered card with a light
-     red column. The new state is a separate green card with a shadow, shifted up as a whole.
-     Column widths are fixed, so the two cards can be drawn behind the cells. */
+     red column. The new-state column looks cut out and lifted forward: a green card in front of the
+     table edge, a little larger than the column, with a shadow. Column widths are fixed, so the
+     card can be drawn exactly behind the third column. */
   .findings-wrap {
     --findings-topic: 13rem;
-    --findings-gap: 1rem;
-    --findings-raise: 1.25rem;
+    --findings-lift: 0.75rem;
     --findings-split: calc(var(--findings-topic) + (100% - var(--findings-topic)) / 2);
     position: relative;
     isolation: isolate;
   }
   .findings-table {
-    position: relative;
-    z-index: 1;
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
@@ -446,44 +444,43 @@ const shots = [
     .findings-table tbody tr:last-child td:nth-of-type(1) {
       border-bottom-right-radius: var(--radius-card);
     }
-    /* The new state: every cell of the third column moves up together with its card. */
+    /* The new-state cells sit above the lifted card. */
     .findings-table thead th:last-child,
     .findings-table td:last-child {
       position: relative;
-      top: calc(-1 * var(--findings-raise));
-      padding-left: calc(var(--findings-gap) + 1.5rem);
+      z-index: 3;
     }
     .findings-table tbody td:last-child::after {
       content: "";
       position: absolute;
       top: 0;
       right: 0;
-      left: var(--findings-gap);
+      left: 0;
       height: 1px;
       background: rgb(12 206 107 / 22%);
     }
-    /* The green card behind the third column. */
+    /* The lifted card: in front of the left card's edge, larger than the column on every side. */
     .findings-wrap::before {
       content: "";
       position: absolute;
-      top: calc(-1 * var(--findings-raise));
-      right: 0;
-      bottom: var(--findings-raise);
-      left: calc(var(--findings-split) + var(--findings-gap));
-      z-index: 0;
+      top: calc(-1 * var(--findings-lift));
+      right: calc(-1 * var(--findings-lift));
+      bottom: calc(-1 * var(--findings-lift));
+      left: calc(var(--findings-split) - var(--findings-lift));
+      z-index: 2;
       border-radius: var(--radius-card);
       background: rgb(240 251 245);
       box-shadow:
         0 0 0 1px rgb(12 206 107 / 30%),
-        0 1px 2px rgb(0 0 0 / 6%),
-        0 22px 44px -14px rgb(0 0 0 / 24%);
+        0 2px 4px rgb(0 0 0 / 6%),
+        0 24px 48px -16px rgb(0 0 0 / 28%);
     }
     /* The border of the left card, drawn above the cell backgrounds. */
     .findings-wrap::after {
       content: "";
       position: absolute;
       inset: 0 calc(100% - var(--findings-split)) 0 0;
-      z-index: 2;
+      z-index: 1;
       border: 1px solid var(--color-line-strong);
       border-radius: var(--radius-card);
       pointer-events: none;
