@@ -271,7 +271,7 @@ const examples = {
       button: "Envoyer une demande",
     },
   },
-  websitesLink: "Voir un exemple : sites web pour hôtels",
+  websitesLink: "Voir des exemples : sites web par secteur",
 } satisfies ExamplesCopy;
 
 export default examples;

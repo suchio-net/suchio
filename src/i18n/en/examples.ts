@@ -267,7 +267,7 @@ const examples = {
       button: "Send a request",
     },
   },
-  websitesLink: "See an example: websites for hotels",
+  websitesLink: "See examples: websites by industry",
 } satisfies ExamplesCopy;
 
 export default examples;

@@ -269,7 +269,7 @@ const examples = {
       button: "Anfrage senden",
     },
   },
-  websitesLink: "Beispiel ansehen: Website für Hotels",
+  websitesLink: "Beispiele ansehen: Websites nach Branche",
 } satisfies ExamplesCopy;
 
 export default examples;
