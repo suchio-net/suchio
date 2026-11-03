@@ -205,14 +205,11 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
     <div>
       <button
         id="mobile-services-button"
-        class="group/mobile-services grid min-h-16 w-full cursor-pointer grid-cols-[2rem_minmax(0,1fr)_1.5rem] items-center border-b border-inverse-line bg-transparent px-0 py-2.5 text-left text-heading-md transition-colors duration-150 hover:bg-white/8"
+        class="group/mobile-services grid min-h-16 w-full cursor-pointer grid-cols-[minmax(0,1fr)_1.5rem] items-center border-b border-inverse-line bg-transparent px-0 py-2.5 text-left text-heading-md transition-colors duration-150 hover:bg-white/8"
         type="button"
         aria-expanded="false"
         aria-controls="mobile-services-menu"
       >
-        <span class="text-meta text-inverse-muted tabular-nums" aria-hidden="true">
-          01
-        </span>
         <span>{t(locale, "nav.services")}</span>
         <span class="grid size-6 place-items-center justify-self-end" aria-hidden="true">
           <ChevronRight
@@ -249,15 +246,14 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
         </div>
       </div>
     </div>
-    {navItems.map((item, index) => (
+    {navItems.map((item) => (
       <a
-        class="group/menu-link grid min-h-16 grid-cols-[2rem_minmax(0,1fr)_1.5rem] items-center border-b border-inverse-line py-2.5 text-heading-md transition-colors duration-150 hover:bg-white/8"
+        class="group/menu-link grid min-h-16 grid-cols-[minmax(0,1fr)_1.5rem] items-center border-b last:border-b-0 border-inverse-line py-2.5 text-heading-md transition-colors duration-150 hover:bg-white/8"
         href={item.href}
         data-scroll-top
         data-menu-link
         aria-current={isActive(item.href) ? "page" : undefined}
       >
-        <span class="text-meta text-inverse-muted tabular-nums">{String(index + 2).padStart(2, "0")}</span>
         <span>{item.label}</span>
         <ArrowUpRight
           class="w-6 justify-self-end transition-transform duration-250 ease-[var(--ease-out)] group-hover/menu-link:translate-x-1 group-hover/menu-link:-translate-y-1 motion-reduce:transform-none motion-reduce:transition-none"
