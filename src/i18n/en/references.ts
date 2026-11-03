@@ -80,26 +80,99 @@ const references = {
     pages: { home: "Home page", contact: "Contact", badNauheim: "Bathroom renovation Bad Nauheim" },
     sourceNote:
       "Lighthouse lab measurements of the live website: the old version on 21 October 2026 (mobile only), the new version on 29 October 2026 with three mobile and three desktop runs per page; the charts show the median. On mobile, the home, contact and Bad Nauheim bathroom pages score 100 for performance, accessibility, best practices and SEO in every run. Scores can vary between runs. 32 of 33 sitemap pages are indexed according to Google Search Console (28 October 2026).",
-    workHeading: "What we did",
-    work: [
+    findingsHeading: "What we found and what we changed",
+    findingsText:
+      "Before the rebuild, we checked all 64 addresses of the old website and recorded 45 findings. Here are six of them, next to the current state.",
+    beforeLabel: "Before",
+    afterLabel: "Now",
+    findings: [
       {
-        title: "Technology",
-        copy: "Static Astro pages on Cloudflare, with no WordPress code since 28 October 2026. Every old URL stayed; pages with a new address redirect with a 301, so links and search results keep working.",
+        title: "Enquiries",
+        before:
+          "The contact form only worked if visitors accepted marketing cookies. Anyone who declined could not send an enquiry.",
+        after:
+          "The form works without cookie consent. Only the project, location, phone or email and the privacy confirmation are required.",
       },
       {
-        title: "Content",
-        copy: "New pages for heating, heat pumps, drywall, full renovation, tiling, service area and Bad Nauheim. Wording and order follow data from Google Search Console. Name, address and a single phone number are the same everywhere.",
+        title: "Page titles",
+        before:
+          "The homepage title started with “Handwerker Frankfurt”, although the business is based in Bad Nauheim. One page carried another page’s title, and many ended with the same slogan.",
+        after:
+          "Every page has its own title with service and location. The homepage is called “Sanierung, Bad & Elektro in Bad Nauheim”.",
+      },
+      {
+        title: "Addresses",
+        before:
+          "One service page returned a 404 error and was linked from five pages. On top of that came 223 WordPress system addresses such as feeds and attachments.",
+        after:
+          "Every old address works or redirects with a 301. The 223 system addresses follow fixed rules, and we tested every one of them.",
+      },
+      {
+        title: "Location pages",
+        before: "Four location pages shared 85 to 90 percent of their text.",
+        after:
+          "The new pages for Friedberg, Bad Vilbel, Karben, Bad Homburg and Butzbach give the distance, the districts, the local water hardness and the rules for listed buildings. Shared text: 19 to 28 percent.",
+      },
+      {
+        title: "Crawlers",
+        before:
+          "robots.txt blocked the CSS and JavaScript folders. The host answered OpenAI’s GPTBot crawler with error 429.",
+        after: "Search engines and AI crawlers may read every page. Cloudflare blocks no AI crawlers.",
+      },
+      {
+        title: "Structured data",
+        before: "Only the homepage and the blog had structured data. The service pages had none.",
+        after: "Every service page describes the service, the page and its breadcrumb path for search engines.",
+      },
+    ],
+    logHeading: "How the project went",
+    logText: "Eleven days passed between the analysis on 21 October and the finished enquiry path on 31 October.",
+    log: [
+      {
+        date: "2026-10-21",
+        title: "Analysis",
+        copy: "We check all 64 addresses of the old website, mobile Lighthouse on five pages, crawler access and the layout on phones. Result: 45 findings, sorted by urgency.",
+      },
+      {
+        date: "2026-10-23",
+        title: "Move without losing an address",
+        copy: "The website runs as an Astro site on Cloudflare. Every old address stays the same, and the mailboxes keep running with the existing provider.",
+      },
+      {
+        date: "2026-10-24",
+        title: "New service pages",
+        copy: "Separate pages for heating, heat pumps, drywall, full renovation and tiling, plus the service area and Bad Nauheim. Old location and service addresses redirect to the new pages with a 301.",
         link: {
           label: "Bathroom renovation in Bad Nauheim (German)",
           href: `${site}/einsatzgebiet/bad-nauheim/badsanierung/`,
         },
       },
       {
-        title: "Enquiries",
-        copy: "The enquiry form asks about the project first. Cost calculators on the service pages send their answers along. Every enquiry arrives by email, with spam protection.",
+        date: "2026-10-28",
+        title: "No WordPress code left",
+        copy: "Every page is rebuilt in the design of the new homepage. Google reports 32 of 33 sitemap pages as indexed.",
+      },
+      {
+        date: "2026-10-29",
+        title: "Loading time",
+        copy: "AVIF images with separate crops for phones, a smaller font file, and spam protection that only loads at the first form input. The homepage, contact page and Bad Nauheim bathroom page score 100 in mobile Lighthouse.",
+      },
+      {
+        date: "2026-10-30",
+        title: "Copy based on search data",
+        copy: "The bathroom renovation and tiling pages follow the wording and order of search queries from Google Search Console. Every page header shows the Google rating.",
+      },
+      {
+        date: "2026-10-31",
+        title: "Location pages, projects and enquiries",
+        copy: "Location pages for five towns in the Wetterau and the Taunus, four project pages with the company’s own photos, and an enquiry form in six steps.",
         link: { label: "See the enquiry form (German)", href: `${site}/kontakt/` },
       },
     ],
+    nowHeading: "What we measure now",
+    nowText:
+      "Before the rebuild, the website did not count enquiries. Since 31 October it counts calls, WhatsApp clicks and sent enquiries, without cookies and without a banner. Over the coming months this shows which pages bring enquiries. We continue to look after SEO and further development.",
+    servicesLabel: "Services in this project",
     cta: {
       heading: "A website like this for your business?",
       text: "Tell us what your website doesn’t do today.",

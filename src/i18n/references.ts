@@ -17,7 +17,9 @@ export const handwerkerWorkMeasurements = {
   desktop: { performance: 100, accessibility: 100, bestPractices: 100, seo: 100, lcpSeconds: 0.5 },
 } as const;
 
-type Group = { title: string; copy: string; link?: { label: string; href: string } };
+type Finding = { title: string; before: string; after: string };
+/** One dated step of the project; `date` is an ISO date. */
+type LogEntry = { date: string; title: string; copy: string; link?: { label: string; href: string } };
 export type ReferencesCopy = {
   label: string;
   overview: {
@@ -83,8 +85,17 @@ export type ReferencesCopy = {
     pagesText: string;
     pages: { home: string; contact: string; badNauheim: string };
     sourceNote: string;
-    workHeading: string;
-    work: Group[];
+    findingsHeading: string;
+    findingsText: string;
+    beforeLabel: string;
+    afterLabel: string;
+    findings: Finding[];
+    logHeading: string;
+    logText: string;
+    log: LogEntry[];
+    nowHeading: string;
+    nowText: string;
+    servicesLabel: string;
     cta: { heading: string; text: string; button: string };
   };
 };

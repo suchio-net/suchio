@@ -80,26 +80,101 @@ const references = {
     pages: { home: "Page d’accueil", contact: "Contact", badNauheim: "Salle de bains Bad Nauheim" },
     sourceNote:
       "Mesures Lighthouse en laboratoire du site en ligne : ancienne version le 21 octobre 2026 (mobile uniquement), nouvelle version le 29 octobre 2026 avec trois mesures mobiles et trois mesures ordinateur par page ; les graphiques montrent la médiane. Sur mobile, l’accueil, le contact et la page salle de bains Bad Nauheim obtiennent 100 en performance, accessibilité, bonnes pratiques et SEO à chaque mesure. Les scores peuvent varier entre les mesures. 32 pages du sitemap sur 33 sont indexées selon Google Search Console (28 octobre 2026).",
-    workHeading: "Ce que nous avons fait",
-    work: [
+    findingsHeading: "Ce que nous avons trouvé et changé",
+    findingsText:
+      "Avant la refonte, nous avons vérifié les 64 adresses de l’ancien site et noté 45 constats. En voici six, à côté de l’état actuel.",
+    beforeLabel: "Avant",
+    afterLabel: "Maintenant",
+    findings: [
       {
-        title: "Technique",
-        copy: "Des pages Astro statiques sur Cloudflare, sans code WordPress depuis le 28 octobre 2026. Toutes les anciennes URL sont restées ; les pages à nouvelle adresse redirigent en 301, pour que liens et résultats de recherche continuent de fonctionner.",
+        title: "Demandes",
+        before:
+          "Le formulaire de contact ne fonctionnait que si le visiteur acceptait les cookies marketing. Sans cet accord, impossible d’envoyer une demande.",
+        after:
+          "Le formulaire fonctionne sans consentement aux cookies. Seuls le projet, le lieu, le téléphone ou l’e-mail et l’accord de confidentialité sont obligatoires.",
       },
       {
-        title: "Contenus",
-        copy: "De nouvelles pages pour le chauffage, la pompe à chaleur, les cloisons sèches, la rénovation complète, le carrelage, la zone d’intervention et Bad Nauheim. Les mots et l’ordre suivent les données de Google Search Console. Nom, adresse et un seul numéro de téléphone sont identiques partout.",
+        title: "Titres de page",
+        before:
+          "Le titre de la page d’accueil commençait par « Handwerker Frankfurt », alors que l’entreprise est à Bad Nauheim. Une page portait le titre d’une autre, et beaucoup finissaient par le même slogan.",
+        after:
+          "Chaque page a son propre titre avec le service et le lieu. La page d’accueil s’appelle « Sanierung, Bad & Elektro in Bad Nauheim ».",
+      },
+      {
+        title: "Adresses",
+        before:
+          "Une page de service renvoyait une erreur 404 et était liée depuis cinq pages. S’y ajoutaient 223 adresses système de WordPress, comme les flux et les pièces jointes.",
+        after:
+          "Toutes les anciennes adresses fonctionnent ou redirigent en 301. Les 223 adresses système suivent des règles fixes, et nous les avons toutes testées.",
+      },
+      {
+        title: "Pages locales",
+        before: "Quatre pages locales partageaient 85 à 90 % de leur texte.",
+        after:
+          "Les nouvelles pages pour Friedberg, Bad Vilbel, Karben, Bad Homburg et Butzbach indiquent la distance, les quartiers, la dureté de l’eau du fournisseur local et la protection du patrimoine. Texte commun : 19 à 28 %.",
+      },
+      {
+        title: "Robots d’indexation",
+        before:
+          "Le fichier robots.txt bloquait les dossiers CSS et JavaScript. L’hébergeur répondait au robot GPTBot d’OpenAI avec l’erreur 429.",
+        after:
+          "Les moteurs de recherche et les robots d’IA peuvent lire chaque page. Cloudflare ne bloque aucun robot d’IA.",
+      },
+      {
+        title: "Données structurées",
+        before:
+          "Seuls la page d’accueil et le blog avaient des données structurées. Les pages de service n’en avaient pas.",
+        after: "Chaque page de service décrit pour les moteurs de recherche le service, la page et son fil d’Ariane.",
+      },
+    ],
+    logHeading: "Le déroulement",
+    logText: "Onze jours séparent l’analyse du 21 octobre du parcours de demande terminé le 31 octobre.",
+    log: [
+      {
+        date: "2026-10-21",
+        title: "Analyse",
+        copy: "Nous vérifions les 64 adresses de l’ancien site, Lighthouse mobile sur cinq pages, l’accès des robots et l’affichage sur téléphone. Résultat : 45 constats, classés par urgence.",
+      },
+      {
+        date: "2026-10-23",
+        title: "Migration sans perte d’adresse",
+        copy: "Le site fonctionne comme site Astro sur Cloudflare. Toutes les anciennes adresses restent identiques, et les boîtes mail continuent chez le fournisseur actuel.",
+      },
+      {
+        date: "2026-10-24",
+        title: "Nouvelles pages de service",
+        copy: "Des pages propres pour le chauffage, la pompe à chaleur, les cloisons sèches, la rénovation complète et le carrelage, plus la zone d’intervention et Bad Nauheim. Les anciennes adresses locales et de service redirigent en 301 vers les nouvelles pages.",
         link: {
           label: "Rénovation de salle de bains à Bad Nauheim (en allemand)",
           href: `${site}/einsatzgebiet/bad-nauheim/badsanierung/`,
         },
       },
       {
-        title: "Demandes",
-        copy: "Le formulaire demande d’abord le projet. Les calculateurs de coûts des pages de service envoient leurs réponses avec la demande. Chaque demande arrive par e-mail, avec protection anti-spam.",
+        date: "2026-10-28",
+        title: "Plus de code WordPress",
+        copy: "Toutes les pages sont refaites dans le design de la nouvelle page d’accueil. Google indique 32 des 33 pages du sitemap comme indexées.",
+      },
+      {
+        date: "2026-10-29",
+        title: "Temps de chargement",
+        copy: "Des images AVIF avec des recadrages propres au mobile, un fichier de police plus léger, et une protection anti-spam qui ne se charge qu’à la première saisie. L’accueil, le contact et la page salle de bains de Bad Nauheim obtiennent 100 dans Lighthouse mobile.",
+      },
+      {
+        date: "2026-10-30",
+        title: "Des textes fondés sur les recherches",
+        copy: "Les pages rénovation de salle de bains et carrelage suivent les mots et l’ordre des recherches de Google Search Console. Chaque en-tête de page affiche la note Google.",
+      },
+      {
+        date: "2026-10-31",
+        title: "Pages locales, projets et demandes",
+        copy: "Des pages locales pour cinq villes de la Wetterau et du Taunus, quatre pages de projets avec les propres photos de l’entreprise et un formulaire de demande en six étapes.",
         link: { label: "Voir le formulaire (en allemand)", href: `${site}/kontakt/` },
       },
     ],
+    nowHeading: "Ce que nous mesurons maintenant",
+    nowText:
+      "Avant la refonte, le site ne comptait pas les demandes. Depuis le 31 octobre, il compte les appels, les clics WhatsApp et les demandes envoyées, sans cookies et sans bannière. Les prochains mois montreront quelles pages apportent des demandes. Nous continuons à suivre le SEO et les évolutions du site.",
+    servicesLabel: "Services dans ce projet",
     cta: {
       heading: "Un site comme celui-ci pour votre entreprise ?",
       text: "Dites-nous ce que votre site ne fait pas aujourd’hui.",
