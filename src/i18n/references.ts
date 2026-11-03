@@ -87,6 +87,7 @@ export type ReferencesCopy = {
     sourceNote: string;
     findingsHeading: string;
     findingsText: string;
+    topicLabel: string;
     beforeLabel: string;
     afterLabel: string;
     findings: Finding[];

@@ -83,6 +83,7 @@ const references = {
     findingsHeading: "What we found and what we changed",
     findingsText:
       "Before the rebuild, we checked all 64 addresses of the old website and recorded 45 findings. Here are six of them, next to the current state.",
+    topicLabel: "Area",
     beforeLabel: "Before",
     afterLabel: "Now",
     findings: [
