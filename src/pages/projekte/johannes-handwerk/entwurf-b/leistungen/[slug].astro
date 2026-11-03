@@ -1,0 +1,12 @@
+---
+import Page from "@/projekte/johannes-handwerk/entwurf-b/Service.astro";
+import { services } from "@/projekte/johannes-handwerk/entwurf-b/data";
+
+export function getStaticPaths() {
+  return services.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+const { service } = Astro.props;
+---
+
+<Page service={service} />

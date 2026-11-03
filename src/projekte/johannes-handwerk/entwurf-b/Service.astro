@@ -1,0 +1,213 @@
+---
+import Layout from "./Layout.astro";
+import Icon from "./Icon.astro";
+import PageHead from "./PageHead.astro";
+import Faq from "./Faq.astro";
+import ContactBand from "./ContactBand.astro";
+import { company } from "../shared/content";
+import { base, requestHref, services, type Service } from "./data";
+
+interface Props {
+  service: Service;
+}
+const { service } = Astro.props;
+const related = services.filter((item) => item.slug !== service.slug);
+const imageSizes = "(min-width: 960px) 46vw, 100vw";
+---
+
+<Layout
+  title={service.title}
+  description={service.description}
+  path={`/leistungen/${service.slug}`}
+  current={`leistungen/${service.slug}`}
+  lcpImage={service.image}
+  lcpSizes={imageSizes}
+>
+  <PageHead
+    title={service.h1}
+    intro={service.intro}
+    crumbs={[{ label: "Leistungen", href: `${base}/leistungen` }, { label: service.name }]}
+    image={service.image}
+  >
+    <div class="actions">
+      <a class="btn" href={requestHref(service.slug)}>
+        Anfrage stellen
+      </a>
+      <a class="btn btn-line" href={company.mobile.href}>
+        <Icon name="phone" />
+        {company.mobile.display}
+      </a>
+    </div>
+  </PageHead>
+
+  <section class="band" aria-labelledby="scope-title">
+    <div class="wrap">
+      <h2 class="section-title" id="scope-title">
+        Was wir übernehmen
+      </h2>
+      <div class="scope">
+        {service.scope.map((group) => (
+          <div>
+            <h3>{group.title}</h3>
+            <ul class="items">
+              {group.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-grout" aria-labelledby="steps-title">
+    <div class="wrap">
+      <h2 class="section-title" id="steps-title">
+        So läuft es ab
+      </h2>
+      <ol class="steps">
+        {service.steps.map((step, index) => (
+          <li>
+            <span class="step-number">{String(index + 1).padStart(2, "0")}</span>
+            <span>{step}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="price-title">
+    <div class="wrap price">
+      <div>
+        <h2 class="section-title" id="price-title">
+          Was den Preis bestimmt
+        </h2>
+        <p class="soft">
+          Jede Fläche ist anders. Nach dem Vor-Ort-Termin erhalten Sie ein Festpreis-Angebot. Diese Punkte bestimmen den
+          Preis:
+        </p>
+      </div>
+      <ul class="factors">
+        {service.priceFactors.map((factor) => (
+          <li>
+            <Icon name="check" size={20} />
+            {factor}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <Faq items={service.faqs} name={`faq-${service.slug}`} />
+
+  <section class="band band-grout" aria-labelledby="related-title">
+    <div class="wrap">
+      <h2 class="section-title" id="related-title">
+        Weitere Leistungen
+      </h2>
+      <ul class="related">
+        {related.map((item) => (
+          <li>
+            <a href={`${base}/leistungen/${item.slug}`}>
+              <strong>{item.name}</strong>
+              <span class="soft">{item.summary}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <ContactBand service={service.slug} />
+</Layout>
+
+<style>
+  .scope {
+    display: grid;
+    gap: 32px 48px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  }
+  .scope h3 {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .steps {
+    display: grid;
+    gap: var(--joint);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  }
+  .steps li {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    padding: 20px 22px 24px;
+    background: var(--board);
+    font-weight: 700;
+    font-size: var(--step-1);
+    line-height: 1.3;
+  }
+  @media (max-width: 600px) {
+    .steps li {
+      grid-template-columns: 44px minmax(0, 1fr);
+      align-items: baseline;
+      padding: 14px 18px;
+    }
+  }
+  .step-number {
+    font-family: var(--display);
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--red);
+  }
+  .price {
+    display: grid;
+    gap: 8px 64px;
+  }
+  .price .section-title {
+    margin-bottom: 16px;
+  }
+  .factors {
+    display: grid;
+    border-top: 2px solid var(--ink);
+  }
+  .factors li {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--grout-line);
+    font-size: var(--step-1);
+  }
+  .factors :global(.icon) {
+    flex: none;
+    color: var(--red);
+  }
+  @media (min-width: 960px) {
+    .price {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      align-items: start;
+    }
+  }
+  .related {
+    display: grid;
+    gap: var(--joint);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  }
+  .related a {
+    display: grid;
+    gap: 6px;
+    height: 100%;
+    padding: 20px 22px;
+    background: var(--board);
+    text-decoration: none;
+  }
+  .related strong {
+    font-family: var(--display);
+    font-size: var(--step-2);
+    line-height: 1.05;
+  }
+  .related a:hover strong {
+    color: var(--red);
+  }
+</style>

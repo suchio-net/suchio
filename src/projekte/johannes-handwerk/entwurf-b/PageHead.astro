@@ -1,0 +1,67 @@
+---
+import Photo from "../shared/Photo.astro";
+import { base } from "./data";
+
+interface Props {
+  title: string;
+  intro: string;
+  /** Breadcrumb trail after "Start". The last entry is the current page and has no link. */
+  crumbs: { label: string; href?: string }[];
+  image?: string;
+}
+const { title, intro, crumbs, image } = Astro.props;
+---
+
+<section class:list={["page-head", "band-grout", { "has-image": image }]}>
+  <div class="wrap head-grid">
+    <div class="head-text">
+      <nav aria-label="Brotkrumen">
+        <ol class="crumbs">
+          <li>
+            <a href={base}>Start</a>
+          </li>
+          {crumbs.map((crumb) => (
+            <li>
+              {crumb.href ? <a href={crumb.href}>{crumb.label}</a> : <span aria-current="page">{crumb.label}</span>}
+            </li>
+          ))}
+        </ol>
+      </nav>
+      <h1>{title}</h1>
+      <p class="lead">{intro}</p>
+      <slot />
+    </div>
+    {image && <Photo name={image} sizes="(min-width: 960px) 46vw, 100vw" eager class="head-photo" />}
+  </div>
+</section>
+
+<style>
+  .page-head {
+    padding-block: 16px clamp(40px, 6vw, 72px);
+  }
+  .head-grid {
+    display: grid;
+    gap: 32px 56px;
+  }
+  .head-text {
+    display: grid;
+    gap: 20px;
+    align-content: start;
+  }
+  h1 {
+    font-size: var(--step-4);
+    margin-top: 8px;
+  }
+  .head-grid :global(.head-photo) {
+    aspect-ratio: 4 / 3;
+  }
+  @media (min-width: 960px) {
+    .has-image .head-grid {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+      align-items: center;
+    }
+    .has-image {
+      padding-top: 16px;
+    }
+  }
+</style>

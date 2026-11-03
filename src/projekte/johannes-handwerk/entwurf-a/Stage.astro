@@ -1,0 +1,541 @@
+---
+// Hero: copy on the left, a driveway built layer by layer on the right. The model is CSS 3D:
+// each layer is a slab with a top, a front and a side face that drops into place, in site
+// order, like the bathroom assembly in Website A. It needs no script and no WebGL, so the copy
+// and the LCP never wait for it. Without motion the finished driveway shows at once.
+import { company, ratings } from "../shared/content";
+import { sections } from "./routes";
+
+interface Slab {
+  name: string;
+  /** Thickness in container units; drawn only, never labelled with real measurements. */
+  h: number;
+  kind: string;
+}
+const slabs: Slab[] = [
+  { name: "Untergrund", h: 7, kind: "earth" },
+  { name: "Frostschutzschicht", h: 5.4, kind: "frost" },
+  { name: "Tragschicht", h: 4.4, kind: "base" },
+  { name: "Bettung aus Splitt", h: 1.8, kind: "grit" },
+];
+const paveHeight = 2.6;
+const rows = 6;
+const names = [...slabs.map((slab) => slab.name), "Pflaster", "Fugen"];
+const start = 0.35,
+  gap = 0.6;
+// Landing time of each step: four slabs, the paving rows, the joints, then the finished drive.
+const at = [0, 1, 2, 3].map((i) => start + i * gap);
+const paveAt = start + 4 * gap;
+const jointsAt = paveAt + rows * 0.12 + 0.75;
+const doneAt = jointsAt + 0.9;
+const times = [...at, paveAt, jointsAt, doneAt];
+let z = 0;
+const placed = slabs.map((slab) => {
+  const slabZ = z;
+  z += slab.h;
+  return { ...slab, z: slabZ };
+});
+const paveZ = z;
+const pad = (n: number) => String(n).padStart(2, "0");
+const s = (value: number) => `${value.toFixed(2)}s`;
+---
+
+<section class="hero" aria-labelledby="hero-title" style={`--done:${s(doneAt)}`}>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="mono kicker">
+        {company.name} · {company.area}
+      </p>
+      <h1 id="hero-title">Pflaster, Terrassen und Außenanlagen in München</h1>
+      <p class="slogan">{company.slogan}</p>
+      <p class="lead mute">
+        Einfahrten, Wege, Terrassen und Zäune, vom Unterbau bis zum letzten Stein. Dazu Innenausbau mit Boden, Fliesen,
+        Bad und Küche.
+      </p>
+      <div class="actions">
+        <a class="btn" href={sections.kontakt}>
+          Projekt anfragen
+          <span class="arrow" aria-hidden="true">
+            →
+          </span>
+        </a>
+        <a class="btn btn-line" href={company.mobile.href}>
+          {company.mobile.display}
+        </a>
+      </div>
+    </div>
+
+    <div class="drive" aria-hidden="true">
+      <div class="scene">
+        <div class="block">
+          <i class="ground"></i>
+          {placed.map((slab, index) => (
+            <div class:list={["slab", slab.kind]} style={`--z:${slab.z}cqw;--h:${slab.h}cqw;--d:${s(times[index])}`}>
+              <i class="face top"></i>
+              <i class="face front"></i>
+              <i class="face side"></i>
+            </div>
+          ))}
+          <div class="pave" style={`--z:${paveZ}cqw;--h:${paveHeight}cqw`}>
+            {Array.from({ length: rows }, (_, r) => (
+              <div class="row" style={`--r:${r};--d:${s(paveAt + r * 0.12)}`}>
+                <i class="face top"></i>
+                <i class="face front"></i>
+                <i class="face side"></i>
+              </div>
+            ))}
+            <i class="joints" style={`--d:${s(jointsAt)}`}></i>
+          </div>
+        </div>
+      </div>
+      <ol class="legend mono">
+        {names
+          .map((name, index) => (
+            <li style={`--d:${s(times[index])}`}>
+              <i class={`swatch s${index}`}></i>
+              <span>{pad(index + 1)}</span>
+              {name}
+            </li>
+          ))
+          .reverse()}
+      </ol>
+    </div>
+  </div>
+
+  <div class="wrap hero-bottom mono">
+    <p class="hud" aria-hidden="true">
+      <span class="hud-label">Aufbau</span>
+      <span class="hud-bar">
+        {names.map((_, index) => (
+          <i style={`--d:${s(times[index])}`}></i>
+        ))}
+      </span>
+      <span class="hud-names">
+        {names.map((name, index) => (
+          <span style={`--from:${s(times[index])};--for:${s(times[index + 1] - times[index])}`}>
+            {pad(index + 1)}/{pad(names.length)} {name}
+          </span>
+        ))}
+        <span class="hud-done">Einfahrt ✓</span>
+      </span>
+    </p>
+    <ul class="ratings">
+      {[ratings.google, ratings.myhammer].map((rating) => (
+        <li>
+          <a href={rating.href} rel="noopener">
+            <b>{rating.value}</b>
+            <span class="stars" aria-hidden="true">
+              ★★★★★
+            </span>
+            {rating.platform}, {rating.count} {rating.unit}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: clamp(28px, 5vw, 64px);
+  }
+  .hero-grid {
+    display: grid;
+    gap: 28px 48px;
+    align-items: center;
+  }
+  @media (min-width: 960px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      min-height: calc(100svh - var(--header-h) - 150px);
+    }
+  }
+  .hero-copy {
+    display: grid;
+    gap: 22px;
+    align-content: center;
+  }
+  .kicker {
+    color: var(--mute);
+  }
+  h1 {
+    max-width: 13ch;
+  }
+  .slogan {
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+  }
+  .slogan::before {
+    content: "";
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    margin-right: 12px;
+    vertical-align: middle;
+    background: var(--red);
+  }
+  .lead {
+    max-width: 40ch;
+    font-size: 1.05rem;
+  }
+
+  /* The model. Units are container widths, so it scales with its column. */
+  .drive {
+    position: relative;
+    container-type: inline-size;
+    aspect-ratio: 10 / 7.4;
+    width: 100%;
+  }
+  /* A faint measuring grid behind the model, fading out towards the edges. */
+  .drive::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgb(17 18 19 / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(17 18 19 / 0.05) 1px, transparent 1px);
+    background-size: 6.4cqw 6.4cqw;
+    background-position: center;
+    mask-image: radial-gradient(ellipse 60% 60% at 42% 52%, #000 10%, transparent 75%);
+  }
+  .scene {
+    position: absolute;
+    inset: 0;
+    perspective: 260cqw;
+    perspective-origin: 32% 30%;
+  }
+  .block {
+    --w: 42cqw;
+    --dp: 35cqw;
+    position: absolute;
+    left: calc(32% - var(--w) / 2);
+    top: calc(56% - var(--dp) / 2);
+    width: var(--w);
+    height: var(--dp);
+    transform-style: preserve-3d;
+    transform: rotateX(57deg) rotateZ(33deg);
+  }
+  .block * {
+    transform-style: preserve-3d;
+  }
+  .ground {
+    position: absolute;
+    inset: -8cqw;
+    background: radial-gradient(closest-side, rgb(17 18 19 / 0.16), transparent);
+    transform: translate(3cqw, 4cqw);
+  }
+  .slab,
+  .pave,
+  .row {
+    position: absolute;
+    inset: 0;
+  }
+  .slab,
+  .pave {
+    transform: translateZ(var(--z));
+  }
+  .face {
+    position: absolute;
+    display: block;
+    backface-visibility: hidden;
+  }
+  .top {
+    inset: 0;
+    transform: translateZ(var(--h));
+  }
+  .front {
+    left: 0;
+    top: 100%;
+    width: 100%;
+    height: var(--h);
+    transform-origin: top;
+    transform: translateZ(var(--h)) rotateX(-90deg);
+    filter: brightness(0.86);
+  }
+  .side {
+    left: 100%;
+    top: 0;
+    width: var(--h);
+    height: 100%;
+    transform-origin: left;
+    transform: translateZ(var(--h)) rotateY(90deg);
+    filter: brightness(0.72);
+  }
+
+  /* Materials: the textures are dots and joints drawn with gradients. */
+  .earth .face {
+    background:
+      radial-gradient(circle, rgb(0 0 0 / 0.16) 0 0.35cqw, transparent 0.45cqw) 0 0 / 2.2cqw 1.9cqw,
+      radial-gradient(circle, rgb(255 255 255 / 0.1) 0 0.3cqw, transparent 0.4cqw) 1.1cqw 0.9cqw / 2.6cqw 2.1cqw,
+      #7b5c41;
+  }
+  .frost .face {
+    background:
+      radial-gradient(circle, #8a847a 0 0.75cqw, transparent 0.85cqw) 0 0 / 2.6cqw 2.2cqw,
+      radial-gradient(circle, #c9c3b8 0 0.55cqw, transparent 0.65cqw) 1.3cqw 1.1cqw / 2.6cqw 2.2cqw,
+      #aaa59c;
+  }
+  .base .face {
+    background:
+      radial-gradient(circle, #64615d 0 0.45cqw, transparent 0.55cqw) 0 0 / 1.6cqw 1.4cqw,
+      radial-gradient(circle, #aba7a1 0 0.35cqw, transparent 0.45cqw) 0.8cqw 0.7cqw / 1.6cqw 1.4cqw,
+      #8a8782;
+  }
+  .grit .face {
+    background:
+      radial-gradient(circle, #b3ab9d 0 0.18cqw, transparent 0.26cqw) 0 0 / 0.8cqw 0.7cqw,
+      #d3ccbf;
+  }
+  /* Concrete pavers in running bond. The joints start empty and dark; sand fills them last. */
+  .row {
+    top: calc(var(--r) * var(--dp) / 6);
+    bottom: auto;
+    height: calc(var(--dp) / 6);
+    transform: none;
+  }
+  .row .top {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20'%3E%3Crect width='40' height='20' fill='%23514c46'/%3E%3Crect x='.7' y='.7' width='18.6' height='8.6' fill='%23a49d93'/%3E%3Crect x='20.7' y='.7' width='18.6' height='8.6' fill='%239a938a'/%3E%3Crect x='-9.3' y='10.7' width='18.6' height='8.6' fill='%23aba499'/%3E%3Crect x='10.7' y='10.7' width='18.6' height='8.6' fill='%23a0998f'/%3E%3Crect x='30.7' y='10.7' width='18.6' height='8.6' fill='%23aba499'/%3E%3C/svg%3E")
+      0 calc(var(--r) * var(--dp) / -6) / 7cqw 3.5cqw;
+  }
+  .row .front,
+  .row .side {
+    background: repeating-linear-gradient(90deg, #514c46 0 0.18cqw, #a29b91 0.18cqw 3.5cqw);
+  }
+  .row .side {
+    background: repeating-linear-gradient(180deg, #514c46 0 0.18cqw, #a29b91 0.18cqw 3.5cqw);
+  }
+  .joints {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transform: translateZ(calc(var(--h) + 0.02cqw));
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20'%3E%3Crect width='40' height='20' fill='%23d6c49a'/%3E%3Crect x='.7' y='.7' width='18.6' height='8.6' fill='%23a49d93'/%3E%3Crect x='20.7' y='.7' width='18.6' height='8.6' fill='%239a938a'/%3E%3Crect x='-9.3' y='10.7' width='18.6' height='8.6' fill='%23aba499'/%3E%3Crect x='10.7' y='10.7' width='18.6' height='8.6' fill='%23a0998f'/%3E%3Crect x='30.7' y='10.7' width='18.6' height='8.6' fill='%23aba499'/%3E%3C/svg%3E")
+      0 0 / 7cqw 3.5cqw;
+  }
+
+  /* Legend: one line per layer, top layer first like the section itself. */
+  .legend {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    display: grid;
+    gap: 6px;
+    transform: translateY(-50%);
+    color: var(--ink);
+  }
+  .legend li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .legend span {
+    color: var(--mute);
+  }
+  .swatch {
+    width: 10px;
+    height: 10px;
+    flex: none;
+  }
+  .s0 {
+    background: #7b5c41;
+  }
+  .s1 {
+    background: #aaa59c;
+  }
+  .s2 {
+    background: #8a8782;
+  }
+  .s3 {
+    background: #d3ccbf;
+  }
+  .s4 {
+    background: #a49d93;
+  }
+  .s5 {
+    background: #d6c49a;
+  }
+
+  .hero-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 40px;
+    margin-top: clamp(20px, 3vw, 32px);
+    padding-block: 16px 20px;
+    border-top: 1px solid var(--line);
+  }
+  .hud {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: none;
+    color: var(--mute);
+  }
+  .hud-bar {
+    display: flex;
+    gap: 3px;
+  }
+  .hud-bar i {
+    width: 18px;
+    height: 3px;
+    background: var(--ink);
+  }
+  .hud-names {
+    display: grid;
+    min-width: 24ch;
+    color: var(--ink);
+  }
+  .hud-names > span {
+    grid-area: 1 / 1;
+    opacity: 0;
+  }
+  .hud-names > .hud-done {
+    opacity: 1;
+  }
+  .ratings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 28px;
+  }
+  .ratings a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: var(--mute);
+    text-decoration: none;
+  }
+  .ratings b {
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .stars {
+    color: var(--ink);
+    letter-spacing: 2px;
+  }
+  .ratings a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  /* Assembly. The finished state is the default; the animations start each step from above. */
+  @media (prefers-reduced-motion: no-preference) {
+    .slab,
+    .row {
+      animation: drop 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d) backwards;
+    }
+    .row {
+      animation-name: drop-row;
+      animation-duration: 0.7s;
+    }
+    .slab .face,
+    .row .face {
+      animation: appear 0.4s ease var(--d) backwards;
+    }
+    .joints {
+      animation: sweep 0.8s cubic-bezier(0.65, 0, 0.35, 1) var(--d) backwards;
+    }
+    .legend li {
+      animation: pending var(--d) step-end;
+    }
+    .hud-bar i {
+      animation: tick-off var(--d) step-end;
+    }
+    .hud-names > span {
+      animation: shown var(--for) step-end var(--from);
+    }
+    .hud-names > .hud-done {
+      animation: hidden var(--done) step-end;
+    }
+  }
+  @keyframes drop {
+    from {
+      transform: translateZ(calc(var(--z) + 26cqw));
+    }
+  }
+  @keyframes drop-row {
+    from {
+      transform: translateZ(12cqw);
+    }
+  }
+  @keyframes appear {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes sweep {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+  }
+  @keyframes pending {
+    from,
+    to {
+      opacity: 0.3;
+    }
+  }
+  @keyframes tick-off {
+    from,
+    to {
+      background: var(--fog);
+    }
+  }
+  @keyframes shown {
+    from,
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes hidden {
+    from,
+    to {
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 959px) {
+    .drive {
+      aspect-ratio: 10 / 8.4;
+    }
+    .block {
+      left: calc(50% - var(--w) / 2);
+      top: calc(44% - var(--dp) / 2);
+      --w: 54cqw;
+      --dp: 44cqw;
+    }
+    .drive::before {
+      mask-image: radial-gradient(ellipse 60% 50% at 50% 42%, #000 10%, transparent 75%);
+    }
+    .legend {
+      top: auto;
+      bottom: 0;
+      left: 0;
+      grid-template-columns: repeat(2, auto);
+      justify-content: space-between;
+      gap: 6px 14px;
+      transform: none;
+      font-size: 0.66rem;
+      letter-spacing: 0.03em;
+    }
+    .legend li {
+      gap: 6px;
+    }
+  }
+  @media (max-width: 600px) {
+    .hud-label {
+      display: none;
+    }
+    .hud-bar i {
+      width: 10px;
+    }
+    .hero-bottom {
+      gap: 4px;
+    }
+    .actions .btn {
+      flex: 1 1 auto;
+    }
+  }
+</style>

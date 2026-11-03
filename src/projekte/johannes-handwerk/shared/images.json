@@ -1,0 +1,92 @@
+{
+  "einfahrt-haus": {
+    "width": 2000,
+    "height": 1334,
+    "color": "#a8a8a8",
+    "alt": "Gepflasterte Einfahrt vor einem Einfamilienhaus mit Doppelgarage"
+  },
+  "einfahrt-garage": {
+    "width": 2000,
+    "height": 1333,
+    "color": "#9aa8a4",
+    "alt": "Gepflasterte Zufahrt vor einer Garage, gesäumt von Hecken"
+  },
+  "weg-pflaster": {
+    "width": 2000,
+    "height": 1333,
+    "color": "#6f8a94",
+    "alt": "Geschwungener Gartenweg aus grauem Pflaster zwischen Beeten"
+  },
+  "pflaster-verlegen": {
+    "width": 2000,
+    "height": 1333,
+    "color": "#989888",
+    "alt": "Handwerker setzt Pflastersteine mit einem Hammer"
+  },
+  "verbundpflaster": {
+    "width": 2000,
+    "height": 1333,
+    "color": "#3c3d42",
+    "alt": "Graues Verbundpflaster in Nahaufnahme"
+  },
+  "terrasse-platten": {
+    "width": 2000,
+    "height": 1755,
+    "color": "#d8d8c8",
+    "alt": "Terrasse aus hellen Platten mit Sitzgruppe vor einem Backsteinhaus"
+  },
+  "terrasse-garten": {
+    "width": 2000,
+    "height": 1333,
+    "color": "#5e6a4a",
+    "alt": "Terrasse aus Sandsteinplatten mit Holzhockern im Garten"
+  },
+  "terrasse-rasen": {
+    "width": 2000,
+    "height": 1333,
+    "color": "#4a5a44",
+    "alt": "Steinterrasse mit Liegen und Trittplatten im Rasen"
+  },
+  "zaun-holz": {
+    "width": 2000,
+    "height": 1333,
+    "color": "#4e4234",
+    "alt": "Holzzaun mit Tor als Sichtschutz im Garten"
+  },
+  "rasenfugen": {
+    "width": 2000,
+    "height": 1333,
+    "color": "#9898a8",
+    "alt": "Betonplatten mit Rasenfugen"
+  },
+  "parkett": {
+    "width": 2000,
+    "height": 1333,
+    "color": "#d8a868",
+    "alt": "Parkett im Fischgrätmuster"
+  },
+  "boden-verlegen": {
+    "width": 2000,
+    "height": 1302,
+    "color": "#c8c8c8",
+    "alt": "Handwerker verlegt einen Bodenbelag"
+  },
+  "fliesen-boden": {
+    "width": 2000,
+    "height": 1125,
+    "color": "#686868",
+    "alt": "Großformatige graue Bodenfliesen"
+  },
+  "fliesen-material": {
+    "width": 2000,
+    "height": 1500,
+    "color": "#c8d0d0",
+    "alt": "Fliesen und Hammer auf einem gefliesten Boden"
+  },
+  "granitpflaster": {
+    "width": 2000,
+    "height": 1333,
+    "color": "#989898",
+    "alt": "Granitpflaster in Nahaufnahme"
+  }
+}

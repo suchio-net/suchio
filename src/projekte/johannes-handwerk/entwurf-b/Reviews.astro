@@ -1,0 +1,116 @@
+---
+import Icon from "./Icon.astro";
+import { googleReviews, myhammerReviews, ratings } from "../shared/content";
+
+const platforms = [ratings.google, ratings.myhammer];
+const reviews = [...myhammerReviews, ...googleReviews];
+---
+
+<section class="band band-grout" aria-labelledby="reviews-title">
+  <div class="wrap">
+    <div class="reviews-head">
+      <h2 class="section-title" id="reviews-title">
+        Das sagen unsere Kunden
+      </h2>
+      <div class="platforms">
+        {platforms.map((platform) => (
+          <a class="platform" href={platform.href} rel="noopener">
+            <span class="platform-name">{platform.platform}</span>
+            <span class="platform-value">
+              <Icon name="star" size={22} />
+              {platform.value}
+            </span>
+            <span class="soft">
+              {platform.count} {platform.unit}
+            </span>
+          </a>
+        ))}
+        <p class="as-of soft">{ratings.asOf}</p>
+      </div>
+    </div>
+    <ul class="quotes">
+      {reviews.map((review) => (
+        <li>
+          <blockquote>
+            <p>„{review.quote}“</p>
+          </blockquote>
+          <p class="who soft">
+            {[review.name, review.place, review.service, review.platform].filter(Boolean).join(" · ")}
+          </p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .reviews-head {
+    display: grid;
+    gap: 8px 48px;
+    margin-bottom: clamp(28px, 4vw, 48px);
+  }
+  .reviews-head .section-title {
+    margin-bottom: 0;
+  }
+  .platforms {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--joint);
+    align-content: end;
+  }
+  .platform {
+    display: grid;
+    gap: 2px;
+    padding: 18px 20px;
+    background: var(--board);
+    text-decoration: none;
+  }
+  .platform:hover .platform-name {
+    text-decoration: underline;
+  }
+  .platform-name {
+    font-weight: 700;
+  }
+  .platform-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--display);
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .platform-value :global(.icon) {
+    color: var(--red);
+    fill: var(--red);
+  }
+  .as-of {
+    grid-column: 1 / -1;
+    font-size: 0.95rem;
+  }
+  .quotes {
+    columns: 3 300px;
+    column-gap: var(--joint);
+  }
+  .quotes li {
+    display: grid;
+    gap: 14px;
+    break-inside: avoid;
+    margin-bottom: var(--joint);
+    padding: 24px;
+    background: var(--board);
+  }
+  blockquote p {
+    font-size: var(--step-1);
+    line-height: 1.45;
+  }
+  .who {
+    font-size: 0.95rem;
+  }
+  @media (min-width: 960px) {
+    .reviews-head {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: end;
+    }
+  }
+</style>

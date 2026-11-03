@@ -1,0 +1,157 @@
+---
+// Suchio draft menu: one small button that opens the links to the overview and both drafts.
+import { project } from "./content";
+
+interface Props {
+  version: "a" | "b";
+}
+const { version } = Astro.props;
+---
+
+<div class="draft" role="group" aria-label="Suchio-Entwurf" data-draft>
+  <div class="draft-panel" id="draft-panel" hidden data-draft-panel>
+    <a class="draft-brand" href={project}>
+      Entwürfe von <b>Suchio</b>
+      <span aria-hidden="true">→</span>
+    </a>
+    <nav class="draft-versions" aria-label="Entwurf wählen">
+      <a href={`${project}/entwurf-a`} aria-current={version === "a" ? "page" : undefined}>
+        Entwurf A
+      </a>
+      <a href={`${project}/entwurf-b`} aria-current={version === "b" ? "page" : undefined}>
+        Entwurf B
+      </a>
+    </nav>
+  </div>
+  <button
+    type="button"
+    class="draft-toggle"
+    aria-label="Suchio: Entwurfsmenü"
+    aria-expanded="false"
+    aria-controls="draft-panel"
+    data-draft-toggle
+  >
+    <img src="/suchio-favicon.svg" width="40" height="40" alt="" draggable="false" />
+  </button>
+</div>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>("[data-draft-toggle]");
+  const panel = document.querySelector<HTMLElement>("[data-draft-panel]");
+  if (toggle && panel) {
+    const draft = toggle.parentElement!;
+    const set = (open: boolean) => {
+      panel.hidden = !open;
+      toggle.setAttribute("aria-expanded", String(open));
+    };
+    toggle.addEventListener("click", () => set(panel.hidden));
+    document.addEventListener("click", (event) => {
+      if (!panel.hidden && !draft.contains(event.target as Node)) set(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !panel.hidden) {
+        set(false);
+        toggle.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  .draft {
+    position: fixed;
+    left: 12px;
+    bottom: 12px;
+    z-index: 60;
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    font:
+      500 0.88rem/1.2 ui-sans-serif,
+      system-ui,
+      -apple-system,
+      "Segoe UI",
+      Arial,
+      sans-serif;
+  }
+  .draft-toggle {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    cursor: pointer;
+  }
+  .draft-toggle img {
+    display: block;
+    width: 40px;
+    height: 40px;
+  }
+  .draft-toggle:focus-visible,
+  .draft a:focus-visible {
+    outline: 2px solid #0b0b0c;
+    outline-offset: 2px;
+  }
+  .draft-panel {
+    display: grid;
+    min-width: 220px;
+    padding: 6px;
+    border: 1px solid rgb(11 11 12 / 0.1);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 24px 50px -24px rgb(0 0 0 / 0.35);
+  }
+  .draft-panel[hidden] {
+    display: none;
+  }
+  .draft-brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 44px;
+    padding: 0 12px;
+    border-radius: 8px;
+    color: #0b0b0c;
+    text-decoration: none;
+  }
+  .draft-brand:hover {
+    background: #f4f4f5;
+  }
+  .draft-versions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-top: 4px;
+    padding-top: 6px;
+    border-top: 1px solid rgb(11 11 12 / 0.1);
+  }
+  .draft-versions a {
+    display: grid;
+    place-items: center;
+    min-height: 40px;
+    padding: 0 10px;
+    border-radius: 8px;
+    color: #0b0b0c;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .draft-versions a:hover {
+    background: #f4f4f5;
+  }
+  .draft-versions a[aria-current] {
+    background: #0b0b0c;
+    color: #fff;
+  }
+  @media (max-width: 760px) {
+    :global(.has-action-bar) .draft {
+      left: auto;
+      right: 8px;
+      bottom: calc(76px + env(safe-area-inset-bottom));
+      justify-items: end;
+    }
+  }
+</style>

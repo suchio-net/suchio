@@ -13,5 +13,6 @@ node_modules/
 # Responsive concept derivatives are generated from src/examples/trades/photos.
 /public/examples/trades/img/*.avif
 /public/examples/trades/img/*.webp
+/public/projekte/johannes-handwerk/img/
 # Worktrees that Claude Code agents create for isolated tasks.
 /.claude/worktrees/

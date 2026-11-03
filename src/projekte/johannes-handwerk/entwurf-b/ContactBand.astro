@@ -1,0 +1,70 @@
+---
+import Icon from "./Icon.astro";
+import { company } from "../shared/content";
+import { requestHref } from "./data";
+
+interface Props {
+  /** Service slug that the request form selects in advance. */
+  service?: string;
+  title?: string;
+}
+const { service, title = "Projekt besprechen" } = Astro.props;
+---
+
+<section class="band dark" aria-labelledby="contact-band-title">
+  <div class="wrap contact-band">
+    <div>
+      <h2 id="contact-band-title">{title}</h2>
+      <p class="lead soft">
+        Rufen Sie an oder stellen Sie Ihre Anfrage online. Mit Ort, ungefährer Fläche und ein paar Fotos können wir Ihr
+        Vorhaben schnell einschätzen.
+      </p>
+    </div>
+    <div class="contact-actions">
+      <a class="btn" href={requestHref(service)}>
+        Anfrage stellen
+      </a>
+      <a class="btn btn-line" href={company.mobile.href}>
+        <Icon name="phone" />
+        {company.mobile.display}
+      </a>
+      <a class="mail" href={`mailto:${company.email}`}>
+        <Icon name="mail" size={18} />
+        {company.email}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-band {
+    display: grid;
+    gap: 32px 64px;
+    align-items: end;
+  }
+  .contact-band h2 {
+    margin-bottom: 20px;
+  }
+  .contact-actions {
+    display: grid;
+    gap: 12px;
+  }
+  .mail {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    color: var(--ink-on-dark);
+    text-decoration: none;
+  }
+  .mail:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+  @media (min-width: 960px) {
+    .contact-band {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+    }
+  }
+</style>

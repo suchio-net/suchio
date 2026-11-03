@@ -1,0 +1,109 @@
+---
+import Layout from "./Layout.astro";
+import PageHead from "./PageHead.astro";
+import ContactBand from "./ContactBand.astro";
+import Photo from "../shared/Photo.astro";
+import { exampleProjects } from "../shared/content";
+import { base, services } from "./data";
+
+const serviceName = (slug: string) => services.find((service) => service.slug === slug)?.name ?? "";
+---
+
+<Layout
+  title="Projekte | Johannes-Handwerk München"
+  description="Pflasterarbeiten, Terrassen, Zäune und Böden aus München und Umgebung, zum Beispiel aus Gauting, Ottobrunn, Baldham und Olching."
+  path="/projekte"
+  current="projekte"
+>
+  <PageHead
+    title="Projekte aus der Region"
+    intro="Einfahrten, Terrassen, Zäune und Böden, die wir in München und Umgebung gebaut haben."
+    crumbs={[{ label: "Projekte" }]}
+  >
+    <p class="jh-note">
+      Titel und Orte stammen aus Ihren Bewertungen. Fotos, Fläche und Material sind Platzhalter. Vor dem Livegang tragen
+      wir Ihre echten Projekte ein.
+    </p>
+  </PageHead>
+
+  <section class="band" aria-label="Projektliste">
+    <ul class="wrap project-grid">
+      {exampleProjects.map((item) => (
+        <li>
+          <Photo name={item.photo} sizes="(min-width: 960px) 30vw, (min-width: 640px) 50vw, 100vw" class="tile" />
+          <div class="project-text">
+            <p class="label">
+              <a href={`${base}/leistungen/${item.service}`}>{serviceName(item.service)}</a>
+            </p>
+            <h2>{item.title}</h2>
+            <dl>
+              <div>
+                <dt>Ort</dt>
+                <dd>{item.place ?? <span class="jh-field">Ihre Angabe</span>}</dd>
+              </div>
+              <div>
+                <dt>Fläche</dt>
+                <dd>
+                  <span class="jh-field">m² eintragen</span>
+                </dd>
+              </div>
+              <div>
+                <dt>Material</dt>
+                <dd>
+                  <span class="jh-field">Ihre Angabe</span>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <ContactBand title="Ihr Projekt als nächstes" />
+</Layout>
+
+<style>
+  .project-grid {
+    display: grid;
+    gap: 48px var(--joint);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  }
+  .project-grid :global(.tile) {
+    aspect-ratio: 4 / 3;
+  }
+  .project-text {
+    display: grid;
+    gap: 8px;
+    padding-top: 16px;
+  }
+  .label a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    color: var(--red);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .label a:hover {
+    text-decoration: underline;
+  }
+  h2 {
+    font-size: var(--step-2);
+  }
+  dl {
+    display: grid;
+    border-top: 1px solid var(--grout-line);
+  }
+  dl div {
+    display: grid;
+    grid-template-columns: 90px minmax(0, 1fr);
+    gap: 12px;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--grout-line);
+  }
+  dt {
+    color: var(--ink-soft);
+  }
+</style>

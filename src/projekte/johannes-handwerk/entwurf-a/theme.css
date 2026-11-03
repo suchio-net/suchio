@@ -1,0 +1,367 @@
+/* Johannes-Handwerk, Entwurf A: editorial and calm, after Website A of the earlier
+   client drafts. White page and ink text, so the red lettering and the coloured hexagons of his logo
+   stay the only colour. DM Sans for words, JetBrains Mono for labels and numbers. All content
+   is visible in the HTML; nothing fades in. */
+:root {
+  --white: #ffffff;
+  --mist: #f5f4f2;
+  --fog: #e8e6e3;
+  --ink: #111213;
+  --ink-2: #2c2d2f;
+  --mute: #66676b;
+  --line: rgb(17 18 19 / 0.1);
+  --line-2: rgb(17 18 19 / 0.2);
+  --night: #141516;
+  --on-night: #f4f4f5;
+  --mute-night: #a2a3a8;
+  --line-night: rgb(255 255 255 / 0.14);
+  /* The red of his logo lettering, for small marks only. */
+  --red: #c8161b;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --gutter: clamp(20px, 4vw, 56px);
+  --max: 1440px;
+  --header-h: 72px;
+  --sans: "DM Sans", "DM Sans Fallback", ui-sans-serif, system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  background: var(--white);
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+body {
+  margin: 0;
+  background: var(--white);
+  color: var(--ink);
+  font: 400 1rem/1.55 var(--sans);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+a {
+  color: inherit;
+}
+button {
+  font: inherit;
+  color: inherit;
+}
+h1,
+h2,
+h3,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ol,
+ul {
+  margin: 0;
+}
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+h1,
+h2,
+h3 {
+  font-weight: 500;
+  text-wrap: balance;
+}
+h1 {
+  font-size: clamp(2.5rem, 1.3rem + 4.2vw, 5.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+h2 {
+  font-size: clamp(2rem, 1.2rem + 3vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+h3 {
+  font-size: clamp(1.15rem, 1rem + 0.5vw, 1.4rem);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+p {
+  text-wrap: pretty;
+  max-width: 54ch;
+}
+strong,
+b {
+  font-weight: 600;
+}
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+.dark :focus-visible {
+  outline-color: var(--on-night);
+}
+::selection {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip {
+  position: fixed;
+  left: 12px;
+  top: -60px;
+  z-index: 100;
+  padding: 12px 18px;
+  background: var(--ink);
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 600;
+}
+.skip:focus {
+  top: 12px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--max) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.dark {
+  background: var(--night);
+  color: var(--on-night);
+}
+.mute {
+  color: var(--mute);
+}
+.dark .mute {
+  color: var(--mute-night);
+}
+
+/* Mono labels: section indices, counters, captions. */
+.mono {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.index {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--mute);
+}
+.index::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: var(--red);
+}
+.dark .index {
+  color: var(--mute-night);
+}
+
+/* Buttons: hard-edged pills; the fill wipes up on hover. */
+.btn {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 48px;
+  padding: 0 22px;
+  overflow: hidden;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--white);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 0.5s var(--ease),
+    border-color 0.5s var(--ease);
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--white);
+  transform: translateY(101%);
+  border-radius: inherit;
+  transition: transform 0.6s var(--ease);
+}
+.btn-line {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line-2);
+}
+.btn-line::before {
+  background: var(--ink);
+}
+.dark .btn {
+  background: var(--white);
+  color: var(--ink);
+  border-color: var(--white);
+}
+.dark .btn::before {
+  background: var(--night);
+}
+.dark .btn-line {
+  background: transparent;
+  color: var(--on-night);
+  border-color: var(--line-night);
+}
+.dark .btn-line::before {
+  background: var(--white);
+}
+@media (hover: hover) {
+  .btn:hover {
+    color: var(--ink);
+  }
+  .btn:hover::before {
+    transform: none;
+  }
+  .btn-line:hover {
+    color: var(--white);
+    border-color: var(--ink);
+  }
+  .dark .btn:hover {
+    color: var(--on-night);
+    border-color: var(--line-night);
+  }
+  .dark .btn-line:hover {
+    color: var(--ink);
+    border-color: var(--white);
+  }
+}
+.btn:active {
+  scale: 0.98;
+}
+.arrow {
+  font-family: var(--mono);
+  font-size: 13px;
+  transition: transform 0.5s var(--ease);
+}
+@media (hover: hover) {
+  :is(a, button):hover > .arrow {
+    transform: translateX(4px);
+  }
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Text link with an underline that withdraws on hover. */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: inherit;
+  font-weight: 500;
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 calc(50% + 0.75em) / 100% 1px no-repeat;
+  transition: background-size 0.6s var(--ease);
+}
+@media (hover: hover) {
+  .link:hover {
+    background-size: 0 1px;
+    background-position: 100% calc(50% + 0.75em);
+  }
+}
+
+.rule {
+  height: 1px;
+  background: var(--line-2);
+}
+
+.faq {
+  border-top: 1px solid var(--line-2);
+}
+.faq details {
+  border-bottom: 1px solid var(--line-2);
+}
+.faq summary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 24px;
+  min-height: 44px;
+  padding: 22px 0;
+  cursor: pointer;
+  list-style: none;
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+}
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+.faq summary::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background:
+    linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat;
+  transition: transform 0.6s var(--ease);
+}
+.faq details[open] summary::after {
+  transform: rotate(135deg);
+}
+.faq .answer {
+  padding: 0 48px 26px 0;
+  color: var(--mute);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

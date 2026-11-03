@@ -1,0 +1,278 @@
+---
+import Logo from "../shared/Logo.astro";
+import { company } from "../shared/content";
+import { base, nav, sections } from "./routes";
+---
+
+<header class="site-header" data-header>
+  <div class="wrap bar">
+    <a class="brand" href={base} aria-label="Johannes-Handwerk, zum Seitenanfang">
+      <Logo height={44} />
+    </a>
+    <nav class="main-nav" aria-label="Hauptnavigation">
+      <ul>
+        {nav.map((item) => (
+          <li>
+            <a class="nav-link" href={item.href}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="bar-right">
+      <a class="tel mono" href={company.mobile.href}>
+        {company.mobile.display}
+      </a>
+      <a class="btn btn-small" href={sections.kontakt}>
+        Anfrage
+        <span class="arrow" aria-hidden="true">
+          →
+        </span>
+      </a>
+      <button class="burger" type="button" aria-controls="mobile-menu" aria-expanded="false" data-burger>
+        <span class="sr-only">Menü öffnen</span>
+        <i aria-hidden="true"></i>
+        <i aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="mobile-menu" id="mobile-menu" aria-label="Menü" data-mobile-menu>
+  <div class="mm-top wrap">
+    <Logo height={40} />
+    <button class="mm-close" type="button" data-close>
+      Schließen
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <nav class="wrap" aria-label="Mobile Navigation">
+    <ul class="mm-main">
+      {nav.map((item, index) => (
+        <li>
+          <a href={item.href}>
+            <span class="mono">{String(index + 1).padStart(2, "0")}</span>
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+  <div class="mm-foot wrap">
+    <a class="btn" href={sections.kontakt}>
+      Projekt anfragen
+      <span class="arrow" aria-hidden="true">
+        →
+      </span>
+    </a>
+    <a class="mm-tel mono" href={company.mobile.href}>
+      {company.mobile.display}
+    </a>
+  </div>
+</dialog>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--header-h);
+    background: rgb(255 255 255 / 0.94);
+    box-shadow: 0 1px 0 var(--line);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    height: 100%;
+  }
+  .brand {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .main-nav {
+    margin-left: auto;
+  }
+  .main-nav ul {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 12px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 10px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s var(--ease);
+  }
+  .nav-link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  .bar-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex: none;
+  }
+  .tel {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .tel:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .btn-small {
+    min-height: 40px;
+    padding: 0 18px;
+    font-size: 0.88rem;
+  }
+  .burger {
+    display: none;
+    place-content: center;
+    gap: 6px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .burger i {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: currentColor;
+  }
+  @media (max-width: 1180px) {
+    .tel {
+      display: none;
+    }
+  }
+  @media (max-width: 960px) {
+    .main-nav,
+    .bar-right > .btn {
+      display: none;
+    }
+    .bar-right {
+      margin-left: auto;
+      gap: 4px;
+    }
+    .tel {
+      display: inline-flex;
+    }
+    .burger {
+      display: grid;
+    }
+  }
+  @media (max-width: 480px) {
+    .tel {
+      display: none;
+    }
+  }
+
+  .mobile-menu {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 0 0 calc(24px + env(safe-area-inset-bottom));
+    border: 0;
+    background: var(--white);
+    color: var(--ink);
+    display: none;
+    flex-direction: column;
+  }
+  .mobile-menu[open] {
+    display: flex;
+  }
+  .mobile-menu::backdrop {
+    background: rgb(0 0 0 / 0.2);
+  }
+  .mm-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--header-h);
+    border-bottom: 1px solid var(--line);
+  }
+  .mm-close {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    background: none;
+    font-size: 0.92rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .mm-close span {
+    font-size: 1.3rem;
+    line-height: 1;
+  }
+  .mobile-menu nav {
+    padding-top: 24px;
+  }
+  .mm-main a {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    min-height: 56px;
+    padding-block: 8px;
+    border-bottom: 1px solid var(--line);
+    font-size: clamp(1.8rem, 8vw, 2.3rem);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 1.1;
+    text-decoration: none;
+  }
+  .mm-main .mono {
+    color: var(--mute);
+    letter-spacing: 0.06em;
+  }
+  .mm-foot {
+    display: grid;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 24px;
+  }
+  .mm-foot .btn {
+    width: 100%;
+    min-height: 52px;
+  }
+  .mm-tel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+</style>
