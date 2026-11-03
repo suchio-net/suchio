@@ -14,5 +14,21 @@
       "pattern": "www.suchio.net/*",
       "zone_name": "suchio.net",
     },
+    {
+      "pattern": "suchio.org/*",
+      "zone_name": "suchio.org",
+    },
+    {
+      "pattern": "www.suchio.org/*",
+      "zone_name": "suchio.org",
+    },
+    {
+      "pattern": "suchio.info/*",
+      "zone_name": "suchio.info",
+    },
+    {
+      "pattern": "www.suchio.info/*",
+      "zone_name": "suchio.info",
+    },
   ],
 }
