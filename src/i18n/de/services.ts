@@ -114,26 +114,6 @@ const services: ServicesCopy = {
             ],
           },
         ],
-        processHeading: "Von der Idee bis zum Launch",
-        processIntro:
-          "Sie sehen in jeder Phase ein konkretes Zwischenergebnis und geben es frei, bevor wir weitermachen.",
-        process: [
-          {
-            id: "understand",
-            title: "Verstehen",
-            copy: "Wir klären, wer die Website nutzt, was sie erreichen soll und welche Programme angebunden werden.",
-          },
-          {
-            id: "design",
-            title: "Gestalten",
-            copy: "Wir entwerfen Struktur und Design in Schritten, die Sie einzeln prüfen und freigeben können.",
-          },
-          {
-            id: "build-and-launch",
-            title: "Bauen und starten",
-            copy: "Wir entwickeln, testen auf Handy und Desktop, gehen live und zeigen Ihnen, wie Sie Inhalte selbst pflegen.",
-          },
-        ],
         faqHeading: "Häufige Fragen zu Websites & Apps",
         faqs: [
           {
@@ -277,25 +257,6 @@ const services: ServicesCopy = {
               "Auswertung organischer Anfragen",
               "Prioritäten regelmäßig neu setzen",
             ],
-          },
-        ],
-        processHeading: "Prüfen, priorisieren, verbessern",
-        processIntro: "SEO hört nach dem ersten Durchgang nicht auf. Nach jeder Runde prüfen wir, was sich bewegt hat.",
-        process: [
-          {
-            id: "analyze",
-            title: "Analysieren",
-            copy: "Wir prüfen Technik, Inhalte, Suchnachfrage, Wettbewerber und wo Sie heute schon gefunden werden.",
-          },
-          {
-            id: "prioritize",
-            title: "Priorisieren",
-            copy: "Sie erhalten eine Liste der Maßnahmen, sortiert nach Wirkung und Aufwand.",
-          },
-          {
-            id: "improve-and-measure",
-            title: "Verbessern und messen",
-            copy: "Wir setzen um, beobachten Rankings und Anfragen und richten die nächste Runde danach aus.",
           },
         ],
         faqHeading: "Häufige Fragen zu SEO & KI-Sichtbarkeit",
@@ -449,26 +410,6 @@ const services: ServicesCopy = {
             ],
           },
         ],
-        processHeading: "Von der Hypothese zur Verbesserung",
-        processIntro:
-          "Jede Kampagne startet mit einer Annahme, die wir testen. Die Ergebnisse entscheiden, was sich ändert.",
-        process: [
-          {
-            id: "align",
-            title: "Ausrichten",
-            copy: "Wir klären Angebot, Zielgruppe, Budget und was eine Anfrage kosten darf.",
-          },
-          {
-            id: "launch-and-test",
-            title: "Starten und testen",
-            copy: "Wir starten die Kampagnen mit mehreren Anzeigenvarianten und testen die wichtigsten Annahmen.",
-          },
-          {
-            id: "learn-and-scale",
-            title: "Lernen und skalieren",
-            copy: "Wir stoppen, was nicht funktioniert, verbessern den Rest und erhöhen das Budget erst, wenn die Zahlen stimmen.",
-          },
-        ],
         faqHeading: "Häufige Fragen zu Google Ads & Social Ads",
         faqs: [
           {
@@ -619,25 +560,6 @@ const services: ServicesCopy = {
               "Monitoring, Logs und Warnungen",
               "Regeln, Dokumentation und Übergabe",
             ],
-          },
-        ],
-        processHeading: "Vom Engpass zum verlässlichen Ablauf",
-        processIntro: "Wir fangen klein an und prüfen früh, ob die Lösung im Alltag funktioniert.",
-        process: [
-          {
-            id: "understand-the-workflow",
-            title: "Ablauf verstehen",
-            copy: "Wir schreiben auf, wie die Aufgabe heute läuft, welche Programme beteiligt sind und wo ein Mensch entscheiden muss.",
-          },
-          {
-            id: "test-the-solution",
-            title: "Lösung erproben",
-            copy: "Wir bauen einen kleinen Prototyp, testen ihn mit echten Beispielen und prüfen, ob die Ergebnisse gut genug sind.",
-          },
-          {
-            id: "integrate-and-safeguard",
-            title: "Integrieren und absichern",
-            copy: "Wir verbinden die Lösung mit Ihren Programmen, richten Warnungen bei Fehlern ein und dokumentieren alles für Ihr Team.",
           },
         ],
         faqHeading: "Häufige Fragen zu KI & Automatisierung",

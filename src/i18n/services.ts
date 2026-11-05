@@ -78,9 +78,6 @@ export type ServiceCopy = {
     scopeHeading: string;
     scopeIntro: string;
     scopeGroups: readonly ScopeGroup[];
-    processHeading: string;
-    processIntro: string;
-    process: readonly ContentItem[];
     faqHeading: string;
     faqs: readonly FaqItem[];
     finalTitle: string;

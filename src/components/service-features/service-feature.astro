@@ -1,0 +1,21 @@
+---
+import type { ServiceId } from "@/i18n/services";
+import { getServiceFeaturesCopy } from "@/i18n/service-features";
+import type { Locale } from "@/lib/i18n";
+import AdCalculator from "./ad-calculator.astro";
+import EnquiryLanes from "./enquiry-lanes.astro";
+import SearchSources from "./search-sources.astro";
+import SiteEditor from "./site-editor.astro";
+
+interface Props {
+  serviceId: ServiceId;
+  locale: Locale;
+}
+const { serviceId, locale } = Astro.props;
+const copy = getServiceFeaturesCopy(locale);
+---
+
+{serviceId === "websites-apps" && <SiteEditor copy={copy.siteEditor} />}
+{serviceId === "seo-ai-visibility" && <SearchSources copy={copy.searchSources} />}
+{serviceId === "paid-campaigns" && <AdCalculator copy={copy.adCalculator} locale={locale} />}
+{serviceId === "ai-automation" && <EnquiryLanes copy={copy.enquiryLanes} />}

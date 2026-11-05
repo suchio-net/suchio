@@ -113,25 +113,6 @@ const services: ServicesCopy = {
             ],
           },
         ],
-        processHeading: "De l’idée au lancement",
-        processIntro: "À chaque étape, vous voyez quelque chose de concret et le validez avant que nous continuions.",
-        process: [
-          {
-            id: "understand",
-            title: "Comprendre",
-            copy: "Nous déterminons qui utilise le site, ce qu’il doit accomplir et à quels outils il doit être relié.",
-          },
-          {
-            id: "design",
-            title: "Concevoir",
-            copy: "Nous concevons la structure et le design par étapes que vous pouvez vérifier et valider une à une.",
-          },
-          {
-            id: "build-and-launch",
-            title: "Développer et lancer",
-            copy: "Nous développons, testons sur mobile et ordinateur, mettons en ligne et vous montrons comment modifier les contenus vous-même.",
-          },
-        ],
         faqHeading: "Questions fréquentes sur les sites web & applications",
         faqs: [
           {
@@ -274,26 +255,6 @@ const services: ServicesCopy = {
               "Analyse des demandes organiques",
               "Révision régulière des priorités",
             ],
-          },
-        ],
-        processHeading: "Vérifier, prioriser, améliorer",
-        processIntro:
-          "Le SEO ne s’arrête pas après le premier passage. Après chaque cycle, nous vérifions ce qui a bougé.",
-        process: [
-          {
-            id: "analyze",
-            title: "Analyser",
-            copy: "Nous examinons la technique, les contenus, la demande, la concurrence et l’endroit où vous apparaissez déjà.",
-          },
-          {
-            id: "prioritize",
-            title: "Prioriser",
-            copy: "Vous recevez une liste des actions, classées par impact et par effort.",
-          },
-          {
-            id: "improve-and-measure",
-            title: "Améliorer et mesurer",
-            copy: "Nous réalisons les actions, suivons positions et demandes et préparons le cycle suivant en fonction des résultats.",
           },
         ],
         faqHeading: "Questions fréquentes sur le SEO & la visibilité IA",
@@ -448,25 +409,6 @@ const services: ServicesCopy = {
             ],
           },
         ],
-        processHeading: "De l’hypothèse à l’amélioration",
-        processIntro: "Chaque campagne part d’une hypothèse que nous testons. Les résultats décident de ce qui change.",
-        process: [
-          {
-            id: "align",
-            title: "Cadrer",
-            copy: "Nous fixons l’offre, le public, le budget et le coût acceptable d’une demande.",
-          },
-          {
-            id: "launch-and-test",
-            title: "Lancer et tester",
-            copy: "Nous lançons les campagnes avec plusieurs variantes d’annonces et testons les hypothèses les plus importantes.",
-          },
-          {
-            id: "learn-and-scale",
-            title: "Apprendre et développer",
-            copy: "Nous arrêtons ce qui ne marche pas, améliorons le reste et n’augmentons le budget que lorsque les chiffres sont bons.",
-          },
-        ],
         faqHeading: "Questions fréquentes sur Google Ads & les réseaux sociaux",
         faqs: [
           {
@@ -617,25 +559,6 @@ const services: ServicesCopy = {
               "Surveillance, journaux et alertes",
               "Règles, documentation et transmission",
             ],
-          },
-        ],
-        processHeading: "Du goulot d’étranglement à un processus fiable",
-        processIntro: "Nous commençons petit et vérifions tôt si la solution fonctionne au quotidien.",
-        process: [
-          {
-            id: "understand-the-workflow",
-            title: "Comprendre le processus",
-            copy: "Nous décrivons comment la tâche se déroule aujourd’hui, quels outils sont concernés et où une personne doit décider.",
-          },
-          {
-            id: "test-the-solution",
-            title: "Tester la solution",
-            copy: "Nous construisons un petit prototype, le testons sur de vrais exemples et vérifions si les résultats sont assez bons.",
-          },
-          {
-            id: "integrate-and-safeguard",
-            title: "Intégrer et sécuriser",
-            copy: "Nous relions la solution à vos outils, mettons en place des alertes en cas d’erreur et documentons tout pour votre équipe.",
           },
         ],
         faqHeading: "Questions fréquentes sur l’IA & l’automatisation",

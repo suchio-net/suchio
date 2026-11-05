@@ -3,29 +3,11 @@ import type { GetStaticPaths } from "astro";
 import SiteLayout from "@/layouts/site-layout.astro";
 import { serviceIcons } from "@/components/service-icons";
 import { serviceStyles } from "@/components/service-styles";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  ChartNoAxesCombined,
-  CircleGauge,
-  Compass,
-  Crosshair,
-  FlaskConical,
-  Layers,
-  ListTodo,
-  PanelsTopLeft,
-  Rocket,
-  ScanSearch,
-  ShieldCheck,
-  Telescope,
-  TestTubeDiagonal,
-  TrendingUp,
-  Waypoints,
-  type AstroComponent,
-} from "@lucide/astro";
+import { ArrowRight, ArrowUpRight, CircleGauge, Compass, Layers } from "@lucide/astro";
 import CtaButton from "@/components/cta-button.astro";
 import Faq from "@/components/faq.astro";
 import OfferVisual from "@/components/offer-visual.astro";
+import ServiceFeature from "@/components/service-features/service-feature.astro";
 import ServiceScopeGrid from "@/components/service-scope-grid.astro";
 import Reveal from "@/components/reveal.astro";
 import SectionHeading from "@/components/section-heading.astro";
@@ -47,12 +29,6 @@ export const getStaticPaths = (() =>
   )) satisfies GetStaticPaths;
 
 const outcomeIcons = [Compass, Layers, CircleGauge] as const;
-const processIcons: Record<ServiceId, readonly [AstroComponent, AstroComponent, AstroComponent]> = {
-  "websites-apps": [Telescope, PanelsTopLeft, Rocket],
-  "seo-ai-visibility": [ScanSearch, ListTodo, ChartNoAxesCombined],
-  "paid-campaigns": [Crosshair, FlaskConical, TrendingUp],
-  "ai-automation": [Waypoints, TestTubeDiagonal, ShieldCheck],
-};
 interface Props {
   locale: Locale;
   serviceId: ServiceId;
@@ -100,6 +76,8 @@ const related = services.filter((entry) => entry.id !== serviceId);
       </div>
     </section>
 
+    <ServiceFeature serviceId={serviceId} locale={locale} />
+
     <section class="bg-canvas px-page py-section">
       <div class="mx-auto max-w-[70rem]">
         <SectionHeading title={copy.page.outcomesHeading} copy={copy.page.outcomesIntro} />
@@ -142,37 +120,6 @@ const related = services.filter((entry) => entry.id !== serviceId);
       <div class="mx-auto max-w-[70rem]">
         <SectionHeading title={copy.page.scopeHeading} copy={copy.page.scopeIntro} />
         <ServiceScopeGrid groups={copy.page.scopeGroups} serviceId={serviceId} />
-      </div>
-    </section>
-
-    <section class="bg-canvas px-page py-section" data-service-process>
-      <div class="mx-auto max-w-[70rem]">
-        <SectionHeading title={copy.page.processHeading} copy={copy.page.processIntro} align="center" />
-        <ol class="process-list m-0 mx-auto grid max-w-[62rem] list-none grid-cols-3 gap-4 p-0 pt-13 max-nav:grid-cols-1 max-nav:pt-0">
-          {copy.page.process.map((item, index) => {
-            const Icon = processIcons[serviceId][index]!;
-            return (
-              <li
-                class="process-step relative rounded-card bg-white p-card-padding shadow-surface max-nav:ml-12"
-                style={{ "--process-delay": `${index * 160}ms` }}
-                data-reveal
-                data-reveal-threshold="half"
-              >
-                <span
-                  class="process-node absolute -top-13 left-[calc(50%_-_19px)] z-[1] grid size-[38px] place-items-center rounded-full bg-ink font-mono text-meta text-white tabular-nums max-nav:top-6 max-nav:-left-12"
-                  aria-hidden="true"
-                >
-                  {index + 1}
-                </span>
-                <Icon class="block size-8" stroke-width={1.7} aria-hidden="true" />
-                <div class="pt-4">
-                  <h3 class="mt-0 mb-2 text-heading-sm">{item.title}</h3>
-                  <p class="text-base/6 text-muted">{item.copy}</p>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
       </div>
     </section>
 

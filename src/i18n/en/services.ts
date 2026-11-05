@@ -113,25 +113,6 @@ const services: ServicesCopy = {
             ],
           },
         ],
-        processHeading: "From idea to launch",
-        processIntro: "You see something concrete at every stage and approve it before we move on.",
-        process: [
-          {
-            id: "understand",
-            title: "Understand",
-            copy: "We work out who uses the site, what it needs to achieve, and which software it connects to.",
-          },
-          {
-            id: "design",
-            title: "Design",
-            copy: "We design the structure and interface in steps you can review and approve one at a time.",
-          },
-          {
-            id: "build-and-launch",
-            title: "Build and launch",
-            copy: "We build it, test on phone and desktop, go live, and show you how to edit content yourself.",
-          },
-        ],
         faqHeading: "Websites & Apps FAQs",
         faqs: [
           {
@@ -274,25 +255,6 @@ const services: ServicesCopy = {
               "Organic enquiry reporting",
               "Regular re-prioritization",
             ],
-          },
-        ],
-        processHeading: "Review, prioritize, improve",
-        processIntro: "SEO doesn’t stop after the first pass. After each round, we check what moved.",
-        process: [
-          {
-            id: "analyze",
-            title: "Analyze",
-            copy: "We review your technical setup, content, search demand, competitors, and where you already show up.",
-          },
-          {
-            id: "prioritize",
-            title: "Prioritize",
-            copy: "You get a list of tasks, ordered by impact and effort.",
-          },
-          {
-            id: "improve-and-measure",
-            title: "Improve and measure",
-            copy: "We do the work, track rankings and enquiries, and plan the next round around the results.",
           },
         ],
         faqHeading: "SEO & AI Visibility FAQs",
@@ -438,25 +400,6 @@ const services: ServicesCopy = {
               "Attribution and reporting",
               "Criteria for a good enquiry",
             ],
-          },
-        ],
-        processHeading: "From hypothesis to improvement",
-        processIntro: "Every campaign starts with an assumption we test. The results decide what changes.",
-        process: [
-          {
-            id: "align",
-            title: "Align",
-            copy: "We settle the offer, audience, budget, and what an enquiry may cost.",
-          },
-          {
-            id: "launch-and-test",
-            title: "Launch and test",
-            copy: "We launch the campaigns with several ad variants and test the most important assumptions.",
-          },
-          {
-            id: "learn-and-scale",
-            title: "Learn and scale",
-            copy: "We stop what doesn’t work, improve the rest, and raise the budget only once the numbers hold up.",
           },
         ],
         faqHeading: "Google Ads & Social Ads FAQs",
@@ -609,25 +552,6 @@ const services: ServicesCopy = {
               "Monitoring, logs, and alerts",
               "Rules, documentation, and handover",
             ],
-          },
-        ],
-        processHeading: "From bottleneck to dependable workflow",
-        processIntro: "We start small and check early whether the solution works in daily use.",
-        process: [
-          {
-            id: "understand-the-workflow",
-            title: "Understand the workflow",
-            copy: "We write down how the task runs today, which software is involved, and where a person has to decide.",
-          },
-          {
-            id: "test-the-solution",
-            title: "Test the solution",
-            copy: "We build a small prototype, try it on real examples, and check whether the results are good enough.",
-          },
-          {
-            id: "integrate-and-safeguard",
-            title: "Integrate and safeguard",
-            copy: "We connect the solution to your software, set up alerts for failures, and document everything for your team.",
           },
         ],
         faqHeading: "AI & Automation FAQs",
