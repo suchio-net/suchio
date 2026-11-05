@@ -1,5 +1,11 @@
 import type { ServiceCopy } from "@/i18n/services";
-import { publicBusinessAddress, publicContactEmail, publicContactPhone, publicXProfile } from "@/lib/contact";
+import {
+  publicBusinessAddress,
+  publicContactEmail,
+  publicContactPhone,
+  publicLinkedInProfile,
+  publicXProfile,
+} from "@/lib/contact";
 import { localizePath, locales, t, type Locale } from "@/lib/i18n";
 import { absoluteUrl } from "@/lib/site";
 
@@ -26,7 +32,7 @@ export function siteNodes(locale: Locale, serviceNames: readonly string[]): Sche
       email: publicContactEmail,
       telephone: publicContactPhone,
       address: { "@type": "PostalAddress", ...publicBusinessAddress },
-      sameAs: [publicXProfile],
+      sameAs: [publicLinkedInProfile, publicXProfile],
       knowsAbout: serviceNames,
     },
     {

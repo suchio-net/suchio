@@ -10,3 +10,4 @@ export const publicBusinessAddress = {
   addressCountry: "DE",
 } as const;
 export const publicXProfile = "https://x.com/suchionet";
+export const publicLinkedInProfile = "https://www.linkedin.com/company/suchio/";

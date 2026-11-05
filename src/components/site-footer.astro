@@ -1,6 +1,6 @@
 ---
 import BrandMark from "@/components/brand-mark.astro";
-import { publicContactEmail, publicXProfile } from "@/lib/contact";
+import { publicContactEmail, publicLinkedInProfile, publicXProfile } from "@/lib/contact";
 import { localizePath, t, type Locale } from "@/lib/i18n";
 import { getServiceCatalog } from "@/lib/service-catalog";
 interface Props {
@@ -52,19 +52,33 @@ const services = getServiceCatalog(locale);
   </div>
   <div class="footer-legal flex items-center justify-between pt-6 text-meta text-inverse-muted max-narrow:mt-12 max-narrow:flex-col max-narrow:items-start max-narrow:gap-2">
     <span>© {new Date().getFullYear()} Suchio</span>
-    <div class="flex items-center gap-4">
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
       <a
-        class="inline-flex size-11 shrink-0 items-center justify-center text-white"
+        class="inline-flex min-h-11 shrink-0 items-center gap-2 transition-colors duration-150 hover:text-white"
+        href={publicLinkedInProfile}
+      >
+        <!-- Official logo: https://brand.linkedin.com/downloads -->
+        <svg class="size-4" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect width="24" height="24" rx="2.5" fill="#0A66C2" />
+          <path
+            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zM7.119 20.452H3.555V9h3.564v11.452z"
+            fill="#fff"
+          />
+        </svg>
+        LinkedIn
+      </a>
+      <a
+        class="inline-flex min-h-11 shrink-0 items-center gap-2 transition-colors duration-150 hover:text-white"
         href={publicXProfile}
-        aria-label="X (@suchionet)"
       >
         <!-- Official logo: https://about.x.com/en/who-we-are/brand-toolkit -->
-        <svg class="h-4 w-auto" viewBox="0 0 1200 1227" fill="none" aria-hidden="true" focusable="false">
+        <svg class="h-3.5 w-auto text-white" viewBox="0 0 1200 1227" fill="none" aria-hidden="true" focusable="false">
           <path
             d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"
             fill="currentColor"
           />
         </svg>
+        X (Twitter)
       </a>
       <a class="transition-colors duration-150 hover:text-white" href={`mailto:${publicContactEmail}`}>
         {publicContactEmail}
