@@ -21,10 +21,10 @@ const services: ServicesCopy = {
       page: {
         metaTitle: "Webdesign Frankfurt: Website erstellen lassen",
         metaDescription:
-          "Website erstellen lassen in Hattersheim, Frankfurt und dem Rhein-Main-Gebiet. Suchio plant, gestaltet und entwickelt schnelle Websites, Onlineshops und Apps.",
+          "Website erstellen lassen in Frankfurt und Rhein-Main: Unternehmenswebsites, Landingpages, Onlineshops und Web-Apps. Schnell, barrierefrei, Ihr Eigentum.",
         title: "Website erstellen lassen, die schnell lädt und Anfragen bringt.",
         intro:
-          "Wir erstellen Websites, Onlineshops und Apps für Betriebe im Rhein-Main-Gebiet und in ganz Deutschland. Vom ersten Entwurf bis zum Launch arbeiten Sie mit denselben Ansprechpartnern.",
+          "Wir gestalten und entwickeln Websites, Onlineshops und Web-Apps für Unternehmen in Frankfurt, im Rhein-Main-Gebiet und in ganz Deutschland. Vom ersten Entwurf bis nach dem Start arbeiten Sie mit denselben Ansprechpartnern.",
         outcomesHeading: "Was die fertige Website leisten muss",
         outcomesIntro: "Daran messen wir jede Entscheidung zu Inhalt, Design und Technik.",
         outcomes: [
@@ -114,31 +114,116 @@ const services: ServicesCopy = {
             ],
           },
         ],
+        showcase: {
+          heading: "Websites aus unserem Studio",
+          copy: "Drei Konzepte für erfundene Betriebe, gebaut wie ein Kundenprojekt.",
+          tabsLabel: "Beispiel-Websites",
+          open: "Website öffnen",
+        },
+        details: {
+          heading: "Was wir bauen",
+          intro: "Diese Projekte bauen wir am häufigsten.",
+          items: [
+            {
+              id: "business-websites",
+              heading: "Unternehmenswebsites, die Anfragen bringen",
+              paragraphs: [
+                "Jede Leistung und jeder wichtige Ort bekommt eine eigene Seite, geplant nach den Suchbegriffen Ihrer Kunden. Telefon, WhatsApp und Formular sind auf jeder Seite einen Fingertipp entfernt. Die Texte schreiben wir mit Ihnen.",
+              ],
+            },
+            {
+              id: "landing-pages",
+              heading: "Landingpages für Ihre Kampagnen",
+              paragraphs: [
+                "Jede Anzeige auf Google, Meta oder LinkedIn führt auf eine eigene Seite mit genau einem Ziel. Die Messung richten wir gleich mit ein. So sehen Sie, wie viele Anfragen eine Kampagne bringt.",
+              ],
+            },
+            {
+              id: "online-shops",
+              heading: "Onlineshops mit schnellem Checkout",
+              paragraphs: [
+                "Produktseiten, Warenkorb und Checkout mit den Zahlungsarten Ihrer Kunden, angebunden an Versand und Warenwirtschaft. Ob ein fertiges Shopsystem oder eine eigene Lösung passt, entscheiden wir nach Sortiment und Abläufen.",
+              ],
+            },
+            {
+              id: "web-apps-portals",
+              heading: "Web-Apps und Kundenportale",
+              paragraphs: [
+                "Ihre Kunden buchen Termine, verfolgen Aufträge und laden Dokumente hoch, ohne anzurufen. Wir beginnen mit einem klickbaren Prototyp, den Sie testen, bevor wir programmieren. Muss die App in den App Store, entwickeln wir sie für iOS und Android.",
+              ],
+            },
+            {
+              id: "relaunch",
+              heading: "Relaunch ohne Verlust von Rankings",
+              paragraphs: [
+                "Wir leiten jede alte Adresse auf die passende neue Seite weiter. Nach dem Start prüfen wir in der Google Search Console, ob Google die neuen Seiten aufnimmt. Bei Handwerker.work waren das 64 Adressen, und keine ging verloren.",
+              ],
+            },
+            {
+              id: "accessibility",
+              heading: "Barrierefrei bedienbar",
+              paragraphs: [
+                "Jede Website lässt sich mit Tastatur und Screenreader bedienen, mit ausreichenden Kontrasten und beschrifteten Formularen. Seit dem 28. Juni 2025 verlangt das Barrierefreiheitsstärkungsgesetz das von vielen Shops und Online-Diensten. Ob es für Sie gilt, klären wir im ersten Gespräch.",
+              ],
+            },
+            {
+              id: "hosting-care",
+              heading: "Hosting, Updates und Weiterentwicklung",
+              paragraphs: [
+                "Nach dem Start betreiben wir die Website, spielen Updates ein und sichern die Daten. Texte, Bilder und Öffnungszeiten ändern Sie selbst. Neue Seiten und Funktionen bauen wir auf dem bestehenden System weiter.",
+              ],
+            },
+          ],
+        },
+        proof: {
+          heading: "Ein Beispiel: Handwerker.work",
+          text: "Wir haben die WordPress-Website eines Sanierungsbetriebs aus Bad Nauheim neu gebaut. Vorher und nachher, gemessen mit Lighthouse auf dem Handy.",
+          beforeLabel: "Vorher",
+          afterLabel: "Nachher",
+          facts: [
+            { label: "Performance", before: "65", after: "100" },
+            { label: "Hauptinhalt sichtbar", before: "10,1 s", after: "1,8 s" },
+            { label: "Verlinkte Seiten mit Fehler 404", before: "1", after: "0" },
+          ],
+          link: "Die ganze Referenz",
+        },
         faqHeading: "Häufige Fragen zu Websites & Apps",
         faqs: [
+          {
+            id: "website-cost",
+            question: "Was kostet eine Website?",
+            answer:
+              "Der Preis hängt von der Zahl der Seiten ab, von Funktionen wie Shop, Buchung oder Login, von den Texten und Fotos und von den Programmen, an die wir die Website anbinden. Nach einem kurzen Gespräch erhalten Sie ein schriftliches Angebot mit Umfang, Preis und Termin. Laufende Kosten für Hosting und Wartung stehen getrennt darin.",
+          },
           {
             id: "how-long-does-a-website-take",
             question: "Wie lange dauert es, eine Website erstellen zu lassen?",
             answer:
-              "Das hängt vom Umfang ab. Eine Landingpage ist schneller fertig als ein Onlineshop mit Anbindung an die Warenwirtschaft. Start und Launch-Termin stehen im Angebot, bevor wir anfangen.",
+              "Eine Landingpage ist schneller fertig als eine Unternehmenswebsite mit vielen Leistungs- und Ortsseiten. Ein Shop oder ein Kundenportal dauert am längsten. Bei Handwerker.work lagen zwischen der Analyse und dem fertigen Anfrageweg elf Tage. Start und Launch-Termin stehen im Angebot.",
+          },
+          {
+            id: "what-we-need",
+            question: "Was brauchen Sie von uns?",
+            answer:
+              "Ein Gespräch über Ihre Kunden und Leistungen, Ihr Logo, Fotos Ihrer Arbeit und die Zugänge zur alten Website und zur Domain. Fehlende Texte schreiben wir mit Ihnen. Jeden Zwischenstand sehen Sie unter einer Vorschau-Adresse und geben ihn frei.",
           },
           {
             id: "can-we-edit-the-website-ourselves",
             question: "Können wir die Website danach selbst bearbeiten?",
             answer:
-              "Ja. Texte, Bilder, Leistungen und neue Seiten pflegen Sie selbst im CMS. Nach dem Launch zeigen wir Ihnen, wie das geht.",
+              "Ja. Texte, Bilder, Leistungen und neue Seiten pflegen Sie selbst im Redaktionssystem. Nach dem Launch zeigen wir Ihnen, wie das geht.",
           },
           {
-            id: "is-the-website-optimized-for-google-and-mobile",
-            question: "Ist die Website für Google und das Handy optimiert?",
+            id: "do-we-own-the-website",
+            question: "Gehört die Website danach uns?",
             answer:
-              "Ja. Jede Website ist für das Handy gebaut, lädt schnell und bringt die technischen SEO-Grundlagen mit, also saubere Seitentitel, strukturierte Daten und eine Sitemap. Laufende Suchmaschinenoptimierung bieten wir als eigene Leistung an.",
+              "Ja. Sie erhalten Quellcode, Designs, Inhalte und alle Zugänge. Sie können die Website danach mit einer anderen Agentur oder im eigenen Haus weiterführen.",
           },
           {
-            id: "can-you-redesign-our-existing-website",
-            question: "Könnt ihr unsere bestehende Website überarbeiten, statt sie neu zu bauen?",
+            id: "only-frankfurt",
+            question: "Arbeiten Sie nur mit Unternehmen aus Frankfurt?",
             answer:
-              "Ja. Wir prüfen zuerst, was funktioniert. Oft reicht es, Struktur, Texte und Ladezeit zu verbessern. Einen Neubau schlagen wir nur vor, wenn die alte Technik dem Ziel im Weg steht.",
+              "Nein. Unser Studio liegt in Hattersheim am Main, zwischen Frankfurt, Wiesbaden und Mainz. Mit Unternehmen aus dem Rhein-Main-Gebiet treffen wir uns gern vor Ort. Mit Unternehmen aus anderen Regionen und aus dem Ausland arbeiten wir per Videocall, Telefon und E-Mail.",
           },
         ],
         finalTitle: "Erzählen Sie uns, was Sie bauen möchten.",

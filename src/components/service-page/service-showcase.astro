@@ -1,0 +1,256 @@
+---
+import { ArrowUpRight, ChevronLeft, ChevronRight, Lock, RotateCw } from "@lucide/astro";
+import SectionHeading from "@/components/section-heading.astro";
+import type { ServiceCopy } from "@/i18n/services";
+
+interface Props {
+  copy: NonNullable<ServiceCopy["page"]["showcase"]>;
+}
+const { copy } = Astro.props;
+
+// Our own concept sites, shown as tabs of one browser window. The concepts exist in German only, so the
+// links stay unlocalized. Phones get the mobile screenshot, because a scaled-down desktop page is unreadable.
+const sites = [
+  {
+    id: "brenneck-bad",
+    name: "Brenneck Bad",
+    short: "Brenneck",
+    initial: "B",
+    color: "#16181d",
+    path: "/examples/trades/brenneck-bad",
+    shot: "/examples/trades/brenneck-bad",
+  },
+  {
+    id: "wendmark-sanierung",
+    name: "Wendmark Sanierung",
+    short: "Wendmark",
+    initial: "W",
+    color: "#1d6b55",
+    path: "/examples/trades/wendmark-sanierung",
+    shot: "/examples/trades/wendmark-sanierung",
+  },
+  {
+    id: "flughotel-nordtor",
+    name: "Flughotel Nordtor",
+    short: "Nordtor",
+    initial: "F",
+    color: "#1f3a7a",
+    path: "/examples/hotels/flughotel-nordtor",
+    shot: "/examples/hotels/flughotel-nordtor",
+  },
+];
+const first = sites[0]!;
+---
+
+<section class="px-page pb-section">
+  <div class="mx-auto max-w-[75rem]">
+    <SectionHeading title={copy.heading} copy={copy.copy} />
+    <div class="reveal showcase overflow-hidden rounded-[1.25rem] bg-white" data-reveal data-showcase>
+      <div class="showcase-bar flex items-end gap-1 bg-[#efeee9] px-3 pt-2.5">
+        <span class="mr-3 mb-3 flex gap-1.5 self-center max-narrow:hidden" aria-hidden="true">
+          <i class="size-2.5 rounded-full bg-[#ff5f57]"></i>
+          <i class="size-2.5 rounded-full bg-[#febc2e]"></i>
+          <i class="size-2.5 rounded-full bg-[#28c840]"></i>
+        </span>
+        <div class="flex min-w-0 flex-1 gap-1" role="tablist" aria-label={copy.tabsLabel}>
+          {sites.map((site, index) => (
+            <button
+              type="button"
+              role="tab"
+              id={`showcase-tab-${site.id}`}
+              aria-controls={`showcase-panel-${site.id}`}
+              aria-selected={index === 0 ? "true" : "false"}
+              tabindex={index === 0 ? 0 : -1}
+              data-path={site.path}
+              class="showcase-tab flex max-w-[14rem] min-w-0 flex-1 items-center gap-2 rounded-t-[10px] px-3 py-2.5 text-left text-[12.5px] font-medium"
+            >
+              <span
+                class="showcase-favicon grid size-4 shrink-0 place-items-center rounded-[4px] text-[9.5px] font-bold text-white"
+                style={{ background: site.color }}
+                aria-hidden="true"
+              >
+                {site.initial}
+              </span>
+              <span class="truncate max-narrow:hidden">{site.name}</span>
+              <span class="hidden max-narrow:inline">{site.short}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div class="flex items-center gap-3 px-4 py-2.5 max-narrow:hidden">
+        <span class="flex gap-2 text-neutral-400 max-narrow:hidden" aria-hidden="true">
+          <ChevronLeft class="size-4" stroke-width={2} />
+          <ChevronRight class="size-4" stroke-width={2} />
+          <RotateCw class="size-3.5 self-center" stroke-width={2} />
+        </span>
+        <span class="flex min-w-0 flex-1 items-center gap-1.5 rounded-full bg-[#efeee9] px-3 py-1.5 text-[12.5px] text-neutral-500">
+          <Lock class="size-3 shrink-0" stroke-width={2.2} aria-hidden="true" />
+          <span class="truncate">
+            <span class="text-ink">suchio.net</span>
+            <span data-showcase-path>{first.path}</span>
+          </span>
+        </span>
+        <a
+          class="flex shrink-0 items-center gap-1 text-[12.5px] font-semibold text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
+          href={first.path}
+          data-showcase-open
+        >
+          <span>{copy.open}</span>
+          <ArrowUpRight class="size-3.5" stroke-width={2.2} aria-hidden="true" />
+        </a>
+      </div>
+      <div class="showcase-viewport relative bg-[#efeee9]">
+        {sites.map((site, index) => (
+          <div
+            role="tabpanel"
+            id={`showcase-panel-${site.id}`}
+            aria-labelledby={`showcase-tab-${site.id}`}
+            class="showcase-panel absolute inset-0"
+            data-showcase-panel
+            data-active={index === 0 ? "" : undefined}
+          >
+            <picture>
+              <source media="(max-width: 37.5rem)" srcset={`${site.shot}-mobile-780.webp`} type="image/webp" />
+              <source
+                type="image/avif"
+                srcset={`${site.shot}-preview-720.avif 720w, ${site.shot}-preview-1440.avif 1440w`}
+                sizes="(max-width: 75rem) 100vw, 75rem"
+              />
+              <img
+                src={`${site.shot}-preview-1440.webp`}
+                srcset={`${site.shot}-preview-720.webp 720w, ${site.shot}-preview-1440.webp 1440w`}
+                sizes="(max-width: 75rem) 100vw, 75rem"
+                width="1440"
+                height="900"
+                alt={site.name}
+                loading="lazy"
+                decoding="async"
+                class="block size-full object-cover object-top"
+              />
+            </picture>
+          </div>
+        ))}
+      </div>
+      <a
+        class="mt-5 hidden items-center justify-center gap-1 text-[13px] font-semibold text-ink underline decoration-line-strong underline-offset-4 max-narrow:flex"
+        href={first.path}
+        data-showcase-open
+      >
+        {copy.open}
+        <ArrowUpRight class="size-3.5" stroke-width={2.2} aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .showcase {
+    box-shadow:
+      0 0 0 1px rgb(0 0 0 / 6%),
+      0 30px 60px -30px rgb(0 0 0 / 30%);
+  }
+  .showcase-tab {
+    color: #6b6b66;
+    transition:
+      background-color 150ms,
+      color 150ms;
+  }
+  .showcase-tab:hover {
+    background: rgb(255 255 255 / 55%);
+  }
+  .showcase-tab[aria-selected="true"] {
+    background: #fff;
+    color: #16181d;
+  }
+  .showcase-viewport {
+    aspect-ratio: 16 / 10;
+  }
+  .showcase-panel {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 220ms ease,
+      visibility 0s linear 220ms;
+  }
+  .showcase-panel[data-active] {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 220ms ease;
+  }
+  @media (max-width: 37.5rem) {
+    .showcase {
+      padding: 1.25rem 1rem 1.75rem;
+      border-radius: var(--radius-card);
+      background: var(--color-service-websites-bg);
+      box-shadow: none;
+    }
+    .showcase-bar {
+      justify-content: center;
+      padding: 0;
+      background: transparent;
+    }
+    .showcase-bar [role="tablist"] {
+      flex: none;
+      gap: 0.25rem;
+      padding: 0.25rem;
+      border-radius: 999px;
+      background: rgb(255 255 255 / 70%);
+    }
+    .showcase-tab {
+      flex: none;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+    }
+    .showcase-tab[aria-selected="true"] {
+      background: #16181d;
+      color: #fff;
+    }
+    .showcase-favicon {
+      display: none;
+    }
+    .showcase-viewport {
+      width: min(15.5rem, 100%);
+      margin: 1.25rem auto 0;
+      aspect-ratio: 390 / 720;
+      overflow: hidden;
+      border: 6px solid #16181d;
+      border-radius: 1.9rem;
+      box-shadow: 0 30px 50px -28px rgb(0 0 0 / 45%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .showcase-panel,
+    .showcase-panel[data-active] {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>("[data-showcase]")) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panels = [...root.querySelectorAll<HTMLElement>("[data-showcase-panel]")];
+    const path = root.querySelector<HTMLElement>("[data-showcase-path]");
+    const links = [...root.querySelectorAll<HTMLAnchorElement>("[data-showcase-open]")];
+    const select = (index: number, focus = false) => {
+      tabs.forEach((tab, at) => {
+        tab.setAttribute("aria-selected", String(at === index));
+        tab.tabIndex = at === index ? 0 : -1;
+      });
+      panels.forEach((panel, at) => panel.toggleAttribute("data-active", at === index));
+      const target = tabs[index]!.dataset.path ?? "";
+      if (path) path.textContent = target;
+      for (const link of links) link.href = target;
+      if (focus) tabs[index]!.focus();
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => select(index));
+      tab.addEventListener("keydown", (event) => {
+        const step = { ArrowRight: 1, ArrowLeft: -1 }[event.key];
+        if (!step) return;
+        event.preventDefault();
+        select((index + step + tabs.length) % tabs.length, true);
+      });
+    });
+  }
+</script>

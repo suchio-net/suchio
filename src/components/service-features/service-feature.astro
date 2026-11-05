@@ -1,21 +1,34 @@
 ---
+import SectionHeading from "@/components/section-heading.astro";
 import type { ServiceId } from "@/i18n/services";
 import { getServiceFeaturesCopy } from "@/i18n/service-features";
 import type { Locale } from "@/lib/i18n";
-import AdCalculator from "./ad-calculator.astro";
-import EnquiryLanes from "./enquiry-lanes.astro";
-import SearchSources from "./search-sources.astro";
-import SiteEditor from "./site-editor.astro";
+import { ClickEnquiry } from "./click-enquiry";
+import { SearchPlaces } from "./search-places";
+import { ServiceTour } from "./service-tour";
+import { ToolMap } from "./tool-map";
 
+// Each service page shows its service at work in one interactive section below the hero.
 interface Props {
   serviceId: ServiceId;
   locale: Locale;
 }
 const { serviceId, locale } = Astro.props;
 const copy = getServiceFeaturesCopy(locale);
+const section = {
+  "websites-apps": copy.serviceTour,
+  "seo-ai-visibility": copy.searchPlaces,
+  "paid-campaigns": copy.clickEnquiry,
+  "ai-automation": copy.toolMap,
+}[serviceId];
 ---
 
-{serviceId === "websites-apps" && <SiteEditor copy={copy.siteEditor} />}
-{serviceId === "seo-ai-visibility" && <SearchSources copy={copy.searchSources} />}
-{serviceId === "paid-campaigns" && <AdCalculator copy={copy.adCalculator} locale={locale} />}
-{serviceId === "ai-automation" && <EnquiryLanes copy={copy.enquiryLanes} />}
+<section class="px-page pb-section">
+  <div class="mx-auto max-w-[70rem]">
+    <SectionHeading title={section.heading} copy={section.copy} />
+    {serviceId === "websites-apps" && <ServiceTour client:visible copy={copy.serviceTour} />}
+    {serviceId === "seo-ai-visibility" && <SearchPlaces client:visible copy={copy.searchPlaces} />}
+    {serviceId === "paid-campaigns" && <ClickEnquiry client:visible copy={copy.clickEnquiry} locale={locale} />}
+    {serviceId === "ai-automation" && <ToolMap client:visible copy={copy.toolMap} />}
+  </div>
+</section>

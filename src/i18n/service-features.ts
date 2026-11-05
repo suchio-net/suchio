@@ -3,36 +3,45 @@ import de from "./de/service-features";
 import en from "./en/service-features";
 import fr from "./fr/service-features";
 
-// Each service page has one section of its own that shows how the service works. The business in
-// every demo is the made-up Mustermann Bäder from the home page.
+// Each service page has one interactive section that shows the service at work. The business in every
+// demo is the made-up Mustermann Bäder from the home page.
 
-export type SiteEditorCopy = {
+export type TourStepId = "design" | "speed" | "enquiry" | "care";
+
+export type ServiceTourCopy = {
   heading: string;
   copy: string;
-  panelTitle: string;
-  headlineLabel: string;
-  headlineDefault: string;
-  hoursLabel: string;
-  hoursDefault: string;
-  noticeLabel: string;
-  noticeText: string;
-  publish: string;
-  published: string;
-  draft: string;
-  live: string;
-  pageCopy: string;
-  pageCta: string;
-  hoursPrefix: string;
-  photoAlt: string;
+  tabsLabel: string;
+  steps: Record<TourStepId, { title: string; text: string }>;
+  domain: string;
+  nav: readonly [string, string, string];
+  headline: string;
+  sub: string;
+  cta: string;
+  cards: readonly [string, string, string];
+  speedLabel: string;
+  speedGood: string;
+  speedPoor: string;
+  speedReady: string;
+  formTitle: string;
+  formFields: readonly { label: string; value: string }[];
+  formSubmit: string;
+  formSent: string;
+  formSentText: string;
+  careLabel: string;
+  careBefore: string;
+  careAfter: string;
+  careSaved: string;
 };
 
 export type SearchPlace = "google" | "maps" | "ai";
 
-export type SearchSourcesCopy = {
+export type SearchPlacesCopy = {
   heading: string;
   copy: string;
   tabsLabel: string;
   forSearch: string;
+  domainPath: string;
   seoTitle: string;
   seoDescription: string;
   pageTitle: string;
@@ -49,37 +58,47 @@ export type SearchSourcesCopy = {
   aiAnswer: string;
 };
 
-export type AdCalculatorCopy = {
+export type ClickEnquiryCopy = {
   heading: string;
   copy: string;
-  budget: string;
-  cpc: string;
-  rate: string;
+  steps: readonly [
+    { title: string; text: string },
+    { title: string; text: string },
+    { title: string; text: string },
+    { title: string; text: string },
+  ];
+  query: string;
+  sponsored: string;
+  adTitle: string;
+  adText: string;
+  domain: string;
+  pageHeadline: string;
+  pageFields: readonly [string, string];
+  pageSubmit: string;
+  pageSent: string;
+  dashboardTitle: string;
+  dashboardExample: string;
   clicks: string;
   enquiries: string;
-  perEnquiry: string;
-  noEnquiry: string;
-  compareHeading: string;
-  today: string;
-  /** `{points}` is replaced with the number of percentage points. */
-  better: string;
-  note: string;
+  costPerEnquiry: string;
 };
 
-export type EnquiryLane = "auto" | "team";
+export type ToolId = "form" | "mail" | "crm" | "calendar" | "chat" | "documents";
 
-export type EnquiryLanesCopy = {
+export type ToolMapCopy = {
   heading: string;
   copy: string;
-  lanes: Record<EnquiryLane, string>;
-  steps: readonly { time: string; lane: EnquiryLane; items: readonly { title: string; detail: string }[] }[];
+  hub: string;
+  toolsLabel: string;
+  replay: string;
+  tools: Record<ToolId, { name: string; event: string; examples: readonly string[] }>;
 };
 
 export type ServiceFeaturesCopy = {
-  siteEditor: SiteEditorCopy;
-  searchSources: SearchSourcesCopy;
-  adCalculator: AdCalculatorCopy;
-  enquiryLanes: EnquiryLanesCopy;
+  serviceTour: ServiceTourCopy;
+  searchPlaces: SearchPlacesCopy;
+  clickEnquiry: ClickEnquiryCopy;
+  toolMap: ToolMapCopy;
 };
 
 const features = { de, en, fr } satisfies Record<Locale, ServiceFeaturesCopy>;

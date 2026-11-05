@@ -1,0 +1,43 @@
+---
+import SectionHeading from "@/components/section-heading.astro";
+import WebsiteVisual from "@/components/service-page/website-visual.astro";
+import { serviceStyles } from "@/components/service-styles";
+import type { ServiceCopy, ServiceId } from "@/i18n/services";
+
+interface Props {
+  details: NonNullable<ServiceCopy["page"]["details"]>;
+  serviceId: ServiceId;
+}
+const { details, serviceId } = Astro.props;
+---
+
+<section class="px-page pb-section">
+  <div class="mx-auto max-w-[75rem]">
+    <SectionHeading title={details.heading} copy={details.intro} />
+    <div class="grid gap-6 max-nav:gap-16">
+      {details.items.map((item, index) => (
+        <article
+          id={item.id}
+          class="reveal grid grid-cols-2 items-center gap-x-16 max-nav:grid-cols-1 max-nav:gap-y-8"
+          data-reveal
+        >
+          <div
+            class:list={[
+              "flex min-h-[27rem] items-center justify-center overflow-hidden rounded-card px-10 py-12 max-nav:min-h-0 max-narrow:px-4 max-narrow:py-8",
+              serviceStyles[serviceId].background,
+              index % 2 === 1 && "order-2 max-nav:order-none",
+            ]}
+          >
+            <WebsiteVisual id={item.id} />
+          </div>
+          <div class="max-w-[30rem] max-nav:max-w-[40rem]">
+            <h3 class="m-0 text-heading-lg text-balance">{item.heading}</h3>
+            {item.paragraphs.map((paragraph) => (
+              <p class="mt-5 mb-0 text-lg/8 text-muted">{paragraph}</p>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

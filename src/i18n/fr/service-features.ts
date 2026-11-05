@@ -1,29 +1,57 @@
 import type { ServiceFeaturesCopy } from "../service-features";
 
 const features = {
-  siteEditor: {
-    heading: "Vous modifiez vous-même les textes et les horaires",
-    copy: "Si vous le souhaitez, nous construisons votre site avec un système de gestion de contenu. Vous modifiez alors vous-même les titres, les horaires et les annonces, et vous les publiez en un clic. Essayez ici.",
-    panelTitle: "Modifier la page d’accueil",
-    headlineLabel: "Titre",
-    headlineDefault: "Votre nouvelle salle de bains par une seule équipe",
-    hoursLabel: "Horaires",
-    hoursDefault: "Lun–ven 8 h–17 h",
-    noticeLabel: "Annonce en haut de la page",
-    noticeText: "Il reste des dates libres en décembre.",
-    publish: "Publier",
-    published: "Publié",
-    draft: "Brouillon",
-    live: "En ligne",
-    pageCopy: "Conception, démolition, carrelage et plomberie par une seule entreprise à Hofheim.",
-    pageCta: "Envoyer une demande",
-    hoursPrefix: "Ouvert",
-    photoAlt: "Mur carrelé d’une salle de bains",
+  serviceTour: {
+    heading: "Ce que nous prenons en charge pour votre site",
+    copy: "Nous concevons et développons le site, le rendons rapide, intégrons formulaires et prise de rendez-vous, et nous en occupons après la mise en ligne.",
+    tabsLabel: "Partie du service",
+    steps: {
+      design: {
+        title: "Design",
+        text: "Chaque page est conçue pour mobile et ordinateur, avec vos services, vos photos et vos textes plutôt qu’un modèle.",
+      },
+      speed: {
+        title: "Chargement",
+        text: "Nous construisons des pages légères. Le contenu principal s’affiche en moins de 2,5 secondes, la limite à partir de laquelle Google juge une page rapide.",
+      },
+      enquiry: {
+        title: "Demandes",
+        text: "Formulaires et prise de rendez-vous se remplissent en une minute sur mobile. Chaque demande vous parvient.",
+      },
+      care: {
+        title: "Entretien",
+        text: "Vous modifiez vous-même textes, images et horaires. Nous nous chargeons de l’hébergement, des mises à jour et des sauvegardes.",
+      },
+    },
+    domain: "mustermann-baeder.de",
+    nav: ["Services", "Projets", "Contact"],
+    headline: "Votre nouvelle salle de bains en trois semaines",
+    sub: "Conception, démolition, carrelage et plomberie par une seule entreprise à Hofheim.",
+    cta: "Envoyer une demande",
+    cards: ["Rénovation", "Salle de bains accessible", "Carrelage"],
+    speedLabel: "Contenu principal visible",
+    speedGood: "bon jusqu’à 2,5 s",
+    speedPoor: "lent dès 4 s",
+    speedReady: "chargé",
+    formTitle: "Demande pour votre salle de bains",
+    formFields: [
+      { label: "Projet", value: "Rénovation" },
+      { label: "Lieu", value: "65719 Hofheim" },
+      { label: "Téléphone", value: "0176 …" },
+    ],
+    formSubmit: "Envoyer une demande",
+    formSent: "Demande envoyée",
+    formSentText: "Nous vous répondons demain avant 12 h.",
+    careLabel: "Horaires",
+    careBefore: "Lun–ven 8 h–17 h",
+    careAfter: "Lun–ven 7 h–18 h, sam 9 h–13 h",
+    careSaved: "Enregistré et en ligne",
   },
-  searchSources: {
+  searchPlaces: {
     heading: "Ce que Google, Maps et les assistants IA lisent sur votre site",
-    copy: "Tous les trois lisent la même page, mais chacun en lit une autre partie. Choisissez un endroit et voyez quelle partie y apparaît.",
+    copy: "Tous les trois lisent la même page, mais chacun en lit une autre partie. Nous nous occupons de chacune de ces parties.",
     tabsLabel: "Endroit où les clients cherchent",
+    domainPath: "mustermann-baeder.de/badsanierung-hofheim",
     forSearch: "Pour les moteurs de recherche",
     seoTitle: "Rénovation de salle de bains à Hofheim | Mustermann Bäder",
     seoDescription:
@@ -58,61 +86,104 @@ const features = {
     aiAnswer:
       "Chez Mustermann Bäder à Hofheim, une petite salle de bains prend en général trois semaines, de la démolition au carrelage.",
   },
-  adCalculator: {
-    heading: "Ce que coûte une demande",
-    copy: "Nous évaluons les campagnes au coût par demande, pas au nombre de clics. Modifiez les valeurs et voyez ce que change une meilleure page d’atterrissage.",
-    budget: "Budget par mois",
-    cpc: "Prix par clic",
-    rate: "Visiteurs qui font une demande",
-    clicks: "clics",
-    enquiries: "demandes",
-    perEnquiry: "par demande",
-    noEnquiry: "aucune demande",
-    compareHeading: "Coût par demande",
-    today: "Avec cette page d’atterrissage",
-    better: "Si {points} points de pourcentage de plus font une demande",
-    note: "Exemple de calcul. Le prix des clics dépend du secteur, du lieu et de la concurrence. Nous vous donnons des valeurs réalistes avant le lancement.",
-  },
-  enquiryLanes: {
-    heading: "Ce qui se fait automatiquement et ce qui reste chez vous",
-    copy: "L’automatisation se charge de la saisie, du tri et des rappels. Le conseil, les mesures et le devis restent chez votre équipe. Un exemple avec une demande de rénovation de salle de bains :",
-    lanes: { auto: "Automatique", team: "Votre équipe" },
+  clickEnquiry: {
+    heading: "Du clic à la demande",
+    copy: "Nous rédigeons les annonces, créons la page d’atterrissage et rattachons chaque demande à son annonce. Vous voyez ainsi ce que coûte une demande.",
     steps: [
       {
-        time: "lundi, 19 h 42",
-        lane: "auto",
-        items: [
-          {
-            title: "La demande arrive",
-            detail: "Rénovation de salle de bains à Hofheim, trois photos envoyées par le formulaire",
-          },
-        ],
+        title: "Annonce",
+        text: "Nous choisissons des mots-clés avec une intention d’achat et rédigeons des annonces avec votre offre et votre lieu.",
       },
       {
-        time: "une minute plus tard",
-        lane: "auto",
-        items: [
-          { title: "Confirmation à la cliente", detail: "« Nous vous répondons d’ici mardi, 12 h. »" },
-          { title: "Fiche dans le CRM", detail: "Nom, service, lieu et photos, sans ressaisie" },
-          { title: "Message pour vous", detail: "Nouvelle demande avec un lien vers la fiche" },
-        ],
+        title: "Page d’atterrissage",
+        text: "Chaque annonce mène à une page consacrée à cette offre, avec un formulaire court.",
       },
       {
-        time: "mardi, 9 h 15",
-        lane: "team",
-        items: [{ title: "Rappel et rendez-vous", detail: "Vous conseillez et fixez la prise de mesures" }],
+        title: "Mesure",
+        text: "Chaque demande envoyée est attribuée à l’annonce qui l’a apportée.",
       },
       {
-        time: "après la prise de mesures",
-        lane: "team",
-        items: [{ title: "Devis", detail: "Vous calculez et envoyez le devis" }],
-      },
-      {
-        time: "cinq jours sans réponse",
-        lane: "auto",
-        items: [{ title: "Rappel avec un brouillon", detail: "Un e-mail de relance est prêt, vous le validez" }],
+        title: "Analyse",
+        text: "Nous déplaçons le budget vers les annonces au coût par demande le plus bas.",
       },
     ],
+    query: "rénovation salle de bains hofheim",
+    sponsored: "Sponsorisé",
+    adTitle: "Rénovation de salle de bains à Hofheim, en trois semaines",
+    adText: "Conception, carrelage et plomberie par une seule entreprise. Prenez rendez-vous.",
+    domain: "mustermann-baeder.de",
+    pageHeadline: "Votre nouvelle salle de bains à Hofheim",
+    pageFields: ["Rénovation", "65719 Hofheim"],
+    pageSubmit: "Envoyer une demande",
+    pageSent: "Demande envoyée",
+    dashboardTitle: "Campagne rénovation",
+    dashboardExample: "Valeurs d’exemple",
+    clicks: "Clics",
+    enquiries: "Demandes",
+    costPerEnquiry: "Coût par demande",
+  },
+  toolMap: {
+    heading: "Nous relions les outils que vous utilisez déjà",
+    copy: "Formulaire, messagerie, CRM, agenda, chat d’équipe et documents travaillent ensemble, sans ressaisie. Choisissez un outil et voyez ce que nous y automatisons.",
+    hub: "Votre automatisation",
+    toolsLabel: "Outil",
+    replay: "Rejouer le déroulé",
+    tools: {
+      form: {
+        name: "Formulaire du site",
+        event: "Nouvelle demande",
+        examples: [
+          "Transmettre les demandes avec service, lieu et photos",
+          "Vérifier les informations obligatoires avant la suite",
+          "Écarter le spam",
+        ],
+      },
+      mail: {
+        name: "Messagerie",
+        event: "Confirmation envoyée",
+        examples: [
+          "Accusé de réception avec les prochaines étapes",
+          "Trier les e-mails par sujet et les attribuer",
+          "Brouillons de réponse validés par votre équipe",
+        ],
+      },
+      crm: {
+        name: "CRM",
+        event: "Contact créé",
+        examples: [
+          "Créer le contact et la demande sans ressaisie",
+          "Tenir à jour le statut dans le pipeline",
+          "Relancer quand un devis reste sans réponse",
+        ],
+      },
+      calendar: {
+        name: "Agenda",
+        event: "Rendez-vous proposé",
+        examples: [
+          "Proposer des créneaux pour un rappel ou une visite",
+          "Confirmation et rappel pour le client",
+          "Attribuer les rendez-vous à la bonne personne",
+        ],
+      },
+      chat: {
+        name: "Chat d’équipe",
+        event: "Équipe prévenue",
+        examples: [
+          "Signaler les nouvelles demandes avec un lien vers le CRM",
+          "Envoyer les cas urgents à la bonne personne",
+          "Récapitulatif quotidien des demandes ouvertes",
+        ],
+      },
+      documents: {
+        name: "Documents et factures",
+        event: "Photos classées",
+        examples: [
+          "Extraire les données des factures et bons de livraison",
+          "Classer les fichiers dans le bon dossier",
+          "Préparer des devis à partir de modèles",
+        ],
+      },
+    },
   },
 } satisfies ServiceFeaturesCopy;
 

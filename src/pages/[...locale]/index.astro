@@ -5,6 +5,7 @@ import CtaButton from "@/components/cta-button.astro";
 import EnquiryScenes from "@/components/enquiry-scenes.astro";
 import Faq from "@/components/faq.astro";
 import FinalCta from "@/components/final-cta.astro";
+import HeroAura from "@/components/hero-aura/hero-aura.astro";
 import OfferVisual from "@/components/offer-visual.astro";
 import ReferenceTeaser from "@/components/reference-teaser.astro";
 import Reveal from "@/components/reveal.astro";
@@ -39,9 +40,10 @@ const faqs = await getFaqs(locale);
   <main id="main-content">
     <section
       id="intro"
-      class="hero--home relative isolate grid min-h-0 min-w-0 grid-cols-[minmax(0,1fr)] bg-canvas [place-items:start_center] px-page pt-page-title pb-section"
+      class="hero--home relative isolate grid min-h-svh min-w-0 grid-cols-[minmax(0,1fr)] overflow-hidden bg-canvas [place-items:center] px-page pt-22 pb-12"
     >
-      <div class="flex min-w-0 w-full max-w-[62rem] flex-col items-center text-center">
+      <HeroAura />
+      <div data-hero-text class="flex min-w-0 w-full max-w-[62rem] flex-col items-center text-center">
         <h1 class="shiny-text mt-6 mb-6 w-full max-w-[18ch] text-display-lg text-ink">
           <>
             {t(locale, "home.heroLine1")} <em class="hero-accent">{t(locale, "home.heroAccent")}</em>.<br />

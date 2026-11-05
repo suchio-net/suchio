@@ -55,6 +55,17 @@ export type AutomationAnimationCopy = {
 type ContentItem = { id: string; title: string; copy: string };
 export type ScopeGroup = { id: string; title: string; copy: string; items: readonly string[] };
 type FaqItem = { id: string; question: string; answer: string };
+/** A heading with plain paragraphs; used for the long-form parts of a service page. */
+export type ProseSection = { id: string; heading: string; paragraphs: readonly string[] };
+/** Before-and-after facts from a real project, linked to its reference page. */
+export type ServiceProof = {
+  heading: string;
+  text: string;
+  facts: readonly { label: string; before: string; after: string }[];
+  beforeLabel: string;
+  afterLabel: string;
+  link: string;
+};
 
 export type ServiceCopy = {
   id: ServiceId;
@@ -78,6 +89,11 @@ export type ServiceCopy = {
     scopeHeading: string;
     scopeIntro: string;
     scopeGroups: readonly ScopeGroup[];
+    /** What the service covers in detail. When present it replaces the scope grid. */
+    details?: { heading: string; intro: string; items: readonly ProseSection[] };
+    proof?: ServiceProof;
+    /** A large browser window that switches between the example sites we built. */
+    showcase?: { heading: string; copy: string; tabsLabel: string; open: string };
     faqHeading: string;
     faqs: readonly FaqItem[];
     finalTitle: string;
