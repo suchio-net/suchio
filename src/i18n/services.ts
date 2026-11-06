@@ -3,7 +3,7 @@ import de from "./de/services";
 import en from "./en/services";
 import fr from "./fr/services";
 
-export type ServiceId = "websites-apps" | "seo-ai-visibility" | "paid-campaigns" | "ai-automation";
+export type ServiceId = "websites-apps" | "apps" | "seo-ai-visibility" | "paid-campaigns" | "ai-automation";
 
 export type WebExperienceAnimationCopy = {
   nav: readonly [string, string, string];
@@ -52,16 +52,9 @@ export type AutomationAnimationCopy = {
   followUpTime: string;
 };
 
-type ContentItem = { id: string; title: string; copy: string };
-export type ScopeGroup = { id: string; title: string; copy: string; items: readonly string[] };
 type FaqItem = { id: string; question: string; answer: string };
 /** A heading with plain paragraphs; used for the long-form parts of a service page. */
 export type ProseSection = { id: string; heading: string; paragraphs: readonly string[] };
-/** One sub-service: a short statement, what we do, what the client receives, and where to read more. */
-export type ServiceDetail = ProseSection & {
-  lead?: string;
-  link?: { label: string; to: "reference" | "examples" | ServiceId };
-};
 /** Before-and-after facts from a real project, linked to its reference page. */
 export type ServiceProof = {
   heading: string;
@@ -88,14 +81,8 @@ export type ServiceCopy = {
     metaDescription: string;
     title: string;
     intro: string;
-    outcomesHeading: string;
-    outcomesIntro: string;
-    outcomes: readonly ContentItem[];
-    scopeHeading: string;
-    scopeIntro: string;
-    scopeGroups: readonly ScopeGroup[];
-    /** What the service covers in detail. When present it replaces the scope grid. */
-    details?: { heading: string; intro: string; items: readonly ServiceDetail[] };
+    /** The links to the sub-service pages and the open text blocks below them. */
+    details: { heading: string; intro: string; items: readonly ProseSection[] };
     proof?: ServiceProof;
     /** The stages of a project in order, each with what the client sees. */
     stages?: { heading: string; intro: string; items: readonly { title: string; copy: string }[] };
@@ -122,6 +109,16 @@ export type ServiceCopy = {
 
 export type ServicesCopy = {
   services: readonly ServiceCopy[];
+  /** The overview page of all areas and sub-services. */
+  overview: {
+    metaTitle: string;
+    metaDescription: string;
+    title: string;
+    intro: string;
+    finalTitle: string;
+    finalCopy: string;
+    finalCta: string;
+  };
   /** Shown beside the final call to action on every service page. */
   contact: { heading: string; text: string };
   webExperienceAnimation: WebExperienceAnimationCopy;

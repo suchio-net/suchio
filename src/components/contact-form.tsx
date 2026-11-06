@@ -5,7 +5,8 @@ import {
   ArrowUpRight,
   CircleHelp,
   LoaderCircle,
-  MonitorSmartphone,
+  AppWindow,
+  Monitor,
   RadioTower,
   Search,
   Workflow,
@@ -96,7 +97,8 @@ const serviceOptionStyles: Record<ServiceChoiceId, { selected: string; icon: str
 
 // Matches the Astro icon map in service-icons.ts.
 const serviceIcons = {
-  "websites-apps": MonitorSmartphone,
+  "websites-apps": Monitor,
+  apps: AppWindow,
   "seo-ai-visibility": Search,
   "paid-campaigns": RadioTower,
   "ai-automation": Workflow,

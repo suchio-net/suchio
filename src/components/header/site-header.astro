@@ -2,13 +2,13 @@
 import { ArrowUpRight, ChevronDown, ChevronRight, Menu, X } from "@lucide/astro";
 import BrandMark from "@/components/brand-mark.astro";
 import LanguageMenu from "@/components/header/language-menu.astro";
-import { serviceIcons } from "@/components/service-icons";
-import { serviceStyles } from "@/components/service-styles";
 import { localeConfig, locales } from "@/i18n/config";
 import { publicContactEmail } from "@/lib/contact";
 import { t, type Locale } from "@/lib/i18n";
 import { alternatePath, localizePath } from "@/lib/locale-path";
+import { getSubServiceCopy } from "@/i18n/sub-services";
 import { getServiceCatalog } from "@/lib/service-catalog";
+import { getSubServicePath, subServiceRoutes } from "@/lib/sub-service-routes";
 interface Props {
   locale: Locale;
   pathname: string;
@@ -28,7 +28,8 @@ const navItems = [
 const within = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 const isActive = (href: string) =>
   within(href) || (navItems.find((item) => item.href === href)?.also ?? []).some(within);
-const servicesActive = pathname.startsWith(localizePath("/services/", locale));
+const servicesActive =
+  pathname === localizePath("/services", locale) || pathname.startsWith(`${localizePath("/services", locale)}/`);
 const selectLocale = t(locale, "nav.selectLocale");
 const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduce:active:scale-100";
 ---
@@ -94,7 +95,7 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
     class="relative inline-flex h-11 items-center justify-center gap-px rounded-control bg-white p-1 shadow-surface max-nav:hidden"
     aria-label={t(locale, "nav.mainMenu")}
   >
-    <div class="relative" data-services>
+    <div data-services>
       <button
         class={`group/services relative z-1 inline-flex h-9 cursor-pointer items-center gap-1 rounded-inset px-3.5 text-sm font-medium transition-[color,background-color,scale] duration-150 ${pressable} ${servicesActive ? "bg-interaction text-ink" : "text-muted hover:bg-interaction hover:text-ink aria-expanded:bg-interaction aria-expanded:text-ink"}`}
         type="button"
@@ -110,34 +111,86 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
       </button>
       <div
         id="services-menu"
-        class="pointer-events-none absolute top-full left-1/2 w-[35rem] -translate-x-1/2 -translate-y-1 pt-3 opacity-0 transition-[opacity,translate] duration-200 ease-[var(--ease-out)] will-change-[opacity,translate] data-open:pointer-events-auto data-open:translate-y-0 data-open:opacity-100 motion-reduce:duration-0"
+        class="pointer-events-none absolute top-full left-1/2 w-[min(70rem,calc(100vw-3rem))] -translate-x-1/2 -translate-y-1 pt-3 opacity-0 transition-[opacity,translate] duration-200 ease-[var(--ease-out)] will-change-[opacity,translate] data-open:pointer-events-auto data-open:translate-y-0 data-open:opacity-100 motion-reduce:duration-0"
         aria-hidden="true"
         inert
       >
-        <div class="grid grid-cols-2 gap-1.5 rounded-shell bg-white p-2 shadow-floating">
-          {services.map((service) => {
-            const Icon = serviceIcons[service.id];
-            const active = pathname === service.href;
-            const styles = serviceStyles[service.id];
-            return (
-              <a
-                class={`group/service flex min-w-0 gap-3 rounded-inset p-3.5 transition-colors duration-150 ${active ? styles.background : "hover:bg-interaction"}`}
-                href={service.href}
-                aria-current={active ? "page" : undefined}
-                data-scroll-top
-              >
-                <span
-                  class={`grid size-9 shrink-0 place-items-center rounded-inset transition-colors duration-150 ${active ? styles.activeIcon : styles.icon}`}
-                >
-                  <Icon class="size-4.5" stroke-width={1.7} aria-hidden="true" />
-                </span>
-                <span class="min-w-0">
-                  <strong class="block text-sm font-semibold text-ink">{service.copy.name}</strong>
-                  <span class="mt-1 block text-meta leading-snug text-muted">{service.copy.navDescription}</span>
-                </span>
-              </a>
-            );
-          })}
+        <div class="rounded-shell bg-white shadow-floating">
+          <div class="grid grid-cols-[repeat(5,auto)] px-3 py-4">
+            {services.map((service) => {
+              const active = pathname === service.href;
+              return (
+                <div class="min-w-0 border-l border-line px-2 first:border-l-0">
+                  <a
+                    class="group/area mb-1 flex items-start gap-1 rounded-inset px-2 py-1.5 text-sm/snug font-semibold text-ink transition-colors duration-150 hover:bg-interaction"
+                    href={service.href}
+                    aria-current={active ? "page" : undefined}
+                    data-scroll-top
+                  >
+                    <span class="min-w-0">{service.copy.name}</span>
+                    {active ? (
+                      <span class="mt-[7px] ml-0.5 size-1.5 shrink-0 rounded-full bg-ink" aria-hidden="true" />
+                    ) : (
+                      <ArrowUpRight
+                        class="mt-[3px] size-3.5 shrink-0 text-subtle transition-[color,translate] duration-150 ease-[var(--ease-out)] group-hover/area:translate-x-0.5 group-hover/area:-translate-y-0.5 group-hover/area:text-ink motion-reduce:transition-none motion-reduce:group-hover/area:translate-x-0 motion-reduce:group-hover/area:translate-y-0"
+                        stroke-width={1.8}
+                        aria-hidden="true"
+                      />
+                    )}
+                  </a>
+                  <ul class="m-0 grid list-none gap-px p-0">
+                    {subServiceRoutes
+                      .filter((route) => route.area === service.id)
+                      .map(({ id }) => {
+                        const href = getSubServicePath(id, locale);
+                        const current = pathname === href;
+                        return (
+                          <li>
+                            <a
+                              class={`group/link flex items-start justify-between gap-2 rounded-inset px-2 py-1.5 text-meta leading-snug transition-colors duration-150 hover:bg-interaction hover:text-ink ${current ? "font-medium text-ink" : "text-neutral-700"}`}
+                              href={href}
+                              aria-current={current ? "page" : undefined}
+                              data-scroll-top
+                            >
+                              <span class="min-w-0">
+                                {getSubServiceCopy(locale, id).name}
+                                {current && (
+                                  <span
+                                    class="ml-1.5 inline-block size-1.5 rounded-full bg-ink align-middle"
+                                    aria-hidden="true"
+                                  />
+                                )}
+                              </span>
+                              {!current && (
+                                <ArrowUpRight
+                                  class="mt-[3px] size-3.5 shrink-0 opacity-0 transition-opacity duration-150 group-hover/link:opacity-100 group-focus-visible/link:opacity-100 motion-reduce:transition-none"
+                                  stroke-width={1.8}
+                                  aria-hidden="true"
+                                />
+                              )}
+                            </a>
+                          </li>
+                        );
+                      })}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+          <div class="flex justify-end border-t border-line px-5 py-2.5">
+            <a
+              class="group/all inline-flex items-center gap-1 text-meta font-medium text-muted transition-colors duration-150 hover:text-ink"
+              href={localizePath("/services", locale)}
+              data-scroll-top
+            >
+              {t(locale, "service.allServices")}
+              <ArrowUpRight
+                class="size-3.5 transition-transform duration-150 ease-[var(--ease-out)] group-hover/all:translate-x-0.5 group-hover/all:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none"
+                stroke-width={1.8}
+                aria-hidden="true"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -226,6 +279,20 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
       >
         <div class="min-h-0 overflow-hidden">
           <div class="max-h-[60vh] overflow-y-auto">
+            <a
+              class="group/menu-link grid min-h-14 grid-cols-[minmax(0,1fr)_1.5rem] items-center border-b border-inverse-line py-2 pl-8 text-heading-sm transition-colors duration-150 hover:bg-white/8"
+              href={localizePath("/services", locale)}
+              aria-current={pathname === localizePath("/services", locale) ? "page" : undefined}
+              data-scroll-top
+              data-menu-link
+            >
+              <span>{t(locale, "service.allServices")}</span>
+              <ArrowUpRight
+                class="w-5 justify-self-end transition-transform duration-250 ease-[var(--ease-out)] group-hover/menu-link:translate-x-1 group-hover/menu-link:-translate-y-1 motion-reduce:transform-none motion-reduce:transition-none"
+                stroke-width={1.7}
+                aria-hidden="true"
+              />
+            </a>
             {services.map((service) => (
               <a
                 class="group/menu-link grid min-h-14 grid-cols-[minmax(0,1fr)_1.5rem] items-center border-b border-inverse-line py-2 pl-8 text-heading-sm transition-colors duration-150 hover:bg-white/8"

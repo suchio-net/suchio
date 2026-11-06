@@ -1,0 +1,192 @@
+{
+  "/": {
+    "de": "/",
+    "en": "/en",
+    "fr": "/fr"
+  },
+  "/about": {
+    "de": "/ueber-uns",
+    "en": "/en/about",
+    "fr": "/fr/a-propos"
+  },
+  "/contact": {
+    "de": "/kontakt",
+    "en": "/en/contact",
+    "fr": "/fr/contact"
+  },
+  "/examples": {
+    "de": "/beispiele",
+    "en": "/en/examples",
+    "fr": "/fr/exemples"
+  },
+  "/examples/hotels": {
+    "de": "/beispiele/hotels",
+    "en": "/en/examples/hotels",
+    "fr": "/fr/exemples/hotels"
+  },
+  "/examples/trades": {
+    "de": "/beispiele/handwerk",
+    "en": "/en/examples/trades",
+    "fr": "/fr/exemples/artisans"
+  },
+  "/references": {
+    "de": "/referenzen",
+    "en": "/en/references",
+    "fr": "/fr/references"
+  },
+  "/references/handwerker-work": {
+    "de": "/referenzen/handwerker-work",
+    "en": "/en/references/handwerker-work",
+    "fr": "/fr/references/handwerker-work"
+  },
+  "/imprint": {
+    "de": "/impressum",
+    "en": "/en/imprint",
+    "fr": "/fr/mentions-legales"
+  },
+  "/privacy": {
+    "de": "/datenschutz",
+    "en": "/en/privacy",
+    "fr": "/fr/confidentialite"
+  },
+  "/services": {
+    "de": "/leistungen",
+    "en": "/en/services",
+    "fr": "/fr/services"
+  },
+  "/services/websites": {
+    "de": "/leistungen/websites",
+    "en": "/en/services/websites",
+    "fr": "/fr/services/sites-web"
+  },
+  "/services/apps": {
+    "de": "/leistungen/apps",
+    "en": "/en/services/apps",
+    "fr": "/fr/services/applications"
+  },
+  "/services/seo": {
+    "de": "/leistungen/seo",
+    "en": "/en/services/seo",
+    "fr": "/fr/services/seo"
+  },
+  "/services/ads": {
+    "de": "/leistungen/werbekampagnen",
+    "en": "/en/services/ads",
+    "fr": "/fr/services/publicite"
+  },
+  "/services/automation": {
+    "de": "/leistungen/automatisierung",
+    "en": "/en/services/automation",
+    "fr": "/fr/services/automatisation"
+  },
+  "/services/websites/business-websites": {
+    "de": "/leistungen/websites/unternehmenswebsites",
+    "en": "/en/services/websites/business-websites",
+    "fr": "/fr/services/sites-web/sites-entreprise"
+  },
+  "/services/websites/relaunch": {
+    "de": "/leistungen/websites/relaunch",
+    "en": "/en/services/websites/relaunch",
+    "fr": "/fr/services/sites-web/refonte"
+  },
+  "/services/websites/landing-pages": {
+    "de": "/leistungen/websites/landingpages",
+    "en": "/en/services/websites/landing-pages",
+    "fr": "/fr/services/sites-web/pages-de-destination"
+  },
+  "/services/websites/online-shops": {
+    "de": "/leistungen/websites/onlineshops",
+    "en": "/en/services/websites/online-shops",
+    "fr": "/fr/services/sites-web/boutiques-en-ligne"
+  },
+  "/services/websites/accessibility": {
+    "de": "/leistungen/websites/barrierefreiheit",
+    "en": "/en/services/websites/accessibility",
+    "fr": "/fr/services/sites-web/accessibilite"
+  },
+  "/services/websites/hosting-maintenance": {
+    "de": "/leistungen/websites/hosting-wartung",
+    "en": "/en/services/websites/hosting-maintenance",
+    "fr": "/fr/services/sites-web/hebergement-maintenance"
+  },
+  "/services/apps/web-apps": {
+    "de": "/leistungen/apps/web-apps",
+    "en": "/en/services/apps/web-apps",
+    "fr": "/fr/services/applications/applications-web"
+  },
+  "/services/apps/customer-portals": {
+    "de": "/leistungen/apps/kundenportale",
+    "en": "/en/services/apps/customer-portals",
+    "fr": "/fr/services/applications/portails-clients"
+  },
+  "/services/apps/mobile-apps": {
+    "de": "/leistungen/apps/ios-android-apps",
+    "en": "/en/services/apps/ios-android-apps",
+    "fr": "/fr/services/applications/applications-ios-android"
+  },
+  "/services/apps/desktop-apps": {
+    "de": "/leistungen/apps/desktop-apps",
+    "en": "/en/services/apps/desktop-apps",
+    "fr": "/fr/services/applications/applications-desktop"
+  },
+  "/services/seo/technical-seo": {
+    "de": "/leistungen/seo/technisches-seo",
+    "en": "/en/services/seo/technical-seo",
+    "fr": "/fr/services/seo/seo-technique"
+  },
+  "/services/seo/local-seo": {
+    "de": "/leistungen/seo/lokales-seo",
+    "en": "/en/services/seo/local-seo",
+    "fr": "/fr/services/seo/seo-local"
+  },
+  "/services/seo/geo": {
+    "de": "/leistungen/seo/geo",
+    "en": "/en/services/seo/geo",
+    "fr": "/fr/services/seo/geo"
+  },
+  "/services/seo/seo-content": {
+    "de": "/leistungen/seo/seo-texte",
+    "en": "/en/services/seo/seo-content",
+    "fr": "/fr/services/seo/contenus-seo"
+  },
+  "/services/ads/google-ads": {
+    "de": "/leistungen/werbekampagnen/google-ads",
+    "en": "/en/services/ads/google-ads",
+    "fr": "/fr/services/publicite/google-ads"
+  },
+  "/services/ads/social-ads": {
+    "de": "/leistungen/werbekampagnen/social-ads",
+    "en": "/en/services/ads/social-ads",
+    "fr": "/fr/services/publicite/social-ads"
+  },
+  "/services/ads/ads-tracking": {
+    "de": "/leistungen/werbekampagnen/tracking",
+    "en": "/en/services/ads/tracking",
+    "fr": "/fr/services/publicite/suivi-conversions"
+  },
+  "/services/automation/leads-crm": {
+    "de": "/leistungen/automatisierung/anfragen-crm",
+    "en": "/en/services/automation/leads-crm",
+    "fr": "/fr/services/automatisation/demandes-crm"
+  },
+  "/services/automation/documents-email": {
+    "de": "/leistungen/automatisierung/dokumente-emails",
+    "en": "/en/services/automation/documents-email",
+    "fr": "/fr/services/automatisation/documents-e-mails"
+  },
+  "/services/automation/workflows": {
+    "de": "/leistungen/automatisierung/workflows",
+    "en": "/en/services/automation/workflows",
+    "fr": "/fr/services/automatisation/workflows"
+  },
+  "/services/automation/ai-assistants": {
+    "de": "/leistungen/automatisierung/ki-assistenten",
+    "en": "/en/services/automation/ai-assistants",
+    "fr": "/fr/services/automatisation/assistants-ia"
+  },
+  "/services/automation/ai-features": {
+    "de": "/leistungen/automatisierung/ki-funktionen",
+    "en": "/en/services/automation/ai-features",
+    "fr": "/fr/services/automatisation/fonctions-ia"
+  }
+}

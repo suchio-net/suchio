@@ -1,0 +1,207 @@
+---
+import CtaButton from "@/components/cta-button.astro";
+import Reveal from "@/components/reveal.astro";
+import ServiceContact from "@/components/service-page/service-contact.astro";
+import ServiceLink from "@/components/service-page/service-link.astro";
+import WhatsAppButton from "@/components/whatsapp-button.astro";
+import { getReferencesCopy } from "@/i18n/references";
+import { getServiceCopy, servicesContent } from "@/i18n/services";
+import { getSubServiceCopy } from "@/i18n/sub-services";
+import SiteLayout from "@/layouts/site-layout.astro";
+import { localizePath, t, type Locale } from "@/lib/i18n";
+import { getServicePath, isServiceId } from "@/lib/service-routes";
+import { absoluteUrl } from "@/lib/site";
+import { breadcrumbNode, faqEntities, organizationReference, pageNode } from "@/lib/structured-data";
+import { getSubServicePath, subServiceRoutes, type SubServiceId } from "@/lib/sub-service-routes";
+
+interface Props {
+  locale: Locale;
+  id: SubServiceId;
+}
+const { locale, id } = Astro.props;
+const copy = getSubServiceCopy(locale, id);
+const route = subServiceRoutes.find((entry) => entry.id === id)!;
+const area = getServiceCopy(locale, route.area);
+const path = getSubServicePath(id, locale);
+const overviewPath = localizePath("/services", locale);
+const areaPath = getServicePath(route.area, locale);
+const serviceNodeId = `${absoluteUrl(path)}#service`;
+const contact = `${localizePath("/contact", locale)}?service=${route.area}`;
+const afterShot = getReferencesCopy(locale).handwerkerWork.afterShot;
+const shot = "/references/handwerker-work-preview";
+const related = copy.related.map((entry) =>
+  isServiceId(entry.to)
+    ? { href: getServicePath(entry.to, locale), name: getServiceCopy(locale, entry.to).name, text: entry.text }
+    : { href: getSubServicePath(entry.to, locale), name: getSubServiceCopy(locale, entry.to).name, text: entry.text },
+);
+---
+
+<SiteLayout
+  locale={locale}
+  title={copy.metaTitle}
+  description={copy.metaDescription}
+  canonicalPathname={path}
+  schema={[
+    pageNode(locale, path, copy.metaTitle, "FAQPage", {
+      about: { "@id": serviceNodeId },
+      mainEntity: faqEntities(copy.faqs),
+    }),
+    {
+      "@type": "Service",
+      "@id": serviceNodeId,
+      name: copy.name,
+      description: copy.metaDescription,
+      url: absoluteUrl(path),
+      inLanguage: locale,
+      provider: organizationReference,
+    },
+    breadcrumbNode(locale, [
+      { name: t(locale, "nav.services"), path: overviewPath },
+      { name: area.name, path: areaPath },
+      { name: copy.name, path },
+    ]),
+  ]}
+>
+  <main id="main-content" class="max-narrow:[--text-heading-lg:1.625rem]">
+    <section class="px-page pt-page-title pb-section">
+      <div class="mx-auto grid max-w-[75rem] grid-cols-[minmax(0,1fr)_25rem] items-start gap-x-16 max-nav:grid-cols-1 max-nav:gap-y-10">
+        <Reveal className="min-w-0">
+          <nav aria-label={t(locale, "nav.services")} class="mb-5 text-meta text-muted">
+            <a class="transition-colors duration-150 hover:text-ink" href={overviewPath}>
+              {t(locale, "nav.services")}
+            </a>
+            <span aria-hidden="true" class="mx-1.5 text-subtle">
+              /
+            </span>
+            <a class="transition-colors duration-150 hover:text-ink" href={areaPath}>
+              {area.name}
+            </a>
+          </nav>
+          <h1 class="m-0 text-display-service text-balance">{copy.title}</h1>
+          <p class="mt-6 mb-0 max-w-[38rem] text-lead text-muted text-pretty">{copy.intro}</p>
+          <div class="mt-8 flex gap-3">
+            <CtaButton href={contact}>{area.page.finalCta}</CtaButton>
+            <WhatsAppButton locale={locale} />
+          </div>
+        </Reveal>
+        <Reveal className="min-w-0 rounded-card bg-white p-card-padding shadow-surface" delay={70}>
+          <h2 class="m-0 text-heading-sm">{copy.deliverables.heading}</h2>
+          <ul class="mt-4 mb-0 grid list-none gap-3 p-0">
+            {copy.deliverables.items.map((item) => (
+              <li class="text-base/6 text-muted">{item}</li>
+            ))}
+          </ul>
+        </Reveal>
+      </div>
+    </section>
+
+    <section class="px-page pb-section">
+      <div
+        class="reveal mx-auto grid max-w-[75rem] grid-cols-[repeat(var(--columns),minmax(0,1fr))] gap-x-12 gap-y-9 max-nav:grid-cols-1"
+        data-reveal
+        style={{ "--columns": copy.sections.length }}
+      >
+        {copy.sections.map((section) => (
+          <div class="max-nav:max-w-[40rem]">
+            <h2 class="m-0 text-heading-md text-balance">{section.heading}</h2>
+            {section.paragraphs.map((paragraph) => (
+              <p class="mt-3 mb-0 text-base/7 text-muted">{paragraph}</p>
+            ))}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {copy.proof && (
+      <section class="bg-white px-page py-section">
+        <div
+          class="reveal mx-auto grid max-w-[75rem] grid-cols-2 items-center gap-16 max-nav:grid-cols-1 max-nav:gap-8"
+          data-reveal
+        >
+          <div>
+            <h2 class="m-0 text-heading-lg text-balance">{copy.proof.heading}</h2>
+            <p class="mt-4 mb-0 max-w-[34rem] text-lg/7 text-muted">{copy.proof.text}</p>
+            <a
+              class="mt-5 inline-block text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
+              href={localizePath("/references/handwerker-work", locale)}
+            >
+              {copy.proof.link}
+            </a>
+          </div>
+          <picture class="block overflow-hidden rounded-card shadow-surface">
+            <source
+              type="image/avif"
+              srcset={`${shot}-720.avif 720w, ${shot}-1440.avif 1440w`}
+              sizes="(max-width: 56.25rem) 100vw, 37rem"
+            />
+            <img
+              src={`${shot}-1440.webp`}
+              srcset={`${shot}-720.webp 720w, ${shot}-1440.webp 1440w`}
+              sizes="(max-width: 56.25rem) 100vw, 37rem"
+              width="1440"
+              height="900"
+              alt={afterShot.alt}
+              loading="lazy"
+              decoding="async"
+              class="block h-auto w-full"
+            />
+          </picture>
+        </div>
+      </section>
+    )}
+
+    <section class:list={["px-page pb-section", copy.proof && "pt-section"]}>
+      <div
+        class="reveal mx-auto grid max-w-[75rem] grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] gap-16 max-nav:grid-cols-1 max-nav:gap-12"
+        data-reveal
+      >
+        <div>
+          <h2 class="m-0 text-heading-lg">{t(locale, "service.faq")}</h2>
+          <div class="mt-7 grid gap-7">
+            {copy.faqs.map((faq) => (
+              <div>
+                <h3 class="m-0 text-heading-sm">{faq.question}</h3>
+                <p class="mt-2 mb-0 max-w-[42rem] text-base/7 text-muted">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h2 class="m-0 text-heading-md">{copy.costs.heading}</h2>
+          <p class="mt-3 mb-0 text-base/7 text-muted">{copy.costs.text}</p>
+          <ul class="mt-5 mb-0 grid list-none gap-3 p-0">
+            {copy.costs.factors.map((factor) => (
+              <li class="text-base/6 text-ink">{factor}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    {related.length > 0 && (
+      <section class="px-page pb-section">
+        <div class="mx-auto max-w-[75rem]">
+          <h2 class="m-0 text-heading-lg">{t(locale, "service.related")}</h2>
+          <nav
+            class="reveal mt-5 grid grid-cols-3 gap-x-8 gap-y-1 max-nav:grid-cols-1"
+            aria-label={t(locale, "service.related")}
+            data-reveal
+          >
+            {related.map((entry) => (
+              <ServiceLink href={entry.href} name={entry.name} text={entry.text} />
+            ))}
+          </nav>
+        </div>
+      </section>
+    )}
+
+    <ServiceContact
+      copy={servicesContent[locale].contact}
+      title={area.page.finalTitle}
+      text={area.page.finalCopy}
+      cta={area.page.finalCta}
+      href={contact}
+      locale={locale}
+    />
+  </main>
+</SiteLayout>

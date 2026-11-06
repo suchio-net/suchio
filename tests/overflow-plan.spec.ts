@@ -9,12 +9,12 @@ const indexable = new Set<string>(indexableBasePaths);
 const sitemap = publicRoutes.filter(({ basePath }) => indexable.has(basePath)).map(({ pathname }) => pathname);
 
 test("direct page changes include every translation and normalize index routes", () => {
-  expect(affectedPaths(["src/pages/[...locale]/about.astro"])).toEqual(["/about", "/en/about", "/fr/about"]);
+  expect(affectedPaths(["src/pages/[...locale]/about.astro"])).toEqual(["/en/about", "/fr/a-propos", "/ueber-uns"]);
   expect(affectedPaths(["src/pages/[...locale]/index.astro"])).toEqual(["/", "/en", "/fr"]);
   expect(affectedPaths(["src/pages/[...locale]/examples/index.astro"])).toEqual([
+    "/beispiele",
     "/en/examples",
-    "/examples",
-    "/fr/examples",
+    "/fr/exemples",
   ]);
 });
 
@@ -35,14 +35,14 @@ test("shards cover every sitemap page exactly once and distribute translations",
   const shards = ["1/3", "2/3", "3/3"].map((shard) => selectOverflowPaths(sitemap, null, shard));
   expect(shards.flat().sort()).toEqual([...sitemap].sort());
   for (const shard of shards) {
-    expect(shard).toHaveLength(12);
+    expect(shard).toHaveLength(indexableBasePaths.length);
     expect(shard.filter((path) => ["/", "/en", "/fr"].includes(path))).toHaveLength(1);
   }
 });
 
 test("unknown routes fall back to all pages and empty sitemaps fail", () => {
   expect(selectOverflowPaths(sitemap, ["/removed"])).toHaveLength(sitemap.length);
-  expect(selectOverflowPaths(sitemap, ["/about", "/en/about", "/fr/about"])).toHaveLength(3);
+  expect(selectOverflowPaths(sitemap, ["/en/about", "/fr/a-propos", "/ueber-uns"])).toHaveLength(3);
   expect(() => selectOverflowPaths([], null)).toThrow();
   for (const shard of ["0/3", "4/3", "1/0", "1", "garbage"])
     expect(() => selectOverflowPaths(sitemap, null, shard)).toThrow();
@@ -87,7 +87,7 @@ test("the CI planner handles multi-commit pushes, pull requests, deletions and f
     const before = commit();
     writeFileSync(page, "Changed page");
     commit();
-    expect(run("push", { before }).paths).toEqual(["/about", "/en/about", "/fr/about"]);
+    expect(run("push", { before }).paths).toEqual(["/en/about", "/fr/a-propos", "/ueber-uns"]);
     expect(run("pull_request", { pull_request: { base: { sha: before } } }).matrix.shard).toEqual(["1/1"]);
     expect(run("schedule", {}).matrix.shard).toEqual(["1/3", "2/3", "3/3"]);
     expect(run("workflow_dispatch", {}).paths).toBeNull();

@@ -25,8 +25,9 @@ const messages: Readonly<Record<MessageKey, string>> = {
   "footer.legal": "Juridique",
   "footer.imprint": "Mentions légales",
   "footer.privacy": "Politique de confidentialité",
-  "service.readMore": "Lire la suite",
-  "service.readLess": "Afficher moins",
+  "service.allServices": "Tous les services",
+  "service.related": "Services associés",
+  "service.faq": "Questions fréquentes",
   "service.otherServices": "Autres services",
   "meta.imprintDescription": "Mentions légales et identification de Suchio, Aleks Tsenov.",
   "meta.privacyDescription":

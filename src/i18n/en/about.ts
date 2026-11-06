@@ -7,7 +7,9 @@ const about = {
       paragraphs: [
         [
           "We plan and build ",
-          { text: "websites and web apps", to: "websites-apps" },
+          { text: "websites", to: "websites-apps" },
+          " and ",
+          { text: "apps", to: "apps" },
           " for businesses and keep looking after them after launch. With ",
           { text: "SEO and AI visibility", to: "seo-ai-visibility" },
           ", we make sure your pages appear on Google and in answers from AI assistants. We run ",

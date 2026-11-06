@@ -25,7 +25,6 @@ const references = {
     text: "A renovation business in Bad Nauheim. We rebuilt its WordPress website and have since managed SEO and further development.",
     link: "Read the full case study",
   },
-  serviceLink: "View the case study: Handwerker.work",
   handwerkerWork: {
     title: "Case study Handwerker.work: new website and SEO for a trades business | Suchio",
     description:

@@ -269,7 +269,6 @@ const examples = {
       button: "Anfrage senden",
     },
   },
-  websitesLink: "Beispiele ansehen: Websites nach Branche",
 } satisfies ExamplesCopy;
 
 export default examples;

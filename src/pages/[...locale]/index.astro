@@ -66,37 +66,44 @@ const faqs = await getFaqs(locale);
     <section id="services" class="px-page py-section">
       <SectionHeading title={t(locale, "home.section1Title")} align="center" />
       <div class="mx-auto grid max-w-[70rem] grid-cols-2 gap-4 max-nav:grid-cols-1">
-        {getServiceCatalog(locale).map((service, index) => (
-          <Reveal className="min-w-0" delay={index * 50}>
-            <a
-              class="pill-button flex h-full min-w-0 flex-col overflow-hidden rounded-card bg-white shadow-surface transition-[box-shadow,transform] duration-150 hover:shadow-surface-hover motion-reduce:transition-none"
-              href={service.href}
+        {[...getServiceCatalog(locale)]
+          .sort((a, b) => Number(!a.animation) - Number(!b.animation))
+          .map((service, index) => (
+            <Reveal
+              className={`min-w-0 ${service.animation ? "" : "col-span-2 max-nav:col-span-1"}`}
+              delay={index * 50}
             >
-              <div class={`px-8 pt-8 max-narrow:px-4 max-narrow:pt-4 ${serviceStyles[service.id].background}`}>
-                <OfferVisual animation={service.animation} locale={locale} />
-              </div>
-              <div class="flex flex-1 items-start gap-4 p-card-padding">
-                <div class="min-w-0 flex-1">
-                  <h3 class="m-0 text-heading-md">{service.copy.name}</h3>
-                  <p class="mt-2 mb-0 text-base/6 text-muted">{service.copy.homeDescription}</p>
+              <a
+                class="pill-button flex h-full min-w-0 flex-col overflow-hidden rounded-card bg-white shadow-surface transition-[box-shadow,transform] duration-150 hover:shadow-surface-hover motion-reduce:transition-none"
+                href={service.href}
+              >
+                {service.animation && (
+                  <div class={`px-8 pt-8 max-narrow:px-4 max-narrow:pt-4 ${serviceStyles[service.id].background}`}>
+                    <OfferVisual animation={service.animation} locale={locale} />
+                  </div>
+                )}
+                <div class="flex flex-1 items-start gap-4 p-card-padding">
+                  <div class="min-w-0 flex-1">
+                    <h3 class="m-0 text-heading-md">{service.copy.name}</h3>
+                    <p class="mt-2 mb-0 text-base/6 text-muted">{service.copy.homeDescription}</p>
+                  </div>
+                  <span
+                    class="pill-button__icon relative mt-1 size-9 flex-none overflow-hidden rounded-pill bg-inverse-surface text-white"
+                    aria-hidden="true"
+                  >
+                    <ArrowRight
+                      class="pill-button__arrow pill-button__arrow--right absolute inset-[9px] size-[18px]"
+                      stroke-width={1.7}
+                    />
+                    <ArrowUpRight
+                      class="pill-button__arrow pill-button__arrow--up-right absolute inset-[9px] size-[18px] opacity-0 [transform:translate(-6px,6px)_scale(.8)]"
+                      stroke-width={1.7}
+                    />
+                  </span>
                 </div>
-                <span
-                  class="pill-button__icon relative mt-1 size-9 flex-none overflow-hidden rounded-pill bg-inverse-surface text-white"
-                  aria-hidden="true"
-                >
-                  <ArrowRight
-                    class="pill-button__arrow pill-button__arrow--right absolute inset-[9px] size-[18px]"
-                    stroke-width={1.7}
-                  />
-                  <ArrowUpRight
-                    class="pill-button__arrow pill-button__arrow--up-right absolute inset-[9px] size-[18px] opacity-0 [transform:translate(-6px,6px)_scale(.8)]"
-                    stroke-width={1.7}
-                  />
-                </span>
-              </div>
-            </a>
-          </Reveal>
-        ))}
+              </a>
+            </Reveal>
+          ))}
       </div>
     </section>
     <section class="px-page pb-section">

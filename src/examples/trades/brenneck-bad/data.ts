@@ -3,7 +3,7 @@
 import { navItems, tfm as tfmContent, type Company, type Faq, type Review } from "../shared/content";
 export * from "../shared/content";
 
-export const base = "/examples/trades/brenneck-bad";
+export const base = "/beispiele/handwerk/brenneck-bad";
 
 export const sections = {
   leistungen: `${base}#leistungen`,

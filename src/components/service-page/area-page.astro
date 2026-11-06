@@ -1,0 +1,161 @@
+---
+import SiteLayout from "@/layouts/site-layout.astro";
+import { serviceIcons } from "@/components/service-icons";
+import { serviceStyles } from "@/components/service-styles";
+import { ArrowRight, ArrowUpRight } from "@lucide/astro";
+import CtaButton from "@/components/cta-button.astro";
+import Faq from "@/components/faq.astro";
+import OfferVisual from "@/components/offer-visual.astro";
+import ServiceChecks from "@/components/service-page/service-checks.astro";
+import ServiceContact from "@/components/service-page/service-contact.astro";
+import ServiceDetails from "@/components/service-page/service-details.astro";
+import ServiceProof from "@/components/service-page/service-proof.astro";
+import ServiceShowcase from "@/components/service-page/service-showcase.astro";
+import ServiceStages from "@/components/service-page/service-stages.astro";
+import ServiceTable from "@/components/service-page/service-table.astro";
+import Reveal from "@/components/reveal.astro";
+import SectionHeading from "@/components/section-heading.astro";
+import WhatsAppButton from "@/components/whatsapp-button.astro";
+import { servicesContent, type ServiceId } from "@/i18n/services";
+import { getReferencesCopy } from "@/i18n/references";
+import { localizePath, t, type Locale } from "@/lib/i18n";
+import { getServiceCatalog } from "@/lib/service-catalog";
+
+import { breadcrumbNode, faqEntities, pageNode, serviceNode } from "@/lib/structured-data";
+
+interface Props {
+  locale: Locale;
+  serviceId: ServiceId;
+}
+const { locale, serviceId } = Astro.props;
+const services = getServiceCatalog(locale);
+const service = services.find((entry) => entry.id === serviceId);
+if (!service) throw new Error(`Missing ${serviceId} service for ${locale}.`);
+const { copy } = service;
+const contact = `${localizePath("/contact", locale)}?service=${serviceId}`;
+const related = services.filter((entry) => entry.id !== serviceId);
+const reference = getReferencesCopy(locale).handwerkerWork;
+---
+
+<SiteLayout
+  locale={locale}
+  title={copy.page.metaTitle}
+  description={copy.page.metaDescription}
+  schema={[
+    pageNode(locale, service.href, copy.page.metaTitle, "FAQPage", {
+      about: { "@id": serviceNode(locale, copy, service.href)["@id"] },
+      mainEntity: faqEntities(copy.page.faqs),
+    }),
+    serviceNode(locale, copy, service.href),
+    breadcrumbNode(locale, [
+      { name: t(locale, "nav.services"), path: localizePath("/services", locale) },
+      { name: copy.name, path: service.href },
+    ]),
+  ]}
+>
+  <main id="main-content" class="max-narrow:[--text-heading-lg:1.625rem]">
+    <section class="px-page pt-page-title pb-section">
+      <div
+        class:list={[
+          "mx-auto grid max-w-[75rem] items-center gap-x-8 max-wide:grid-cols-1 max-wide:gap-10",
+          service.animation ? "grid-cols-[minmax(0,1fr)_34rem]" : "grid-cols-1",
+        ]}
+      >
+        <Reveal className="min-w-0 max-w-[39rem]">
+          <h1 class="m-0 text-display-service text-balance">{copy.page.title}</h1>
+          <p class="mt-6 max-w-[38rem] text-lead text-muted text-balance">{copy.page.intro}</p>
+          <div class="mt-8 flex gap-3">
+            <CtaButton href={contact}>{copy.page.finalCta}</CtaButton>
+            <WhatsAppButton locale={locale} />
+          </div>
+        </Reveal>
+        {service.animation && (
+          <Reveal className="min-w-0" delay={70}>
+            <OfferVisual
+              animation={service.animation}
+              locale={locale}
+              className="max-wide:mx-auto max-wide:max-w-[44rem]"
+            />
+          </Reveal>
+        )}
+      </div>
+    </section>
+
+    {copy.page.showcase && <ServiceShowcase copy={copy.page.showcase} />}
+
+    <ServiceDetails details={copy.page.details} serviceId={serviceId} locale={locale} />
+    {copy.page.proof && <ServiceProof proof={copy.page.proof} locale={locale} />}
+    {copy.page.stages && <ServiceStages stages={copy.page.stages} />}
+    {copy.page.findings && (
+      <ServiceTable
+        heading={copy.page.findings.heading}
+        intro={copy.page.findings.intro}
+        columns={[reference.topicLabel, reference.beforeLabel, reference.afterLabel]}
+        rows={reference.findings.slice(1).map((finding) => ({
+          title: finding.title,
+          cells: [finding.before, finding.after],
+        }))}
+        link={{
+          label: copy.page.findings.link,
+          href: localizePath("/references/handwerker-work", locale),
+        }}
+      />
+    )}
+    {copy.page.checks && <ServiceChecks checks={copy.page.checks} />}
+    {copy.page.table && <ServiceTable {...copy.page.table} />}
+
+    <section class="px-page py-section">
+      <SectionHeading title={copy.page.faqHeading} align="center" />
+      <div class="mx-auto max-w-[820px]">
+        <Faq items={copy.page.faqs} id={`service-${serviceId}-${locale}`} />
+      </div>
+    </section>
+
+    <section class="bg-canvas px-page py-section-compact">
+      <div class="mx-auto max-w-[75rem]">
+        <h2 class="m-0 text-heading-md">{t(locale, "service.otherServices")}</h2>
+        <nav class="mt-6 grid grid-cols-2 gap-3 max-nav:grid-cols-1" aria-label={t(locale, "service.otherServices")}>
+          {related.map((entry) => {
+            const Icon = serviceIcons[entry.id];
+            return (
+              <a
+                class="pill-button flex min-w-0 items-center gap-3 rounded-card bg-white p-5 shadow-surface transition-[background-color,box-shadow,transform] duration-150 hover:bg-interaction hover:shadow-surface-hover motion-reduce:transition-none"
+                href={entry.href}
+              >
+                <span class={`grid size-9 shrink-0 place-items-center rounded-inset ${serviceStyles[entry.id].icon}`}>
+                  <Icon class="size-4.5" stroke-width={1.7} aria-hidden="true" />
+                </span>
+                <span class="min-w-0 flex-1">
+                  <strong class="block text-sm font-semibold text-ink">{entry.copy.name}</strong>
+                  <span class="mt-1 block text-meta leading-snug text-muted">{entry.copy.navDescription}</span>
+                </span>
+                <span
+                  class="pill-button__icon relative size-8 flex-none overflow-hidden rounded-pill bg-inverse-surface text-white"
+                  aria-hidden="true"
+                >
+                  <ArrowRight
+                    class="pill-button__arrow pill-button__arrow--right absolute inset-[7px] size-[18px]"
+                    stroke-width={1.7}
+                  />
+                  <ArrowUpRight
+                    class="pill-button__arrow pill-button__arrow--up-right absolute inset-[7px] size-[18px] opacity-0 [transform:translate(-6px,6px)_scale(.8)]"
+                    stroke-width={1.7}
+                  />
+                </span>
+              </a>
+            );
+          })}
+        </nav>
+      </div>
+    </section>
+
+    <ServiceContact
+      copy={servicesContent[locale].contact}
+      title={copy.page.finalTitle}
+      text={copy.page.finalCopy}
+      cta={copy.page.finalCta}
+      href={contact}
+      locale={locale}
+    />
+  </main>
+</SiteLayout>

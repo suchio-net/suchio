@@ -1,0 +1,19 @@
+---
+import LegalPage from "@/components/legal-page.astro";
+import SiteLayout from "@/layouts/site-layout.astro";
+import { t, type Locale } from "@/lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+---
+
+<SiteLayout
+  locale={locale}
+  title={t(locale, "imprint.title")}
+  description={t(locale, "meta.imprintDescription")}
+  noindex
+>
+  <LegalPage locale={locale} kind="imprint" />
+</SiteLayout>

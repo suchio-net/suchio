@@ -9,8 +9,8 @@ interface Props {
   link?: { label: string; href: string };
 }
 const { heading, intro, columns, rows, link } = Astro.props;
-// Phones show the first rows only. The other rows stay in the HTML.
-const phoneRows = 3;
+// On phones, long tables show the first rows only. The other rows stay in the HTML.
+const phoneRows = rows.length > 4 ? 3 : rows.length;
 ---
 
 <section class="px-page pb-section">

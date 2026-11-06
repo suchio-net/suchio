@@ -7,7 +7,9 @@ const about = {
       paragraphs: [
         [
           "Wir planen und bauen ",
-          { text: "Websites und Web-Apps", to: "websites-apps" },
+          { text: "Websites", to: "websites-apps" },
+          " und ",
+          { text: "Apps", to: "apps" },
           " für Unternehmen und betreuen sie nach dem Start weiter. Mit ",
           { text: "SEO und KI-Sichtbarkeit", to: "seo-ai-visibility" },
           " sorgen wir dafür, dass Ihre Seiten bei Google und in den Antworten von KI-Assistenten erscheinen. Wir schalten ",

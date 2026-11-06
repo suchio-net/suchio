@@ -4,12 +4,13 @@ const services: ServicesCopy = {
   services: [
     {
       id: "websites-apps",
-      name: "Sites web & applications",
-      navDescription: "Faire créer un site web, une boutique en ligne ou une application.",
-      homeDescription: "Des sites d’entreprise, boutiques et portails rapides, accessibles et qui vous appartiennent.",
+      name: "Sites web",
+      navDescription: "Faire créer un site web ou une boutique en ligne.",
+      homeDescription:
+        "Des sites d’entreprise, boutiques en ligne et pages de destination rapides, accessibles et qui vous appartiennent.",
       headline: "Des sites web qui apportent des demandes.",
       summary:
-        "Nous créons des sites web, des boutiques en ligne et des applications qui se chargent vite sur mobile et amènent les visiteurs à vous contacter. Ensuite, vous modifiez textes et images vous-même.",
+        "Nous créons des sites web et des boutiques en ligne qui se chargent vite sur mobile et amènent les visiteurs à vous contacter. Ensuite, vous modifiez textes et images vous-même.",
       highlights: [
         "Sites d’entreprise et pages de destination",
         "Boutiques en ligne avec paiement et livraison",
@@ -18,131 +19,210 @@ const services: ServicesCopy = {
       ],
       cta: "En savoir plus sur les sites web",
       page: {
-        metaTitle: "Création de site web, région de Francfort",
+        metaTitle: "Agence web Francfort : sites et boutiques en ligne",
         metaDescription:
-          "Création de sites web à Hattersheim, Francfort et en Rhin-Main. Suchio conçoit des sites rapides, des boutiques en ligne et des applications.",
-        title: "Création de site web : un site rapide qui apporte des demandes.",
+          "Agence web pour Francfort et la région Rhin-Main : sites d’entreprise, refontes, pages de destination et boutiques en ligne. Rapides, accessibles et à vous.",
+        title: "Un webdesign rapide qui apporte des demandes.",
         intro:
-          "Nous créons des sites web, des boutiques en ligne et des applications pour les entreprises de la région Rhin-Main et de toute l’Allemagne. Du premier croquis au lancement, vous travaillez avec les mêmes personnes.",
-        outcomesHeading: "Ce que le site final doit accomplir",
-        outcomesIntro: "Nous évaluons chaque décision de contenu, de design et de technique selon ces critères.",
-        outcomes: [
-          {
-            id: "a-clear-path-to-action",
-            title: "Les visiteurs savent quoi faire",
-            copy: "Chaque page a un objectif, par exemple une demande, un achat ou une prise de rendez-vous, et y mène clairement.",
-          },
-          {
-            id: "fast-and-accessible",
-            title: "Rapide et accessible",
-            copy: "Les pages se chargent vite même sur réseau mobile et fonctionnent au clavier et avec un lecteur d’écran.",
-          },
-          {
-            id: "ready-to-evolve",
-            title: "Facile à modifier",
-            copy: "Vous modifiez vous-même textes et images dans le CMS. De nouvelles pages et fonctions s’ajoutent plus tard sans tout recommencer.",
-          },
-        ],
-        scopeHeading: "Ce que nous créons",
-        scopeIntro: "Des projets typiques. Si le vôtre n’y figure pas, demandez-nous quand même.",
-        scopeGroups: [
-          {
-            id: "marketing-websites",
-            title: "Sites d’entreprise",
-            copy: "Des sites de plusieurs pages qui expliquent ce que vous proposez et amènent les visiteurs à vous contacter.",
-            items: [
-              "Structure des pages et parcours utilisateurs",
-              "Webdesign pour mobile et ordinateur",
-              "CMS avec blocs de contenu sur mesure",
-              "Base technique pour la vitesse, l’accessibilité et le SEO",
-            ],
-          },
-          {
-            id: "landing-pages",
-            title: "Pages de destination",
-            copy: "Des pages uniques pour une campagne, un produit ou une promotion, avec un seul objectif.",
-            items: [
-              "Structure de l’offre et du message",
-              "Design et développement responsive",
-              "Formulaires et prise de rendez-vous",
-              "Suivi des conversions",
-            ],
-          },
-          {
-            id: "e-commerce-experiences",
-            title: "Boutiques en ligne",
-            copy: "Des boutiques pour des produits, des abonnements ou des offres numériques, adaptées à votre catalogue, vos moyens de paiement et votre expédition.",
-            items: [
-              "Pages boutique et fiches produit",
-              "Panier et paiement",
-              "Connexion du paiement, de l’expédition et de la gestion des stocks",
-              "Suivi e-commerce et consentement",
-            ],
-          },
-          {
-            id: "applications-customer-portals",
-            title: "Applications & portails clients",
-            copy: "Des applications web et natives où vos clients font eux-mêmes certaines démarches ou où votre équipe travaille en interne, reliées aux outils que vous utilisez déjà.",
-            items: [
-              "Concept et prototypes cliquables",
-              "Applications web, multiplateformes et natives",
-              "Connexion et comptes utilisateurs",
-              "Intégrations de données, d’API et de systèmes",
-            ],
-          },
-          {
-            id: "content-platforms",
-            title: "Plateformes de contenu",
-            copy: "Pour les équipes qui rédigent, valident et publient beaucoup de contenus sur plusieurs types de pages ou canaux.",
-            items: [
-              "Architecture CMS et modèles de contenu",
-              "Rôles et validations",
-              "Composants réutilisables",
-              "Reprise des contenus existants",
-            ],
-          },
-          {
-            id: "form-booking-experiences",
-            title: "Formulaires & réservation en ligne",
-            copy: "Des formulaires de demande et une prise de rendez-vous en ligne faciles à remplir sur mobile.",
-            items: [
-              "Formulaires en plusieurs étapes",
-              "Questions de qualification",
-              "Connexion au calendrier et aux rendez-vous",
-              "Transmission vers votre CRM ou votre boîte e-mail",
-            ],
-          },
-        ],
-        faqHeading: "Questions fréquentes sur les sites web & applications",
+          "Nous concevons et développons des sites web et des boutiques en ligne pour les entreprises de Francfort, de la région Rhin-Main et de toute l’Allemagne. Du premier projet à l’après-lancement, vous travaillez avec les mêmes personnes.",
+        showcase: {
+          heading: "Des sites web de notre studio",
+          copy: "Trois concepts pour des entreprises fictives, réalisés comme un projet client.",
+          tabsLabel: "Sites d’exemple",
+          open: "Ouvrir le site",
+        },
+        details: {
+          heading: "Ce que nous créons",
+          intro: "Chaque service a sa propre page avec le déroulement, le résultat et ce qui détermine le prix.",
+          items: [],
+        },
+        proof: {
+          heading: "Un exemple : Handwerker.work",
+          text: "Nous avons reconstruit le site WordPress d’une entreprise de rénovation de Bad Nauheim. Avant et après, mesuré avec Lighthouse sur mobile.",
+          beforeLabel: "Avant",
+          afterLabel: "Après",
+          facts: [
+            { label: "Performance", before: "65", after: "100" },
+            { label: "Contenu principal visible", before: "10,1 s", after: "1,8 s" },
+            { label: "Pages liées avec erreur 404", before: "1", after: "0" },
+          ],
+          link: "Voir toute la référence",
+        },
+        stages: {
+          heading: "Comment se déroule un projet de site web",
+          intro: "Vous voyez chaque étape sur une adresse de prévisualisation et vous la validez.",
+          items: [
+            {
+              title: "Échange et devis",
+              copy: "Vous nous parlez de vos clients et de vos objectifs. Vous recevez ensuite un devis écrit avec le périmètre, le prix et les dates.",
+            },
+            {
+              title: "Analyse",
+              copy: "Nous vérifions la technique, les contenus et l’affichage sur mobile du site actuel, et nous fixons la structure des pages.",
+            },
+            {
+              title: "Design et textes",
+              copy: "Vous voyez le design et les textes sur de vraies pages, pas sur des modèles, et vous les validez.",
+            },
+            {
+              title: "Développement et tests",
+              copy: "Nous développons les pages, raccordons les formulaires et les logiciels, et testons sur mobile et ordinateur.",
+            },
+            {
+              title: "Lancement",
+              copy: "Nous mettons le site en ligne, redirigeons les anciennes adresses et vérifions que Google intègre les pages.",
+            },
+          ],
+        },
+        faqHeading: "Questions sur les sites web",
         faqs: [
+          {
+            id: "website-cost",
+            question: "Combien coûte un site web ?",
+            answer:
+              "Le prix dépend du nombre de pages, de fonctions comme une boutique, une réservation ou une connexion, des textes et des photos, et des logiciels auxquels nous relions le site. Après un court échange, vous recevez un devis écrit avec le périmètre, le prix et les dates. Les coûts récurrents d’hébergement et de maintenance y figurent séparément.",
+          },
           {
             id: "how-long-does-a-website-take",
             question: "Combien de temps faut-il pour créer un site web ?",
             answer:
-              "Cela dépend du périmètre. Une page de destination est prête plus vite qu’une boutique en ligne reliée à une gestion des stocks. Les dates de début et de lancement figurent dans la proposition avant le démarrage.",
+              "Une page de destination est prête plus vite qu’un site d’entreprise avec de nombreuses pages de services et pages locales. Une boutique ou un portail client prend le plus de temps. Pour Handwerker.work, onze jours ont séparé l’analyse du parcours de demande terminé. Les dates de début et de lancement figurent dans le devis.",
+          },
+          {
+            id: "what-we-need",
+            question: "De quoi avez-vous besoin de notre part ?",
+            answer:
+              "D’un échange sur vos clients et vos services, de votre logo, de photos de votre travail et des accès à l’ancien site et au domaine. Nous rédigeons les textes manquants avec vous. Vous voyez chaque étape sur une adresse de prévisualisation et vous la validez.",
           },
           {
             id: "can-we-edit-the-website-ourselves",
             question: "Pourrons-nous modifier le site nous-mêmes ?",
             answer:
-              "Oui. Vous modifiez vous-même textes, images, prestations et nouvelles pages dans le CMS. Après le lancement, nous vous montrons comment faire.",
+              "Oui. Vous modifiez vous-même les textes, les images, les services et les nouvelles pages dans le système de gestion de contenu. Après le lancement, nous vous montrons comment faire.",
           },
           {
-            id: "is-the-website-optimized-for-google-and-mobile",
-            question: "Le site est-il optimisé pour Google et le mobile ?",
+            id: "do-we-own-the-website",
+            question: "Le site nous appartient-il ensuite ?",
             answer:
-              "Oui. Chaque site est conçu pour le mobile, se charge vite et inclut les bases techniques du SEO, comme des titres de page soignés, des données structurées et un sitemap. Le référencement continu est un service à part.",
+              "Oui. Vous recevez le code source, les designs, les contenus et tous les accès. Vous pouvez poursuivre le site avec une autre agence ou en interne.",
           },
           {
-            id: "can-you-redesign-our-existing-website",
-            question: "Pouvez-vous améliorer notre site actuel plutôt que le refaire ?",
+            id: "only-frankfurt",
+            question: "Travaillez-vous seulement avec des entreprises de Francfort ?",
             answer:
-              "Oui. Nous vérifions d’abord ce qui fonctionne. Souvent, il suffit d’améliorer la structure, les textes et la vitesse de chargement. Nous ne proposons une refonte que si l’ancienne technique empêche d’atteindre l’objectif.",
+              "Non. Notre studio se trouve à Hattersheim am Main, entre Francfort, Wiesbaden et Mayence. Nous rencontrons volontiers sur place les entreprises de la région Rhin-Main. Avec les entreprises d’autres régions et de l’étranger, nous travaillons par visioconférence, téléphone et e-mail.",
           },
         ],
         finalTitle: "Dites-nous ce que vous voulez créer.",
         finalCopy: "Une brève description suffit. Nous revenons vers vous avec notre avis et une première étape.",
         finalCta: "Parler de votre projet",
+      },
+    },
+    {
+      id: "apps",
+      name: "Applications & logiciels",
+      navDescription: "Applications web, portails clients, applications mobiles et logiciels desktop.",
+      homeDescription:
+        "Applications web, portails clients, applications iOS et Android et programmes pour Windows et Mac.",
+      headline: "Des logiciels pour vos processus.",
+      summary:
+        "Nous développons des applications pour des processus qui passent aujourd’hui par des tableurs et des e-mails. Vous testez d’abord un prototype cliquable.",
+      highlights: [
+        "Applications web et portails clients",
+        "Applications pour iOS et Android",
+        "Logiciels desktop pour Windows et Mac",
+        "Raccordement à vos logiciels",
+      ],
+      cta: "En savoir plus sur les applications",
+      page: {
+        metaTitle: "Développement d’applications, région de Francfort",
+        metaDescription:
+          "Développement d’applications pour Francfort et la région Rhin-Main : applications web, portails clients, applications iOS et Android et logiciels desktop, du prototype à l’exploitation.",
+        title: "Des logiciels adaptés à vos processus.",
+        intro:
+          "Nous développons des applications web, des portails clients, des applications iOS et Android et des programmes pour Windows et Mac. Vous testez d’abord un prototype cliquable et recevez le code source à la fin.",
+        details: {
+          heading: "Ce que nous développons",
+          intro:
+            "Chaque type d’application a sa propre page avec le déroulement, le résultat et ce qui détermine le prix.",
+          items: [],
+        },
+        table: {
+          heading: "Quelle application vous convient ?",
+          intro:
+            "Le type d’application détermine les coûts et l’entretien. Nous le clarifions avant le premier prototype.",
+          columns: ["Type", "Fonctionne sur", "Convient si", "Convient moins si"],
+          rows: [
+            {
+              title: "Application web",
+              cells: [
+                "Tout appareil dans le navigateur, sans installation.",
+                "Plusieurs personnes travaillent avec les mêmes données et les processus changent souvent.",
+                "Vous dépendez fortement des fonctions de l’appareil ou de l’usage hors ligne.",
+              ],
+            },
+            {
+              title: "Portail client",
+              cells: [
+                "Le navigateur, avec une connexion pour vos clients.",
+                "Les clients doivent gérer eux-mêmes rendez-vous, commandes et documents.",
+                "Les clients ont rarement besoin de vous.",
+              ],
+            },
+            {
+              title: "Application iOS et Android",
+              cells: [
+                "iPhone et Android, depuis les stores.",
+                "Les utilisateurs l’ouvrent souvent ou ont besoin de l’appareil photo, de la localisation et des notifications.",
+                "Les utilisateurs en ont rarement besoin et le navigateur suffit.",
+              ],
+            },
+            {
+              title: "Application desktop",
+              cells: [
+                "Windows et Mac, installée.",
+                "L’application utilise des fichiers ou appareils locaux ou doit fonctionner hors ligne.",
+                "L’application n’a pas besoin d’appareils locaux et internet est toujours disponible.",
+              ],
+            },
+          ],
+        },
+        faqHeading: "Questions sur les applications",
+        faqs: [
+          {
+            id: "what-does-an-app-cost",
+            question: "Combien coûte une application ?",
+            answer:
+              "Le prix dépend du nombre de fonctions, des systèmes et du raccordement à vos logiciels. Après le prototype, le périmètre s’estime facilement et vous recevez un devis écrit.",
+          },
+          {
+            id: "why-prototype",
+            question: "Pourquoi d’abord un prototype ?",
+            answer:
+              "Avec un prototype cliquable, votre équipe voit si le processus est juste avant le développement. Les changements coûtent peu à ce stade.",
+          },
+          {
+            id: "who-owns-the-code",
+            question: "À qui appartient le code source ?",
+            answer: "À vous. Vous recevez le code source, la documentation et tous les accès.",
+          },
+          {
+            id: "take-over-software",
+            question: "Reprenez-vous des logiciels existants ?",
+            answer:
+              "Oui. Nous vérifions d’abord le code, les données et les dépendances. Nous vous disons ensuite si la poursuite du développement vaut la peine ou si une reconstruction est préférable.",
+          },
+          {
+            id: "work-with-it-team",
+            question: "Travaillez-vous avec notre service informatique ?",
+            answer:
+              "Oui. Nous accordons les accès, les interfaces et l’exploitation avec votre service informatique et lui transmettons la documentation.",
+          },
+        ],
+        finalTitle: "Quel processus confier à un logiciel ?",
+        finalCopy:
+          "Dites-nous brièvement qui utilisera l’application et ce qu’elle doit faire. Nous vous dirons quel type convient et à quoi ressemble la première étape.",
+        finalCta: "Parler de votre application",
       },
     },
     {
@@ -164,101 +244,36 @@ const services: ServicesCopy = {
         metaTitle: "Référencement SEO près de Francfort",
         metaDescription:
           "SEO pour les entreprises de la région de Francfort : SEO technique, fiche Google, contenus et visibilité dans ChatGPT et les réponses IA.",
-        title: "Le SEO pour être trouvé sur Google et dans les réponses IA.",
+        title: "Le SEO pour Google et les réponses IA.",
         intro:
           "Nous corrigeons les problèmes techniques, rédigeons des contenus pour de vraies recherches et entretenons votre fiche d’établissement Google. Vos clients vous trouvent ainsi dans la recherche classique, dans Google Maps et dans les réponses IA.",
-        outcomesHeading: "Ce qu’exige une meilleure visibilité",
-        outcomesIntro: "S’il manque l’un de ces éléments, les autres servent peu.",
-        outcomes: [
-          {
-            id: "a-discoverable-foundation",
-            title: "Aucun frein technique",
-            copy: "Google peut explorer et indexer toutes les pages importantes. Les erreurs comme les mauvaises redirections ou les pages en double sont corrigées.",
-          },
-          {
-            id: "content-for-real-search-intent",
-            title: "Des contenus pour de vraies questions",
-            copy: "Vos pages répondent aux questions que vos clients se posent avant de décider, avec les mots qu’ils utilisent eux-mêmes.",
-          },
-          {
-            id: "clear-signals-not-geo-hacks",
-            title: "Des informations vérifiables",
-            copy: "Des informations précises sur vos prestations et votre adresse, ainsi que des mentions sur d’autres sites, vous rendent citable sur Google et dans les réponses IA.",
-          },
-        ],
-        scopeHeading: "Ce que nous faisons pour votre visibilité",
-        scopeIntro:
-          "Nous commençons par ce qui rapporte le plus. Souvent c’est la technique, parfois les bonnes pages n’existent tout simplement pas encore.",
-        scopeGroups: [
-          {
-            id: "technical-seo",
-            title: "SEO technique",
-            copy: "Nous repérons les problèmes techniques et les classons par impact, pour que Google puisse explorer et indexer vos pages importantes. Les refontes plus importantes deviennent un projet de site à part.",
-            items: [
-              "Audit SEO technique",
-              "Exploration et indexation",
-              "Maillage interne et données structurées",
-              "Vitesse de chargement là où elle coûte des positions",
-            ],
-          },
-          {
-            id: "search-intent-topics",
-            title: "Mots-clés & sujets",
-            copy: "Nous identifions ce que vos clients recherchent et quelles pages manquent pour cela sur votre site.",
-            items: [
-              "Analyse des mots-clés et des intentions de recherche",
-              "Comparaison avec la concurrence",
-              "Structure des sujets et priorités",
-              "Plan de pages et de contenus",
-            ],
-          },
-          {
-            id: "on-page-seo-content",
-            title: "SEO on-page & rédaction",
-            copy: "Nous retravaillons les pages existantes et en rédigeons de nouvelles, chacune pour les recherches sur lesquelles elle doit être trouvée.",
-            items: [
-              "Optimisation des pages clés",
-              "Pages de prestations rédigées pour la recherche",
-              "Briefs de contenu et plan éditorial",
-              "Titres de page, méta-descriptions et liens internes",
-            ],
-          },
-          {
-            id: "local-visibility",
-            title: "Référencement local",
-            copy: "Pour les entreprises avec une clientèle locale, nous renforçons les signaux qui comptent dans Google Maps et dans les recherches avec un nom de ville.",
-            items: [
-              "Fiche d’établissement Google",
-              "Pages par adresse et par prestation",
-              "Annuaires professionnels",
-              "Gestion des avis",
-            ],
-          },
-          {
-            id: "ai-search-geo",
-            title: "Recherche IA & GEO",
-            copy: "Nous vérifions ce que ChatGPT, Perplexity et les aperçus IA de Google disent de vous et de votre secteur, et rendons vos informations plus faciles à citer.",
-            items: [
-              "Analyse des réponses IA dans votre secteur",
-              "Signaux de marque, de sujets et d’entités",
-              "Contenus et sources citables",
-              "Données structurées et mentions sur d’autres sites",
-            ],
-          },
-          {
-            id: "measurement-iteration",
-            title: "Mesure & amélioration continue",
-            copy: "Les positions seules disent peu de chose. Nous relions les données de recherche aux visites et aux demandes, séparément de la publicité payante.",
-            items: [
-              "Search Console et statistiques",
-              "Suivi des positions et de la visibilité",
-              "Analyse des demandes organiques",
-              "Révision régulière des priorités",
-            ],
-          },
-        ],
-        faqHeading: "Questions fréquentes sur le SEO & la visibilité IA",
+        details: {
+          heading: "Nos services SEO",
+          intro:
+            "Nous travaillons le plus souvent dans cet ordre : d’abord la technique, puis les contenus, puis Maps et les réponses IA.",
+          items: [
+            {
+              id: "seo-measurement",
+              heading: "Mesure et rapports",
+              paragraphs: [
+                "Nous mettons en place la Search Console et les statistiques et séparons les demandes organiques de celles issues de la publicité payante. Vous recevez régulièrement un court rapport en langage clair : ce qui a changé, ce que nous avons fait et ce qui vient ensuite.",
+              ],
+            },
+          ],
+        },
+        findings: {
+          heading: "Ce qu’un audit SEO trouve",
+          intro: "Cinq des 45 constats de notre audit pour Handwerker.work, avec la situation actuelle.",
+          link: "Voir toute la référence",
+        },
+        faqHeading: "Questions sur le SEO et l’IA",
         faqs: [
+          {
+            id: "what-does-seo-cost",
+            question: "Combien coûte le SEO ?",
+            answer:
+              "Le prix dépend de l’état de votre site, du nombre de pages et d’établissements et de la concurrence dans votre secteur. Après un court échange, vous recevez un devis écrit avec le périmètre et le prix.",
+          },
           {
             id: "seo-vs-google-ads",
             question: "Quelle est la différence entre le SEO et Google Ads ?",
@@ -275,19 +290,19 @@ const services: ServicesCopy = {
             id: "can-you-improve-local-search-visibility",
             question: "Comment être mieux trouvé sur Google Maps ?",
             answer:
-              "Grâce à une fiche d’établissement Google complète, une page pour chaque adresse et chaque prestation, des inscriptions dans les annuaires professionnels et des avis réguliers. Nous nous occupons de tout cela.",
+              "Grâce à une fiche d’établissement Google complète, une page pour chaque adresse et chaque service, des inscriptions dans les annuaires professionnels et des avis réguliers. Nous nous occupons de tout cela.",
           },
           {
             id: "what-does-geo-mean",
             question: "Que signifient GEO et visibilité IA ?",
             answer:
-              "GEO signifie Generative Engine Optimization. L’objectif est que ChatGPT, Perplexity ou les aperçus IA de Google citent votre entreprise quand quelqu’un s’intéresse à votre prestation. Le GEO repose sur les mêmes bases que le SEO.",
+              "GEO signifie Generative Engine Optimization. L’objectif est que ChatGPT, Perplexity ou l’aperçu IA de Google citent votre entreprise quand quelqu’un s’intéresse à votre service. Le GEO repose sur les mêmes bases que le SEO.",
           },
           {
             id: "can-you-create-the-content-too",
             question: "Rédigez-vous aussi les textes ?",
             answer:
-              "Oui. Nous rédigeons de nouvelles pages et retravaillons les pages existantes. Nous validons avec vous les détails techniques, par exemple sur vos prestations.",
+              "Oui. Nous rédigeons de nouvelles pages et retravaillons les pages existantes. Nous validons avec vous les détails métier, par exemple sur vos services.",
           },
         ],
         finalTitle: "Rendez votre offre plus facile à trouver.",
@@ -313,103 +328,64 @@ const services: ServicesCopy = {
       ],
       cta: "En savoir plus sur les campagnes",
       page: {
-        metaTitle: "Google Ads & publicité sociale, région de Francfort",
+        metaTitle: "Agence Google Ads et publicité sur les réseaux",
         metaDescription:
           "Google Ads et réseaux sociaux pour les entreprises de la région Rhin-Main : campagnes, annonces, pages de destination et suivi des demandes.",
-        title: "Google Ads et réseaux sociaux, du clic à la demande.",
+        title: "Une publicité qui apporte des demandes.",
         intro:
           "Nous planifions vos campagnes, rédigeons et concevons les annonces, optimisons la page qui suit et mesurons quels clics deviennent des demandes.",
-        outcomesHeading: "Voir la campagne dans son ensemble",
-        outcomesIntro:
-          "Un compte publicitaire bien configuré sert peu si l’offre ou la page de destination ne convainc pas. Nous travaillons sur les trois.",
-        outcomes: [
-          {
-            id: "a-persuasive-offer",
-            title: "Une offre convaincante",
-            copy: "Avant d’engager le budget, nous fixons qui la campagne doit toucher, ce qu’elle promet et ce que les prospects font ensuite.",
-          },
-          {
-            id: "faster-learning-cycles",
-            title: "Des tests avec une question précise",
-            copy: "Chaque test vérifie une hypothèse sur le public, l’annonce ou la page de destination. Vous voyez ainsi quelle combinaison fonctionne.",
-          },
-          {
-            id: "measurable-demand",
-            title: "Le coût par demande",
-            copy: "Le suivi relie les dépenses publicitaires aux vraies demandes. Vous voyez combien coûte une demande et de quel canal elle vient.",
-          },
-        ],
-        scopeHeading: "Ce que nous prenons en charge",
-        scopeIntro: "Tout, du choix des canaux au reporting.",
-        scopeGroups: [
-          {
-            id: "campaign-strategy-offer",
-            title: "Stratégie de campagne & offre",
-            copy: "Avant d’investir dans des annonces, nous fixons le public, le message, le budget et le coût maximal d’une demande.",
-            items: [
-              "Objectifs et publics",
-              "Offre et message",
-              "Planification des canaux et du budget",
-              "Structure des campagnes et des tests",
-            ],
-          },
-          {
-            id: "google-search-shopping",
-            title: "Google Ads : Search & Shopping",
-            copy: "Les annonces sur le Réseau de Recherche touchent les personnes qui cherchent votre offre en ce moment, si besoin ciblées sur votre région. Les campagnes Shopping s’ajoutent si vous vendez des produits en ligne.",
-            items: [
-              "Analyse des mots-clés et de la demande",
-              "Campagnes Search et Shopping",
-              "Textes d’annonces et extensions",
-              "Enchères, budgets et termes de recherche",
-            ],
-          },
-          {
-            id: "paid-social",
-            title: "Publicités sur les réseaux sociaux",
-            copy: "Les publicités sociales touchent les gens avant qu’ils ne cherchent activement. Nous adaptons le format et le message à chaque canal.",
-            items: [
-              "Choix des canaux et des publics",
-              "Prospection et reciblage",
-              "Campagnes et ensembles de publicités",
-              "Optimisation des emplacements et du budget",
-            ],
-          },
-          {
-            id: "creative-messaging",
-            title: "Annonces & messages",
-            copy: "Nous créons les annonces en plusieurs variantes pour voir rapidement quel message fonctionne.",
-            items: [
-              "Concepts d’annonces",
-              "Variantes image, vidéo et texte",
-              "Tests d’offre et d’accroche",
-              "Plan pour de nouvelles annonces",
-            ],
-          },
-          {
-            id: "campaign-journeys-cro",
-            title: "Pages de destination & conversion",
-            copy: "Après le clic, la page doit tenir la promesse de l’annonce. Nous optimisons le message, le formulaire et les questions de qualification sur vos pages existantes.",
-            items: [
-              "Continuité entre l’annonce et la page",
-              "Qualification dans le formulaire",
-              "Optimisation du tunnel et des conversions",
-              "Hypothèses de test et analyse",
-            ],
-          },
-          {
-            id: "campaign-measurement-lead-handoff",
-            title: "Suivi & reporting",
-            copy: "Nous mettons en place un suivi qui relie les dépenses aux vraies demandes et définissons quand une demande est transmise à l’équipe commerciale.",
-            items: [
-              "Suivi des campagnes et des conversions",
-              "Consentement et signaux des plateformes",
-              "Attribution et reporting",
-              "Critères d’une bonne demande",
-            ],
-          },
-        ],
-        faqHeading: "Questions fréquentes sur Google Ads & les réseaux sociaux",
+        details: {
+          heading: "Ce que nous faisons pour vos campagnes",
+          intro: "D’abord les canaux, puis ce qui décide de la réussite d’une campagne.",
+          items: [
+            {
+              id: "campaign-strategy",
+              heading: "Stratégie et budget",
+              paragraphs: [
+                "Avant de dépenser pour des annonces, nous fixons le public, l’offre et le message. À partir de la valeur de vos commandes, nous calculons ce qu’une demande peut coûter au maximum. Si le budget ne suffit pas pour un test significatif, nous vous le disons avant le lancement.",
+              ],
+            },
+            {
+              id: "ad-creative",
+              heading: "Annonces et messages",
+              paragraphs: [
+                "Nous rédigeons et concevons des annonces image, vidéo et texte en plusieurs variantes. Chaque variante teste une hypothèse. Nous arrêtons les variantes faibles et développons les bonnes.",
+              ],
+            },
+          ],
+        },
+        checks: {
+          heading: "Ce que nous vérifions dans votre compte",
+          intro:
+            "Six questions avant de changer quoi que ce soit. Vous savez ensuite ce qui reste, ce que nous nettoyons et ce que nous reconstruisons.",
+          items: [
+            {
+              title: "Mesure-t-on de vraies demandes ?",
+              copy: "Nous vérifions si les conversions mesurent les formulaires, les appels et les achats, ou seulement les pages vues. Des données fausses orientent aussi les enchères automatiques dans la mauvaise direction.",
+            },
+            {
+              title: "Que payez-vous en ce moment ?",
+              copy: "Le rapport sur les termes de recherche montre pour quelles recherches vos annonces sont apparues et lesquelles n’ont rien à voir avec votre offre.",
+            },
+            {
+              title: "Le budget va-t-il au bon endroit ?",
+              copy: "Nous comparons les campagnes, les régions, les appareils et les heures et voyons ce qui reçoit l’argent et ce qui apporte les demandes.",
+            },
+            {
+              title: "La page correspond-elle à l’annonce ?",
+              copy: "Nous cliquons nous-mêmes sur chaque annonce importante, aussi sur mobile. Si elle promet autre chose que la page qui suit, vous payez pour des visiteurs qui repartent aussitôt.",
+            },
+            {
+              title: "Quel âge ont les annonces ?",
+              copy: "Nous vérifions l’âge et les variantes des annonces, et si les extensions comme les appels et les adresses sont entretenues.",
+            },
+            {
+              title: "À qui appartiennent le compte et les données ?",
+              copy: "Nous clarifions les accès, les données de facturation et la propriété du compte, afin que les données restent chez vous, même si vous changez d’agence.",
+            },
+          ],
+        },
+        faqHeading: "Questions sur la publicité",
         faqs: [
           {
             id: "how-much-ad-budget-do-we-need",
@@ -421,7 +397,7 @@ const services: ServicesCopy = {
             id: "is-advertising-spend-included-in-your-fee",
             question: "Le budget publicitaire est-il inclus dans vos honoraires ?",
             answer:
-              "Non. Le budget publicitaire, nos honoraires et les autres frais de tiers figurent séparément dans la proposition. Vous voyez exactement ce qui va aux annonces et ce qui nous revient.",
+              "Non. Le budget publicitaire, nos honoraires et les autres frais de tiers figurent séparément dans le devis. Vous voyez exactement ce qui va aux annonces et ce qui nous revient.",
           },
           {
             id: "how-do-we-know-the-ads-work",
@@ -467,102 +443,70 @@ const services: ServicesCopy = {
         metaTitle: "IA & automatisation pour PME, région de Francfort",
         metaDescription:
           "IA et automatisation pour les entreprises de la région Rhin-Main : traiter demandes, e-mails et documents automatiquement et réduire le travail manuel.",
-        title: "IA et automatisation, sans perdre le contrôle.",
+        title: "IA et automatisation sous votre contrôle.",
         intro:
           "Nous relions vos outils, automatisons les tâches répétitives et utilisons l’IA là où elle soulage votre équipe, par exemple pour les demandes, les e-mails et les documents.",
-        outcomesHeading: "D’abord le processus, ensuite l’outil",
-        outcomesIntro:
-          "Avant de construire quoi que ce soit, nous décrivons comment la tâche se déroule aujourd’hui, où se trouvent les exceptions et quelles décisions demandent une personne.",
-        outcomes: [
-          {
-            id: "fewer-manual-handoffs",
-            title: "Moins de ressaisie",
-            copy: "Les demandes, documents et données arrivent automatiquement dans le bon outil au lieu d’être recopiés à la main.",
-          },
-          {
-            id: "faster-handling",
-            title: "Un traitement plus rapide",
-            copy: "L’automatisation traite les cas courants ou les prépare. Les décisions qui demandent une personne restent à votre équipe.",
-          },
-          {
-            id: "ai-where-it-helps",
-            title: "L’IA là où elle aide",
-            copy: "Nous utilisons l’IA pour des tâches où elle fait gagner un temps mesurable, comme le tri des e-mails ou la lecture de documents.",
-          },
-        ],
-        scopeHeading: "Ce que nous automatisons et développons",
-        scopeIntro:
-          "Des processus que nous automatisons souvent. Si le travail a besoin d’une interface dans un site ou une application, nous la créons aussi.",
-        scopeGroups: [
-          {
-            id: "workflow-automation",
-            title: "Automatisation des workflows",
-            copy: "Des règles fixes prennent en charge les étapes répétitives, comme transmettre des données, créer des tâches ou prévenir des collègues.",
-            items: [
-              "Analyse des processus et des outils",
-              "Déclencheurs, règles et validations",
-              "Notifications et tâches",
-              "Gestion des erreurs et contrôle manuel",
-            ],
-          },
-          {
-            id: "crm-lead-processes",
-            title: "Demandes & CRM",
-            copy: "Les nouvelles demandes venant du site ou d’une campagne sont complétées, évaluées et transmises automatiquement à la bonne personne.",
-            items: [
-              "Transmission du formulaire au CRM",
-              "Enrichissement et évaluation des demandes",
-              "Routage et relances automatiques",
-              "Mise à jour automatique du pipeline",
-            ],
-          },
-          {
-            id: "documents-communication",
-            title: "E-mails & documents",
-            copy: "L’IA lit les e-mails, factures et autres documents, en extrait les données importantes et les prépare pour votre équipe.",
-            items: [
-              "Tri automatique de la boîte e-mail",
-              "Classification des documents",
-              "Extraction de données et résumés",
-              "Brouillons de réponse à valider",
-            ],
-          },
-          {
-            id: "internal-ai-assistants",
-            title: "Assistants IA internes",
-            copy: "Votre équipe interroge un assistant sur les connaissances internes et obtient des réponses avec leurs sources. Les réponses respectent qui a le droit de voir quoi.",
-            items: [
-              "Recherche documentaire et questions-réponses",
-              "Citations des sources et droits d’accès",
-              "Assistants par rôle",
-              "Tests de qualité et retours",
-            ],
-          },
-          {
-            id: "ai-features-in-websites-apps",
-            title: "Fonctions d’IA dans les sites & applications",
-            copy: "Des fonctions d’IA pour vos clients, par exemple un conseiller produit ou une recherche qui comprend les questions. Nous développons la logique IA et connectons le modèle.",
-            items: [
-              "Tâche et critères de qualité",
-              "Prototypes et tests de faisabilité",
-              "Intégration du modèle et des API",
-              "Mesure des coûts, de l’usage et de la qualité",
-            ],
-          },
-          {
-            id: "integration-dependable-operation",
-            title: "Intégrations & fonctionnement fiable",
-            copy: "Nous relions vos outils avec les bons droits d’accès, des alertes en cas d’erreur et une documentation pour votre équipe.",
-            items: [
-              "Intégrations d’API et de systèmes",
-              "Accès aux données et autorisations",
-              "Surveillance, journaux et alertes",
-              "Règles, documentation et transmission",
-            ],
-          },
-        ],
-        faqHeading: "Questions fréquentes sur l’IA & l’automatisation",
+        details: {
+          heading: "Ce que nous automatisons",
+          intro:
+            "Ce que nous faisons, ce que vous recevez et qui décide à la fin figure sur la page de chaque service.",
+          items: [],
+        },
+        table: {
+          heading: "Qui fait quoi : règle, IA et votre équipe",
+          intro: "Cinq processus typiques. Dans chacun, la décision finale reste à votre équipe.",
+          columns: ["Processus", "Règle fixe", "IA", "Votre équipe"],
+          rows: [
+            {
+              title: "Demande par formulaire",
+              cells: [
+                "Crée le contact dans le CRM et envoie la confirmation.",
+                "Reconnaît l’objet, le lieu et l’urgence dans le texte libre.",
+                "Rappelle et établit le devis.",
+              ],
+            },
+            {
+              title: "Facture par e-mail",
+              cells: [
+                "La classe et signale l’échéance.",
+                "Lit le fournisseur, le montant et la date.",
+                "Valide le paiement.",
+              ],
+            },
+            {
+              title: "E-mail dans la boîte commune",
+              cells: [
+                "Le transmet à la personne responsable.",
+                "Trie selon l’objet et rédige un brouillon de réponse.",
+                "Vérifie le brouillon et l’envoie.",
+              ],
+            },
+            {
+              title: "Prise de rendez-vous",
+              cells: [
+                "Inscrit le rendez-vous dans l’agenda et rappelle le client.",
+                "Pas nécessaire.",
+                "Décide en cas d’exception ou d’annulation.",
+              ],
+            },
+            {
+              title: "Question sur le savoir interne",
+              cells: [
+                "Vérifie qui peut voir quels documents.",
+                "Cherche la réponse et indique la source.",
+                "Vérifie la réponse et signale les erreurs.",
+              ],
+            },
+          ],
+        },
+        faqHeading: "Questions sur l’automatisation",
         faqs: [
+          {
+            id: "what-does-automation-cost",
+            question: "Combien coûte une automatisation ?",
+            answer:
+              "Le prix dépend du nombre de logiciels à relier, du nombre d’exceptions et du besoin d’IA. Les coûts récurrents des outils et des modèles d’IA figurent séparément dans le devis.",
+          },
           {
             id: "what-can-we-automate",
             question: "Que peut-on automatiser dans notre entreprise ?",
@@ -600,13 +544,24 @@ const services: ServicesCopy = {
       },
     },
   ],
+  overview: {
+    metaTitle: "Services : sites web, applications, SEO, publicité et IA",
+    metaDescription:
+      "Tous les services de Suchio : sites web et boutiques en ligne, applications et logiciels, SEO et visibilité IA, campagnes payantes, IA et automatisation.",
+    title: "Tous les services",
+    intro:
+      "Cinq domaines, 22 services. Chaque service a sa propre page avec le déroulement, le résultat et ce qui détermine le prix.",
+    finalTitle: "Vous ne savez pas ce qu’il vous faut ?",
+    finalCopy: "Décrivez-nous brièvement votre objectif. Nous vous dirons par où nous commencerions.",
+    finalCta: "Parler de votre projet",
+  },
   contact: {
     heading: "Contact direct",
     text: "Vous parlez aux personnes qui font le travail. Vous recevez une réponse au plus tard sous un jour ouvré.",
   },
   webExperienceAnimation: {
     nav: ["Projets", "Services", "Contact"],
-    kicker: "Sites web & applications",
+    kicker: "Sites web",
     headline: "Clair. Rapide. Utile.",
     intro: "Des pages qui se chargent instantanément, se lisent clairement et transforment les visites en demandes.",
     cta: "Nous contacter",

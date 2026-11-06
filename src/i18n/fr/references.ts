@@ -25,7 +25,6 @@ const references = {
     text: "Une entreprise de rénovation à Bad Nauheim. Nous avons refait son site WordPress et assurons depuis le SEO et les évolutions du site.",
     link: "Voir la référence complète",
   },
-  serviceLink: "Voir la référence : Handwerker.work",
   handwerkerWork: {
     title: "Référence Handwerker.work : nouveau site et SEO pour une entreprise artisanale | Suchio",
     description:

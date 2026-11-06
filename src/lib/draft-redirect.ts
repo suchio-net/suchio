@@ -13,6 +13,9 @@ const moves: [from: string, to: string][] = [
 
 /** A permanent redirect for a request below /entwurf/hw/ that no exact page redirect handled. */
 export function draftRedirect(url: URL) {
+  if (["/entwurf/parkhotel", "/entwurf/parkhotel/", "/entwurf/parkhotel/index.html"].includes(url.pathname)) {
+    return new Response(null, { status: 308, headers: { location: `/beispiele/hotels${url.search}` } });
+  }
   const move = moves.find(([from]) => url.pathname.startsWith(from));
   if (!move) return undefined;
   const location = move[1] + url.pathname.slice(move[0].length) + url.search;

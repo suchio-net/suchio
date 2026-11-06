@@ -15,6 +15,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import sharp from "sharp";
 import { launchChrome, sitemapPaths, startPreview } from "./lib/browser.mjs";
 import { pageHeadlines, recordFile, sourceHash } from "./lib/social-card-inputs.mjs";
+import routes from "../src/lib/localized-route-table.json" with { type: "json" };
 
 const root = new URL("../", import.meta.url);
 const outDir = new URL("public/social/", root);
@@ -35,10 +36,12 @@ const browser = await launchChrome();
 try {
   // Indexable pages come from the sitemap, per language.
   const urls = await sitemapPaths(origin);
-  const pages = urls.map((path) => {
+  // Pages without a dedicated card keep borrowing their nearest existing card.
+  const pages = urls.flatMap((path) => {
     const [, prefix, rest] = path.match(/^\/(en|fr)(\/.*)?$/) ?? [null, "de", path];
-    const base = rest ?? "/";
-    return { path, locale: prefix, card: base === "/" ? "home" : base.slice(1).replaceAll("/", "-") };
+    const base = Object.entries(routes).find(([, translations]) => translations[prefix] === path)?.[0] ?? rest ?? "/";
+    if (base === "/services" || base === "/services/apps" || base.split("/").length > 3) return [];
+    return [{ path, locale: prefix, card: base === "/" ? "home" : base.slice(1).replaceAll("/", "-") }];
   });
 
   const capture = await browser.newPage();
@@ -60,7 +63,17 @@ try {
       const active = document.querySelector("#services-menu a[aria-current=page]");
       const tile = active?.querySelector("span");
       // The menu shows the current page with a white tile; cards use the service colours instead.
-      const tokens = { websites: "websites", seo: "search", ads: "campaigns", automation: "automation" };
+      const tokens = {
+        websites: "websites",
+        "sites-web": "websites",
+        seo: "search",
+        ads: "campaigns",
+        werbekampagnen: "campaigns",
+        publicite: "campaigns",
+        automation: "automation",
+        automatisierung: "automation",
+        automatisation: "automation",
+      };
       const token = active && tokens[active.getAttribute("href").split("/").pop()];
       const theme = getComputedStyle(document.documentElement);
       return {
@@ -97,14 +110,15 @@ try {
       visual.illustration = await shot(illustration);
     }
     if (page.card === "about") {
-      // The four services as the navigation menu lists them, with their icons and colours.
+      // The service areas as the overview page lists them, with their icons and colours.
+      await open(routes["/services"][page.locale]);
       visual.services = await capture.evaluate(() =>
-        [...document.querySelectorAll("#services-menu a")].map((link) => {
+        [...document.querySelectorAll("main a:has(h2)")].map((link) => {
           const tile = link.querySelector("span");
           const style = getComputedStyle(tile);
           return {
-            name: link.querySelector("strong").textContent.trim(),
-            description: link.querySelector("strong + span").textContent.trim(),
+            name: link.querySelector("h2").textContent.trim(),
+            description: link.querySelector("h2 + span").textContent.trim(),
             icon: tile.querySelector("svg").outerHTML,
             background: style.backgroundColor,
             color: style.color,

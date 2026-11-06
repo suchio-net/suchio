@@ -7,7 +7,9 @@ const about = {
       paragraphs: [
         [
           "Nous concevons et développons des ",
-          { text: "sites et applications web", to: "websites-apps" },
+          { text: "sites web", to: "websites-apps" },
+          " et des ",
+          { text: "applications", to: "apps" },
           " pour les entreprises, et nous continuons à nous en occuper après la mise en ligne. Avec le ",
           { text: "SEO et la visibilité dans l’IA", to: "seo-ai-visibility" },
           ", nous faisons en sorte que vos pages apparaissent sur Google et dans les réponses des assistants IA. Nous gérons des ",

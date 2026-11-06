@@ -25,7 +25,6 @@ const references = {
     text: "Ein Sanierungsbetrieb aus Bad Nauheim. Wir haben die WordPress-Website neu gebaut und betreuen seitdem SEO und den weiteren Ausbau.",
     link: "Ganze Referenz ansehen",
   },
-  serviceLink: "Referenz ansehen: Handwerker.work",
   handwerkerWork: {
     title: "Referenz Handwerker.work: neue Website und SEO für einen Handwerksbetrieb | Suchio",
     description:

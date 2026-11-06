@@ -3,7 +3,7 @@
 import { navItems, tfm as tfmContent, type Company, type Faq, type Review } from "../shared/content";
 export * from "../shared/content";
 
-export const base = "/examples/trades/wendmark-sanierung";
+export const base = "/beispiele/handwerk/wendmark-sanierung";
 
 export const tfm = { ...tfmContent, href: `${base}/gebaeudebetreuung` };
 

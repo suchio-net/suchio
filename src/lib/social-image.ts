@@ -1,10 +1,15 @@
-import { defaultLocale, type Locale } from "../i18n/config";
-import { alternatePath } from "./locale-path";
+import { type Locale } from "../i18n/config";
+import { routeKey } from "./locale-path";
 import { indexableBasePaths } from "./public-routes";
 
 /** Card name of a page: indexable pages have their own, others share the home card. */
 export function socialCardName(pathname: string) {
-  const base = alternatePath(pathname, defaultLocale);
+  let base = routeKey(pathname);
+  if (base === "/services") base = "/";
+  if (base.startsWith("/services/")) {
+    base = base.split("/").slice(0, 3).join("/");
+    if (base === "/services/apps") base = "/services/websites";
+  }
   if (base === "/" || !indexableBasePaths.some((path) => path === base)) return "home";
   return base.slice(1).replaceAll("/", "-");
 }

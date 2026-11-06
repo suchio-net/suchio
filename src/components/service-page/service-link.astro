@@ -1,0 +1,27 @@
+---
+import { ArrowRight } from "@lucide/astro";
+
+interface Props {
+  href: string;
+  name: string;
+  text: string;
+  /** Use h3 where the link sits below a section heading, so the text stays in the page outline. */
+  headingTag?: "h3" | "strong";
+}
+const { href, name, text, headingTag: Heading = "h3" } = Astro.props;
+---
+
+<a
+  class="group/link -mx-4 flex min-w-0 items-start gap-4 rounded-card px-4 py-3.5 transition-colors duration-150 hover:bg-interaction motion-reduce:transition-none"
+  href={href}
+>
+  <span class="min-w-0 flex-1">
+    <Heading class="m-0 block text-heading-sm">{name}</Heading>
+    <span class="mt-1 block text-base/6 text-muted">{text}</span>
+  </span>
+  <ArrowRight
+    class="mt-1 size-5 shrink-0 text-subtle transition-[translate,color] duration-150 group-hover/link:translate-x-1 group-hover/link:text-ink motion-reduce:transition-none"
+    stroke-width={1.8}
+    aria-hidden="true"
+  />
+</a>

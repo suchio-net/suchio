@@ -87,7 +87,7 @@
   --text-heading-lg--line-height: 1.08;
   --text-heading-lg--letter-spacing: -0.035em;
   --text-heading-lg--font-weight: 600;
-  --text-display-service: clamp(2.5rem, calc(1.0625rem + 2.5vw), 3.25rem);
+  --text-display-service: clamp(1.875rem, calc(1.0625rem + 2.5vw), 3.25rem);
   --text-display-service--line-height: 1.06;
   --text-display-service--letter-spacing: -0.035em;
   --text-display-service--font-weight: 600;

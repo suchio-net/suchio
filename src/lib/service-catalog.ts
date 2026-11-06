@@ -19,7 +19,8 @@ export type ServiceAnimation =
 export type ServiceCatalogEntry = {
   id: ServiceId;
   copy: ServiceCopy;
-  animation: ServiceAnimation;
+  /** Apps & Software has no illustration. */
+  animation?: ServiceAnimation;
   href: string;
   reverse: boolean;
 };
@@ -31,7 +32,7 @@ export function getServiceCatalog(locale: Locale): ServiceCatalogEntry[] {
     throw new Error(`Service identities must be unique and complete for ${locale}.`);
   }
 
-  const animationById: Record<ServiceId, ServiceAnimation> = {
+  const animationById: Partial<Record<ServiceId, ServiceAnimation>> = {
     "websites-apps": { type: "web-experience", copy: content.webExperienceAnimation },
     "seo-ai-visibility": { type: "optimization", copy: content.optimizationAnimation },
     "paid-campaigns": { type: "campaign", copy: content.campaignAnimation },

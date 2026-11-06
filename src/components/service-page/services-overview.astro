@@ -1,0 +1,88 @@
+---
+import Reveal from "@/components/reveal.astro";
+import { serviceIcons } from "@/components/service-icons";
+import ServiceContact from "@/components/service-page/service-contact.astro";
+import { serviceStyles } from "@/components/service-styles";
+import { servicesContent } from "@/i18n/services";
+import { getSubServiceCopy } from "@/i18n/sub-services";
+import SiteLayout from "@/layouts/site-layout.astro";
+import { localizePath, t, type Locale } from "@/lib/i18n";
+import { getServiceCatalog } from "@/lib/service-catalog";
+import { breadcrumbNode, pageNode } from "@/lib/structured-data";
+import { getSubServicePath, subServiceRoutes } from "@/lib/sub-service-routes";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const path = localizePath("/services", locale);
+const copy = servicesContent[locale].overview;
+const areas = getServiceCatalog(locale);
+---
+
+<SiteLayout
+  locale={locale}
+  title={copy.metaTitle}
+  description={copy.metaDescription}
+  canonicalPathname={path}
+  schema={[pageNode(locale, path, copy.metaTitle), breadcrumbNode(locale, [{ name: t(locale, "nav.services"), path }])]}
+>
+  <main id="main-content">
+    <section class="px-page pt-page-title pb-section">
+      <div class="mx-auto max-w-[75rem]">
+        <Reveal className="max-w-[44rem]">
+          <h1 class="m-0 text-display-service">{copy.title}</h1>
+          <p class="mt-6 mb-0 text-lead text-muted text-pretty">{copy.intro}</p>
+        </Reveal>
+        <div class="mt-14 grid gap-12 max-nav:mt-10 max-nav:gap-10">
+          {areas.map((area, index) => {
+            const Icon = serviceIcons[area.id];
+            return (
+              <Reveal
+                className="grid grid-cols-[minmax(0,22rem)_minmax(0,1fr)] gap-x-16 gap-y-4 max-nav:grid-cols-1"
+                delay={index * 40}
+              >
+                <a class="group/area flex min-w-0 items-start gap-4 self-start" href={area.href}>
+                  <span
+                    class={`grid size-10 shrink-0 place-items-center rounded-inset ${serviceStyles[area.id].icon}`}
+                    aria-hidden="true"
+                  >
+                    <Icon class="size-5" stroke-width={1.7} />
+                  </span>
+                  <span class="min-w-0">
+                    <h2 class="m-0 text-heading-md underline decoration-transparent underline-offset-4 transition-[text-decoration-color] group-hover/area:decoration-ink">
+                      {area.copy.name}
+                    </h2>
+                    <span class="mt-1 block text-base/6 text-muted">{area.copy.navDescription}</span>
+                  </span>
+                </a>
+                <ul class="m-0 grid list-none grid-cols-2 gap-x-8 gap-y-1 self-start p-0 max-narrow:grid-cols-1">
+                  {subServiceRoutes
+                    .filter((route) => route.area === area.id)
+                    .map(({ id }) => (
+                      <li>
+                        <a
+                          class="-mx-3 block rounded-inset px-3 py-2 text-ink transition-colors duration-150 hover:bg-interaction"
+                          href={getSubServicePath(id, locale)}
+                        >
+                          {getSubServiceCopy(locale, id).name}
+                        </a>
+                      </li>
+                    ))}
+                </ul>
+              </Reveal>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+    <ServiceContact
+      copy={servicesContent[locale].contact}
+      title={copy.finalTitle}
+      text={copy.finalCopy}
+      cta={copy.finalCta}
+      href={localizePath("/contact", locale)}
+      locale={locale}
+    />
+  </main>
+</SiteLayout>

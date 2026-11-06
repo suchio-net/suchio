@@ -1,7 +1,7 @@
 import { siteOrigin } from "../src/lib/site-config.ts";
 import { defaultLocale, locales } from "../src/i18n/config.ts";
-import { indexableBasePaths, publicRoutes, legacyServiceRoutes } from "../src/lib/public-routes.ts";
-import { alternatePath } from "../src/lib/locale-path.ts";
+import { indexableBasePaths, publicRoutes, localizedRedirects, conceptRedirects } from "../src/lib/public-routes.ts";
+import { alternatePath, localizePath, routeKey } from "../src/lib/locale-path.ts";
 
 const project = "/projekte/handwerker-work";
 const serviceSlugs = ["badsanierung", "sanitaer-heizung", "elektro", "fliesen", "renovierung"];
@@ -51,8 +51,12 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
       status: 404,
       locale,
     })),
-    ...legacyServiceRoutes.map((route) => ({ path: route.from, status: 308, destination: route.to })),
-    { path: "/de/about", status: 307, destination: "/about" },
+    ...[...localizedRedirects, ...conceptRedirects].map((route) => ({
+      path: route.from,
+      status: 308,
+      destination: route.to,
+    })),
+    { path: "/de/about", status: 307, destination: "/ueber-uns" },
     { path: "/?check=locale", headers: { cookie: "suchio-locale=fr" }, status: 307, destination: "/fr?check=locale" },
     {
       path: "/",
@@ -65,9 +69,10 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
       path: "/de/contact?draft=1",
       method: "HEAD",
       status: 307,
-      destination: "/contact?draft=1",
+      destination: "/kontakt?draft=1",
       cookie: "suchio-locale=de",
     },
+    { path: "/contact?service=seo-ai-visibility", status: 308, destination: "/kontakt?service=seo-ai-visibility" },
     { path: "/robots.txt", status: 200 },
     { path: "/sitemap.xml", status: 200 },
     { path: "/llms.txt", status: 200 },
@@ -78,14 +83,14 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
     ...["/entwurf/parkhotel", "/entwurf/parkhotel/", "/entwurf/parkhotel/index.html"].map((path) => ({
       path,
       status: 308,
-      destination: "/examples/hotels",
+      destination: "/beispiele/hotels",
     })),
-    { path: "/examples/hotels/flughotel-nordtor", status: 200, draft: true },
+    { path: "/beispiele/hotels/flughotel-nordtor", status: 200, draft: true },
     ...[
-      "/examples/trades/brenneck-bad",
-      "/examples/trades/wendmark-sanierung",
-      "/examples/trades/wendmark-sanierung/leistungen/badsanierung",
-      "/examples/trades/wendmark-sanierung/kontakt",
+      "/beispiele/handwerk/brenneck-bad",
+      "/beispiele/handwerk/wendmark-sanierung",
+      "/beispiele/handwerk/wendmark-sanierung/leistungen/badsanierung",
+      "/beispiele/handwerk/wendmark-sanierung/kontakt",
     ].map((path) => ({ path, status: 200, draft: true })),
     ...[
       project,
@@ -125,7 +130,7 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
             status: 308,
             destination: `${siteOrigin}/en/contact?check=canonical`,
           },
-          { path: "https://www.suchio.net/fr/about", status: 308, destination: `${siteOrigin}/fr/about` },
+          { path: "https://www.suchio.net/fr/a-propos", status: 308, destination: `${siteOrigin}/fr/a-propos` },
         ]
       : []),
   ];
@@ -211,7 +216,7 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
               }
               if (check.indexable && /\bname="robots"[^>]*content="noindex/.test(body))
                 throw new Error("public page unexpectedly marked noindex");
-              if (/\/examples\/(hotels|trades)$/.test(check.canonical)) {
+              if (["/examples/hotels", "/examples/trades"].includes(routeKey(check.canonical))) {
                 const graph =
                   JSON.parse(
                     body.match(/<script\b[^>]*type="application\/ld\+json"[^>]*>(.*?)<\/script>/s)?.[1] ?? "{}",
@@ -220,10 +225,11 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
                   if (!graph.some((node) => node["@type"] === type)) throw new Error(`missing ${type} schema`);
                 const faq = graph.find((node) => node["@type"] === "FAQPage");
                 if (faq.mainEntity?.length !== 6) throw new Error("incorrect industry FAQ schema");
-                const prefix = check.locale === defaultLocale ? "" : `/${check.locale}`;
-                if (!body.includes(`href="${prefix}/contact?service=websites-apps"`))
+
+                if (!body.includes(`href="${localizePath("/contact", check.locale)}?service=websites-apps"`))
                   throw new Error("missing industry contact service preselection");
-                if (!body.includes(`href="${prefix}/services/seo"`)) throw new Error("missing industry SEO link");
+                if (!body.includes(`href="${localizePath("/services/seo", check.locale)}"`))
+                  throw new Error("missing industry SEO link");
               }
             }
             if (check.path === "/robots.txt" && !body.includes(`Sitemap: ${siteOrigin}/sitemap.xml`))
@@ -232,14 +238,18 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
               throw new Error("missing localized sitemap entry");
             if (check.path === "/sitemap.xml") {
               if (
-                ["/projekte/", "/entwurf/", "/examples/hotels/flughotel-nordtor", "/examples/trades/"].some((path) =>
-                  body.includes(path),
-                )
+                [
+                  "/projekte/",
+                  "/entwurf/",
+                  "/beispiele/hotels/flughotel-nordtor",
+                  "/beispiele/handwerk/brenneck-bad",
+                  "/beispiele/handwerk/wendmark-sanierung",
+                ].some((path) => body.includes(path))
               )
                 throw new Error("concept leaked into sitemap");
-              for (const prefix of ["", "/en", "/fr"])
+              for (const locale of locales)
                 for (const path of ["/examples", "/examples/hotels", "/examples/trades"])
-                  if (!body.includes(`<loc>${siteOrigin}${prefix}${path}</loc>`))
+                  if (!body.includes(`<loc>${siteOrigin}${localizePath(path, locale)}</loc>`))
                     throw new Error("missing examples sitemap entry");
             }
             if (

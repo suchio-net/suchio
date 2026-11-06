@@ -5,11 +5,11 @@
 export const tradesConcepts = {
   "brenneck-bad": {
     preview: "/examples/trades/brenneck-bad-preview",
-    live: "/examples/trades/brenneck-bad",
+    live: "/beispiele/handwerk/brenneck-bad",
   },
   "wendmark-sanierung": {
     preview: "/examples/trades/wendmark-sanierung-preview",
-    live: "/examples/trades/wendmark-sanierung",
+    live: "/beispiele/handwerk/wendmark-sanierung",
   },
 } as const;
 

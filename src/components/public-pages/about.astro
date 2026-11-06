@@ -1,0 +1,73 @@
+---
+import SiteLayout from "@/layouts/site-layout.astro";
+import FinalCta from "@/components/final-cta.astro";
+import Reveal from "@/components/reveal.astro";
+import { getAboutCopy, type AboutLinkTarget } from "@/i18n/about";
+import { localizePath, t, type Locale } from "@/lib/i18n";
+import { getServicePath } from "@/lib/service-routes";
+import { breadcrumbNode, organizationReference, pageNode } from "@/lib/structured-data";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const { sections } = getAboutCopy(locale);
+const linkHref = (target: AboutLinkTarget) => {
+  if (target === "reference") return localizePath("/references/handwerker-work", locale);
+  if (target === "contact") return localizePath("/contact", locale);
+  return getServicePath(target, locale);
+};
+---
+
+<SiteLayout
+  locale={locale}
+  title={t(locale, "meta.aboutTitle")}
+  description={t(locale, "meta.aboutDescription")}
+  schema={[
+    pageNode(locale, localizePath("/about", locale), t(locale, "meta.aboutTitle"), "AboutPage", {
+      about: organizationReference,
+      mainEntity: organizationReference,
+    }),
+    breadcrumbNode(locale, [{ name: t(locale, "nav.about"), path: localizePath("/about", locale) }]),
+  ]}
+>
+  <main id="main-content">
+    <section class="px-page pt-page-title pb-section-compact">
+      <Reveal className="mx-auto max-w-[70rem] text-center">
+        <h1 class="m-0 mx-auto max-w-[22ch] text-display-sm text-balance">{t(locale, "about.title")}</h1>
+        <p class="mx-auto mt-6 mb-0 max-w-[38rem] text-lead text-muted text-balance">{t(locale, "about.copy")}</p>
+      </Reveal>
+    </section>
+
+    <!-- Plain heading-and-text sections, read top to bottom like an article. -->
+    <div class="px-page pb-section">
+      <div class="mx-auto max-w-[70rem]">
+        <div class="mx-auto max-w-[44rem]">
+          {sections.map((section) => (
+            <section class="mt-16 first:mt-0">
+              <h2 class="m-0 text-heading-md text-balance">{section.heading}</h2>
+              {section.paragraphs.map((paragraph) => (
+                <p class="mt-4 mb-0 text-lg/8 text-muted">
+                  {paragraph.map((span) =>
+                    typeof span === "string" ? (
+                      span
+                    ) : (
+                      <a
+                        class="text-ink underline decoration-line-strong underline-offset-4 transition-[text-decoration-color] hover:decoration-ink"
+                        href={linkHref(span.to)}
+                      >
+                        {span.text}
+                      </a>
+                    ),
+                  )}
+                </p>
+              ))}
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <FinalCta locale={locale} />
+  </main>
+</SiteLayout>

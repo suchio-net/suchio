@@ -35,7 +35,6 @@ export type ExamplesCopy = {
   overview: PageCopy & { label: string };
   hotels: IndustryCopy;
   trades: IndustryCopy;
-  websitesLink: string;
 };
 
 const examples = { de, en, fr } satisfies Record<Locale, ExamplesCopy>;

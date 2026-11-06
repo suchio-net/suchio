@@ -20,7 +20,7 @@ export function pageMetadata({ locale, pathname, title, description }: PageMetad
   const image = { url: absoluteUrl(socialImagePath(pathname, locale)), width: 1200, height: 630, alt: pageTitle };
   const languageAlternates = Object.fromEntries(
     locales.map((candidate) => [candidate, absoluteUrl(alternatePath(pathname, candidate))]),
-  );
+  ) as Record<Locale, string>;
   return {
     title: pageTitle,
     description,

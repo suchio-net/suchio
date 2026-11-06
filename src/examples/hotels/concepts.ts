@@ -5,7 +5,7 @@
 export const hotelConcepts = {
   "flughotel-nordtor": {
     preview: "/examples/hotels/flughotel-nordtor-preview",
-    live: "/examples/hotels/flughotel-nordtor",
+    live: "/beispiele/hotels/flughotel-nordtor",
   },
 } as const;
 

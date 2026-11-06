@@ -1,5 +1,6 @@
 import { handle } from "@astrojs/cloudflare/handler";
 import { defaultLocale, hasLocale, localeCookie, type Locale } from "./i18n/config";
+import { alternatePath } from "./lib/locale-path";
 import { draftRedirect } from "./lib/draft-redirect";
 import { securityHeaders } from "./lib/security-headers";
 import { purgeAdminSessions } from "./server/audit-admin-auth";
@@ -53,7 +54,7 @@ function localeRedirect(request: Request, url: URL) {
     if (locale !== defaultLocale) return redirect(`/${locale}${url.search}`);
   }
   if (url.pathname === `/${defaultLocale}` || url.pathname.startsWith(`/${defaultLocale}/`)) {
-    return redirect(`${url.pathname.slice(defaultLocale.length + 1) || "/"}${url.search}`, defaultLocale);
+    return redirect(`${alternatePath(url.pathname, defaultLocale)}${url.search}`, defaultLocale);
   }
   return undefined;
 }

@@ -4,6 +4,7 @@ import { localizePath } from "@/lib/locale-path";
 
 export const serviceOrder: readonly ServiceId[] = [
   "websites-apps",
+  "apps",
   "seo-ai-visibility",
   "paid-campaigns",
   "ai-automation",
@@ -12,6 +13,7 @@ export const serviceOrder: readonly ServiceId[] = [
 /** Public URL slug of each service. The service ids were the slugs before; those URLs redirect. */
 export const serviceRouteSlugs = {
   "websites-apps": "websites",
+  apps: "apps",
   "seo-ai-visibility": "seo",
   "paid-campaigns": "ads",
   "ai-automation": "automation",

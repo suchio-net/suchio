@@ -36,7 +36,6 @@ export type ReferencesCopy = {
     conceptsLink: string;
   };
   /** Short link text for the service pages. */
-  serviceLink: string;
   teaser: {
     heading: string;
     text: string;

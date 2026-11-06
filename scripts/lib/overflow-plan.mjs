@@ -1,5 +1,7 @@
 import localeConfig from "../../src/i18n/config.json" with { type: "json" };
 
+import routes from "../../src/lib/localized-route-table.json" with { type: "json" };
+
 const locales = Object.keys(localeConfig.locales);
 
 export function affectedPaths(files) {
@@ -12,7 +14,7 @@ export function affectedPaths(files) {
     const route = match[1].replace(/(^|\/)index$/, "").replace(/\/$/, "");
     for (const locale of locales) {
       const prefix = locale === localeConfig.defaultLocale ? "" : `/${locale}`;
-      paths.add(`${prefix}${route ? `/${route}` : ""}` || "/");
+      paths.add(routes[`/${route}`]?.[locale] ?? (`${prefix}${route ? `/${route}` : ""}` || "/"));
     }
   }
   return [...paths].sort();
@@ -26,6 +28,8 @@ export function selectOverflowPaths(sitemap, requested, shard = "1/1") {
   // A removed, redirected or non-indexable route cannot safely narrow the existing sitemap checks.
   const paths = requested?.length && requested.every((path) => sitemap.includes(path)) ? requested : sitemap;
   const base = (path) => {
+    for (const [key, translations] of Object.entries(routes))
+      if (Object.values(translations).includes(path)) return key;
     const parts = path.split("/");
     if (locales.includes(parts[1])) parts.splice(1, 1);
     return parts.join("/") || "/";

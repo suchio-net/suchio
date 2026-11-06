@@ -8,7 +8,7 @@ import { auditReportsIntegration } from "./src/integrations/audit-reports";
 import { securityHeadersIntegration } from "./src/integrations/security-headers";
 import { draftImagesIntegration } from "./src/integrations/draft-images";
 import { johannesImagesIntegration } from "./src/projekte/johannes-handwerk/shared/image-integration";
-import { legacyServiceRoutes } from "./src/lib/public-routes";
+import { localizedRedirects, conceptRedirects } from "./src/lib/public-routes";
 
 export default defineConfig({
   site: "https://suchio.net",
@@ -25,11 +25,13 @@ export default defineConfig({
     ...Object.fromEntries(
       ["/entwurf/parkhotel", "/entwurf/parkhotel/index.html"].map((from) => [
         from,
-        { status: 308, destination: "/examples/hotels" },
+        { status: 308, destination: "/beispiele/hotels" },
       ]),
     ),
     // Old service slugs stay reachable.
-    ...Object.fromEntries(legacyServiceRoutes.map(({ from, to }) => [from, { status: 308, destination: to }])),
+    ...Object.fromEntries(
+      [...localizedRedirects, ...conceptRedirects].map(({ from, to }) => [from, { status: 308, destination: to }]),
+    ),
   },
   // Hovered links load ahead of the click, as the former client router did.
   prefetch: { prefetchAll: true, defaultStrategy: "hover" },
