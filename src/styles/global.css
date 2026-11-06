@@ -101,15 +101,6 @@ button {
 .header-language:hover {
   box-shadow: var(--shadow-surface-hover);
 }
-.menu-language {
-  transition:
-    scale 150ms var(--ease-out),
-    background-color 180ms var(--ease-out);
-}
-.menu-language:hover {
-  background: oklch(1 0 0 / 8%);
-  box-shadow: var(--shadow-dark-surface-hover);
-}
 
 .pill-button {
   --cta-ease: var(--ease-out);

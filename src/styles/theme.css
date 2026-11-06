@@ -108,7 +108,6 @@
   --spacing-split: clamp(2.5rem, 7vw, 6rem);
   --spacing-grid: clamp(1.5rem, 4vw, 4rem);
   --spacing-content-stack: clamp(5rem, 8vw, 7rem);
-  --spacing-menu: clamp(1.5rem, 5vw, 5rem);
   --spacing-card-padding: min(1.5rem, 7.5vw);
   --spacing-card-fluid: clamp(1.5rem, 4vw, 2.5rem);
   --spacing-control-x: 0.875rem;

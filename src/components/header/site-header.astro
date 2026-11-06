@@ -1,7 +1,9 @@
 ---
-import { ArrowUpRight, ChevronDown, ChevronRight, Menu, X } from "@lucide/astro";
+import { ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight } from "@lucide/astro";
 import BrandMark from "@/components/brand-mark.astro";
+import CtaButton from "@/components/cta-button.astro";
 import LanguageMenu from "@/components/header/language-menu.astro";
+import WhatsAppButton from "@/components/whatsapp-button.astro";
 import { localeConfig, locales } from "@/i18n/config";
 import { publicContactEmail } from "@/lib/contact";
 import { t, type Locale } from "@/lib/i18n";
@@ -32,6 +34,14 @@ const servicesActive =
   pathname === localizePath("/services", locale) || pathname.startsWith(`${localizePath("/services", locale)}/`);
 const selectLocale = t(locale, "nav.selectLocale");
 const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduce:active:scale-100";
+// The area of the current page gets a dot in the first level of the phone menu.
+const isCurrentArea = (area: string, href: string) =>
+  pathname === href ||
+  subServiceRoutes.some((route) => route.area === area && getSubServicePath(route.id, locale) === pathname);
+const menuView =
+  "absolute inset-x-0 top-0 px-1 pt-1 pb-3 opacity-0 transition-[translate,opacity] duration-[280ms] ease-[var(--ease-out)] data-open:translate-x-0 data-open:opacity-100 motion-reduce:transition-none";
+const menuRow =
+  "flex min-h-[46px] w-full cursor-pointer items-center justify-between gap-2 rounded-inset px-2 py-1.5 text-left text-lg/[1.2] font-semibold tracking-[-0.015em] transition-colors duration-150 hover:bg-interaction active:bg-interaction motion-reduce:transition-none";
 ---
 
 <noscript>
@@ -80,12 +90,11 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
 
 <header
   data-navigation-enhanced
-  class="fixed left-1/2 z-50 flex w-max -translate-x-1/2 items-center gap-2 transition-[opacity,transform] duration-[550ms] ease-[var(--ease-out)] max-nav:right-4 max-nav:left-4 max-nav:w-auto max-nav:[translate:none] max-narrow:gap-1 data-scrolling:duration-[260ms] data-scrolling:ease-[cubic-bezier(.4,0,.2,1)] motion-safe:data-scrolling:pointer-events-none motion-safe:data-scrolling:[transform:translateY(-0.75rem)] motion-safe:data-scrolling:opacity-0"
-  style="top: max(1.5rem, env(safe-area-inset-top))"
+  class="fixed top-[max(1rem,env(safe-area-inset-top))] left-1/2 z-50 flex w-max -translate-x-1/2 items-center gap-2 transition-[opacity,transform] duration-[550ms] ease-[var(--ease-out)] max-nav:right-3 max-nav:left-3 max-nav:block max-nav:w-auto max-nav:[translate:none] nav:top-[max(1.5rem,env(safe-area-inset-top))] data-scrolling:duration-[260ms] data-scrolling:ease-[cubic-bezier(.4,0,.2,1)] motion-safe:data-scrolling:pointer-events-none motion-safe:data-scrolling:[transform:translateY(-0.75rem)] motion-safe:data-scrolling:opacity-0"
 >
   <a
     href={localizePath("/", locale)}
-    class={`group/brand inline-flex h-11 min-w-0 items-center justify-center rounded-control bg-white px-4.5 shadow-surface transition-[transform,box-shadow] duration-150 hover:shadow-surface-hover ${pressable} max-narrow:px-2`}
+    class={`group/brand inline-flex h-11 min-w-0 items-center justify-center rounded-control bg-white px-4.5 shadow-surface transition-[transform,box-shadow] duration-150 hover:shadow-surface-hover ${pressable} max-nav:hidden`}
     aria-label={t(locale, "nav.brandHome")}
     data-scroll-top
   >
@@ -206,136 +215,177 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
     ))}
   </nav>
   <LanguageMenu id="desktop-language-menu" locale={locale} pathname={pathname} label={selectLocale} />
-  <LanguageMenu id="mobile-language-menu" locale={locale} pathname={pathname} label={selectLocale} mobile />
-  <button
-    class={`inline-flex size-[44px] shrink-0 items-center justify-center rounded-control bg-white shadow-surface transition-[transform,box-shadow] duration-150 hover:shadow-surface-hover ${pressable} nav:hidden`}
-    type="button"
-    aria-label={t(locale, "nav.openMenu")}
-    aria-expanded="false"
-    aria-controls="site-menu"
-    data-menu-open
-  >
-    <Menu class="w-[17px]" stroke-width={1.7} aria-hidden="true" />
-  </button>
-</header>
-
-<div
-  id="site-menu"
-  class="pointer-events-none fixed inset-0 z-100 flex -translate-y-3 flex-col overscroll-contain bg-inverse-surface text-white opacity-0 transition-[opacity,translate] duration-300 ease-[var(--ease-out)] will-change-[opacity,translate] data-open:pointer-events-auto data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none max-nav:overflow-y-auto nav:hidden"
-  style="padding: max(1.5rem, env(safe-area-inset-top)) max(var(--spacing-menu), env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(var(--spacing-menu), env(safe-area-inset-left))"
-  aria-hidden="true"
-  inert
-  role="dialog"
-  aria-modal="true"
-  aria-label={t(locale, "nav.siteMenu")}
->
-  <div
-    class="menu-top fixed right-4 left-4 z-2 flex items-center gap-2"
-    style="top: max(1.5rem, env(safe-area-inset-top))"
-  >
-    <a
-      href={localizePath("/", locale)}
-      class={`group/brand inline-flex h-11 min-w-0 items-center rounded-control bg-inverse-surface px-4.5 shadow-dark-surface transition-[background-color,scale] duration-150 hover:bg-white/8 ${pressable}`}
-      data-scroll-top
-      data-menu-link
-    >
-      <BrandMark inverse />
-    </a>
-    <LanguageMenu id="mobile-menu-language-menu" locale={locale} pathname={pathname} label={selectLocale} dark mobile />
-    <button
-      type="button"
-      class={`grid size-11 place-items-center rounded-control bg-transparent text-white shadow-dark-surface transition-[background-color,scale] duration-150 hover:bg-white/8 ${pressable}`}
-      aria-label={t(locale, "nav.closeMenu")}
-      data-menu-close
-    >
-      <X class="w-[19px]" stroke-width={1.7} aria-hidden="true" />
-    </button>
-  </div>
   <nav
-    class="menu-links my-auto flex flex-col self-stretch py-24 max-nav:w-full max-nav:max-w-[44rem]"
+    class="overflow-hidden rounded-shell bg-white shadow-surface transition-shadow duration-200 data-open:shadow-floating motion-reduce:transition-none nav:hidden"
     aria-label={t(locale, "nav.mainMenu")}
+    data-mobile-nav
   >
-    <div>
+    <div class="flex h-12 items-center pl-3">
+      <a
+        href={localizePath("/", locale)}
+        class={`inline-flex h-11 min-w-0 items-center rounded-inset transition-transform duration-150 ${pressable}`}
+        aria-label={t(locale, "nav.brandHome")}
+        data-scroll-top
+      >
+        <BrandMark />
+      </a>
       <button
-        id="mobile-services-button"
-        class="group/mobile-services grid min-h-16 w-full cursor-pointer grid-cols-[minmax(0,1fr)_1.5rem] items-center border-b border-inverse-line bg-transparent px-0 py-2.5 text-left text-heading-md transition-colors duration-150 hover:bg-white/8"
+        class="group/burger relative ml-auto size-11 shrink-0 cursor-pointer rounded-control"
         type="button"
+        aria-label={t(locale, "nav.openMenu")}
         aria-expanded="false"
-        aria-controls="mobile-services-menu"
+        aria-controls="site-menu"
+        data-menu-open
+        data-label-open={t(locale, "nav.openMenu")}
+        data-label-close={t(locale, "nav.closeMenu")}
       >
-        <span>{t(locale, "nav.services")}</span>
-        <span class="grid size-6 place-items-center justify-self-end" aria-hidden="true">
-          <ChevronRight
-            class="size-5 transition-transform duration-200 ease-[var(--ease-out)] group-aria-expanded/mobile-services:rotate-90 motion-reduce:transition-none"
-            stroke-width={1.7}
-          />
-        </span>
+        <span
+          class="absolute top-1/2 left-[13px] -mt-[.85px] h-[1.7px] w-[18px] -translate-y-[3.5px] rounded-full bg-ink transition-[translate,rotate] duration-[240ms] ease-[var(--ease-out)] group-aria-expanded/burger:translate-y-0 group-aria-expanded/burger:rotate-45 motion-reduce:transition-none"
+          aria-hidden="true"
+        ></span>
+        <span
+          class="absolute top-1/2 left-[13px] -mt-[.85px] h-[1.7px] w-[18px] translate-y-[3.5px] rounded-full bg-ink transition-[translate,rotate] duration-[240ms] ease-[var(--ease-out)] group-aria-expanded/burger:translate-y-0 group-aria-expanded/burger:-rotate-45 motion-reduce:transition-none"
+          aria-hidden="true"
+        ></span>
       </button>
+    </div>
+    <div
+      id="site-menu"
+      class="h-0 max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain opacity-0 transition-[height,opacity] duration-[280ms] ease-[var(--ease-out)] data-open:opacity-100 motion-reduce:transition-none"
+      aria-hidden="true"
+      inert
+    >
       <div
-        id="mobile-services-menu"
-        aria-labelledby="mobile-services-button"
-        class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-200 ease-[cubic-bezier(.4,0,.2,1)] data-open:grid-rows-[1fr] motion-reduce:transition-none"
-        inert
+        class="relative overflow-hidden transition-[height] duration-[280ms] ease-[var(--ease-out)] motion-reduce:transition-none"
+        data-menu-views
       >
-        <div class="min-h-0 overflow-hidden">
-          <div class="max-h-[60vh] overflow-y-auto">
-            <a
-              class="group/menu-link grid min-h-14 grid-cols-[minmax(0,1fr)_1.5rem] items-center border-b border-inverse-line py-2 pl-8 text-heading-sm transition-colors duration-150 hover:bg-white/8"
-              href={localizePath("/services", locale)}
-              aria-current={pathname === localizePath("/services", locale) ? "page" : undefined}
-              data-scroll-top
-              data-menu-link
-            >
-              <span>{t(locale, "service.allServices")}</span>
-              <ArrowUpRight
-                class="w-5 justify-self-end transition-transform duration-250 ease-[var(--ease-out)] group-hover/menu-link:translate-x-1 group-hover/menu-link:-translate-y-1 motion-reduce:transform-none motion-reduce:transition-none"
-                stroke-width={1.7}
-                aria-hidden="true"
-              />
-            </a>
-            {services.map((service) => (
+        <div class={`-translate-x-[30%] ${menuView}`} data-menu-view data-open>
+          {services.map((service) => (
+            <button class={menuRow} type="button" aria-controls={`menu-area-${service.id}`} data-menu-area>
+              <span class="min-w-0">{service.copy.name}</span>
+              <span class="flex shrink-0 items-center gap-2">
+                {isCurrentArea(service.id, service.href) && (
+                  <span class="size-1.5 rounded-full bg-ink" aria-hidden="true" />
+                )}
+                <ChevronRight class="size-[18px] text-subtle" stroke-width={1.7} aria-hidden="true" />
+              </span>
+            </button>
+          ))}
+          <a
+            class={`${menuRow} !min-h-11 !text-ui !font-medium !tracking-[-0.01em] !text-muted`}
+            href={localizePath("/services", locale)}
+            aria-current={pathname === localizePath("/services", locale) ? "page" : undefined}
+            data-scroll-top
+          >
+            <span class="min-w-0">{t(locale, "service.allServices")}</span>
+            {pathname === localizePath("/services", locale) ? (
+              <span class="size-1.5 shrink-0 rounded-full bg-ink" aria-hidden="true" />
+            ) : (
+              <ArrowUpRight class="size-4 shrink-0 text-subtle" stroke-width={1.7} aria-hidden="true" />
+            )}
+          </a>
+          <div class="h-2.5"></div>
+          {navItems
+            .filter((item) => item.href !== localizePath("/contact", locale))
+            .map((item) => (
               <a
-                class="group/menu-link grid min-h-14 grid-cols-[minmax(0,1fr)_1.5rem] items-center border-b border-inverse-line py-2 pl-8 text-heading-sm transition-colors duration-150 hover:bg-white/8"
-                href={service.href}
-                aria-current={pathname === service.href ? "page" : undefined}
+                class={menuRow}
+                href={item.href}
+                aria-current={isActive(item.href) ? "page" : undefined}
                 data-scroll-top
-                data-menu-link
               >
-                <span>{service.copy.name}</span>
-                <ArrowUpRight
-                  class="w-5 justify-self-end transition-transform duration-250 ease-[var(--ease-out)] group-hover/menu-link:translate-x-1 group-hover/menu-link:-translate-y-1 motion-reduce:transform-none motion-reduce:transition-none"
-                  stroke-width={1.7}
-                  aria-hidden="true"
-                />
+                <span class="min-w-0">{item.label}</span>
+                {isActive(item.href) && <span class="size-1.5 shrink-0 rounded-full bg-ink" aria-hidden="true" />}
+              </a>
+            ))}
+        </div>
+        {services.map((service) => (
+          <div id={`menu-area-${service.id}`} class={`translate-x-full ${menuView}`} data-menu-view inert>
+            <button
+              class="flex h-10 cursor-pointer items-center gap-0.5 pr-2 pl-[3px] text-sm font-medium text-muted"
+              type="button"
+              data-menu-back
+            >
+              <ChevronLeft class="size-[18px]" stroke-width={1.7} aria-hidden="true" />
+              {t(locale, "nav.back")}
+            </button>
+            <a
+              class="mb-2 flex items-center justify-between gap-2 rounded-inset px-2 py-0.5 text-heading-md"
+              href={service.href}
+              aria-current={pathname === service.href ? "page" : undefined}
+              data-scroll-top
+            >
+              <span class="min-w-0">{service.copy.name}</span>
+              {pathname === service.href ? (
+                <span class="size-1.5 shrink-0 rounded-full bg-ink" aria-hidden="true" />
+              ) : (
+                <ArrowUpRight class="size-5 shrink-0 text-subtle" stroke-width={1.7} aria-hidden="true" />
+              )}
+            </a>
+            <ul class="m-0 list-none p-0">
+              {subServiceRoutes
+                .filter((route) => route.area === service.id)
+                .map(({ id }) => {
+                  const href = getSubServicePath(id, locale);
+                  const current = pathname === href;
+                  return (
+                    <li>
+                      <a
+                        class={`${menuRow} !min-h-11 !text-base !tracking-[-0.01em] ${current ? "" : "!font-medium"}`}
+                        href={href}
+                        aria-current={current ? "page" : undefined}
+                        data-scroll-top
+                      >
+                        <span class="min-w-0">{getSubServiceCopy(locale, id).name}</span>
+                        {current && <span class="size-1.5 shrink-0 rounded-full bg-ink" aria-hidden="true" />}
+                      </a>
+                    </li>
+                  );
+                })}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div class="px-2 pb-1.5" data-menu-foot>
+        <div class="flex gap-2">
+          <CtaButton
+            href={localizePath("/contact", locale)}
+            className="!flex-nowrap !gap-2 whitespace-nowrap !pl-3.5 max-narrow:flex-1"
+          >
+            {t(locale, "nav.cta")}
+          </CtaButton>
+          <WhatsAppButton locale={locale} />
+        </div>
+        <div class="flex items-center justify-between px-1 pt-1">
+          <div class="flex text-meta font-semibold text-subtle" role="group" aria-label={selectLocale}>
+            {locales.map((candidate) => (
+              <a
+                class="grid h-11 min-w-8 place-items-center justify-items-start aria-[current=page]:text-ink"
+                href={alternatePath(pathname, candidate)}
+                hreflang={candidate}
+                lang={candidate}
+                aria-label={localeConfig[candidate].name}
+                aria-current={candidate === locale ? "page" : undefined}
+                data-menu-locale={candidate}
+              >
+                {localeConfig[candidate].shortLabel}
               </a>
             ))}
           </div>
+          <a class="text-meta text-muted" href={`mailto:${publicContactEmail}`}>
+            {publicContactEmail}
+          </a>
         </div>
       </div>
     </div>
-    {navItems.map((item) => (
-      <a
-        class="group/menu-link grid min-h-16 grid-cols-[minmax(0,1fr)_1.5rem] items-center border-b last:border-b-0 border-inverse-line py-2.5 text-heading-md transition-colors duration-150 hover:bg-white/8"
-        href={item.href}
-        data-scroll-top
-        data-menu-link
-        aria-current={isActive(item.href) ? "page" : undefined}
-      >
-        <span>{item.label}</span>
-        <ArrowUpRight
-          class="w-6 justify-self-end transition-transform duration-250 ease-[var(--ease-out)] group-hover/menu-link:translate-x-1 group-hover/menu-link:-translate-y-1 motion-reduce:transform-none motion-reduce:transition-none"
-          stroke-width={1.7}
-          aria-hidden="true"
-        />
-      </a>
-    ))}
   </nav>
-  <div class="menu-bottom flex items-center justify-end text-meta text-inverse-muted max-narrow:flex-col max-narrow:items-start max-narrow:gap-5">
-    <a class="transition-colors duration-150 hover:text-white" href={`mailto:${publicContactEmail}`}>
-      {publicContactEmail}
-    </a>
-  </div>
-</div>
+</header>
+
+<div
+  class="pointer-events-none fixed inset-0 z-40 touch-none bg-neutral-900/24 opacity-0 transition-opacity duration-200 ease-[var(--ease-out)] data-open:pointer-events-auto data-open:opacity-100 motion-reduce:transition-none nav:hidden"
+  aria-hidden="true"
+  data-menu-scrim
+></div>
 
 <script>
   import { alternatePath } from "@/lib/locale-path";
@@ -343,11 +393,18 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
   import { hasLocale } from "@/i18n/config";
 
   const header = document.querySelector<HTMLElement>("[data-navigation-enhanced]")!;
+  const mobileNav = header.querySelector<HTMLElement>("[data-mobile-nav]")!;
   const menu = document.getElementById("site-menu")!;
+  const menuScrim = document.querySelector<HTMLElement>("[data-menu-scrim]")!;
   const openButton = header.querySelector<HTMLButtonElement>("[data-menu-open]")!;
-  const closeButton = menu.querySelector<HTMLButtonElement>("[data-menu-close]")!;
-  const mobileServicesButton = document.getElementById("mobile-services-button") as HTMLButtonElement;
-  const mobileServicesPanel = document.getElementById("mobile-services-menu")!;
+  const menuViewport = menu.querySelector<HTMLElement>("[data-menu-views]")!;
+  const menuFoot = menu.querySelector<HTMLElement>("[data-menu-foot]")!;
+  const menuViews = [...menu.querySelectorAll<HTMLElement>("[data-menu-view]")];
+  const menuRoot = menuViews[0]!;
+  // Everything next to the header is inert while the menu is open.
+  const menuBackground = [...document.body.children].filter(
+    (element): element is HTMLElement => element instanceof HTMLElement && element !== header && element !== menuScrim,
+  );
   const services = header.querySelector<HTMLElement>("[data-services]")!;
   const servicesButton = services.querySelector<HTMLButtonElement>("button")!;
   const servicesPanel = document.getElementById("services-menu")!;
@@ -377,27 +434,69 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
     scrollTo({ top: 0, left: 0, behavior: reducedMotion ? "auto" : "smooth" });
   }
 
-  // Site menu (below the navigation breakpoint)
-  function setMobileServices(open: boolean) {
-    setPanel(mobileServicesButton, mobileServicesPanel, open, { hidden: false });
+  // Site menu (below the navigation breakpoint): the header bar grows into a panel with two levels.
+  function fitMenu() {
+    const height = menuViews.find((view) => view.hasAttribute("data-open"))!.offsetHeight;
+    menuViewport.style.height = `${height}px`;
+    menu.style.height = isOpen(openButton) ? `${height + menuFoot.offsetHeight}px` : "0px";
+  }
+  function showMenuView(target: HTMLElement) {
+    for (const view of menuViews) {
+      view.toggleAttribute("data-open", view === target);
+      view.inert = view !== target;
+    }
+    menu.scrollTop = 0;
+    fitMenu();
   }
   function setMenu(open: boolean, { restoreFocus = false } = {}) {
-    setMobileServices(false);
     setPanel(openButton, menu, open);
-    openButton.setAttribute("aria-expanded", String(open));
+    openButton.setAttribute("aria-label", (open ? openButton.dataset.labelClose : openButton.dataset.labelOpen) ?? "");
+    mobileNav.toggleAttribute("data-open", open);
+    menuScrim.toggleAttribute("data-open", open);
     document.body.style.overflow = open ? "hidden" : "";
-    if (open) {
-      window.setTimeout(() => {
-        if (!menu.contains(document.activeElement)) closeButton.focus();
-      }, 50);
-    } else if (restoreFocus) openButton.focus();
+    for (const element of menuBackground) element.inert = open;
+    showMenuView(menuRoot);
+    if (restoreFocus) openButton.focus();
   }
-  openButton.addEventListener("click", () => setMenu(true));
-  closeButton.addEventListener("click", () => setMenu(false, { restoreFocus: true }));
-  mobileServicesButton.addEventListener("click", () => setMobileServices(!isOpen(mobileServicesButton)));
-  for (const link of menu.querySelectorAll<HTMLAnchorElement>("[data-menu-link]")) {
-    link.addEventListener("click", () => setMenu(false));
+  // The element that opened the current second level. Focus returns to it.
+  function closeMenuArea() {
+    const area = menuViews.find((view) => view.hasAttribute("data-open"))!;
+    showMenuView(menuRoot);
+    menu.querySelector<HTMLElement>(`[aria-controls="${area.id}"]`)?.focus({ preventScroll: true });
   }
+  openButton.addEventListener("click", () => setMenu(!isOpen(openButton)));
+  menuScrim.addEventListener("click", () => setMenu(false));
+  for (const button of menu.querySelectorAll<HTMLButtonElement>("[data-menu-area]")) {
+    button.addEventListener("click", () => {
+      const area = document.getElementById(button.getAttribute("aria-controls")!)!;
+      showMenuView(area);
+      area.querySelector<HTMLElement>("[data-menu-back]")?.focus({ preventScroll: true });
+    });
+  }
+  for (const button of menu.querySelectorAll<HTMLButtonElement>("[data-menu-back]")) {
+    button.addEventListener("click", closeMenuArea);
+  }
+  // The capture phase unlocks page scrolling before a link to the current page scrolls back to the top.
+  mobileNav.addEventListener(
+    "click",
+    (event) => {
+      if ((event.target as Element).closest("a")) setMenu(false);
+    },
+    true,
+  );
+  for (const link of menu.querySelectorAll<HTMLAnchorElement>("[data-menu-locale]")) {
+    const locale = link.dataset.menuLocale ?? "";
+    if (!hasLocale(locale)) continue;
+    // The error page can be served at any missing URL; switching language keeps that URL.
+    link.href = alternatePath(location.pathname, locale) + location.search + location.hash;
+    link.addEventListener("click", (event) => {
+      if (isPlainClick(event)) rememberLocale(locale);
+      scrollToPageTop(event, link);
+    });
+  }
+  addEventListener("resize", () => {
+    if (isOpen(openButton)) fitMenu();
+  });
   matchMedia("(min-width: 900px)").addEventListener("change", (event) => {
     if (event.matches) setMenu(false);
   });
@@ -472,9 +571,8 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
   document.addEventListener("keydown", (event) => {
     const menuOpen = isOpen(openButton);
     if (event.key === "Escape") {
-      if (menuOpen && isOpen(mobileServicesButton)) {
-        setMobileServices(false);
-        mobileServicesButton.focus();
+      if (menuOpen && !menuRoot.hasAttribute("data-open")) {
+        closeMenuArea();
       } else if (isOpen(servicesButton)) {
         setServices(false);
         servicesButton.focus();
@@ -485,7 +583,7 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
     }
     if (!menuOpen || event.key !== "Tab") return;
     const focusables = [
-      ...menu.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'),
+      ...mobileNav.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'),
     ].filter((element) => !element.closest("[inert]"));
     const first = focusables[0];
     const last = focusables.at(-1);
@@ -506,7 +604,6 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
     const code = root.querySelector<HTMLElement>("[data-language-code]")!;
     const links = [...root.querySelectorAll<HTMLAnchorElement>("[data-locale-link]")];
     const current = root.dataset.locale!;
-    const inMenu = menu.contains(root);
     let openedByHover = false;
 
     function highlight(locale: string | null) {
@@ -529,14 +626,12 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
       if (!open) highlight(null);
     }
 
-    if (root.hasAttribute("data-hover")) {
-      root.addEventListener("pointerenter", (event) => {
-        if (event.pointerType !== "mouse") return;
-        openedByHover = !isOpen(button);
-        setPanel(button, panel, true);
-      });
-      root.addEventListener("pointerleave", () => setOpen(false));
-    }
+    root.addEventListener("pointerenter", (event) => {
+      if (event.pointerType !== "mouse") return;
+      openedByHover = !isOpen(button);
+      setPanel(button, panel, true);
+    });
+    root.addEventListener("pointerleave", () => setOpen(false));
     root.addEventListener("focusout", (event) => {
       if (!root.contains(event.relatedTarget as Node | null)) setOpen(false);
     });
@@ -572,7 +667,6 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
         if (isPlainClick(event)) rememberLocale(locale);
         scrollToPageTop(event, link);
         setOpen(false);
-        if (inMenu) setMenu(false);
       });
     }
   }
