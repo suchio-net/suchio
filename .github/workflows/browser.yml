@@ -6,6 +6,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -15,9 +18,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  overflow:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      paths: ${{ steps.plan.outputs.paths }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - id: plan
+        run: node scripts/plan-overflow.mjs
+
+  browser:
+    needs: plan
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      OVERFLOW_PATHS: ${{ needs.plan.outputs.paths }}
+      OVERFLOW_SHARD: ${{ matrix.shard }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -45,3 +68,14 @@ jobs:
             .astro/johannes-images
           key: astro-images-${{ runner.os }}-${{ hashFiles('src/projekte/handwerker-work/photos/**', 'src/examples/trades/photos/**', 'src/projekte/johannes-handwerk/photos/**', 'src/projekte/handwerker-work/shared/images.json', 'src/examples/trades/shared/images.json', 'src/projekte/johannes-handwerk/shared/images.ts', 'src/integrations/draft-images.ts', 'src/projekte/johannes-handwerk/shared/image-integration.ts', 'bun.lock') }}
       - run: bun run check:overflow
+
+  # Preserve the existing required check name and fail if planning or any shard fails.
+  overflow:
+    if: always()
+    needs: [plan, browser]
+    runs-on: ubuntu-latest
+    steps:
+      - run: test "$PLAN_RESULT" = success && test "$BROWSER_RESULT" = success
+        env:
+          PLAN_RESULT: ${{ needs.plan.result }}
+          BROWSER_RESULT: ${{ needs.browser.result }}

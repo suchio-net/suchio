@@ -186,9 +186,9 @@ export async function checkSite(origin = siteOrigin, transport = fetch) {
               throw new Error("missing localized page content");
             if (
               check.locale &&
-              !/<link\b[^>]*rel="preload"[^>]*href="\/_astro\/dm-sans-latin-standard-normal\.[^"]+\.woff2"/.test(body)
+              !/<link\b[^>]*rel="preload"[^>]*href="\/_astro\/google-sans-flex-latin-rounded\.[^"]+\.woff2"/.test(body)
             )
-              throw new Error("missing DM Sans Latin preload");
+              throw new Error("missing Google Sans Flex Latin preload");
             if (check.canonical) {
               const canonical = body.match(/<link\b[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1];
               if (!canonical || new URL(canonical).href !== new URL(check.canonical, siteOrigin).href)

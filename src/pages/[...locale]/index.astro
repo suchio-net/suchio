@@ -43,16 +43,19 @@ const faqs = await getFaqs(locale);
       class="hero--home relative isolate grid min-h-svh min-w-0 grid-cols-[minmax(0,1fr)] overflow-hidden bg-canvas [place-items:center] px-page pt-22 pb-12"
     >
       <HeroAura />
-      <div data-hero-text class="flex min-w-0 w-full max-w-[62rem] flex-col items-center text-center">
-        <h1 class="shiny-text mt-6 mb-6 w-full max-w-[18ch] text-display-lg text-ink">
+      <div data-hero-text class="@container flex min-w-0 w-full max-w-[62rem] flex-col items-center text-center">
+        <h1 class="shiny-text mt-6 mb-6 w-full text-display-lg text-ink">
           <>
             {t(locale, "home.heroLine1")} <em class="hero-accent">{t(locale, "home.heroAccent")}</em>.<br />
             {t(locale, "home.heroLine2")}
           </>
         </h1>
-        <p class="hero-copy m-0 max-w-narrow text-lead text-muted">{t(locale, "home.heroDescription")}</p>
+        <p class="hero-copy m-0 max-w-narrow text-lead text-balance text-muted">{t(locale, "home.heroDescription")}</p>
         <div class="hero-actions mt-8 flex gap-3 max-narrow:w-[min(20rem,100%)]">
-          <CtaButton href={localizePath("/contact", locale)} className="max-narrow:flex-1 [&>span:first-child]:min-w-0">
+          <CtaButton
+            href={localizePath("/contact", locale)}
+            className="max-narrow:flex-1 max-narrow:flex-nowrap [&>span:first-child]:min-w-0"
+          >
             {t(locale, "home.ctaContact")}
           </CtaButton>
           <WhatsAppButton locale={locale} />

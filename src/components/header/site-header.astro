@@ -79,7 +79,7 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
 
 <header
   data-navigation-enhanced
-  class="fixed left-1/2 z-50 flex w-max -translate-x-1/2 items-center gap-2 max-nav:right-4 max-nav:left-4 max-nav:w-auto max-nav:[translate:none] max-narrow:gap-1"
+  class="fixed left-1/2 z-50 flex w-max -translate-x-1/2 items-center gap-2 transition-[opacity,transform] duration-[550ms] ease-[var(--ease-out)] max-nav:right-4 max-nav:left-4 max-nav:w-auto max-nav:[translate:none] max-narrow:gap-1 data-scrolling:duration-[260ms] data-scrolling:ease-[cubic-bezier(.4,0,.2,1)] motion-safe:data-scrolling:pointer-events-none motion-safe:data-scrolling:[transform:translateY(-0.75rem)] motion-safe:data-scrolling:opacity-0"
   style="top: max(1.5rem, env(safe-area-inset-top))"
 >
   <a
@@ -372,6 +372,34 @@ const pressable = "active:scale-[.96] motion-reduce:transition-none motion-reduc
   for (const link of document.querySelectorAll<HTMLAnchorElement>("[data-scroll-top]")) {
     link.addEventListener("click", (event) => scrollToPageTop(event, link));
   }
+
+  // The header hides after 60px of scrolling down. It returns on any upward scroll or after a 1s pause.
+  // It stays visible while one of its menus is open or a keyboard user has focus inside it.
+  let lastScrollY = scrollY;
+  let scrolledDown = 0;
+  let scrollPauseTimer: number | undefined;
+  const showHeader = () => {
+    scrolledDown = 0;
+    header.removeAttribute("data-scrolling");
+  };
+  addEventListener(
+    "scroll",
+    () => {
+      const delta = scrollY - lastScrollY;
+      lastScrollY = scrollY;
+      window.clearTimeout(scrollPauseTimer);
+      if (delta < 0) {
+        showHeader();
+        return;
+      }
+      scrolledDown += delta;
+      if (scrolledDown >= 60 && !header.querySelector('[aria-expanded="true"], :focus-visible'))
+        header.toggleAttribute("data-scrolling", true);
+      scrollPauseTimer = window.setTimeout(showHeader, 1000);
+    },
+    { passive: true },
+  );
+  header.addEventListener("focusin", showHeader);
 
   // Escape closes the innermost open layer; Tab stays inside the open site menu.
   document.addEventListener("keydown", (event) => {

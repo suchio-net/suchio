@@ -12,8 +12,8 @@ export const recordFile = new URL("scripts/social-cards.json", root);
 // The illustrations, wordmark and type drawn on the cards, and the generator that lays them out.
 const sources = [
   "src/components/offer-animations",
-  "src/assets/fonts/dm-sans-latin-standard-normal.woff2",
-  "src/assets/fonts/dm-sans-latin-ext-standard-normal.woff2",
+  "src/assets/fonts/google-sans-flex-latin-rounded.woff2",
+  "src/assets/fonts/google-sans-flex-latin-ext-rounded.woff2",
   "public/suchio-logo-light.svg",
   "scripts/social-cards.mjs",
 ];

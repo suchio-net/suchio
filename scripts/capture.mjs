@@ -39,6 +39,8 @@ try {
         await tab.goto(server.origin + localized, { waitUntil: "networkidle0" });
         const { width: pageWidth, viewport } = await playThrough(tab);
         await tab.evaluate(() => scrollTo(0, 0));
+        // The header hides while the page scrolls, so wait until it has returned.
+        await new Promise((resolve) => setTimeout(resolve, 800));
         await tab.screenshot({ path: outFile(`${name}.png`), fullPage: true });
         const visuals = args.includes("--visuals") ? await tab.$$("[data-offer-visual]") : [];
         if (visuals.length) {

@@ -57,6 +57,11 @@ export type ScopeGroup = { id: string; title: string; copy: string; items: reado
 type FaqItem = { id: string; question: string; answer: string };
 /** A heading with plain paragraphs; used for the long-form parts of a service page. */
 export type ProseSection = { id: string; heading: string; paragraphs: readonly string[] };
+/** One sub-service: a short statement, what we do, what the client receives, and where to read more. */
+export type ServiceDetail = ProseSection & {
+  lead?: string;
+  link?: { label: string; to: "reference" | "examples" | ServiceId };
+};
 /** Before-and-after facts from a real project, linked to its reference page. */
 export type ServiceProof = {
   heading: string;
@@ -90,8 +95,21 @@ export type ServiceCopy = {
     scopeIntro: string;
     scopeGroups: readonly ScopeGroup[];
     /** What the service covers in detail. When present it replaces the scope grid. */
-    details?: { heading: string; intro: string; items: readonly ProseSection[] };
+    details?: { heading: string; intro: string; items: readonly ServiceDetail[] };
     proof?: ServiceProof;
+    /** The stages of a project in order, each with what the client sees. */
+    stages?: { heading: string; intro: string; items: readonly { title: string; copy: string }[] };
+    /** Real audit findings of the reference project, shown as a table. */
+    findings?: { heading: string; intro: string; link: string };
+    /** Questions we answer before we change anything in an existing account. */
+    checks?: { heading: string; intro: string; items: readonly { title: string; copy: string }[] };
+    /** A table with one row for each typical task. */
+    table?: {
+      heading: string;
+      intro: string;
+      columns: readonly string[];
+      rows: readonly { title: string; cells: readonly string[] }[];
+    };
     /** A large browser window that switches between the example sites we built. */
     showcase?: { heading: string; copy: string; tabsLabel: string; open: string };
     faqHeading: string;
@@ -104,6 +122,8 @@ export type ServiceCopy = {
 
 export type ServicesCopy = {
   services: readonly ServiceCopy[];
+  /** Shown beside the final call to action on every service page. */
+  contact: { heading: string; text: string };
   webExperienceAnimation: WebExperienceAnimationCopy;
   optimizationAnimation: OptimizationAnimationCopy;
   campaignAnimation: CampaignAnimationCopy;

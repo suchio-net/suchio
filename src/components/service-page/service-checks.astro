@@ -1,0 +1,26 @@
+---
+import SectionHeading from "@/components/section-heading.astro";
+import type { ServiceCopy } from "@/i18n/services";
+
+interface Props {
+  checks: NonNullable<ServiceCopy["page"]["checks"]>;
+}
+const { checks } = Astro.props;
+---
+
+<section class="bg-white px-page py-section">
+  <div class="mx-auto max-w-[75rem]">
+    <SectionHeading title={checks.heading} copy={checks.intro} />
+    <div
+      class="reveal grid grid-cols-3 gap-x-12 gap-y-10 max-nav:grid-cols-2 max-narrow:grid-cols-1 max-narrow:gap-y-7"
+      data-reveal
+    >
+      {checks.items.map((item) => (
+        <div>
+          <h3 class="m-0 text-heading-sm">{item.title}</h3>
+          <p class="mt-2 mb-0 text-base/7 text-muted">{item.copy}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

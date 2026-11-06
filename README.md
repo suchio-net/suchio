@@ -79,7 +79,7 @@ Contact drafts use tab-scoped `sessionStorage` to survive page and language chan
 
 ### Fonts, images, and client drafts
 
-Font files live in `src/assets/fonts`, so builds serve them with hashed, immutably cached URLs. DM Sans uses `font-display: optional` (text never switches fonts mid-visit) and only its Latin subset is preloaded. After updating the Fontsource packages, run `bun scripts/sync-fonts.mjs` to refresh the files and their `@font-face` CSS. The Astro Fonts API is not used: it lets the Fontsource CSS override `display` and does not expose subsets for a Latin-only preload.
+Font files live in `src/assets/fonts`, so builds serve them with hashed, immutably cached URLs. Google Sans Flex uses files from `scripts/fonts/build-google-sans-flex.py` (optical size and weight axes, rounding fixed at 100), has `font-display: optional` (text never switches fonts mid-visit) and preloads only its Latin subset. After updating the Fontsource packages, run `bun scripts/sync-fonts.mjs` to refresh the files and their `@font-face` CSS. The Astro Fonts API is not used: it lets the Fontsource CSS override `display` and does not expose subsets for a Latin-only preload.
 
 Drafts stay in this app and are excluded from indexing. Their GSAP, Lenis, and Three.js modules load only on draft routes. Suchio's 2D illustrations use Motion, except the SEO illustration, which uses GSAP and SplitText; its chunk loads only when the illustration nears the viewport. Static pages such as About load no React runtime.
 

@@ -4,7 +4,7 @@
  * Cards reuse the site's own visuals in every language: the home hero with its highlighted
  * word, the localized service illustrations, the services menu and the call-to-action button.
  * They are captured from the built pages with reduced motion, so illustrations show their
- * final state, and composed in Chrome with the site's DM Sans files.
+ * final state, and composed in Chrome with the site's Google Sans Flex files.
  *
  * Usage, after `bun run build`: node scripts/social-cards.mjs
  * Requires Chrome or Chromium; set CHROME_PATH if it is not in a standard location.
@@ -22,8 +22,8 @@ const outDir = new URL("public/social/", root);
 const dataUrl = (bytes, type) => `data:${type};base64,${Buffer.from(bytes).toString("base64")}`;
 const fontFile = (name) => readFile(new URL(`src/assets/fonts/${name}`, root));
 const fonts = {
-  latin: dataUrl(await fontFile("dm-sans-latin-standard-normal.woff2"), "font/woff2"),
-  latinExt: dataUrl(await fontFile("dm-sans-latin-ext-standard-normal.woff2"), "font/woff2"),
+  latin: dataUrl(await fontFile("google-sans-flex-latin-rounded.woff2"), "font/woff2"),
+  latinExt: dataUrl(await fontFile("google-sans-flex-latin-ext-rounded.woff2"), "font/woff2"),
 };
 const wordmark = dataUrl(await readFile(new URL("public/suchio-logo-light.svg", root)), "image/svg+xml");
 const escape = (text) => text.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
@@ -163,13 +163,13 @@ try {
       ? `<img class="cta" src="${data.cta.src}" style="width:${data.cta.width}px;height:${data.cta.height}px" alt="">`
       : "";
     const html = `<!doctype html><html lang="${page.locale}"><head><meta charset="utf-8"><style>
-      @font-face { font-family: "DM Sans"; src: url(${fonts.latinExt}) format("woff2"); font-weight: 100 1000;
+      @font-face { font-family: "Google Sans Flex"; src: url(${fonts.latinExt}) format("woff2"); font-weight: 300 800;
         unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1EFF, U+2020, U+20A0-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
-      @font-face { font-family: "DM Sans"; src: url(${fonts.latin}) format("woff2"); font-weight: 100 1000;
+      @font-face { font-family: "Google Sans Flex"; src: url(${fonts.latin}) format("woff2"); font-weight: 300 800;
         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
       * { box-sizing: border-box; }
       html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
-      body { background: #faf9f6; color: #171717; font-family: "DM Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+      body { background: #faf9f6; color: #171717; font-family: "Google Sans Flex", sans-serif; -webkit-font-smoothing: antialiased; }
       .card { display: grid; grid-template-columns: 520px 1fr; column-gap: 56px; width: 1200px; height: 630px; padding: 60px 64px 60px 72px; }
       .left { display: flex; flex-direction: column; min-height: 0; }
       .logo { display: block; align-self: flex-start; height: 36px; width: auto; }
@@ -177,7 +177,7 @@ try {
       .label { display: flex; align-items: center; gap: 14px; margin-bottom: 26px; font-size: 22px; font-weight: 600; letter-spacing: -0.015em; }
       .tile { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px; }
       .tile svg { width: 23px; height: 23px; }
-      h1 { margin: 0; font-size: var(--size, 64px); font-weight: 500; line-height: 1.04; letter-spacing: -0.042em; text-wrap: balance; }
+      h1 { margin: 0; font-size: var(--size, 64px); font-weight: 600; line-height: 1.04; letter-spacing: -0.042em; text-wrap: balance; }
       h1 .hero-accent { position: relative; z-index: 0; display: inline-block; margin-right: 0.1em; color: hsl(212 100% 48%);
         font-style: italic; transform: skewX(-9deg); transform-origin: center bottom; }
       h1 .hero-accent::after { content: ""; position: absolute; z-index: -1; inset: 0.08em -0.1em 0.02em 0.04em; border-radius: 3px; background: #fff500; }

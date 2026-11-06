@@ -3,7 +3,7 @@ import ScrollReveal from "@/components/scroll-reveal.astro";
 import SiteHeader from "@/components/header/site-header.astro";
 import SiteFooter from "@/components/site-footer.astro";
 import StructuredData from "@/components/structured-data.astro";
-import dmSansLatin from "@/assets/fonts/dm-sans-latin-standard-normal.woff2?url";
+import googleSansFlexLatin from "@/assets/fonts/google-sans-flex-latin-rounded.woff2?url";
 import { t, type Locale } from "@/lib/i18n";
 import { getServiceCatalog } from "@/lib/service-catalog";
 import { pageMetadata } from "@/lib/site";
@@ -92,10 +92,10 @@ const graph = noindex
     <link rel="icon" href="/suchio-favicon-192x192.png" type="image/png" sizes="192x192" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <link rel="preload" href={dmSansLatin} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={googleSansFlexLatin} as="font" type="font/woff2" crossorigin="anonymous" />
     {graph && <StructuredData value={graph} />}
   </head>
-  <body class="flex min-h-screen min-w-0 flex-col bg-canvas font-sans text-ink antialiased">
+  <body class="flex min-h-screen min-w-0 flex-col bg-canvas font-sans tracking-[-0.01em] text-ink antialiased">
     <div
       aria-hidden="true"
       class="scroll-progress pointer-events-none fixed inset-x-0 top-0 z-[1100] h-1 origin-left bg-accent"

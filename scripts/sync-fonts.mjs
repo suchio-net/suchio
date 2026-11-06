@@ -2,18 +2,24 @@
 // The files live in src/assets so the build gives them hashed, immutably cached URLs.
 const target = "src/assets/fonts";
 
-const sans = "node_modules/@fontsource-variable/dm-sans";
-for (const subset of ["latin", "latin-ext"]) {
-  const file = `dm-sans-${subset}-standard-normal.woff2`;
-  await Bun.write(`${target}/${file}`, Bun.file(`${sans}/files/${file}`));
-}
-await Bun.write(`${target}/DM-Sans-OFL.txt`, Bun.file(`${sans}/LICENSE`));
+const sans = "node_modules/@fontsource-variable/google-sans-flex";
+// scripts/fonts/build-google-sans-flex.py builds the font files; this script writes their license and CSS.
+const subsets = ["latin-ext", "latin"];
+await Bun.write(`${target}/Google-Sans-Flex-OFL.txt`, Bun.file(`${sans}/LICENSE`));
+const sansSource = await Bun.file(`${sans}/rond.css`).text();
 // "optional" keeps the fallback font for the whole visit when the font misses the first paint, so text never shifts.
-const sansCss = (await Bun.file(`${sans}/standard.css`).text())
+const sansCss = subsets
+  .map(
+    (subset) =>
+      sansSource.match(new RegExp(`/\\* google-sans-flex-${subset}-rond-normal \\*/\\s*@font-face \\{[^}]+\\}`))[0],
+  )
+  .join("\n\n")
   .replaceAll("font-display: swap", "font-display: optional")
+  .replaceAll("font-weight: 1 1000", "font-weight: 300 800")
+  .replaceAll("-rond-normal", "-rounded")
   .replaceAll("url(./files/", "url(../assets/fonts/");
-await Bun.write("src/styles/fonts.css", sansCss);
-console.log("Updated DM Sans subsets, license and CSS.");
+await Bun.write("src/styles/fonts.css", `${sansCss}\n`);
+console.log("Updated Google Sans Flex license and CSS.");
 
 const mono = "node_modules/@fontsource/jetbrains-mono";
 let monoCss = "";

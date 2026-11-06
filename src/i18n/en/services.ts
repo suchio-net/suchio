@@ -594,6 +594,10 @@ const services: ServicesCopy = {
       },
     },
   ],
+  contact: {
+    heading: "Direct contact",
+    text: "You talk to the people who do the work. You get an answer within one working day at the latest.",
+  },
   webExperienceAnimation: {
     nav: ["Work", "Services", "Contact"],
     kicker: "Websites & apps",

@@ -1,0 +1,29 @@
+---
+import SectionHeading from "@/components/section-heading.astro";
+import type { ServiceCopy } from "@/i18n/services";
+
+interface Props {
+  stages: NonNullable<ServiceCopy["page"]["stages"]>;
+}
+const { stages } = Astro.props;
+---
+
+<section class="px-page py-section">
+  <div class="mx-auto max-w-[75rem]">
+    <SectionHeading title={stages.heading} copy={stages.intro} />
+    <ol class="reveal m-0 grid list-none grid-cols-5 gap-8 p-0 max-wide:grid-cols-1 max-wide:gap-6" data-reveal>
+      {stages.items.map((stage, index) => (
+        <li class="max-wide:grid max-wide:max-w-[40rem] max-wide:grid-cols-[auto_minmax(0,1fr)] max-wide:gap-x-4">
+          <span
+            class="grid size-8 place-items-center rounded-pill bg-inverse-surface text-sm font-semibold text-white max-wide:row-span-2"
+            aria-hidden="true"
+          >
+            {index + 1}
+          </span>
+          <h3 class="mt-4 mb-0 text-heading-sm max-wide:mt-1">{stage.title}</h3>
+          <p class="mt-2 mb-0 text-base/6 text-muted">{stage.copy}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

@@ -21,7 +21,7 @@ const references = {
     conceptsLink: "All concepts",
   },
   teaser: {
-    heading: "Handwerker.work: a new website, every address kept",
+    heading: "A new website, every address kept",
     text: "A renovation business in Bad Nauheim. We rebuilt its WordPress website and have since managed SEO and further development.",
     link: "Read the full case study",
   },

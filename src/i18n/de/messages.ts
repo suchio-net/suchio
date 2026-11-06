@@ -23,6 +23,8 @@ const messages = {
   "footer.legal": "Rechtliches",
   "footer.imprint": "Impressum",
   "footer.privacy": "Datenschutz",
+  "service.readMore": "Mehr lesen",
+  "service.readLess": "Weniger anzeigen",
   "service.otherServices": "Weitere Leistungen",
   "meta.imprintDescription": "Impressum und Anbieterangaben von Suchio, Aleks Tsenov.",
   "meta.privacyDescription":

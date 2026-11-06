@@ -600,6 +600,10 @@ const services: ServicesCopy = {
       },
     },
   ],
+  contact: {
+    heading: "Contact direct",
+    text: "Vous parlez aux personnes qui font le travail. Vous recevez une réponse au plus tard sous un jour ouvré.",
+  },
   webExperienceAnimation: {
     nav: ["Projets", "Services", "Contact"],
     kicker: "Sites web & applications",

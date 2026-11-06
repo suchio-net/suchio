@@ -21,7 +21,7 @@ const references = {
     conceptsLink: "Tous les concepts",
   },
   teaser: {
-    heading: "Handwerker.work : un nouveau site, aucune adresse perdue",
+    heading: "Un nouveau site, aucune adresse perdue",
     text: "Une entreprise de rénovation à Bad Nauheim. Nous avons refait son site WordPress et assurons depuis le SEO et les évolutions du site.",
     link: "Voir la référence complète",
   },

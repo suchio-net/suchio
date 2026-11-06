@@ -7,8 +7,11 @@
  * Without paths it checks every page in the sitemap, which takes several minutes; paths such as
  * `/en` or `services/seo` check just those. Needs Chrome or Chromium; set CHROME_PATH if it is not in
  * a standard location.
+ * CI supplies OVERFLOW_PATHS as a JSON array or null and OVERFLOW_SHARD as N/TOTAL.
+ * Shared changes and weekly runs check all sitemap pages across three separate runners.
  */
 import { launchChrome, pagePaths, playThrough, sitemapPaths, startPreview } from "./lib/browser.mjs";
+import { selectOverflowPaths } from "./lib/overflow-plan.mjs";
 
 const widths = [390, 1280];
 const server = await startPreview(4320);
@@ -16,9 +19,16 @@ const browser = await launchChrome();
 const failures = [];
 try {
   const requested = pagePaths(process.argv.slice(2));
+  const planned = process.env.OVERFLOW_PATHS ? JSON.parse(process.env.OVERFLOW_PATHS) : null;
+  if (planned !== null && (!Array.isArray(planned) || planned.some((path) => typeof path !== "string")))
+    throw new Error("OVERFLOW_PATHS must be a JSON array of paths or null.");
+  const paths = requested.length
+    ? requested
+    : selectOverflowPaths(await sitemapPaths(server.origin), planned, process.env.OVERFLOW_SHARD ?? "1/1");
+  console.log(`Overflow shard ${process.env.OVERFLOW_SHARD ?? "1/1"}: ${paths.length} pages at both widths.`);
   // One page at a time: parallel tabs compete for frames and stop animations at different points.
   const tab = await browser.newPage();
-  for (const path of requested.length ? requested : await sitemapPaths(server.origin))
+  for (const path of paths)
     for (const width of widths) {
       await tab.setViewport({ width, height: 844 });
       await tab.goto(server.origin + path, { waitUntil: "networkidle0" });
