@@ -46,7 +46,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/three": "^0.186.0",
-    "eslint": "^10.12.0",
+    "eslint": "^10.14.0",
     "eslint-plugin-astro": "^3.2.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "fontkit": "^2.0.4",
@@ -58,7 +58,7 @@
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.71.1",
-    "wrangler": "^4.149.0"
+    "wrangler": "~4.158.0"
   },
   "type": "module",
   "overrides": {
@@ -69,6 +69,9 @@
     "nanoid": "3.3.18",
     "brace-expansion@1": "1.1.21",
     "brace-expansion@5": "5.0.12",
-    "undici": "7.29.1"
+    "undici@7": "7.30.1",
+    "fast-uri": "3.1.9",
+    "zod@4": "4.6.7",
+    "minimatch@10": "11.0.5"
   }
 }
