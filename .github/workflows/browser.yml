@@ -25,7 +25,7 @@ jobs:
       paths: ${{ steps.plan.outputs.paths }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
       - id: plan
@@ -43,7 +43,7 @@ jobs:
       OVERFLOW_SHARD: ${{ matrix.shard }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
       - uses: oven-sh/setup-bun@v2
