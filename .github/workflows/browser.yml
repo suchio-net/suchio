@@ -24,7 +24,7 @@ jobs:
       matrix: ${{ steps.plan.outputs.matrix }}
       paths: ${{ steps.plan.outputs.paths }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -42,7 +42,7 @@ jobs:
       OVERFLOW_PATHS: ${{ needs.plan.outputs.paths }}
       OVERFLOW_SHARD: ${{ matrix.shard }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: 24
